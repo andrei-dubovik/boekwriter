@@ -1,0 +1,32 @@
+# Copyright (c) 2025 Andrey Dubovik <andrei at dubovik dot eu>
+{query: str, prompt: str, schema: str}
+---
+query: chapters
+prompt:
+  Draft a list of chapters for a book called "${book}". Next to the title of
+  each chapter write one paragraph introducing what that chapter is about. You
+  have a total budget of ${word_count} words. Allocate this budget per chapter.
+schema: [{number: int, title: str, description: str, word_count: int}]
+---
+query: chapter-outline
+prompt:
+  You are writing a book called "${book}". The book consists of the following
+  chapters.
+  % for i, chapter in enumerate(chapters):
+
+  # Chapter ${i + 1}: ${chapter['title']}.
+
+  ${chapter['description']}
+  % endfor
+
+  Consider Chapter ${cid + 1} "${chapters[cid]['title']}". Write a detailed
+  plan for this chapter. Each item in the plan must be one sentence long. For
+  this chapter you have a total budget of ${word_count} words. Allocate this
+  budget per item of the plan.
+
+  An item of a plan can be, among other things, a pedagogical aid such as:
+
+  - an example
+  - a case study
+schema: [{item: str, word_count: int}]
+...
