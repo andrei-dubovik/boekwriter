@@ -4,6 +4,7 @@
 
 # Import standard libraries
 from abc import ABC, abstractmethod
+import time
 
 # Import external libraries
 from google import genai
@@ -54,12 +55,13 @@ class LLModel(ABC):
                 return cached['response']
 
         # Query LLM, reflow text parts
-        response = self.retry(prompt, validators)
+        response, timer = self.retry(prompt, validators)
         response = utils.reflow(response)
 
         # Prepare a cache object
         prompt['hash'] = hash, None
         prompt['response'] = response, prompt.get('schema')
+        prompt['duration'] = timer, {'type': 'integer', 'unit': 'ms'}
         del prompt['schema']
 
         # Cache the results
@@ -70,11 +72,13 @@ class LLModel(ABC):
 
     def retry(self, prompt, validators):
         # TODO: add retries, passing through for the time being
+        timer = time.monotonic()
         response = self.basequery(prompt)
+        timer = int((time.monotonic() - timer)*1000)  # ms
         validate(response, prompt['schema'])
         for check in validators:
             check(response)
-        return response
+        return response, timer
 
 
 def load_prompt(path, query, **kwargs):
