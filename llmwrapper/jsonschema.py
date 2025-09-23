@@ -30,6 +30,11 @@ def load(schema):
                     'type': 'string',
                     'enum': convert(left)['enum'] + convert(right)['enum'],
                 }
+            case ast.Name(id='ms'):
+                return {
+                    'type': 'integer',
+                    'unit': 'ms',
+                }
             case ast.Name(id='int'):
                 return {'type': 'integer'}
             case ast.Name(id='str'):
@@ -52,6 +57,8 @@ def dump(schema):
             return '[' + dump(s) + ']'
         case {'type': 'object', 'properties': fields}:
             return '{' + ', '.join(k + ': ' + dump(s) for k, s in fields.items()) + '}'
+        case {'type': 'integer', 'unit': 'ms'}:
+            return 'ms'
         case {'type': 'integer'}:
             return 'int'
         case {'type': 'string', 'enum': options}:

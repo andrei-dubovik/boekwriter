@@ -8,11 +8,6 @@ from jsonschema import validate
 # Import local libraries
 from . import jsonschema
 
-# Conversion functions for inline types
-INLINE_TYPES = {
-    'integer': int,
-}
-
 # Initialization functions for block types
 BLOCK_TYPES = {
     'string': bytearray,  # str is immutable
@@ -33,6 +28,9 @@ class SerializeError(YAMLError):
 
 class NotFound(YAMLError):
     pass
+
+class StopInline(YAMLError):
+    """No inline type is available."""
 
 
 def load(file):
@@ -100,9 +98,9 @@ def parse(lines, obj, schema, level):
                     lines.append(' '*tabstop + line)
                     return
                 _type = _schema['type']
-                if (conv := INLINE_TYPES.get(_type)) is not None:
-                    obj.append(conv(line[2:]))
-                else:
+                try:
+                    obj.append(parse_inline(line[2:], _schema))
+                except StopInline:
                     lines.append(' '*(tabstop + 2) + line[2:])
                     obj.append(BLOCK_TYPES[_type]())
                     parse(lines, obj[-1], _schema, level + 1)
@@ -114,7 +112,7 @@ def parse(lines, obj, schema, level):
                             lines.append(' '*(tabstop + 2) + line.removeprefix(key + ': '))
                             line = key + ':'
                         else:
-                            obj[key] = INLINE_TYPES[_type](line.removeprefix(key + ': '))
+                            obj[key] = parse_inline(line.removeprefix(key + ': '), _schema)
                             break
                     if line == key + ':':  # block data
                         obj[key] = BLOCK_TYPES[_type]()
@@ -125,6 +123,19 @@ def parse(lines, obj, schema, level):
                     raise ParseError()
             case _:
                 raise ParseError()
+
+
+def parse_inline(value, schema):
+    """Parse an inline value."""
+    match schema:
+        case {'type': 'integer', 'unit': unit}:
+            if not value.endswith(' ' + unit):
+                raise ParseError()
+            return int(value[:-(1 + len(unit))])
+        case {'type': 'integer'}:
+            return int(value)
+        case _:
+            raise StopInline()
 
 
 def unwrap_bytearray(obj):
@@ -146,11 +157,11 @@ def dump(schema, documents, file):
     for obj in documents:
         validate(obj, schema)
         file.write('---\n')
-        serialize(file, obj, 0)
+        serialize(file, obj, schema, 0)
     file.write('...\n')
 
 
-def serialize(file, obj, level, hanging=None):
+def serialize(file, obj, schema, level, hanging=None):
     """Recursively serialize to a YAML-like grammar."""
     tab = '  '*level
     match obj:
@@ -161,19 +172,32 @@ def serialize(file, obj, level, hanging=None):
         case list():
             for i, value in enumerate(obj):
                 pfx = hanging if i == 0 and hanging is not None else tab
-                serialize(file, value, level + 1, pfx + '- ')
+                serialize(file, value, schema['items'], level + 1, pfx + '- ')
         case dict():
             for i, (key, value) in enumerate(obj.items()):
                 pfx = hanging if i == 0 and hanging is not None else tab
-                if type(value) in INLINE_TYPES.values():
-                    file.write(pfx + key + ': ' + str(value) + '\n')
-                elif type(value) == str and value.find('\n') == -1:
-                    # Inline style
-                    serialize(file, value, level + 1, pfx + key + ': ')
-                else:
-                    # Block style
-                    file.write(pfx + key + ':\n')
-                    shift = 0 if type(value) == list else 1  # compact style
-                    serialize(file, value, level + shift)
+                _schema = schema['properties'][key]
+                try:
+                    file.write(pfx + key + ': ' + serialize_inline(value, _schema) + '\n')
+                except StopInline:
+                    if type(value) == str and value.find('\n') == -1:
+                        # Inline style
+                        serialize(file, value, _schema, level + 1, pfx + key + ': ')
+                    else:
+                        # Block style
+                        file.write(pfx + key + ':\n')
+                        shift = 0 if type(value) == list else 1  # compact style
+                        serialize(file, value, _schema, level + shift)
         case _:
             raise SerializeError()
+
+
+def serialize_inline(obj, schema):
+    """Serialzie an inline value."""
+    match schema:
+        case {'type': 'integer', 'unit': unit}:
+            return str(obj) + ' ' + unit
+        case {'type': 'integer'}:
+            return str(obj)
+        case _:
+            raise StopInline()
