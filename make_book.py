@@ -4,10 +4,22 @@
 
 # Import standard libraries
 import argparse
+from itertools import count
 
+# Visual features
+VISUALS = [
+    'Diagram',
+    'Chart',
+    'Map',
+    'Timeline',
+    'Illustration',
+]
 
 def make_book(model, book, word_count):
     """Use an LLM to write a textbook."""
+    # Initialize a global figure counter
+    fig = count(1)
+
     # Draft a list of chapters
     chapters = model.query(
         'chapters',
@@ -30,6 +42,18 @@ def make_book(model, book, word_count):
         cid = 0,
         word_count = chapter['word_count'],
     )
+
+    # Decide on visual aids (or a table, which is always allowed)
+    visuals = model.query(
+        'visuals',
+        slot = '0',
+        validators = [chk_range('number', 1, len(outline))],
+        book = book,
+        chapter = chapter,
+        outline = outline,
+        visuals = VISUALS,
+    )
+    visuals = {v['number'] - 1: v | {'fig': next(fig)} for v in visuals}
 
 
 if __name__ == '__main__':
