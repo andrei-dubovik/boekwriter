@@ -3,6 +3,7 @@
 """Miscellaneous utilities."""
 
 # Import standard libraries
+from enum import Enum
 from hashlib import sha256
 from struct import pack
 import textwrap
@@ -48,3 +49,24 @@ def reflow(obj, width=80):
             return textwrap.fill(obj, width=width).rstrip()
         case _:
             return obj
+
+
+def upcast(obj):
+    """Recursively convert objects to base classes."""
+    match obj:
+        case None:
+            return None
+        case Enum():
+            return obj.name
+        case str():
+            return obj
+        case int():
+            return obj
+        case list():
+            return [upcast(v) for v in obj]
+        case dict():
+            return {k: upcast(v) for k, v in obj.items() if v is not None}
+        case object(__dict__=fields):
+            return {k: upcast(v) for k, v in fields.items() if v is not None}
+        case _:
+            raise RuntimeError('unsupported type')

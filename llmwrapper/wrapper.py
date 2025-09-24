@@ -55,13 +55,14 @@ class LLModel(ABC):
                 return cached['response']
 
         # Query LLM, reflow text parts
-        response, timer = self.retry(prompt, validators)
+        response, timer, stats = self.retry(prompt, validators)
         response = utils.reflow(response)
 
         # Prepare a cache object
         prompt['hash'] = hash, None
         prompt['response'] = response, prompt.get('schema')
         prompt['duration'] = timer, {'type': 'integer', 'unit': 'ms'}
+        prompt['usage_stats'] = stats, True
         del prompt['schema']
 
         # Cache the results
@@ -73,12 +74,12 @@ class LLModel(ABC):
     def retry(self, prompt, validators):
         # TODO: add retries, passing through for the time being
         timer = time.monotonic()
-        response = self.basequery(prompt)
+        response, stats = self.basequery(prompt)
         timer = int((time.monotonic() - timer)*1000)  # ms
         validate(response, prompt['schema'])
         for check in validators:
             check(response)
-        return response, timer
+        return response, timer, stats
 
 
 def load_prompt(path, query, **kwargs):
@@ -157,9 +158,10 @@ class Gemini(LLModel):
                 },
             )
             if prompt['schema']['type'] == 'string':
-                return response.text
+                content = response.text
             else:
-                return response.parsed
+                content = response.parsed
+            return content, utils.upcast(response.usage_metadata)
         except genai.errors.ClientError as err:
             raise LLMError(err.status) from err
         except genai.errors.ServerError as err:
