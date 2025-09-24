@@ -39,6 +39,8 @@ def load(schema):
                 return {'type': 'integer'}
             case ast.Name(id='str'):
                 return {'type': 'string'}
+            case ast.Name(id='json'):
+                return True
             case ast.Constant(id):
                 return {
                     'type': 'string',
@@ -65,6 +67,8 @@ def dump(schema):
             return ' | '.join('"' + v + '"' for v in options)
         case {'type': 'string'}:
             return 'str'
+        case True:
+            return 'json'
         case _:
             raise SchemaError()
 

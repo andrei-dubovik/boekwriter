@@ -2,6 +2,9 @@
 
 """A YAML-like data serialization language with explicit schemas."""
 
+# Import standard libraries
+import json
+
 # Import external libraries
 from jsonschema import validate
 
@@ -53,7 +56,7 @@ def load(file):
             block.append(line)
     if line != '...':
         raise ParseError()
-    return schema, unwrap_bytearray(obj)
+    return schema, [unwrap(v, schema) for v in obj]
 
 
 def find(file, **kwargs):
@@ -97,6 +100,8 @@ def parse(lines, obj, schema, level):
                 if not line.startswith('- '):
                     lines.append(' '*tabstop + line)
                     return
+                if _schema == True:  # arbitrary JSON
+                    _schema = {'type': 'string'}
                 _type = _schema['type']
                 try:
                     obj.append(parse_inline(line[2:], _schema))
@@ -106,6 +111,8 @@ def parse(lines, obj, schema, level):
                     parse(lines, obj[-1], _schema, level + 1)
             case {'type': 'object', 'properties': fields}:
                 for key, _schema in fields.items():
+                    if _schema == True:  # arbitrary JSON
+                        _schema = {'type': 'string'}
                     _type = _schema['type']
                     if line.startswith(key + ': '):  # inline data (or string)
                         if _type == 'string':
@@ -138,15 +145,19 @@ def parse_inline(value, schema):
             raise StopInline()
 
 
-def unwrap_bytearray(obj):
-    """Recursively replace bytearrays with strings."""
+def unwrap(obj, schema):
+    """Recursively replace bytearrays with strings, unwrap JSON"""
     match obj:
         case list():
-            return [unwrap_bytearray(v) for v in obj]
+            return [unwrap(v, schema['items']) for v in obj]
         case dict():
-            return {k: unwrap_bytearray(v) for k, v in obj.items()}
+            return {k: unwrap(v, schema['properties'][k]) for k, v in obj.items()}
         case bytearray():
-            return obj.decode()[:-1]  # remove '\n'
+            s = obj.decode()[:-1]  # remove '\n'
+            if schema == True:
+                return json.loads(s)
+            else:
+                return s
         case _:
             return obj
 
@@ -157,7 +168,7 @@ def dump(schema, documents, file):
     for obj in documents:
         validate(obj, schema)
         file.write('---\n')
-        serialize(file, obj, schema, 0)
+        serialize(file, wrap(obj, schema), schema, 0)
     file.write('...\n')
 
 
@@ -201,3 +212,19 @@ def serialize_inline(obj, schema):
             return str(obj)
         case _:
             raise StopInline()
+
+
+def wrap(obj, schema):
+    """Recursively replace arbitrary JSONs with strings."""
+    match schema:
+        case {'type': 'array', 'items': items}:
+            return [wrap(v, items) for v in obj]
+        case {'type': 'object', 'properties': fields}:
+            return {k: wrap(v, fields[k]) for k, v in obj.items()}
+        case True:
+            text = json.dumps(obj)
+            if len(text) > 80:
+                text = json.dumps(obj, indent=2)
+            return text
+        case _:
+            return obj
