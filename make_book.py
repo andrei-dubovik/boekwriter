@@ -35,7 +35,7 @@ def make_book(model, book, word_count):
     # Draft a chapter outline
     outline = model.query(
         'chapter-outline',
-        slot = '0',
+        slot = '1',
         validators = [chk_sum('word_count', chapter['word_count'])],
         book = book,
         chapters = chapters,
@@ -46,7 +46,7 @@ def make_book(model, book, word_count):
     # Decide on visual aids (or a table, which is always allowed)
     visuals = model.query(
         'visuals',
-        slot = '0',
+        slot = '1',
         validators = [chk_range('number', 1, len(outline))],
         book = book,
         chapter = chapter,
@@ -54,6 +54,19 @@ def make_book(model, book, word_count):
         visuals = VISUALS,
     )
     visuals = {v['number'] - 1: v | {'fig': next(fig)} for v in visuals}
+
+    # Write a chunk of a book
+    chunk = model.query(
+        'chunk',
+        slot = '1-1',
+        validators = [],
+        book = book,
+        chapters = chapters,
+        outline = outline,
+        cid = 0,
+        oid = 0,
+        visual = visuals.get(0),
+    )
 
 
 if __name__ == '__main__':
