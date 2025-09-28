@@ -6,7 +6,10 @@
 from enum import Enum
 from hashlib import sha256
 from struct import pack
-import textwrap
+import re
+
+# Import external libraries
+import mdformat
 
 
 def deephash(obj):
@@ -39,14 +42,14 @@ def deephash(obj):
 
 
 def reflow(obj, width=80):
-    """Recursively wrap all strings at width 80."""
+    """Recursively wrap all (markdown) strings at width 80."""
     match obj:
         case list():
             return [reflow(v, width) for v in obj]
         case dict():
             return {k: reflow(v, width) for k, v in obj.items()}
         case str():
-            return textwrap.fill(obj, width=width).rstrip()
+            return mdformat.text(obj, options={'wrap': width, 'number': True}).rstrip()
         case _:
             return obj
 
@@ -70,3 +73,10 @@ def upcast(obj):
             return {k: upcast(v) for k, v in fields.items() if v is not None}
         case _:
             raise RuntimeError('unsupported type')
+
+
+COUNT_WORDS = re.compile(r'\W+')
+
+def count_words(txt):
+    """Count words in a piece of text."""
+    return len(COUNT_WORDS.split(txt.rstrip('.?')))

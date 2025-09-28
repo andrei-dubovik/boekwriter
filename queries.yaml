@@ -73,19 +73,9 @@ prompt:
   Consider point ${oid + 1} of the plan. Write this part of the book. Be consise
   in your writing, avoid an overly verbose prose. Use Markdown for paragraphs,
   emphasis, numbered or unnumbered lists. Use LaTeX for formulas. Do not add any
-  headers. Footnotes are allowed but should be used sparingly. You should write
-  about ${outline[oid]['word_count']} words in total.
+  headers. Footnotes are allowed but should be used sparingly. In total, you
+  should write between ${min_words} and ${max_words} words.
   % if visual is not None:
-  % if visual['aid'] == 'Table':
-
-  This part of the book also contains a table. Its description is as follows.
-
-  ${visual['description']}
-
-  Prepare this table, format it in Markdown and include it in your text where
-  appropriate. You can refer to this table as Fig. ${visual['fig']}. The table
-  does not count towards the total number of words.
-  % else:
 
   This section of the book will feature a ${visual['aid']}. Its description is as
   follows.
@@ -94,6 +84,5 @@ prompt:
 
   This visual aid will be drafted separately, but you can already refer to it as
   Fig. ${visual['fig']} in the text.
-  % endif
   % endif
 ...

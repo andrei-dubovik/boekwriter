@@ -56,15 +56,19 @@ def make_book(model, book, word_count):
     visuals = {v['number'] - 1: v | {'fig': next(fig)} for v in visuals}
 
     # Write a chunk of a book
+    min_words = outline[0]['word_count']*3//4
+    max_words = outline[0]['word_count']
     chunk = model.query(
         'chunk',
         slot = '1-1',
-        validators = [],
+        validators = [chk_words(min_words, max_words)],
         book = book,
         chapters = chapters,
         outline = outline,
         cid = 0,
         oid = 0,
+        min_words = min_words,
+        max_words = max_words,
         visual = visuals.get(0),
     )
 
@@ -100,7 +104,7 @@ if __name__ == '__main__':
 
     # Import local libraries
     from llmwrapper.wrapper import Gemini
-    from llmwrapper.wrapper import chk_sum, chk_range
+    from llmwrapper.wrapper import chk_sum, chk_range, chk_words
 
     # Initialize an LLM wrapper
     with open(args.key) as file:

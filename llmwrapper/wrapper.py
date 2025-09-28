@@ -188,3 +188,11 @@ def chk_range(key, min, max):
         if not all(min <= v <= max for v in values):
             raise ValidationError()
     return validator
+
+
+def chk_words(min, max):
+    """Check the total word count falls withing range."""
+    def validator(response):
+        if not min <= utils.count_words(response) <= max:
+            raise ValidationError()
+    return validator
