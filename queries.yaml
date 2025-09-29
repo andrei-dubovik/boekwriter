@@ -101,4 +101,20 @@ prompt:
   should have an aspect ratio of 4:3. Do not include the figure title in the
   SVG figure. Verify that the labels do not obstruct one another.
 schema: {caption: str, svg: str}
+---
+query: table
+prompt:
+  Consider the following text fragment from a book called "${book}".
+
+  ${chunk}
+
+  This fragment refers to Fig. ${visual['fig']}, which is a table. Its
+  description is as follows:
+
+  ${visual['description']}
+
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in
+  the output, exclude the outer `table` environment.
+schema: {caption: str, latex: str}
 ...

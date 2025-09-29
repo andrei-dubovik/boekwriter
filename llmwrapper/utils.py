@@ -50,6 +50,9 @@ def reflow(obj, width=80):
         case dict():
             return {k: reflow(v, width) for k, v in obj.items()}
         case str():
+            if obj.startswith(r'\begin{'):
+                # Do not reflow LaTeX
+                return obj
             if obj.startswith('<svg '):
                 parser = etree.XMLParser()
                 svg = etree.fromstring(obj, parser)
