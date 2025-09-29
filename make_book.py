@@ -4,7 +4,6 @@
 
 # Import standard libraries
 import argparse
-from itertools import count
 
 # Visual features
 VISUALS = [
@@ -14,6 +13,7 @@ VISUALS = [
     'Timeline',
     'Illustration',
 ]
+
 
 def make_book(model, book, word_count):
     """Use an LLM to write a textbook."""
@@ -29,24 +29,36 @@ def make_book(model, book, word_count):
         word_count = word_count,
     )
 
-    # Focus on the first chapter
-    chapter = chapters[0]
+    # Write the book
+    content = [
+        make_chapter(book, chapters, cid, fig)
+        for cid in range(len(chapters))
+    ]
+
+    return {
+        'content': content,
+    }
+
+
+def make_chapter(book, chapters, cid, fig):
+    """Draft a single chapter."""
+    chapter = chapters[cid]
 
     # Draft a chapter outline
     outline = model.query(
         'chapter-outline',
-        slot = '1',
+        slot = f'{cid+1}',
         validators = [chk_sum('word_count', chapter['word_count'])],
         book = book,
         chapters = chapters,
-        cid = 0,
+        cid = cid,
         word_count = chapter['word_count'],
     )
 
     # Decide on visual aids (or a table, which is always allowed)
     visuals = model.query(
         'visuals',
-        slot = '1',
+        slot = f'{cid+1}',
         validators = [chk_range('number', 1, len(outline))],
         book = book,
         chapter = chapter,
@@ -55,22 +67,68 @@ def make_book(model, book, word_count):
     )
     visuals = {v['number'] - 1: v | {'fig': next(fig)} for v in visuals}
 
-    # Write a chunk of a book
-    min_words = outline[0]['word_count']*3//4
-    max_words = outline[0]['word_count']
+    # Write the chapter
+    content = [
+        make_section(book, chapters, cid, outline, oid, visuals)
+        for oid in range(len(outline))
+    ]
+
+    return chapter | {
+        'content': content,
+    }
+
+
+def make_section(book, chapters, cid, outline, oid, visuals):
+    """Draft a section of a book."""
+    min_words = outline[oid]['word_count']*3//4
+    max_words = outline[oid]['word_count']
+    visual = visuals.get(oid)
+
     chunk = model.query(
         'chunk',
-        slot = '1-1',
+        slot = f'{cid+1}-{oid+1}',
         validators = [chk_words(min_words, max_words)],
         book = book,
         chapters = chapters,
         outline = outline,
-        cid = 0,
-        oid = 0,
+        cid = cid,
+        oid = oid,
         min_words = min_words,
         max_words = max_words,
-        visual = visuals.get(0),
+        visual = visual,
     )
+
+    # Draft a visual aid, if any
+    figure = None
+    if visual is not None:
+        figure = {
+            'number': visual['fig'],
+            'type': visual['aid'],
+        }
+        if visual['aid'] == 'Table':
+            response = model.query(
+                'table',
+                slot = f'{cid+1}-{oid+1}',
+                validators = [],
+                book = book,
+                chunk = chunk,
+                visual = visual,
+            )
+            figure['caption'] = response['caption']
+            figure['table'] = response['latex']
+        else:
+            response = model.query(
+                'figure',
+                slot = f'{cid+1}-{oid+1}',
+                validators = [],
+                book = book,
+                chunk = chunk,
+                visual = visual,
+            )
+            figure['caption'] = response['caption']
+            figure['svg'] = response['svg']
+
+    return {'chunk': chunk} | ({} if figure is None else {'figure': figure})
 
 
 if __name__ == '__main__':
@@ -100,6 +158,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Import standard libraries
+    from itertools import count
     from pathlib import Path
 
     # Import local libraries
@@ -118,4 +177,4 @@ if __name__ == '__main__':
     )
 
     # Round and round she goes
-    make_book(model, book=args.title, word_count=args.words)
+    _ = make_book(model, book=args.title, word_count=args.words)

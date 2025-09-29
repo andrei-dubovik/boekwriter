@@ -55,6 +55,7 @@ class LLModel(ABC):
                 return cached['response']
 
         # Query LLM, reflow text parts
+        print(f'generating {query}-{slot}')
         response, timer, stats = self.retry(prompt, validators)
 
         # Prepare a cache object
