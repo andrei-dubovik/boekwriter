@@ -85,4 +85,20 @@ prompt:
   This visual aid will be drafted separately, but you can already refer to it as
   Fig. ${visual['fig']} in the text.
   % endif
+---
+query: figure
+prompt:
+  Consider the following text fragment from a book called "${book}".
+
+  ${chunk}
+
+  This fragment refers to Fig. ${visual['fig']}. The figure in question is a
+  "${visual['aid']}" and its description is as follows:
+
+  ${visual['description']}
+
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the
+  SVG figure. Verify that the labels do not obstruct one another.
+schema: {caption: str, svg: str}
 ...

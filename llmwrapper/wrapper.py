@@ -56,7 +56,6 @@ class LLModel(ABC):
 
         # Query LLM, reflow text parts
         response, timer, stats = self.retry(prompt, validators)
-        response = utils.reflow(response)
 
         # Prepare a cache object
         prompt['hash'] = hash, None
@@ -79,6 +78,7 @@ class LLModel(ABC):
         validate(response, prompt['schema'])
         for check in validators:
             check(response)
+        response = utils.reflow(response)  # can raise SVG errors
         return response, timer, stats
 
 

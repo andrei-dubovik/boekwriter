@@ -9,6 +9,7 @@ from struct import pack
 import re
 
 # Import external libraries
+from lxml import etree
 import mdformat
 
 
@@ -42,13 +43,17 @@ def deephash(obj):
 
 
 def reflow(obj, width=80):
-    """Recursively wrap all (markdown) strings at width 80."""
+    """Recursively wrap all (markdown) strings at width 80; beautify SVG."""
     match obj:
         case list():
             return [reflow(v, width) for v in obj]
         case dict():
             return {k: reflow(v, width) for k, v in obj.items()}
         case str():
+            if obj.startswith('<svg '):
+                parser = etree.XMLParser()
+                svg = etree.fromstring(obj, parser)
+                return etree.tostring(svg, pretty_print=True).decode().rstrip()
             return mdformat.text(obj, options={'wrap': width, 'number': True}).rstrip()
         case _:
             return obj
