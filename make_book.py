@@ -17,9 +17,6 @@ VISUALS = [
 
 def make_book(model, book, word_count):
     """Use an LLM to write a textbook."""
-    # Initialize a global figure counter
-    fig = count(1)
-
     # Draft a list of chapters
     chapters = model.query(
         'chapters',
@@ -31,7 +28,7 @@ def make_book(model, book, word_count):
 
     # Write the book
     content = [
-        make_chapter(book, chapters, cid, fig)
+        make_chapter(book, chapters, cid)
         for cid in range(len(chapters))
     ]
 
@@ -40,7 +37,7 @@ def make_book(model, book, word_count):
     }
 
 
-def make_chapter(book, chapters, cid, fig):
+def make_chapter(book, chapters, cid):
     """Draft a single chapter."""
     chapter = chapters[cid]
 
@@ -65,7 +62,7 @@ def make_chapter(book, chapters, cid, fig):
         outline = outline,
         visuals = VISUALS,
     )
-    visuals = {v['number'] - 1: v | {'fig': next(fig)} for v in visuals}
+    visuals = {v['number'] - 1: v | {'fig': f'{cid+1}.{v["number"]}'} for v in visuals}
 
     # Write the chapter
     content = [
