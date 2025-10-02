@@ -37,6 +37,11 @@ def load(schema):
                 }
             case ast.Name(id='int'):
                 return {'type': 'integer'}
+            case ast.Name(id='png'):
+                return {
+                    'type': 'string',
+                    'mimeType': 'image/png',
+                }
             case ast.Name(id='str'):
                 return {'type': 'string'}
             case ast.Name(id='json'):
@@ -63,6 +68,8 @@ def dump(schema):
             return 'ms'
         case {'type': 'integer'}:
             return 'int'
+        case {'type': 'string', 'mimeType': 'image/png'}:
+            return 'png'
         case {'type': 'string', 'enum': options}:
             return ' | '.join('"' + v + '"' for v in options)
         case {'type': 'string'}:

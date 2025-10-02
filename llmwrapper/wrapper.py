@@ -4,6 +4,7 @@
 
 # Import standard libraries
 from abc import ABC, abstractmethod
+from copy import deepcopy
 import time
 
 # Import external libraries
@@ -49,8 +50,7 @@ class LLModel(ABC):
         hash = utils.deephash(prompt)
         path = self.cache/f'{query}-{slot}.yaml'
         if path.exists():
-            with open(path, 'r') as file:
-                _, [cached] = yaml.load(file)
+            cached = load_yaml(path)
             if cached['hash'] == hash:
                 return cached['response']
 
@@ -66,8 +66,7 @@ class LLModel(ABC):
         del prompt['schema']
 
         # Cache the results
-        with open(path, 'w') as file:
-            yaml.dump(prompt.schema, [prompt], file)
+        dump_yaml(prompt, path)
         return response
 
 
@@ -76,10 +75,11 @@ class LLModel(ABC):
         timer = time.monotonic()
         response, stats = self.basequery(prompt)
         timer = int((time.monotonic() - timer)*1000)  # ms
-        validate(response, prompt['schema'])
+        if 'mimeType' not in prompt['schema']:
+            validate(response, prompt['schema'])
+            response = utils.reflow(response)  # can raise SVG errors
         for check in validators:
             check(response)
-        response = utils.reflow(response)  # can raise SVG errors
         return response, timer, stats
 
 
@@ -98,6 +98,37 @@ def load_prompt(path, query, **kwargs):
     # Expand the schema
     prompt['schema'] = jsonschema.load(prompt.get('schema', 'str'))
     return JSONObject(prompt, schema)
+
+
+def dump_yaml(prompt, path):
+    """Save a prompt-response pair to a YAML-like file, dump included images."""
+    # Dump the image, if present
+    response_schema = prompt.schema['properties']['response']
+    if 'mimeType' in response_schema:
+        _, ext = response_schema['mimeType'].split('/')
+        img_path = path.with_suffix('.' + ext)
+        with open(img_path, 'wb') as file:
+            file.write(prompt['response'])
+        # Replace the image data with a relative reference to the image
+        prompt = prompt.copy()
+        prompt['response'] = img_path.name, response_schema
+
+    # Dump the prompt
+    with open(path, 'wt') as file:
+        yaml.dump(prompt.schema, [prompt], file)
+
+
+def load_yaml(path):
+    """Load a prompt-response pair from a YAML-like file, load included images."""
+    # Load the prompt
+    with open(path, 'rt') as file:
+        schema, [prompt] = yaml.load(file)
+
+    # Load the image, if present
+    if 'mimeType' in schema['properties']['response']:
+        with open(path.parent/prompt['response'], 'rb') as file:
+            prompt['response'] = file.read()
+    return prompt
 
 
 # A very hacky solution to avoid a few lines of boiler-plate; I'll come to regret it
@@ -127,6 +158,9 @@ class JSONObject(dict):
             schema = jsonschema.deduce(value)
         super().__setitem__(key, value)
         self.schema['properties'][key] = schema
+
+    def copy(self):
+        return JSONObject(super().copy(), deepcopy(self.schema))
 
 
 class Gemini(LLModel):
@@ -158,10 +192,18 @@ class Gemini(LLModel):
                     **schema,
                 },
             )
-            if prompt['schema']['type'] == 'string':
-                content = response.text
-            else:
-                content = response.parsed
+            match prompt['schema']:
+                case {'type': 'string', 'mimeType': mime_type}:
+                    for part in response.candidates[0].content.parts:
+                        if part.inline_data is not None and part.inline_data.mime_type == mime_type:
+                            content = part.inline_data.data
+                            break
+                    else:
+                        raise LLMError(f'{mime_type} not found')
+                case {'type': 'string'}:
+                    content = response.text
+                case _:
+                    content = response.parsed
             return content, utils.upcast(response.usage_metadata)
         except genai.errors.ClientError as err:
             raise LLMError(err.status) from err
