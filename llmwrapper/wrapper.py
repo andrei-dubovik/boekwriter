@@ -5,6 +5,7 @@
 # Import standard libraries
 from abc import ABC, abstractmethod
 from copy import deepcopy
+import logging
 import time
 
 # Import external libraries
@@ -15,6 +16,9 @@ import mdformat
 
 # Import local libraries
 from . import jsonschema, yaml, utils
+
+# Initialize a logger
+LOGGER = logging.getLogger(__name__)
 
 
 # Error definitions
@@ -55,7 +59,7 @@ class LLModel(ABC):
                 return cached['response']
 
         # Query LLM, reflow text parts
-        print(f'generating {query}-{slot}')
+        LOGGER.info(f'generating {query}-{slot}')
         response, timer, stats = self.retry(prompt, validators)
 
         # Prepare a cache object

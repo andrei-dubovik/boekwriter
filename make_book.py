@@ -174,10 +174,18 @@ if __name__ == '__main__':
     # Import standard libraries
     from itertools import count
     from pathlib import Path
+    import logging
 
     # Import local libraries
     from llmwrapper.wrapper import Gemini
     from llmwrapper.wrapper import chk_sum, chk_range, chk_words
+
+    # Configure logging
+    logging.basicConfig(
+        format = '%(asctime)s [%(levelname)s] %(message)s',
+        datefmt = '%Y-%d-%m %H:%M:%S',
+        level = logging.INFO,
+    )
 
     # Initialize an LLM wrapper
     with open(args.key) as file:
