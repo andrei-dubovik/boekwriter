@@ -70,8 +70,25 @@ def make_chapter(book, chapters, cid):
         for oid in range(len(outline))
     ]
 
+    # Make a headpiece
+    hp_task = model.query(
+        'headpiece',
+        slot = f'{cid+1}',
+        validators = [],
+        book = book,
+        content = content,
+    )
+
+    hp_image = model.query(
+        'image',
+        slot = f'{cid+1}',
+        validators = [],
+        prompt = hp_task,
+    )
+
     return chapter | {
         'content': content,
+        'headpiece': hp_image,
     }
 
 

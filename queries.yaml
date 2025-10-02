@@ -1,5 +1,5 @@
 # Copyright (c) 2025 Andrey Dubovik <andrei at dubovik dot eu>
-{query: str, prompt: str, schema: str}
+{query: str, model: str, prompt: str, schema: str}
 ---
 query: chapters
 prompt:
@@ -117,4 +117,28 @@ prompt:
   already imported. Only include the `tabular` environment and its content in
   the output, exclude the outer `table` environment.
 schema: {caption: str, latex: str}
+---
+query: headpiece
+prompt:
+  What follows is a text for a chapter from a book called "${book}".
+
+  <chapter>
+  % for chunk in content:
+
+  ${chunk['chunk']}
+  % endfor
+
+  </chapter>
+
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should touch on some specific topic discussed in the chapter.
+  Describe the chosen illustration as if your are giving a task to an artist.
+  Keep the aesthetics simple. The description should be self-sufficient, i.e.
+  it should not reference the chapter. The description should be no longer than
+  a paragraph. A shorter description is also fine.
+---
+query: image
+model: gemini-2.5-flash-image-preview
+prompt: ${prompt}
+schema: png
 ...
