@@ -1,2 +1,4 @@
 *.key
 __pycache__
+build/*
+!build/.keep

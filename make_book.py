@@ -15,29 +15,30 @@ VISUALS = [
 ]
 
 
-def make_book(model, book, word_count):
+def make_book(model, title, word_count):
     """Use an LLM to write a textbook."""
     # Draft a list of chapters
     chapters = model.query(
         'chapters',
         validators = [chk_sum('word_count', word_count)],
         slot = 'root',
-        book = book,
+        book = title,
         word_count = word_count,
     )
 
     # Write the book
     content = [
-        make_chapter(book, chapters, cid)
+        make_chapter(title, chapters, cid)
         for cid in range(len(chapters))
     ]
 
     return {
+        'title': title,
         'content': content,
     }
 
 
-def make_chapter(book, chapters, cid):
+def make_chapter(title, chapters, cid):
     """Draft a single chapter."""
     chapter = chapters[cid]
 
@@ -46,7 +47,7 @@ def make_chapter(book, chapters, cid):
         'chapter-outline',
         slot = f'{cid+1}',
         validators = [chk_sum('word_count', chapter['word_count'])],
-        book = book,
+        book = title,
         chapters = chapters,
         cid = cid,
         word_count = chapter['word_count'],
@@ -57,7 +58,7 @@ def make_chapter(book, chapters, cid):
         'visuals',
         slot = f'{cid+1}',
         validators = [chk_range('number', 1, len(outline))],
-        book = book,
+        book = title,
         chapter = chapter,
         outline = outline,
         visuals = VISUALS,
@@ -66,7 +67,7 @@ def make_chapter(book, chapters, cid):
 
     # Write the chapter
     content = [
-        make_section(book, chapters, cid, outline, oid, visuals)
+        make_section(title, chapters, cid, outline, oid, visuals)
         for oid in range(len(outline))
     ]
 
@@ -75,7 +76,7 @@ def make_chapter(book, chapters, cid):
         'headpiece',
         slot = f'{cid+1}',
         validators = [],
-        book = book,
+        book = title,
         content = content,
     )
 
@@ -92,7 +93,7 @@ def make_chapter(book, chapters, cid):
     }
 
 
-def make_section(book, chapters, cid, outline, oid, visuals):
+def make_section(title, chapters, cid, outline, oid, visuals):
     """Draft a section of a book."""
     min_words = outline[oid]['word_count']*3//4
     max_words = outline[oid]['word_count']
@@ -102,7 +103,7 @@ def make_section(book, chapters, cid, outline, oid, visuals):
         'chunk',
         slot = f'{cid+1}-{oid+1}',
         validators = [chk_words(min_words, max_words)],
-        book = book,
+        book = title,
         chapters = chapters,
         outline = outline,
         cid = cid,
@@ -124,7 +125,7 @@ def make_section(book, chapters, cid, outline, oid, visuals):
                 'table',
                 slot = f'{cid+1}-{oid+1}',
                 validators = [],
-                book = book,
+                book = title,
                 chunk = chunk,
                 visual = visual,
             )
@@ -135,7 +136,7 @@ def make_section(book, chapters, cid, outline, oid, visuals):
                 'figure',
                 slot = f'{cid+1}-{oid+1}',
                 validators = [],
-                book = book,
+                book = title,
                 chunk = chunk,
                 visual = visual,
             )
@@ -169,6 +170,11 @@ if __name__ == '__main__':
         default = 'gemini-2.5-pro',
         help = 'LLM model (default: gemini-2.5-pro)',
     )
+    parser.add_argument(
+        '--template',
+        default = 'template.tex',
+        help = 'title page LaTeX template (default: template.tex)',
+    )
     args = parser.parse_args()
 
     # Import standard libraries
@@ -179,6 +185,7 @@ if __name__ == '__main__':
     # Import local libraries
     from llmwrapper.wrapper import Gemini
     from llmwrapper.wrapper import chk_sum, chk_range, chk_words
+    import latex
 
     # Configure logging
     logging.basicConfig(
@@ -199,4 +206,5 @@ if __name__ == '__main__':
     )
 
     # Round and round she goes
-    _ = make_book(model, book=args.title, word_count=args.words)
+    book = make_book(model, title=args.title, word_count=args.words)
+    latex.render_book(book, template=args.template)

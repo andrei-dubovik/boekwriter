@@ -1,0 +1,19 @@
+\documentclass[a4paper,oneside,11pt]{book}
+\usepackage{graphicx}
+\usepackage[a4paper,top=1in,bottom=1in,left=1.2in,right=1.2in]{geometry}
+\usepackage{booktabs}
+
+%% A minimal redesign of a title page
+\usepackage{titling}
+\pretitle{\begin{center}\Huge\bfseries}
+\posttitle{\end{center}}
+
+%% Define metadata
+\title{${book['title']}}
+\author{Gemini Pro \and Andrei Dubovik}
+\date{October 2025\\Version 0.1}
+
+\begin{document}
+\maketitle
+\input{chapter-1}
+\end{document}
