@@ -1,0 +1,115 @@
+{model: str, query: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: visuals
+prompt:
+  You are writing a chapter titled "Introduction to Computational Linguistics" in
+  a book called "Introduction to Computational Linguistics". The plan for the
+  chapter is a follows.
+  
+  01. We begin by defining computational linguistics as the scientific study of
+      language from a computational perspective.
+  02. This section will explain how the field uniquely combines insights from
+      computer science, linguistics, and artificial intelligence.
+  03. We will use the ambiguous sentence 'I saw a man on a hill with a telescope'
+      to illustrate the complex challenges that require both linguistic knowledge
+      and computational methods to resolve.
+  04. The relationship between computational linguistics, the science, and natural
+      language processing, the engineering discipline, will be clarified.
+  05. A historical timeline will trace the evolution of the field from its origins
+      in the 1950s to the present day.
+  06. We will explore the early rule-based and symbolic approaches, exemplified by
+      projects like the Georgetown-IBM machine translation experiment.
+  07. This part describes the major paradigm shift towards statistical and
+      probabilistic methods that began in the late 1980s and 1990s.
+  08. The current era dominated by deep learning and neural networks, which have
+      dramatically advanced the state of the art, will be introduced.
+  09. The fundamental goals of computational linguistics—enabling computers to
+      understand, interpret, and generate human language—will be stated.
+  10. A case study of a virtual assistant like Amazon's Alexa will demonstrate how
+      multiple CL tasks are integrated to process a spoken command and generate a
+      response.
+  11. We will discuss the immense societal and economic impact of automated
+      machine translation systems like Google Translate.
+  12. This section explains how search engines leverage computational linguistics
+      to understand user queries and rank relevant documents.
+  13. A brief survey will highlight a diverse range of other applications,
+      including sentiment analysis, information extraction, and dialogue systems.
+  14. Finally, we will provide a roadmap for the rest of the book, previewing the
+      core concepts that will be covered in subsequent chapters.
+  15. The chapter concludes with a summary of the key definitions, historical
+      periods, and applications discussed.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 6 aids. Explain the chosen aids in detail. Only list the items where an aid
+  has been chosen.
+hash: f99506e59bddf91f53bc00b326048dd3721c5dbfb22ebc9a68024cd59b872947
+response:
+- number: 2
+  aid: Diagram
+  description:
+    A Venn diagram illustrating computational linguistics as the intersection of
+    three overlapping fields: computer science, linguistics, and artificial
+    intelligence. This will visually anchor the interdisciplinary nature of the
+    subject.
+- number: 3
+  aid: Diagram
+  description:
+    A diagram showing two different syntactic parse trees for the sentence 'I saw a
+    man on a hill with a telescope'. This will visually represent the concept of
+    structural ambiguity, a core challenge in the field, by showing how the phrase
+    'with a telescope' can attach to either 'hill' or 'saw'.
+- number: 5
+  aid: Timeline
+  description:
+    A timeline graphic charting the major eras in the history of computational
+    linguistics. It will highlight key periods and events, such as the early
+    symbolic/rule-based era (1950s-1980s), the statistical revolution (late
+    1980s-2000s), and the current deep learning era.
+- number: 10
+  aid: Diagram
+  description:
+    A flowchart showing the processing pipeline for a spoken command given to a
+    virtual assistant. It will illustrate the sequence of interconnected CL tasks:
+    Automatic Speech Recognition -> Natural Language Understanding -> Dialogue
+    Management -> Natural Language Generation -> Text-to-Speech.
+- number: 11
+  aid: Chart
+  description:
+    A line chart showing the improvement in machine translation quality over time,
+    plotting a standard evaluation metric (like BLEU score) on the y-axis against
+    years on the x-axis. The chart will visually emphasize the dramatic performance
+    gains corresponding to paradigm shifts to statistical and neural methods.
+- number: 13
+  aid: Table
+  description:
+    A table summarizing a range of modern computational linguistics applications.
+    Columns will detail the 'Application' (e.g., Sentiment Analysis, Named Entity
+    Recognition), its 'Goal', and a concrete 'Example' (e.g., 'Classify product
+    reviews as positive/negative', 'Identify people and organizations in a news
+    article').
+duration: 22318 ms
+usage_stats:
+  {
+    "candidates_token_count": 509,
+    "prompt_token_count": 581,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 581
+      }
+    ],
+    "thoughts_token_count": 1673,
+    "total_token_count": 2763
+  }
+...

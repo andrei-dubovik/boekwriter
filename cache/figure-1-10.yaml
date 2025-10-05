@@ -1,0 +1,211 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To see how the different branches of computational linguistics come together,
+  consider one of its most ubiquitous applications: a virtual assistant like
+  Amazon's Alexa or Google Assistant. These systems appear to have a seamless,
+  singular ability to converse, but this illusion is built upon a cascade of
+  distinct computational tasks. This entire sequence is visualized in the
+  processing pipeline shown in Fig. 1.10. Let's trace the journey of a simple
+  spoken command: *"Hey assistant, what's the weather like in Paris tomorrow?"*
+  
+  The first challenge is to convert the physical sound waves of your voice into
+  digital text. This is the domain of **Automatic Speech Recognition (ASR)**. The
+  assistant's microphone captures the utterance, and an ASR model, trained on
+  thousands of hours of speech data, transcribes it into the text string: "what's
+  the weather like in paris tomorrow". This process must be robust enough to
+  handle a vast range of accents, speaking speeds, and background noise. A single
+  transcription error at this stage can cause the entire interaction to fail.
+  
+  Once the command exists as text, the system must decipher its meaning, a task
+  known as **Natural Language Understanding (NLU)**. NLU's goal is to transform
+  the unstructured string of words into a structured, machine-readable format. It
+  does this by identifying two key things:
+  
+  - **Intent:** The user's core goal. In this case, the intent is to
+    `GetWeatherForecast`.
+  - **Entities (or Slots):** The specific pieces of information needed to fulfill
+    the intent. Here, the entities are `Location: Paris` and `Date: tomorrow`.
+  
+  The output of the NLU component is no longer just a sequence of words, but a
+  structured representation like:
+  `{ intent: GetWeatherForecast, location: "Paris", date: "tomorrow" }`.
+  
+  This structured data is passed to the **Dialogue Manager (DM)**, the system's
+  brain. The DM maintains the state of the conversation and decides what action to
+  take. Seeing the `GetWeatherForecast` intent, it knows it must query an external
+  service, such as a weather API. It uses the extracted entities to populate this
+  query, requesting the forecast for "Paris" on the relevant date. If the NLU
+  module had failed to identify a location (e.g., if the user had just asked,
+  "What's the weather like tomorrow?"), the DM's logic would decide to ask a
+  clarifying question: "For which city?".
+  
+  After the DM retrieves the information from the weather service—say,
+  `{ forecast: "sunny", high: "15°C" }`—it must deliver this answer to the user.
+  This is where **Natural Language Generation (NLG)** comes in. The NLG module
+  takes the structured data from the API and converts it into a well-formed,
+  natural-sounding sentence, such as: "The weather in Paris tomorrow will be
+  sunny, with a high of 15 degrees Celsius."
+  
+  Finally, this generated text string is sent to a **Text-to-Speech (TTS)** or
+  speech synthesis engine. The TTS system converts the text back into audible
+  speech, producing the synthesized voice that you hear as the final response.
+  This intricate, multi-stage process—from speech to text, text to meaning,
+  meaning to action, action to text, and text back to speech—all happens in just a
+  few seconds, perfectly illustrating how multiple sub-fields of computational
+  linguistics are integrated to create a single, powerful application.
+  
+  This fragment refers to Fig. 1.10. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A flowchart showing the processing pipeline for a spoken command given to a
+  virtual assistant. It will illustrate the sequence of interconnected CL tasks:
+  Automatic Speech Recognition -> Natural Language Understanding -> Dialogue
+  Management -> Natural Language Generation -> Text-to-Speech.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 55197e06c75dfb5724b0045ca6a3d2a9992a223af01c1ec4c83fdcb04e652725
+response:
+  caption:
+    A flowchart showing the processing pipeline for a spoken command given to a
+    virtual assistant. The process begins with Automatic Speech Recognition (ASR)
+    converting speech to text. The text is then interpreted by Natural Language
+    Understanding (NLU) to extract intent and entities. A Dialogue Manager (DM) uses
+    this structured data to decide on an action, potentially querying an external
+    API. The result is formulated into a sentence by the Natural Language Generation
+    (NLG) module, and finally converted back into audible speech by a Text-to-Speech
+    (TTS) engine.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" font-family="sans-serif" font-size="14px">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="#fff"/>
+      <style>.box { fill: #f0f8ff; stroke: #6495ed; stroke-width: 1.5px; } .label { text-anchor: middle; fill: #333; font-weight: bold; } .sub-label { text-anchor: middle; font-size: 11px; fill: #555; font-style: italic; } .arrow { stroke: #333; stroke-width: 2px; marker-end: url(#arrowhead); } .api-box { fill: #fff0f5; stroke: #db7093; stroke-width: 1.5px; }</style>
+      <g id="input">
+        <text x="50" y="285" text-anchor="middle" font-size="12px">Spoken Command</text>
+        <path d="M 20 300 C 30 290, 40 310, 50 300 S 70 290, 80 300" stroke="#333" stroke-width="1.5" fill="none"/>
+      </g>
+      <g id="pipeline">
+        <rect x="110" y="270" width="120" height="70" rx="5" class="box"/>
+        <text x="170" y="300" class="label">
+          <tspan x="170" dy="-0.6em">Automatic Speech</tspan>
+          <tspan x="170" dy="1.2em">Recognition (ASR)</tspan>
+        </text>
+        <path d="M 230 305 L 270 305" class="arrow"/>
+        <text x="250" y="295" class="sub-label">Text</text>
+        <rect x="270" y="270" width="120" height="70" rx="5" class="box"/>
+        <text x="330" y="300" class="label">
+          <tspan x="330" dy="-0.6em">Natural Language</tspan>
+          <tspan x="330" dy="1.2em">Understanding (NLU)</tspan>
+        </text>
+        <path d="M 390 305 L 430 305" class="arrow"/>
+        <text x="410" y="295" class="sub-label">Structured Meaning</text>
+        <rect x="430" y="270" width="120" height="70" rx="5" class="box"/>
+        <text x="490" y="305" class="label">Dialogue Manager (DM)</text>
+        <path d="M 550 305 L 590 305" class="arrow"/>
+        <text x="570" y="295" class="sub-label">Structured Data</text>
+        <rect x="590" y="270" width="120" height="70" rx="5" class="box"/>
+        <text x="650" y="300" class="label">
+          <tspan x="650" dy="-0.6em">Natural Language</tspan>
+          <tspan x="650" dy="1.2em">Generation (NLG)</tspan>
+        </text>
+        <path d="M 710 305 L 750 305" class="arrow"/>
+        <text x="730" y="295" class="sub-label">Text</text>
+      </g>
+      <g id="output_stage">
+        <rect x="750" y="270" width="120" height="70" rx="5" class="box"/>
+        <text x="810" y="300" class="label">
+          <tspan x="810" dy="-0.6em">Text-to-Speech</tspan>
+          <tspan x="810" dy="1.2em">(TTS)</tspan>
+        </text>
+      </g>
+      <g id="api_interaction">
+        <rect x="430" y="400" width="120" height="50" rx="5" class="api-box"/>
+        <text x="490" y="428" class="label">External APIs</text>
+        <path d="M 480 340 L 480 400" class="arrow"/>
+        <path d="M 500 400 L 500 340" class="arrow"/>
+      </g>
+      <g id="final_output">
+        <text x="920" y="285" text-anchor="middle" font-size="12px">Spoken Response</text>
+        <path d="M 890 300 C 900 290, 910 310, 920 300 S 940 290, 950 300" stroke="#333" stroke-width="1.5" fill="none"/>
+        <path d="M 870 305 L 890 305" class="arrow"/>
+      </g>
+      <svg x="0" y="0" width="1000" height="600" viewBox="0 0 1000 600">
+        <rect width="100%" height="100%" fill="#fff"/>
+        <g id="input">
+          <text x="35" y="290" text-anchor="middle" font-size="12px">Spoken</text>
+          <text x="35" y="305" text-anchor="middle" font-size="12px">Command</text>
+          <path d="M 65 300 L 95 300" class="arrow"/>
+        </g>
+        <g id="pipeline">
+          <rect x="95" y="265" width="130" height="70" rx="5" class="box"/>
+          <text x="160" y="295" class="label">
+            <tspan x="160" dy="-0.6em">Automatic Speech</tspan>
+            <tspan x="160" dy="1.2em">Recognition (ASR)</tspan>
+          </text>
+          <path d="M 225 300 L 265 300" class="arrow"/>
+          <text x="245" y="290" class="sub-label">Text</text>
+          <rect x="265" y="265" width="130" height="70" rx="5" class="box"/>
+          <text x="330" y="295" class="label">
+            <tspan x="330" dy="-0.6em">Natural Language</tspan>
+            <tspan x="330" dy="1.2em">Understanding (NLU)</tspan>
+          </text>
+          <path d="M 395 300 L 435 300" class="arrow"/>
+          <text x="415" y="290" class="sub-label">Structured Meaning</text>
+          <rect x="435" y="265" width="130" height="70" rx="5" class="box"/>
+          <text x="500" y="300" class="label">Dialogue Manager (DM)</text>
+          <path d="M 565 300 L 605 300" class="arrow"/>
+          <text x="585" y="290" class="sub-label">Structured Data</text>
+          <rect x="605" y="265" width="130" height="70" rx="5" class="box"/>
+          <text x="670" y="295" class="label">
+            <tspan x="670" dy="-0.6em">Natural Language</tspan>
+            <tspan x="670" dy="1.2em">Generation (NLG)</tspan>
+          </text>
+          <path d="M 735 300 L 775 300" class="arrow"/>
+          <text x="755" y="290" class="sub-label">Text</text>
+        </g>
+        <g id="output_stage">
+          <rect x="775" y="265" width="130" height="70" rx="5" class="box"/>
+          <text x="840" y="295" class="label">
+            <tspan x="840" dy="-0.6em">Text-to-Speech</tspan>
+            <tspan x="840" dy="1.2em">(TTS)</tspan>
+          </text>
+        </g>
+        <g id="api_interaction">
+          <rect x="435" y="400" width="130" height="50" rx="5" class="api-box"/>
+          <text x="500" y="428" class="label">External API</text>
+          <path d="M 490 335 L 490 400" class="arrow"/>
+          <path d="M 510 400 L 510 335" class="arrow"/>
+        </g>
+        <g id="final_output">
+          <path d="M 905 300 L 935 300" class="arrow"/>
+          <text x="965" y="290" text-anchor="middle" font-size="12px">Spoken</text>
+          <text x="965" y="305" text-anchor="middle" font-size="12px">Response</text>
+        </g>
+      </svg>
+    </svg>
+duration: 49593 ms
+usage_stats:
+  {
+    "candidates_token_count": 2548,
+    "prompt_token_count": 912,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 912
+      }
+    ],
+    "thoughts_token_count": 4022,
+    "total_token_count": 7482
+  }
+...

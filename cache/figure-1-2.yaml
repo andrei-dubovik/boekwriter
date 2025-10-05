@@ -1,0 +1,100 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Computational linguistics is not a monolithic discipline but a vibrant synthesis
+  of three distinct fields: linguistics, computer science, and artificial
+  intelligence. As illustrated in the Venn diagram in Fig. 1.2, it resides at the
+  intersection where the scientific study of language, the theory of computation,
+  and the quest for intelligent behavior converge. Each parent field provides
+  indispensable components, and understanding their unique contributions is key to
+  grasping the nature of our subject.
+  
+  From *linguistics*, the field inherits its core object of study and theoretical
+  grounding. Linguistics provides the formal models for describing language
+  structure, from the smallest sounds (phonology) and word forms (morphology) to
+  sentence structure (syntax) and meaning (semantics and pragmatics). It frames
+  the fundamental questions: What constitutes a grammatical sentence? How do words
+  acquire meaning from context? How do we resolve ambiguity? Without the
+  descriptive and theoretical frameworks developed over centuries of linguistic
+  study, our computational efforts would be unguided, lacking a deep understanding
+  of the phenomena we seek to model.
+  
+  *Computer science* provides the "computational" in the field's name,
+  contributing the algorithms, data structures, and engineering principles
+  necessary to make linguistic theories operational. It is the discipline that
+  allows us to process language at a massive scale. Formal language theory, which
+  we will encounter in Chapter 2, provides the mathematical foundation for
+  modeling language structures, while efficient algorithms for tasks like parsing
+  and searching enable the creation of practical applications. Computer science
+  provides the rigor and scalability to transform abstract linguistic models into
+  working systems that can handle the complexity and sheer volume of real-world
+  text and speech.
+  
+  Finally, *artificial intelligence* (AI) provides the overarching ambition and
+  many of the most powerful modern techniques. The goal of building machines that
+  can understand and generate language is a quintessential AI problem, often seen
+  as a hallmark of true intelligence. Historically, computational linguistics has
+  been considered a core subfield of AI. In the contemporary era, this link is
+  stronger than ever, as AI's machine learning paradigm—and deep learning in
+  particular—has become the dominant approach for nearly every language task. This
+  synergy is what propels the field forward: linguistic insight informs the
+  architecture of AI models, which are then implemented and evaluated using the
+  powerful tools of computer science.
+  
+  This fragment refers to Fig. 1.2. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A Venn diagram illustrating computational linguistics as the intersection of
+  three overlapping fields: computer science, linguistics, and artificial
+  intelligence. This will visually anchor the interdisciplinary nature of the
+  subject.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 168640cfe9b8243cfb940a7f46e6705f2a954e414207100fca3901dc6502e314
+response:
+  caption:
+    Fig. 1.2: A Venn diagram illustrating computational linguistics as the
+    intersection of three overlapping fields: linguistics, computer science, and
+    artificial intelligence.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+      <rect width="100%" height="100%" fill="white"/>
+      <g font-family="sans-serif" text-anchor="middle" fill="#333">
+        <g font-size="17">
+          <circle cx="200" cy="125" r="85" fill="#E57373" fill-opacity="0.7" stroke="#333" stroke-width="1.5"/>
+          <text x="200" y="70">Linguistics</text>
+          <circle cx="145" cy="195" r="85" fill="#64B5F6" fill-opacity="0.7" stroke="#333" stroke-width="1.5"/>
+          <text x="75" y="190">Computer</text>
+          <text x="75" y="210">Science</text>
+          <circle cx="255" cy="195" r="85" fill="#81C784" fill-opacity="0.7" stroke="#333" stroke-width="1.5"/>
+          <text x="325" y="190">Artificial</text>
+          <text x="325" y="210">Intelligence</text>
+        </g>
+        <g font-size="16" font-weight="bold">
+          <text x="200" y="170">Computational</text>
+          <text x="200" y="190">Linguistics</text>
+        </g>
+      </g>
+    </svg>
+duration: 29795 ms
+usage_stats:
+  {
+    "candidates_token_count": 430,
+    "prompt_token_count": 631,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 631
+      }
+    ],
+    "thoughts_token_count": 3727,
+    "total_token_count": 4788
+  }
+...

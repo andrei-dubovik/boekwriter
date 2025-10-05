@@ -1,0 +1,161 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Perhaps no application demonstrates the transformative power of computational
+  linguistics more vividly than automated Machine Translation (MT). The ambitious
+  goal of instantly translating text from a source language to a target language
+  has been a driving force in the field since its inception. While early systems
+  produced translations that were often more comical than useful, today's
+  platforms, like Google Translate or DeepL, have become indispensable tools for
+  communication, commerce, and information access on a global scale.
+  
+  The societal impact is immense. These systems empower travelers to navigate
+  foreign countries, enable immigrants to access essential services, and allow
+  researchers to read scientific papers published in other languages. They have
+  fundamentally lowered the barrier to cross-cultural communication, making the
+  world's vast repository of knowledge and culture more accessible than ever
+  before. For businesses, MT facilitates international e-commerce by localizing
+  product descriptions and customer support, opening up global markets that were
+  once prohibitively expensive to enter. A small online retailer can now
+  communicate with customers across dozens of countries, a feat unimaginable just
+  a few decades ago.
+  
+  This revolution did not happen overnight. It is the direct result of the major
+  paradigm shifts in computational linguistics. As illustrated in **Fig. 1.11**,
+  the quality of machine translation, often measured by automated metrics like the
+  BLEU score,¹ has seen dramatic improvements that coincide with these shifts. The
+  move from rule-based systems to *Statistical Machine Translation (SMT)* in the
+  1990s and 2000s led to a significant leap in performance by learning translation
+  patterns from massive amounts of parallel text. The subsequent adoption of
+  *Neural Machine Translation (NMT)* in the mid-2010s, powered by the deep
+  learning techniques we will explore later in this book, caused an even more
+  spectacular jump in quality. Modern NMT systems can produce stunningly fluent
+  and accurate translations, particularly for high-resource language pairs like
+  French and English.
+  
+  The economic implications are just as significant. The global language services
+  industry is valued in the tens of billions of dollars, and MT is a disruptive
+  force within it. Rather than replacing human translators, it has created a new
+  collaborative model where machines produce a high-quality first draft that a
+  human expert then refines—a process known as post-editing. This synergy makes
+  professional translation faster and more cost-effective, fueling the engine of
+  global enterprise. Machine translation stands as a testament to the field's
+  ability to tackle a profoundly complex and human problem with computational
+  rigor, yielding a technology that has reshaped our interconnected world.
+  
+  ______________________________________________________________________
+  
+  ¹ BLEU (Bilingual Evaluation Understudy) is a metric for evaluating a generated
+  sentence to a set of high-quality reference translations. It measures the
+  correspondence between a machine's output and that of a human.
+  
+  This fragment refers to Fig. 1.11. The figure in question is a "Chart" and its
+  description is as follows:
+  
+  A line chart showing the improvement in machine translation quality over time,
+  plotting a standard evaluation metric (like BLEU score) on the y-axis against
+  years on the x-axis. The chart will visually emphasize the dramatic performance
+  gains corresponding to paradigm shifts to statistical and neural methods.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 5f6bc4dd9cc8ab08866b4e9fddd5f34920ceb14beb8d0bd29c797ec9dc8272e0
+response:
+  caption:
+    Fig. 1.11: The evolution of Machine Translation quality over time, measured by a
+    metric like the BLEU score. The chart highlights the significant performance
+    improvements following the major paradigm shifts from rule-based systems to
+    Statistical Machine Translation (SMT) in the 1990s and the subsequent, even more
+    dramatic, leap with the advent of Neural Machine Translation (NMT) in the
+    mid-2010s.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" font-family="sans-serif">
+      <rect width="400" height="300" fill="white"/>
+      <g class="axes" stroke="black" stroke-width="1">
+        <path d="M 50 260 H 380"/>
+        <path d="M 50 30 V 260"/>
+      </g>
+      <g class="ticks" font-size="10px" text-anchor="middle">
+        <g class="x-ticks">
+          <g transform="translate(50, 260)">
+            <line y2="5"/>
+            <text y="18">1990</text>
+          </g>
+          <g transform="translate(160, 260)">
+            <line y2="5"/>
+            <text y="18">2000</text>
+          </g>
+          <g transform="translate(270, 260)">
+            <line y2="5"/>
+            <text y="18">2010</text>
+          </g>
+          <g transform="translate(380, 260)">
+            <line y2="5"/>
+            <text y="18">2020</text>
+          </g>
+        </g>
+        <g class="y-ticks" text-anchor="end">
+          <g transform="translate(50, 260)">
+            <line x2="-5"/>
+            <text x="-8" dy=".3em">0</text>
+          </g>
+          <g transform="translate(50, 221.7)">
+            <line x2="-5"/>
+            <text x="-8" dy=".3em">10</text>
+          </g>
+          <g transform="translate(50, 183.3)">
+            <line x2="-5"/>
+            <text x="-8" dy=".3em">20</text>
+          </g>
+          <g transform="translate(50, 145)">
+            <line x2="-5"/>
+            <text x="-8" dy=".3em">30</text>
+          </g>
+          <g transform="translate(50, 106.7)">
+            <line x2="-5"/>
+            <text x="-8" dy=".3em">40</text>
+          </g>
+          <g transform="translate(50, 68.3)">
+            <line x2="-5"/>
+            <text x="-8" dy=".3em">50</text>
+          </g>
+          <g transform="translate(50, 30)">
+            <line x2="-5"/>
+            <text x="-8" dy=".3em">60</text>
+          </g>
+        </g>
+      </g>
+      <g class="labels" font-size="12px" text-anchor="middle">
+        <text x="215" y="290">Year</text>
+        <text transform="translate(15, 145) rotate(-90)">Translation Quality (BLEU Score)</text>
+      </g>
+      <g class="annotations">
+        <line x1="138" y1="30" x2="138" y2="260" stroke="#aaa" stroke-width="1" stroke-dasharray="4 2"/>
+        <line x1="314" y1="30" x2="314" y2="260" stroke="#aaa" stroke-width="1" stroke-dasharray="4 2"/>
+        <text x="94" y="215" font-size="11px" fill="#555" text-anchor="middle">Rule-based</text>
+        <text x="226" y="150" font-size="11px" fill="#555" text-anchor="middle">Statistical MT (SMT)</text>
+        <text x="347" y="65" font-size="11px" fill="#555" text-anchor="middle">Neural MT (NMT)</text>
+      </g>
+      <polyline points="50,221.7 138,202.5 270,125.8 314,114.7 380,49.2" fill="none" stroke="#007bff" stroke-width="2.5"/>
+    </svg>
+duration: 32169 ms
+usage_stats:
+  {
+    "candidates_token_count": 1108,
+    "prompt_token_count": 767,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 767
+      }
+    ],
+    "thoughts_token_count": 3319,
+    "total_token_count": 5194
+  }
+...

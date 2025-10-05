@@ -1,0 +1,596 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: headpiece
+prompt:
+  What follows is a text for a chapter from a book called "Introduction to
+  Computational Linguistics".
+  
+  <chapter>
+  
+  Computational linguistics is the scientific study of language from a
+  computational perspective. At its core, the discipline is concerned with
+  modeling human language in all its forms—from the sounds of speech to the
+  structure of sentences and the flow of dialogue—using the formalisms and
+  algorithms of computer science.
+  
+  This pursuit has a dual nature. First, it is a *scientific* discipline. By
+  creating computational models of linguistic phenomena, we can test the validity
+  and predictive power of linguistic theories, leading to a deeper, more rigorous
+  understanding of how language itself works. Second, it is an *engineering*
+  discipline, focused on building useful technologies that can process,
+  understand, interpret, and generate human language.
+  
+  This interplay between scientific inquiry and technological application is a
+  defining characteristic of the field. Theoretical insights about linguistic
+  structure often pave the way for new applications, while the challenges of
+  building practical systems frequently reveal the limitations of our current
+  theories, driving the science forward. It asks not only *how* language is
+  structured, but also *how we can build machines* that process it.
+  
+  Computational linguistics is not a monolithic discipline but a vibrant synthesis
+  of three distinct fields: linguistics, computer science, and artificial
+  intelligence. As illustrated in the Venn diagram in Fig. 1.2, it resides at the
+  intersection where the scientific study of language, the theory of computation,
+  and the quest for intelligent behavior converge. Each parent field provides
+  indispensable components, and understanding their unique contributions is key to
+  grasping the nature of our subject.
+  
+  From *linguistics*, the field inherits its core object of study and theoretical
+  grounding. Linguistics provides the formal models for describing language
+  structure, from the smallest sounds (phonology) and word forms (morphology) to
+  sentence structure (syntax) and meaning (semantics and pragmatics). It frames
+  the fundamental questions: What constitutes a grammatical sentence? How do words
+  acquire meaning from context? How do we resolve ambiguity? Without the
+  descriptive and theoretical frameworks developed over centuries of linguistic
+  study, our computational efforts would be unguided, lacking a deep understanding
+  of the phenomena we seek to model.
+  
+  *Computer science* provides the "computational" in the field's name,
+  contributing the algorithms, data structures, and engineering principles
+  necessary to make linguistic theories operational. It is the discipline that
+  allows us to process language at a massive scale. Formal language theory, which
+  we will encounter in Chapter 2, provides the mathematical foundation for
+  modeling language structures, while efficient algorithms for tasks like parsing
+  and searching enable the creation of practical applications. Computer science
+  provides the rigor and scalability to transform abstract linguistic models into
+  working systems that can handle the complexity and sheer volume of real-world
+  text and speech.
+  
+  Finally, *artificial intelligence* (AI) provides the overarching ambition and
+  many of the most powerful modern techniques. The goal of building machines that
+  can understand and generate language is a quintessential AI problem, often seen
+  as a hallmark of true intelligence. Historically, computational linguistics has
+  been considered a core subfield of AI. In the contemporary era, this link is
+  stronger than ever, as AI's machine learning paradigm—and deep learning in
+  particular—has become the dominant approach for nearly every language task. This
+  synergy is what propels the field forward: linguistic insight informs the
+  architecture of AI models, which are then implemented and evaluated using the
+  powerful tools of computer science.
+  
+  To appreciate the complexity that computational linguistics addresses, consider
+  a seemingly simple sentence:
+  
+  *I saw a man on a hill with a telescope.*
+  
+  For a human, understanding this sentence feels effortless. We might briefly
+  register a slight ambiguity, but context or common sense usually guides us to a
+  single, intended meaning. For a computer, however, this sentence presents a
+  significant challenge. The string of words is grammatically correct, yet it
+  allows for at least two distinct interpretations based on its underlying
+  structure:
+  
+  1. There is a man on a hill, and I used a telescope to see him. In this case,
+     the telescope is the instrument of the action 'saw'.
+  2. There is a man on a hill, and that hill also has a telescope on it. In this
+     case, the telescope is part of the description of the hill.
+  
+  This is a classic example of *structural ambiguity*, also known as syntactic
+  ambiguity. The uncertainty doesn't come from the words themselves but from how
+  they can be grammatically combined. The source of the confusion is the
+  prepositional phrase *with a telescope*. What does it modify? Does it attach to
+  the verb phrase (*saw...with a telescope*) or the noun phrase (*a hill with a
+  telescope*)?
+  
+  This ambiguity is visually represented in the two syntactic parse trees shown in
+  Fig. 1.3. In one tree, the phrase *with a telescope* attaches to the verb phrase
+  headed by *saw*, modifying the act of seeing. In the other, it attaches to the
+  noun phrase *a hill*, modifying the location. Both are perfectly valid
+  grammatical structures. A computational system, however, has no innate
+  understanding of the world to help it decide. It cannot know if the speaker is
+  an astronomer or is describing a landmark. Without a mechanism to resolve this
+  ambiguity, a system cannot reliably answer questions like "What did you use to
+  see the man?" or "What was on the hill?"
+  
+  Resolving this kind of ambiguity is a central task in computational linguistics.
+  It requires a powerful combination of disciplines. From *linguistics*, we borrow
+  the formalisms of syntax that allow us to identify and represent these different
+  possible structures. From *computer science* and *artificial intelligence*, we
+  leverage algorithms to parse the sentence and statistical models to determine
+  which structure is more probable. For instance, a model trained on a vast amount
+  of text might learn that the verb 'saw' is far more frequently modified by the
+  instrument 'with a telescope' than the noun 'hill' is. This single, illustrative
+  sentence thus encapsulates the core challenge of the field: to make the
+  implicit, probabilistic reasoning that humans perform so easily explicit and
+  computable.
+  
+  As you navigate the field, you will frequently encounter two terms:
+  *Computational Linguistics* (CL) and *Natural Language Processing* (NLP). While
+  often used interchangeably, especially in industry, they represent a subtle but
+  important distinction in focus, best understood through the lens of science
+  versus engineering.
+  
+  *Computational Linguistics* is fundamentally a *scientific* discipline. Its
+  primary goal is to understand the nature of human language itself, using
+  computational models as its primary theoretical and experimental tool. A
+  computational linguist asks questions like: What formal mechanisms can explain
+  how humans resolve ambiguity? Can we create a model of syntax that aligns with
+  psycholinguistic evidence of human sentence processing? The ultimate aim is to
+  gain deeper insight into language and the human mind.
+  
+  *Natural Language Processing*, on the other hand, is an *engineering*
+  discipline. It is a subfield of artificial intelligence and computer science
+  focused on building systems that can perform useful tasks involving language. An
+  NLP engineer asks questions like: What is the most accurate and efficient
+  algorithm for translating Spanish to Japanese? How can we build a chatbot that
+  reliably answers customer questions? The success of an NLP system is measured by
+  its performance, robustness, and utility in a real-world application.
+  
+  Think of the relationship between physics and mechanical engineering. A
+  physicist studies the laws of motion and thermodynamics to understand the
+  universe. An engineer uses those laws to build a more efficient engine. The two
+  are deeply intertwined and mutually beneficial. In the same way, CL and NLP
+  exist in a symbiotic relationship:
+  
+  - Scientific insights from **CL** about the structure of language often lead to
+    new techniques and better-performing models in **NLP**.
+  - The practical challenges and empirical results from building **NLP** systems
+    often challenge existing theories and drive new research questions in **CL**.
+  
+  In this book, we will explore both facets. We will delve into the linguistic
+  theories and formal models that form the scientific core of the field, while
+  also grounding our discussion in the practical algorithms and applications that
+  define modern NLP.
+  
+  The history of computational linguistics is not one of steady, linear progress
+  but is better understood as a series of major paradigm shifts, each driven by
+  new theoretical insights and advancements in computing power. As summarized in
+  the timeline in Fig. 1.5, we can broadly identify three distinct eras that have
+  shaped the field.
+  
+  The journey began in the 1950s, alongside the dawn of artificial intelligence
+  itself. This first phase, often called the *symbolic* or *rule-based era*, was
+  characterized by attempts to explicitly encode linguistic knowledge. Researchers
+  believed that by writing down a sufficient number of grammatical rules and
+  dictionary entries, they could enable machines to understand and translate
+  language. This approach dominated the field for several decades but often
+  struggled with the vast complexity and ambiguity inherent in human language.
+  
+  The late 1980s and 1990s witnessed the *statistical revolution*. This marked a
+  profound shift away from handcrafted rules and towards learning probabilistic
+  patterns directly from large digital text collections known as corpora. Finally,
+  the 2010s ushered in the current *deep learning era*, where neural networks have
+  redefined the state of the art, enabling unprecedented performance on a wide
+  array of language tasks.
+  
+  The early history of computational linguistics, from the 1950s through the
+  1980s, was defined by a *symbolic* or *rule-based* paradigm. The guiding
+  philosophy was one of rationalism: human language was seen as a formal system
+  that could be fully described by a set of explicit rules and structures. The
+  task, then, was for linguists to meticulously codify this knowledge—the rules of
+  grammar, syntax, and morphology—and for computer scientists to implement these
+  rules in programs. This approach envisioned the computer not as a learner, but
+  as a logician, mechanically applying human-created linguistic rules to process
+  text.
+  
+  The most prominent and publicized example of this era was the Georgetown-IBM
+  machine translation experiment in 1954. This demonstration, designed to showcase
+  the potential of automated translation, successfully translated over sixty
+  carefully selected Russian sentences into English. The system was rudimentary by
+  modern standards, relying on a small vocabulary of 250 words and just six
+  handcrafted grammatical rules. A Russian word would be looked up in a bilingual
+  dictionary, and its English equivalent would be output, with the rules handling
+  basic word reordering and inflectional changes. For instance, a rule might
+  specify how to handle a Russian noun's case ending to produce a correct English
+  prepositional phrase.
+  
+  The demonstration was a resounding success in the public eye, creating a wave of
+  optimism and securing substantial government funding for the nascent field. The
+  press confidently predicted that automated interpreters would be commonplace
+  within a few years. However, this initial success on a small, controlled problem
+  masked a fundamental weakness. The rule-based approach failed to scale. The
+  number of rules required to cover the vast complexity, ambiguity, and exceptions
+  of a real language grew astronomically. As more rules were added, they would
+  often conflict, leading to a cascade of errors. This "combinatorial explosion"
+  proved that hand-crafting a comprehensive grammar for a language was an
+  intractable task, setting the stage for a major paradigm shift.
+  
+  By the late 1980s, the limitations of purely symbolic, rule-based systems were
+  becoming clear. Hand-crafting comprehensive grammars and lexicons proved to be a
+  monumental task; for every rule a linguist could devise, real-world language
+  presented countless exceptions. These systems were notoriously *brittle*: an
+  unfamiliar word or a slightly unconventional grammatical construction could
+  cause them to fail completely. Furthermore, they were difficult to scale or
+  adapt to new domains, as each new application required another intensive, manual
+  effort of rule creation.
+  
+  This led to a major paradigm shift, often called the *statistical revolution*.
+  The central idea was to move away from hand-crafted rules and towards models
+  that learn patterns automatically from data. Instead of relying on a linguist's
+  intuition, the field embraced probability theory and machine learning. The
+  fundamental question changed from "Is this sentence grammatically correct
+  according to my rules?" to "What is the most *probable* interpretation of this
+  sentence given the evidence we have seen?"
+  
+  This new empirical approach was fueled by two parallel developments: the
+  exponential growth in computing power, which made it feasible to process huge
+  datasets, and the increasing availability of large-scale digital text
+  collections, known as *corpora*. Researchers could now train statistical models
+  on millions or even billions of words of authentic text, allowing the models to
+  learn the likelihood of different linguistic phenomena. Tasks were reframed as
+  problems of statistical inference. For example, machine translation was no
+  longer about applying transfer rules, but about finding the target sentence *T*
+  that maximizes the probability $P(T|S)$ given a source sentence *S*. Using
+  Bayes' theorem, this can be expressed as finding the *T* that maximizes the
+  product of two probabilities:
+  
+  $P(S|T) \times P(T)$
+  
+  This elegantly separates the problem into a *translation model* (the probability
+  of the source given the target) and a *language model* (the a priori probability
+  of the target sentence). This probabilistic mindset, pioneered in speech
+  recognition and machine translation, made systems more robust and adaptable,
+  laying the essential groundwork for the data-driven methods that define
+  computational linguistics today.
+  
+  Beginning in the early 2010s, the field underwent its most dramatic
+  transformation to date, ushering in the current era of *deep learning*. This
+  paradigm shift was fueled by the convergence of three key factors: the
+  availability of massive datasets, significant advancements in parallel computing
+  hardware like Graphics Processing Units (GPUs), and breakthroughs in neural
+  network architectures. Unlike the statistical methods that relied on carefully
+  engineered features and explicit probabilistic models, deep learning models
+  learn relevant features automatically from raw data through a hierarchy of
+  interconnected layers of "neurons."
+  
+  The first major success of this era was the development of dense word
+  representations, known as *word embeddings*. Models like *Word2Vec* and *GloVe*
+  learned to map words to low-dimensional vectors, where semantically similar
+  words were located close to each other in the vector space. This was a
+  revolutionary departure from the sparse, high-dimensional vectors of the
+  previous era. It allowed models to capture nuanced semantic relationships—for
+  instance, learning a vector relationship such that
+  $vector('king') -
+  vector('man') + vector('woman') \approx vector('queen')$. This
+  ability to represent meaning numerically became a cornerstone of modern NLP.
+  
+  Following this, architectures specifically designed for sequential data, such as
+  *Recurrent Neural Networks* (RNNs) and their more robust variants like Long
+  Short-Term Memory (LSTM) networks, became dominant. These models process text
+  one word at a time, maintaining an internal state or "memory" that allows them
+  to capture sequential dependencies, making them highly effective for tasks like
+  language modeling and machine translation.
+  
+  However, the most significant breakthrough of the deep learning era has been the
+  *Transformer* architecture, introduced in 2017. Its core innovation, the
+  *self-attention mechanism*, allows a model to weigh the influence of all words
+  in an input sentence when processing any single word. This enables it to capture
+  complex, long-range dependencies far more effectively than RNNs and, crucially,
+  allows for massive parallelization during training. This architecture is the
+  foundation for the massive *Large Language Models* (LLMs), such as BERT and GPT,
+  that now define the state of the art. These models are pre-trained on immense
+  quantities of text, acquiring a broad understanding of language that can then be
+  fine-tuned for exceptional performance on a wide range of specific tasks. This
+  paradigm of pre-training and fine-tuning has largely replaced the need to train
+  a new model from scratch for every problem, fundamentally changing how
+  computational linguistics is practiced today.
+  
+  At its core, computational linguistics pursues a deceptively simple ambition: to
+  enable computers to process human language with a facility approaching our own.
+  This overarching ambition can be distilled into two primary, complementary
+  goals, often framed as *understanding* and *generation*.
+  
+  1. **Natural Language Understanding (NLU):** This is the task of analysis—of
+     mapping raw language input to a structured, unambiguous representation of its
+     meaning. It goes far beyond simple keyword matching. True understanding
+     requires a machine to dissect grammatical structure (a process we will
+     explore in Chapter 6), resolve the meaning of words in context (Chapter 7),
+     and infer a speaker's underlying intent. The goal is to *interpret* language,
+     successfully navigating the kinds of ambiguities illustrated by the
+     'telescope' sentence to arrive at a coherent meaning.
+  
+  2. **Natural Language Generation (NLG):** This is the inverse task of synthesis.
+     NLG systems start with a non-linguistic, formal representation of
+     information—such as data from a database or a knowledge graph—and produce
+     fluent, grammatically correct, and stylistically appropriate human language.
+     Applications range from automatically generating weather forecasts from
+     meteorological data to summarizing long documents or crafting responses for a
+     chatbot.
+  
+  These two goals are not independent but form the two halves of a complete
+  communication cycle. A machine translation system must first understand a
+  sentence in a source language before it can generate its equivalent in a target
+  language. A virtual assistant must interpret a user's command before it can
+  generate a helpful response. The ultimate aim is to create systems that can both
+  listen and speak, read and write, thereby bridging the gap between human
+  communication and machine computation.
+  
+  To see how the different branches of computational linguistics come together,
+  consider one of its most ubiquitous applications: a virtual assistant like
+  Amazon's Alexa or Google Assistant. These systems appear to have a seamless,
+  singular ability to converse, but this illusion is built upon a cascade of
+  distinct computational tasks. This entire sequence is visualized in the
+  processing pipeline shown in Fig. 1.10. Let's trace the journey of a simple
+  spoken command: *"Hey assistant, what's the weather like in Paris tomorrow?"*
+  
+  The first challenge is to convert the physical sound waves of your voice into
+  digital text. This is the domain of **Automatic Speech Recognition (ASR)**. The
+  assistant's microphone captures the utterance, and an ASR model, trained on
+  thousands of hours of speech data, transcribes it into the text string: "what's
+  the weather like in paris tomorrow". This process must be robust enough to
+  handle a vast range of accents, speaking speeds, and background noise. A single
+  transcription error at this stage can cause the entire interaction to fail.
+  
+  Once the command exists as text, the system must decipher its meaning, a task
+  known as **Natural Language Understanding (NLU)**. NLU's goal is to transform
+  the unstructured string of words into a structured, machine-readable format. It
+  does this by identifying two key things:
+  
+  - **Intent:** The user's core goal. In this case, the intent is to
+    `GetWeatherForecast`.
+  - **Entities (or Slots):** The specific pieces of information needed to fulfill
+    the intent. Here, the entities are `Location: Paris` and `Date: tomorrow`.
+  
+  The output of the NLU component is no longer just a sequence of words, but a
+  structured representation like:
+  `{ intent: GetWeatherForecast, location: "Paris", date: "tomorrow" }`.
+  
+  This structured data is passed to the **Dialogue Manager (DM)**, the system's
+  brain. The DM maintains the state of the conversation and decides what action to
+  take. Seeing the `GetWeatherForecast` intent, it knows it must query an external
+  service, such as a weather API. It uses the extracted entities to populate this
+  query, requesting the forecast for "Paris" on the relevant date. If the NLU
+  module had failed to identify a location (e.g., if the user had just asked,
+  "What's the weather like tomorrow?"), the DM's logic would decide to ask a
+  clarifying question: "For which city?".
+  
+  After the DM retrieves the information from the weather service—say,
+  `{ forecast: "sunny", high: "15°C" }`—it must deliver this answer to the user.
+  This is where **Natural Language Generation (NLG)** comes in. The NLG module
+  takes the structured data from the API and converts it into a well-formed,
+  natural-sounding sentence, such as: "The weather in Paris tomorrow will be
+  sunny, with a high of 15 degrees Celsius."
+  
+  Finally, this generated text string is sent to a **Text-to-Speech (TTS)** or
+  speech synthesis engine. The TTS system converts the text back into audible
+  speech, producing the synthesized voice that you hear as the final response.
+  This intricate, multi-stage process—from speech to text, text to meaning,
+  meaning to action, action to text, and text back to speech—all happens in just a
+  few seconds, perfectly illustrating how multiple sub-fields of computational
+  linguistics are integrated to create a single, powerful application.
+  
+  Perhaps no application demonstrates the transformative power of computational
+  linguistics more vividly than automated Machine Translation (MT). The ambitious
+  goal of instantly translating text from a source language to a target language
+  has been a driving force in the field since its inception. While early systems
+  produced translations that were often more comical than useful, today's
+  platforms, like Google Translate or DeepL, have become indispensable tools for
+  communication, commerce, and information access on a global scale.
+  
+  The societal impact is immense. These systems empower travelers to navigate
+  foreign countries, enable immigrants to access essential services, and allow
+  researchers to read scientific papers published in other languages. They have
+  fundamentally lowered the barrier to cross-cultural communication, making the
+  world's vast repository of knowledge and culture more accessible than ever
+  before. For businesses, MT facilitates international e-commerce by localizing
+  product descriptions and customer support, opening up global markets that were
+  once prohibitively expensive to enter. A small online retailer can now
+  communicate with customers across dozens of countries, a feat unimaginable just
+  a few decades ago.
+  
+  This revolution did not happen overnight. It is the direct result of the major
+  paradigm shifts in computational linguistics. As illustrated in **Fig. 1.11**,
+  the quality of machine translation, often measured by automated metrics like the
+  BLEU score,¹ has seen dramatic improvements that coincide with these shifts. The
+  move from rule-based systems to *Statistical Machine Translation (SMT)* in the
+  1990s and 2000s led to a significant leap in performance by learning translation
+  patterns from massive amounts of parallel text. The subsequent adoption of
+  *Neural Machine Translation (NMT)* in the mid-2010s, powered by the deep
+  learning techniques we will explore later in this book, caused an even more
+  spectacular jump in quality. Modern NMT systems can produce stunningly fluent
+  and accurate translations, particularly for high-resource language pairs like
+  French and English.
+  
+  The economic implications are just as significant. The global language services
+  industry is valued in the tens of billions of dollars, and MT is a disruptive
+  force within it. Rather than replacing human translators, it has created a new
+  collaborative model where machines produce a high-quality first draft that a
+  human expert then refines—a process known as post-editing. This synergy makes
+  professional translation faster and more cost-effective, fueling the engine of
+  global enterprise. Machine translation stands as a testament to the field's
+  ability to tackle a profoundly complex and human problem with computational
+  rigor, yielding a technology that has reshaped our interconnected world.
+  
+  ______________________________________________________________________
+  
+  ¹ BLEU (Bilingual Evaluation Understudy) is a metric for evaluating a generated
+  sentence to a set of high-quality reference translations. It measures the
+  correspondence between a machine's output and that of a human.
+  
+  Search engines like Google or Bing represent one of the most profound and
+  widely-used applications of computational linguistics. At first glance, a search
+  engine might seem like a simple keyword-matching tool, retrieving documents that
+  contain the exact words typed into the search bar. The reality, however, is far
+  more complex. Modern search engines do not just *match* strings of text; they
+  strive to *understand* a user's intent and the content of billions of web pages
+  to deliver truly relevant results. This monumental leap from matching to
+  understanding is powered by core techniques from computational linguistics.
+  
+  The process begins the moment a user types a query. The engine must first
+  interpret what the user is actually looking for. This involves several tasks. It
+  performs spelling correction for typos and uses knowledge of lexical semantics
+  to perform *query expansion*, recognizing that a search for "car repair shops"
+  is also related to "auto maintenance services." Furthermore, it must resolve
+  ambiguity. A query for "jaguar" could refer to the animal, the car brand, or an
+  operating system. By analyzing a user’s prior searches or geographic location,
+  the engine can disambiguate the query to infer the most likely intent.
+  
+  In parallel with understanding queries, the engine must also have a deep
+  understanding of the documents it might return as results. Before a page is ever
+  shown to a user, it is crawled and analyzed using a pipeline of language
+  processing techniques. The text is tokenized, and words are normalized using
+  stemming and lemmatization so that searches for "run" can match documents
+  containing "ran" or "running." More advanced methods like *Named Entity
+  Recognition* are used to identify and tag key entities like people,
+  organizations, and locations, creating a rich, structured index of the web's
+  unstructured content.
+  
+  With an understood query and a well-structured index, the final challenge is to
+  rank documents by relevance. This is the central task of *Information
+  Retrieval*. Instead of a simple yes/no decision on whether a document contains a
+  keyword, documents are assigned a relevance score. A foundational technique for
+  this is weighting terms by their importance, a classic example being TF-IDF
+  (Term Frequency–Inverse Document Frequency). The score for a term *t* in a
+  document *d* is a product of its frequency in that document and its rarity
+  across all documents:
+  
+  $TF-IDF(t, d) = TF(t, d) \times IDF(t)$
+  
+  The core idea is that a term is significant if it appears frequently in a
+  specific document ($TF$) but is rare in the overall collection ($IDF$). This
+  simple but powerful heuristic helps the engine prioritize documents where the
+  query terms are not just present, but a central part of the topic. By combining
+  these computational linguistics techniques, a search engine orchestrates a
+  complex process of understanding, analysis, and ranking to transform a simple
+  query into a useful list of results in a fraction of a second.
+  
+  Beyond the prominent examples of machine translation, search, and virtual
+  assistants, the techniques of computational linguistics power a vast ecosystem
+  of applications. These tools are often seamlessly integrated into the software
+  we use daily, working behind the scenes to structure data, understand opinions,
+  and facilitate communication. The following examples represent just a sample of
+  this diverse and impactful landscape.
+  
+  - **Sentiment Analysis and Opinion Mining:** This field focuses on automatically
+    identifying and categorizing opinions expressed in text. The primary goal is
+    often to determine the author's attitude—*positive*, *negative*, or
+    *neutral*—towards a particular topic, product, or service. Businesses use this
+    technology extensively to analyze customer feedback, monitor brand perception
+    on social media, and gauge public response to marketing campaigns.
+  
+  - **Information Extraction (IE):** While search engines retrieve relevant
+    documents, information extraction systems go a step further by pulling
+    structured data from unstructured text. A key subtask is *Named Entity
+    Recognition (NER)*, which identifies and classifies entities like people
+    (e.g., "Ada Lovelace"), organizations ("Google"), and locations ("Paris").
+    Another is *Relation Extraction*, which seeks to discover the relationships
+    between these entities, such as identifying who works for which company from a
+    collection of news articles.
+  
+  - **Text Summarization:** With the overwhelming volume of online text, automatic
+    summarization is an invaluable tool. The objective is to produce a concise and
+    fluent summary of a longer document while retaining its most important
+    information. This technology is used to generate news headlines on aggregator
+    sites, create abstracts for scientific papers, and condense long reports into
+    manageable digests for busy executives.
+  
+  - **Dialogue Systems and Chatbots:** While related to the virtual assistants
+    discussed earlier, this broad category also includes more focused
+    conversational agents. Task-oriented chatbots guide users through specific
+    processes like booking a flight or providing automated customer support,
+    freeing up human agents for more complex issues.
+  
+  These applications, along with others like grammar correction and plagiarism
+  detection, demonstrate the broad utility of the field. Each one relies on a
+  combination of the core linguistic and computational concepts we will explore
+  throughout this book. A more detailed summary of these and other modern
+  applications, outlining their primary goals and providing concrete examples, is
+  presented in Fig. 1.13.
+  
+  This book is structured to guide you systematically from the foundational
+  principles of computational linguistics to its most advanced applications. We
+  have designed a path that builds knowledge incrementally, ensuring each new
+  concept rests on a solid prior understanding.
+  
+  Our journey begins with the essential building blocks of language processing.
+  The next three chapters focus on the fundamentals:
+  
+  - **Chapter 2** introduces the formal tools for pattern matching: *regular
+    expressions* and *finite automata*.
+  - **Chapter 3** grounds us in the empirical reality of language data, covering
+    *corpus linguistics* and essential *text normalization* techniques.
+  - **Chapter 4** provides our first taste of statistical modeling by teaching you
+    how to predict word sequences with *N-gram language models*.
+  
+  With these core skills established, we will ascend the traditional linguistic
+  hierarchy. We will tackle the core analytical tasks of assigning grammatical
+  roles with *Part-of-Speech tagging* (Chapter 5), uncovering sentence structure
+  through *syntactic parsing* (Chapter 6), and finally, representing meaning with
+  *lexical and compositional semantics* (Chapter 7).
+  
+  From there, we expand our view beyond single sentences to the broader context of
+  *discourse* and *dialogue* (Chapter 8). The subsequent chapters showcase major
+  real-world applications where these techniques converge: *Machine Translation*
+  (Chapter 9), *Information Retrieval and Extraction* (Chapter 10), and *Sentiment
+  Analysis* (Chapter 11). Our exploration culminates in Chapter 12 with a look at
+  the current state-of-the-art—*Large Language Models*—and a crucial discussion of
+  the *ethical considerations* that shape the future of our field. This roadmap
+  will equip you with a comprehensive understanding of how we empower computers to
+  process human language.
+  
+  In this chapter, we have laid the groundwork for our study of computational
+  linguistics. We began by defining the field as the scientific endeavor to
+  understand and model human language using computation, highlighting its unique
+  position at the intersection of computer science, linguistics, and artificial
+  intelligence. We distinguished this scientific goal from the engineering
+  applications of *Natural Language Processing* (NLP), while acknowledging that
+  the two are deeply intertwined.
+  
+  Our historical overview traced the field's evolution through three major
+  paradigms:
+  
+  - **The Symbolic Era (1950s–1980s):** Dominated by hand-crafted grammatical
+    rules and symbolic logic, exemplified by early machine translation efforts.
+  - **The Statistical Revolution (late 1980s–2000s):** A pivotal shift towards
+    learning probabilistic models from large-scale text data, or corpora.
+  - **The Neural Era (2010s–Present):** Characterized by the remarkable success of
+    deep learning and large-scale neural networks.
+  
+  Finally, we saw how these approaches empower a vast array of real-world
+  applications, from machine translation and search engines to virtual assistants
+  and sentiment analysis. These examples underscore the core goal of enabling
+  computers to understand, interpret, and generate language, a theme we will
+  explore in technical detail throughout this book.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: 7f32e40b316110bc768a640b548c1f728cdff7fd1b698335aefc5769be68cb4c
+response:
+  Create a simple, clean line art illustration of a person in profile, looking
+  intently through a large telescope mounted on a tripod. The focus of the drawing
+  should be on the act of observation. In the distance, visible as the object of
+  the person's gaze, is a simple, rolling hill. The style should be minimalist and
+  uncluttered, emphasizing the connection between the observer, the instrument,
+  and the distant object being interpreted. The overall feeling should be one of
+  focused inquiry and the challenge of perceiving detail from afar.
+duration: 17913 ms
+usage_stats:
+  {
+    "candidates_token_count": 104,
+    "prompt_token_count": 7147,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 7147
+      }
+    ],
+    "thoughts_token_count": 1528,
+    "total_token_count": 8779
+  }
+...

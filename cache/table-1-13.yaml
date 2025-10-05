@@ -1,0 +1,99 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Beyond the prominent examples of machine translation, search, and virtual
+  assistants, the techniques of computational linguistics power a vast ecosystem
+  of applications. These tools are often seamlessly integrated into the software
+  we use daily, working behind the scenes to structure data, understand opinions,
+  and facilitate communication. The following examples represent just a sample of
+  this diverse and impactful landscape.
+  
+  - **Sentiment Analysis and Opinion Mining:** This field focuses on automatically
+    identifying and categorizing opinions expressed in text. The primary goal is
+    often to determine the author's attitude—*positive*, *negative*, or
+    *neutral*—towards a particular topic, product, or service. Businesses use this
+    technology extensively to analyze customer feedback, monitor brand perception
+    on social media, and gauge public response to marketing campaigns.
+  
+  - **Information Extraction (IE):** While search engines retrieve relevant
+    documents, information extraction systems go a step further by pulling
+    structured data from unstructured text. A key subtask is *Named Entity
+    Recognition (NER)*, which identifies and classifies entities like people
+    (e.g., "Ada Lovelace"), organizations ("Google"), and locations ("Paris").
+    Another is *Relation Extraction*, which seeks to discover the relationships
+    between these entities, such as identifying who works for which company from a
+    collection of news articles.
+  
+  - **Text Summarization:** With the overwhelming volume of online text, automatic
+    summarization is an invaluable tool. The objective is to produce a concise and
+    fluent summary of a longer document while retaining its most important
+    information. This technology is used to generate news headlines on aggregator
+    sites, create abstracts for scientific papers, and condense long reports into
+    manageable digests for busy executives.
+  
+  - **Dialogue Systems and Chatbots:** While related to the virtual assistants
+    discussed earlier, this broad category also includes more focused
+    conversational agents. Task-oriented chatbots guide users through specific
+    processes like booking a flight or providing automated customer support,
+    freeing up human agents for more complex issues.
+  
+  These applications, along with others like grammar correction and plagiarism
+  detection, demonstrate the broad utility of the field. Each one relies on a
+  combination of the core linguistic and computational concepts we will explore
+  throughout this book. A more detailed summary of these and other modern
+  applications, outlining their primary goals and providing concrete examples, is
+  presented in Fig. 1.13.
+  
+  This fragment refers to Fig. 1.13, which is a table. Its description is as
+  follows:
+  
+  A table summarizing a range of modern computational linguistics applications.
+  Columns will detail the 'Application' (e.g., Sentiment Analysis, Named Entity
+  Recognition), its 'Goal', and a concrete 'Example' (e.g., 'Classify product
+  reviews as positive/negative', 'Identify people and organizations in a news
+  article').
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: 4323b55a44a8354aa726a3ef3c5ed01a24380748501f55745c3080d7a98fa1b6
+response:
+  caption:
+    Fig. 1.13: A summary of modern computational linguistics applications, outlining
+    their primary goals and providing concrete examples.
+  latex:
+    \begin{tabular}{@{}l p{4.5cm} p{5.5cm}@{}}
+    \toprule
+    \textbf{Application} & \textbf{Goal} & \textbf{Example} \\
+    \midrule
+    Sentiment Analysis & Determine the attitude (positive, negative, neutral) expressed in a text. & Classify product reviews as positive or negative. \\
+    \addlinespace
+    Named Entity Recognition (NER) & Identify and classify entities like people, organizations, and locations. & Identify ``Ada Lovelace'' (Person) and ``Google'' (Organization) in a news article. \\
+    \addlinespace
+    Relation Extraction & Discover semantic relationships between identified entities. & Determine that a specific person works for a specific company from a text. \\
+    \addlinespace
+    Text Summarization & Create a concise and fluent summary of a longer document. & Generate headlines for news aggregator sites or abstracts for scientific papers. \\
+    \addlinespace
+    Dialogue Systems & Guide a user through a task-oriented conversation. & An automated chatbot to help a customer book a flight or check an account balance. \\
+    \bottomrule
+    \end{tabular}
+duration: 18207 ms
+usage_stats:
+  {
+    "candidates_token_count": 293,
+    "prompt_token_count": 669,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 669
+      }
+    ],
+    "thoughts_token_count": 1775,
+    "total_token_count": 2737
+  }
+...

@@ -1,0 +1,110 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The history of computational linguistics is not one of steady, linear progress
+  but is better understood as a series of major paradigm shifts, each driven by
+  new theoretical insights and advancements in computing power. As summarized in
+  the timeline in Fig. 1.5, we can broadly identify three distinct eras that have
+  shaped the field.
+  
+  The journey began in the 1950s, alongside the dawn of artificial intelligence
+  itself. This first phase, often called the *symbolic* or *rule-based era*, was
+  characterized by attempts to explicitly encode linguistic knowledge. Researchers
+  believed that by writing down a sufficient number of grammatical rules and
+  dictionary entries, they could enable machines to understand and translate
+  language. This approach dominated the field for several decades but often
+  struggled with the vast complexity and ambiguity inherent in human language.
+  
+  The late 1980s and 1990s witnessed the *statistical revolution*. This marked a
+  profound shift away from handcrafted rules and towards learning probabilistic
+  patterns directly from large digital text collections known as corpora. Finally,
+  the 2010s ushered in the current *deep learning era*, where neural networks have
+  redefined the state of the art, enabling unprecedented performance on a wide
+  array of language tasks.
+  
+  This fragment refers to Fig. 1.5. The figure in question is a "Timeline" and its
+  description is as follows:
+  
+  A timeline graphic charting the major eras in the history of computational
+  linguistics. It will highlight key periods and events, such as the early
+  symbolic/rule-based era (1950s-1980s), the statistical revolution (late
+  1980s-2000s), and the current deep learning era.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 769ef710c0ece26b9fe5104bda26fd8e70450fb572d568d832fbc3e555771213
+response:
+  caption:
+    Fig. 1.5. A timeline of the major eras in the history of computational
+    linguistics, from the early symbolic approaches to the current deep learning
+    paradigm.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" font-family="sans-serif">
+      <rect x="0" y="0" width="800" height="600" fill="white"/>
+      <line x1="50" y1="300" x2="750" y2="300" stroke="black" stroke-width="2.5"/>
+      <path d="M 750 295 L 765 300 L 750 305 Z" fill="black"/>
+      <line x1="50" y1="295" x2="50" y2="305" stroke="black" stroke-width="2"/>
+      <text x="50" y="325" text-anchor="middle" font-size="16">1950</text>
+      <line x1="137.5" y1="295" x2="137.5" y2="305" stroke="black" stroke-width="2"/>
+      <text x="137.5" y="325" text-anchor="middle" font-size="16">1960</text>
+      <line x1="225" y1="295" x2="225" y2="305" stroke="black" stroke-width="2"/>
+      <text x="225" y="325" text-anchor="middle" font-size="16">1970</text>
+      <line x1="312.5" y1="295" x2="312.5" y2="305" stroke="black" stroke-width="2"/>
+      <text x="312.5" y="325" text-anchor="middle" font-size="16">1980</text>
+      <line x1="400" y1="295" x2="400" y2="305" stroke="black" stroke-width="2"/>
+      <text x="400" y="325" text-anchor="middle" font-size="16">1990</text>
+      <line x1="487.5" y1="295" x2="487.5" y2="305" stroke="black" stroke-width="2"/>
+      <text x="487.5" y="325" text-anchor="middle" font-size="16">2000</text>
+      <line x1="575" y1="295" x2="575" y2="305" stroke="black" stroke-width="2"/>
+      <text x="575" y="325" text-anchor="middle" font-size="16">2010</text>
+      <line x1="662.5" y1="295" x2="662.5" y2="305" stroke="black" stroke-width="2"/>
+      <text x="662.5" y="325" text-anchor="middle" font-size="16">2020</text>
+      <g>
+        <rect x="50" y="150" width="341.25" height="100" fill="#aed6f1" stroke="#5dade2" stroke-width="1" rx="10"/>
+        <line x1="220.625" y1="250" x2="220.625" y2="300" stroke="#5dade2" stroke-width="2" stroke-dasharray="4"/>
+        <text x="220.625" y="190" text-anchor="middle" font-size="20" font-weight="bold" fill="#2874a6">
+          <tspan>Symbolic /</tspan>
+          <tspan x="220.625" dy="1.2em">Rule-based Era</tspan>
+        </text>
+        <text x="220.625" y="230" text-anchor="middle" font-size="16" fill="#2e86c1">1950s - 1980s</text>
+      </g>
+      <g>
+        <rect x="382.5" y="350" width="183.75" height="100" fill="#a9dfbf" stroke="#58d68d" stroke-width="1" rx="10"/>
+        <line x1="474.375" y1="350" x2="474.375" y2="300" stroke="#58d68d" stroke-width="2" stroke-dasharray="4"/>
+        <text x="474.375" y="390" text-anchor="middle" font-size="20" font-weight="bold" fill="#239b56">
+          <tspan>Statistical</tspan>
+          <tspan x="474.375" dy="1.2em">Revolution</tspan>
+        </text>
+        <text x="474.375" y="430" text-anchor="middle" font-size="16" fill="#28b463">Late 1980s - 2000s</text>
+      </g>
+      <g>
+        <rect x="575" y="150" width="122.5" height="100" fill="#f9e79f" stroke="#f4d03f" stroke-width="1" rx="10"/>
+        <line x1="636.25" y1="250" x2="636.25" y2="300" stroke="#f4d03f" stroke-width="2" stroke-dasharray="4"/>
+        <text x="636.25" y="190" text-anchor="middle" font-size="20" font-weight="bold" fill="#d4ac0d">
+          <tspan>Deep Learning</tspan>
+          <tspan x="636.25" dy="1.2em">Era</tspan>
+        </text>
+        <text x="636.25" y="230" text-anchor="middle" font-size="16" fill="#d6b633">2010s - Present</text>
+      </g>
+    </svg>
+duration: 67368 ms
+usage_stats:
+  {
+    "candidates_token_count": 1583,
+    "prompt_token_count": 440,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 440
+      }
+    ],
+    "thoughts_token_count": 8258,
+    "total_token_count": 10281
+  }
+...

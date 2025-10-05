@@ -1,0 +1,34 @@
+{model: str, query: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-flash-image-preview
+query: image
+prompt:
+  Create a simple, clean line art illustration of a person in profile, looking
+  intently through a large telescope mounted on a tripod. The focus of the drawing
+  should be on the act of observation. In the distance, visible as the object of
+  the person's gaze, is a simple, rolling hill. The style should be minimalist and
+  uncluttered, emphasizing the connection between the observer, the instrument,
+  and the distant object being interpreted. The overall feeling should be one of
+  focused inquiry and the challenge of perceiving detail from afar.
+hash: a945eba70ad147788e2fdc10e4da7ed7f59a2431a337e87d4182916da55c607b
+response: image-1.png
+duration: 5267 ms
+usage_stats:
+  {
+    "candidates_token_count": 1297,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 113,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 113
+      }
+    ],
+    "total_token_count": 1410
+  }
+...
