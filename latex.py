@@ -66,7 +66,14 @@ def render_chunk(file, chunk):
         caption = normalize(caption)
 
         text = text.replace(old_lbl, new_lbl)
+        paras = (p for p in text.split('\n\n'))
 
+        # Output all the paragrapsh before the first figure mention
+        while (par := next(paras)).find(new_lbl) == -1:
+            file.write(par)
+            file.write('\n\n')
+
+        # Output the figure
         file.write(r'\begin{figure}' + '\n')
         file.write(r'\makebox[\textwidth][c]{' + '\n')
 
@@ -85,9 +92,16 @@ def render_chunk(file, chunk):
         file.write('}\n')
         file.write(r'\caption{%s}' % caption + '\n')
         file.write(r'\label{%s}' % ref + '\n')
-        file.write(r'\end{figure}' + '\n')
+        file.write(r'\end{figure}')
 
-    file.write(text)
+        # Output all the remaining paragraphs
+        file.write('\n\n')
+        file.write(par)
+        for par in paras:
+            file.write('\n\n')
+            file.write(par)
+    else:
+        file.write(text)
 
 
 def svgbb(path):
