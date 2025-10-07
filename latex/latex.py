@@ -35,7 +35,7 @@ def render_book(book, template):
         render_chapter(chapter)
 
     # Run compilation
-    rslt = subprocess.run(['latexmk', '-pdf', 'book.tex'], capture_output=True, cwd=BUILD)
+    rslt = subprocess.run(['latexmk', '-pdf', '-latexoption=-interaction=nonstopmode', 'book.tex'], capture_output=True, cwd=BUILD)
     if rslt.returncode != 0:
         raise RuntimeError('external call to latexmk failed')
     LOGGER.info(f'compiled {BUILD/"book.pdf"}')
