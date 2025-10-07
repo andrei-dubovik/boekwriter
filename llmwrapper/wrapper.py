@@ -18,7 +18,7 @@ import mdformat
 from . import jsonschema, yaml, utils
 
 # Initialize a logger
-LOGGER = logging.getLogger(__name__)
+LOGGER = logging.getLogger('wrapper')
 
 
 # Error definitions

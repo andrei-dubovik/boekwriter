@@ -22,7 +22,7 @@ BUILD = Path('build')
 md = MarkdownIt('commonmark').use(dollarmath_plugin)
 
 # Initialize a logger
-LOGGER = logging.getLogger(__name__)
+LOGGER = logging.getLogger('latex')
 
 
 def render_book(book, template):

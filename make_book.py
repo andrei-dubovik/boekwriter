@@ -189,10 +189,12 @@ if __name__ == '__main__':
 
     # Configure logging
     logging.basicConfig(
-        format = '%(asctime)s [%(levelname)s] %(message)s',
+        format = '%(asctime)s [%(name)s:%(levelname)s] %(message)s',
         datefmt = '%Y-%d-%m %H:%M:%S',
         level = logging.INFO,
     )
+    logging.getLogger('google_genai.models').setLevel(logging.WARNING)
+    logging.getLogger('httpx').setLevel(logging.WARNING)
 
     # Initialize an LLM wrapper
     with open(args.key) as file:
