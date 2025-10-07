@@ -51,6 +51,7 @@ def render_chapter(chapter):
         file.write(r'\newpage' + '\n')
         for chunk in chapter['content']:
             render_chunk(file, chunk)
+    LOGGER.info(f'rendered chapter-{chapter["number"]}.tex')
 
 
 def render_chunk(file, chunk):
