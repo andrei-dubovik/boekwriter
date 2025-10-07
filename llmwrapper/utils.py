@@ -10,7 +10,29 @@ import re
 
 # Import external libraries
 from lxml import etree
+from mdit_py_plugins.dollarmath import dollarmath_plugin
 import mdformat
+
+
+class DollarMath():
+    """A basic LaTeX math plugin for mdformat."""
+    @staticmethod
+    def update_mdit(mdit):
+        mdit.use(dollarmath_plugin)
+
+    @staticmethod
+    def math_inline(node, context):
+        return f'${node.content}$'
+
+    @staticmethod
+    def escape_text(text, node, context):
+        return text.replace('$', '\\$')
+
+    RENDERERS = {'math_inline': math_inline}
+    POSTPROCESSORS = {'text': escape_text}
+
+# Enable LaTeX support in mdformat
+mdformat.plugins.PARSER_EXTENSIONS['dollarmath'] = DollarMath
 
 
 def deephash(obj):
@@ -57,7 +79,11 @@ def reflow(obj, width=80):
                 parser = etree.XMLParser()
                 svg = etree.fromstring(obj, parser)
                 return etree.tostring(svg, pretty_print=True).decode().rstrip()
-            return mdformat.text(obj, options={'wrap': width, 'number': True}).rstrip()
+            return mdformat.text(
+                obj,
+                options = {'wrap': width, 'number': True},
+                extensions = {'dollarmath'},
+            ).rstrip()
         case _:
             return obj
 

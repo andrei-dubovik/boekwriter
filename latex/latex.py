@@ -14,11 +14,12 @@ from PIL import Image, ImageOps
 from mako.template import Template
 from markdown_it import MarkdownIt
 from markdown_it.tree import SyntaxTreeNode
+from mdit_py_plugins.dollarmath import dollarmath_plugin
 
 # Define constants
 SUPERSCRIPTS = '¹|²|³|⁴|⁵|⁶|⁷|⁸|⁹'
 BUILD = Path('build')
-md = MarkdownIt('commonmark')
+md = MarkdownIt('commonmark').use(dollarmath_plugin)
 
 # Initialize a logger
 LOGGER = logging.getLogger(__name__)
@@ -139,24 +140,22 @@ def svg2pdf(path):
 # response can be validated against a strict spec and bounced back if the
 # validation fails. For now, going a quicker but a less robust route.
 
-
 def md2tex(obj):
     """Covert a parsed Markdown to LaTeX."""
     match obj:
         case SyntaxTreeNode(type='softbreak'):
             return ' '
         case SyntaxTreeNode(type='text'):
-            text = obj.content
-            if (len(text) > 2
-                and text[0] == '$'
-                and text[1] != '$'
-                and text[-1] == '$'
-                and len(obj.parent.children) == 1
-            ):
-                # Display formula
-                return '$' + text + '$'
-            else:
-                return text
+            return obj.content
+        case SyntaxTreeNode(type='math_inline'):
+            formula = obj.content
+            formula = formula.replace('\n', ' ')
+            formula = re.sub("(?<![a-zA-Z])'(.+?)'", r"\\ltq{}\1\\rtq{}", formula)  # single quotes
+            formula = re.sub('"(.+?)"', r"\\ltq{}\1\\rtq{}", formula)  # double quotes
+            formula = '$' + formula + '$'
+            if len(obj.parent.children) == 1:  # display formula
+                formula = '$' + formula + '$'
+            return '\0' + formula + '\0'  # \0 markup skips normalization later-on
         case SyntaxTreeNode(type='code_inline'):
             code = obj.content.replace('{', r'\{').replace('}', r'\}')  # escape curly brackets
             code = code.replace(' ', r'\ ')  # fixed-width space
@@ -185,19 +184,15 @@ def md2tex(obj):
 
 def normalize(text):
     """Normalize typography in a LaTeX fragment."""
-    return re.sub('(\0.+?\0)' + r'|(\$\$.+?\$\$|\$.+?\$)|(.+?)(?=$|\$' + r'|\0)', normalize_span, text, flags=re.S)
+    return re.sub('(\0.+?\0)|(.+?)(?=$|\0)', normalize_span, text, flags=re.S)
 
 
 def normalize_span(match):
     """Normalize typography in a span depending on its type."""
     match match.groups():
-        case (fixed, None, None):
+        case (fixed, None):
             return fixed[1:-1]  # strips \0
-        case (None, formula, None):
-            formula = re.sub("(?<![a-zA-Z])'(.+?)'", r"\\textrm`\1\\textrm'", formula)  # single quotes
-            formula = re.sub('"(.+?)"', "`\\1'", formula)  # double quotes
-            return formula
-        case (None, None, text):
+        case (None, text):
             text = text.replace('—', '---')  # em dash
             text = re.sub("(?<![a-zA-Z])'(.+?)'", "``\\1''", text)  # single quotes
             text = re.sub('"(.+?)"', "``\\1''", text)  # double quotes
