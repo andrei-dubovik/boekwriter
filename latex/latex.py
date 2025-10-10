@@ -162,11 +162,9 @@ def md2tex(obj):
                     formula = '$' + formula + '$'
                 return '\0' + formula + '\0'  # \0 markup skips normalization later-on
             case SyntaxTreeNode(type='code_inline'):
-                code = obj.content.replace('{', r'\{').replace('}', r'\}')  # escape curly brackets
-                code = code.replace(' ', r'\ ')  # fixed-width space
-                code = re.sub("(?<![a-zA-Z])'(.+?)'", "`\\1'", code)  # single-quotes
-                code = re.sub('"(.+?)"', "`\\1'", code)  # double quotes
-                return '\0\\texttt{' + code + '}\0'  # \0 markup skips normalization later-on
+                code = obj.content
+                sep = find_delimiter(code)
+                return f'\0\\Verb{sep}' + code + f'{sep}\0'  # \0 markup skips normalization later-on
             case SyntaxTreeNode(type='paragraph'):
                 return convert(obj.children) + '\n\n'
             case SyntaxTreeNode(type='em'):
@@ -229,3 +227,13 @@ def detect_footnotes(text):
 
     text = re.sub(f'^({SUPERSCRIPTS}) *(.*)', fntext, text, flags=re.M)
     return re.sub(SUPERSCRIPTS, fnmark, text)
+
+
+def find_delimiter(code):
+    """Find a delimiter not present in the code."""
+    for i in range(0x21, 0x7f):  # printable ASCII
+        c = chr(i)
+        if code.find(c) == -1:
+            return c
+    else:
+        raise RuntimeError('no suitable delimiter found')
