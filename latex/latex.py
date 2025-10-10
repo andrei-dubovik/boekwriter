@@ -212,12 +212,16 @@ def normalize_span(match):
     """Normalize typography in a span depending on its type."""
     match match.groups():
         case (fixed, None):
+            # Formula or verbatim
             return fixed[1:-1]  # strips \0
         case (None, text):
+            # Text
             text = text.replace('—', '---')  # em dash
             text = normalize_math(text)
             text = normalize_unicode(text)
             text = normalize_quotes(text, 'text')
+            # Unescape erroneously escaped asterisks (a known issue with the caching pipeline)
+            text = re.sub(r'(?<!\\)\\\*', r'*', text)
             return text
 
 
