@@ -19,11 +19,12 @@ from mdit_py_plugins.dollarmath import dollarmath_plugin
 from mdit_py_plugins.footnote import footnote_plugin
 
 # Import local libraries
-from .unicode import VARIABLES
+from .unicode import VARIABLES, UNICODE
 
 # Define constants
 SUPERSCRIPTS = '¹|²|³|⁴|⁵|⁶|⁷|⁸|⁹'
 VARIABLES_KEYS = '|'.join(VARIABLES.keys())
+UNICODE_KEYS = '|'.join(UNICODE.keys())
 BUILD = Path('build')
 md = MarkdownIt('commonmark').use(dollarmath_plugin).use(footnote_plugin)
 
@@ -215,6 +216,7 @@ def normalize_span(match):
         case (None, text):
             text = text.replace('—', '---')  # em dash
             text = normalize_math(text)
+            text = normalize_unicode(text)
             text = normalize_quotes(text, 'text')
             return text
 
@@ -279,6 +281,12 @@ def normalize_subscript(match):
     var, index = match.groups()
     var = VARIABLES.get(var, var)  # Recode Unicode symbols
     return f'${var}_{ord(index) - 0x2080}$'
+
+
+def normalize_unicode(text):
+    """Recode miscellaneous Unicode to LaTeX."""
+    text = re.sub(f'{UNICODE_KEYS}', lambda m: '%s{}' % UNICODE[m.group(0)], text)
+    return text
 
 
 def detect_footnotes(text):

@@ -54,3 +54,8 @@ VARIABLES = {
     'ψ': r'\psi',
     'ω': r'\omega',
 }
+
+UNICODE = {
+    # Select phonetics
+    'ʃ': r'\textesh',
+}

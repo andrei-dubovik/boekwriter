@@ -3,9 +3,14 @@
 \usepackage[a4paper,top=1in,bottom=1in,left=1.2in,right=1.2in]{geometry}
 \usepackage{booktabs}
 \usepackage{amsmath}
+\usepackage{tipa}
 \usepackage{fvextra}
 
+%% Convigure packages
 \fvset{breaklines,breakbefore=(+[\{}
+
+%% Patch select Unicode characters inside a verbatim environment
+\DeclareUnicodeCharacter{03B5}{$\epsilon$}
 
 %% Typographic quotes for inside the math formulas
 \def\ltq{\ifmmode\textrm`\else `\fi}
