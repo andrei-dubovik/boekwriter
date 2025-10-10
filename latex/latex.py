@@ -18,8 +18,12 @@ from markdown_it.tree import SyntaxTreeNode
 from mdit_py_plugins.dollarmath import dollarmath_plugin
 from mdit_py_plugins.footnote import footnote_plugin
 
+# Import local libraries
+from .unicode import VARIABLES
+
 # Define constants
 SUPERSCRIPTS = '¹|²|³|⁴|⁵|⁶|⁷|⁸|⁹'
+VARIABLES_KEYS = '|'.join(VARIABLES.keys())
 BUILD = Path('build')
 md = MarkdownIt('commonmark').use(dollarmath_plugin).use(footnote_plugin)
 
@@ -210,6 +214,7 @@ def normalize_span(match):
             return fixed[1:-1]  # strips \0
         case (None, text):
             text = text.replace('—', '---')  # em dash
+            text = normalize_math(text)
             text = normalize_quotes(text, 'text')
             return text
 
@@ -260,6 +265,20 @@ class TestQuoteNormalization(unittest.TestCase):
         for context, subcases in self.cases.items():
             for old, new in subcases:
                 self.assertEqual(normalize_quotes(old, context), new)
+
+
+def normalize_math(text):
+    """Recode 'residual' Unicode math to LaTeX."""
+    text = re.sub(f'\\b([a-zA-Z]|{VARIABLES_KEYS})(₀|₁|₂|₃|₄|₅|₆|₇|₈|₉)', normalize_subscript, text)
+    text = re.sub(f'\\b({VARIABLES_KEYS})\\b', lambda m: '$%s$' % VARIABLES[m.group(1)], text)
+    return text
+
+
+def normalize_subscript(match):
+    """Recode 'x₀' and such to LaTeX."""
+    var, index = match.groups()
+    var = VARIABLES.get(var, var)  # Recode Unicode symbols
+    return f'${var}_{ord(index) - 0x2080}$'
 
 
 def detect_footnotes(text):
