@@ -5,12 +5,15 @@
 # Import standard libraries
 from abc import ABC, abstractmethod
 from copy import deepcopy
+from itertools import count
 import logging
 import time
 
 # Import external libraries
 from google import genai
 from jsonschema import validate
+from jsonschema.exceptions import ValidationError as JSONValidationError
+from lxml.etree import XMLSyntaxError
 from mako.template import Template
 import mdformat
 
@@ -32,9 +35,11 @@ class ValidationError(LLMError):
 class LLModel(ABC):
     """A generic large language model."""
 
-    def __init__(self, queries, cache):
+    def __init__(self, queries, cache, tries=5, cooldown=20):
         self.queries = queries
         self.cache = cache
+        self.tries = tries
+        self.cooldown = cooldown
         cache.mkdir(parents=True, exist_ok=True)
 
     @abstractmethod
@@ -75,16 +80,22 @@ class LLModel(ABC):
 
 
     def retry(self, prompt, validators):
-        # TODO: add retries, passing through for the time being
-        timer = time.monotonic()
-        response, stats = self.basequery(prompt)
-        timer = int((time.monotonic() - timer)*1000)  # ms
-        if 'mimeType' not in prompt['schema']:
-            validate(response, prompt['schema'])
-            response = utils.reflow(response)  # can raise SVG errors
-        for check in validators:
-            check(response)
-        return response, timer, stats
+        for i in count():
+            try:
+                timer = time.monotonic()
+                response, stats = self.basequery(prompt)
+                timer = int((time.monotonic() - timer)*1000)  # ms
+                if 'mimeType' not in prompt['schema']:
+                    validate(response, prompt['schema'])
+                    response = utils.reflow(response)  # can raise SVG errors
+                for check in validators:
+                    check(response)
+                return response, timer, stats
+            except (LLMError, JSONValidationError, XMLSyntaxError) as err:
+                if i == self.tries - 1:
+                    raise
+                LOGGER.warn(f'retry {i + 1}: got {repr(err)}')
+                time.sleep(self.cooldown)
 
 
 def load_prompt(path, query, **kwargs):
@@ -223,7 +234,7 @@ def chk_sum(key, total, threshold=0.05):
     def validator(response):
         summed = sum(obj[key] for obj in response)
         if abs(summed/total - 1) > threshold:
-            raise ValidationError()
+            raise ValidationError('chk_sum validation failed')
     return validator
 
 
@@ -234,7 +245,7 @@ def chk_range(key, min, max):
         if len(set(values)) < len(values):
             raise ValidationError()
         if not all(min <= v <= max for v in values):
-            raise ValidationError()
+            raise ValidationError('chk_range validation failed')
     return validator
 
 
@@ -242,5 +253,5 @@ def chk_words(min, max):
     """Check the total word count falls withing range."""
     def validator(response):
         if not min <= utils.count_words(response) <= max:
-            raise ValidationError()
+            raise ValidationError('chk_words validation failed')
     return validator
