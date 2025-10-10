@@ -8,6 +8,7 @@ from pathlib import Path
 import logging
 import re
 import subprocess
+import unittest
 
 # Import external libraries
 from PIL import Image, ImageOps
@@ -81,7 +82,8 @@ def render_chunk(file, chunk):
         file.write(r'\makebox[\textwidth][c]{' + '\n')
 
         if figure['type'] == 'Table':
-            file.write(figure['table'])
+            latex = normalize_quotes(figure['table'], 'table')
+            file.write(latex)
         else:
             svg_path = Path(BUILD/f'fig-{figure["number"]}.svg')
             with open(svg_path, 'wt') as svg:
@@ -155,8 +157,7 @@ def md2tex(obj):
             case SyntaxTreeNode(type='math_inline'):
                 formula = obj.content
                 formula = formula.replace('\n', ' ')
-                formula = re.sub("(?<![a-zA-Z])'(.+?)'", r"\\ltq{}\1\\rtq{}", formula)  # single quotes
-                formula = re.sub('"(.+?)"', r"\\ltq{}\1\\rtq{}", formula)  # double quotes
+                formula = normalize_quotes(formula, 'formula')
                 formula = '$' + formula + '$'
                 if len(obj.parent.children) == 1:  # display formula
                     formula = '$' + formula + '$'
@@ -209,9 +210,56 @@ def normalize_span(match):
             return fixed[1:-1]  # strips \0
         case (None, text):
             text = text.replace('—', '---')  # em dash
-            text = re.sub("(?<![a-zA-Z])'(.+?)'", "``\\1''", text)  # single quotes
-            text = re.sub('"(.+?)"', "``\\1''", text)  # double quotes
+            text = normalize_quotes(text, 'text')
             return text
+
+
+def normalize_quotes(text, context):
+    """Normalize quote usage depending on context."""
+    match context:
+        case 'text':
+            text = re.sub("(?<![a-zA-Z}])'(.*?)'", "``\\1''", text)  # single quotes
+            text = re.sub('"(.*?)"', "``\\1''", text)  # double quotes
+        case 'formula':
+            text = re.sub("(?<![a-zA-Z}])'([^`]+?)'", r"\\ltq{}\1\\rtq{}", text)  # single quotes
+            text = re.sub("`([^']+?)`", r"\\ltq{}\1\\rtq{}", text)  # backquotes
+            text = re.sub('"(.*?)"', r"\\ltq{}\1\\rtq{}", text)  # double quotes
+        case 'table':
+            text = re.sub("(?<![a-zA-Z}])'([^`]+?)'", r"``\1''", text)  # single quotes
+            text = re.sub("`([^']+?)`", r"``\1''", text)  # backquotes
+            text = re.sub('"(.*?)"', r"``\1''", text)  # double quotes
+
+    return text
+
+
+class TestQuoteNormalization(unittest.TestCase):
+    """Test quote normalization (and its interaction with Mardkown parsing.)"""
+
+    cases = {
+        'text': [
+            ('(e.g., "", "ab", "abab")',
+             "(e.g., ``'', ``ab'', ``abab'')"),
+            ("uncertainty doesn't come",
+             "uncertainty doesn't come"),
+            (r"the number of \emph{a}'s to ensure an equal number of \emph{b}'s",
+             r"the number of \emph{a}'s to ensure an equal number of \emph{b}'s"),
+        ],
+        'formula': [
+            (r"vector('king') - vector('man')",
+             r"vector(\ltq{}king\rtq{}) - vector(\ltq{}man\rtq{})"),
+        ],
+        'table': [
+            ("Identify ``Ada Lovelace'' (Person) and ``Google'' (Organization)",
+             "Identify ``Ada Lovelace'' (Person) and ``Google'' (Organization)"),
+            (r'\texttt{gray|grey} matches "gray" or "grey"',
+             r"\texttt{gray|grey} matches ``gray'' or ``grey''"),
+        ],
+    }
+
+    def test_cases(self):
+        for context, subcases in self.cases.items():
+            for old, new in subcases:
+                self.assertEqual(normalize_quotes(old, context), new)
 
 
 def detect_footnotes(text):
