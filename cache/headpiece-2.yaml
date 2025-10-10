@@ -1,0 +1,827 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: headpiece
+prompt:
+  What follows is a text for a chapter from a book called "Introduction to
+  Computational Linguistics".
+  
+  <chapter>
+  
+  To us, human language appears fluid and intuitive. We process words and
+  sentences effortlessly. For a computer, however, language is merely a sequence
+  of characters, devoid of inherent meaning or structure. To bridge this gap and
+  enable computational processing, we cannot rely on intuition. We need precise,
+  unambiguous methods for describing the patterns that govern language. This is
+  where formal mathematical models become indispensable. They provide a rigorous
+  framework for defining what constitutes a valid word, phrase, or sentence in a
+  given language.
+  
+  This chapter introduces the foundational tools for this task, drawn from a field
+  known as *formal language theory*. We will begin by modeling the simplest
+  components of language—the patterns that make up individual words. By defining
+  simple "languages" as specific sets of strings and designing abstract machines
+  to recognize them, we create our first computational building blocks. This
+  formal approach is not just a theoretical exercise; it provides the robust and
+  efficient foundation upon which almost all complex language processing
+  technologies are built.
+  
+  To formally model language, we begin with the simplest yet surprisingly powerful
+  class of formal languages: the *regular languages*. In formal language theory, a
+  "language" is simply a set of strings, and a regular language is a specific type
+  of this set—one whose structure can be described using a constrained but
+  effective set of rules.
+  
+  Why start here? Because a vast number of word-level phenomena and simple text
+  patterns can be modeled effectively as regular languages. For instance, the set
+  of all English words ending in *-ing*, the structure of dates like `MM-DD-YYYY`,
+  or the morphological variants of a noun are all patterns that fall into this
+  class. The key advantage of regular languages is their computational elegance;
+  they can be described by the practical tool of *regular expressions* and
+  recognized by an efficient class of abstract machines called *finite automata*.
+  This makes them both theoretically fundamental and highly practical for
+  real-world text processing. They represent the first, essential step on a ladder
+  of formalisms used to describe linguistic structure.
+  
+  To formalize our study of language, we begin with three foundational concepts:
+  the *alphabet*, the *string*, and the *language*. These concepts provide the
+  mathematical bedrock for defining patterns and structures.
+  
+  An **alphabet**, denoted by $\Sigma$ (Sigma), is a non-empty, finite set of
+  symbols. For example, the binary alphabet is $\Sigma = \{0, 1\}$, while the
+  alphabet for lowercase English text is $\Sigma = \{a, b, \dots, z\}$.
+  
+  A **string** (or *word*) is a finite sequence of symbols drawn from an alphabet.
+  The string `book` is formed from the English alphabet. The *length* of a string
+  $w$, denoted $|w|$, is the number of symbols it contains; for example,
+  $|book| = 4$. A special case is the **empty string**, which has zero length and
+  is denoted by $\epsilon$ (epsilon).
+  
+  Finally, a **formal language** is simply a set of strings over a given alphabet.
+  Importantly, this set can be either finite or infinite. Given the alphabet
+  $\Sigma = \{a, b\}$, consider the following languages:
+  
+  - A finite language: $L_1 = \{\epsilon, a, b, ab, ba\}$
+  - An infinite language: $L_2 = \{a, aa, aaa, \dots\}$, the set of all strings
+    consisting of one or more 'a's.
+  
+  The set of *all* possible strings that can be formed from an alphabet $\Sigma$
+  is denoted $\Sigma^*$ (pronounced "Sigma star"). Therefore, any language $L$
+  over $\Sigma$ is a subset of $\Sigma^*$, which can be formally stated as
+  $L \subseteq \Sigma^*$.
+  
+  To define interesting languages, we need formal operations for combining and
+  repeating strings. The most fundamental of these is _concatenation_, which
+  simply joins two strings end-to-end. If we have a string $s_1 = \text{`compu`}$
+  and another string $s_2 = \text{`ter`}$, their concatenation, written as
+  $s_1s_2$, is the string `computer`. Concatenating any string $s$ with the empty
+  string $\epsilon$ results in the original string: $s\epsilon = \epsilon s = s$.
+  
+  While concatenation builds longer strings, we also need a mechanism for
+  repetition. This is provided by the _Kleene star_ or _Kleene closure_. For a
+  given language (a set of strings) $L$, its Kleene closure, denoted $L^*$, is the
+  set of all strings formed by concatenating _zero or more_ strings from $L$. The
+  "zero" case is important; it means the empty string $\epsilon$ is always an
+  element of $L^*$. For example, if $L = \{\text{`a`}\}$, then
+  $L^* = \{\epsilon, \text{`a`}, \text{`aa`}, \text{`aaa`}, \dots\}$.
+  
+  A closely related operator is the _Kleene plus_ or _positive closure_, denoted
+  $L^+$. This operation is similar to the Kleene star but requires _one or more_
+  concatenations of strings from $L$. Therefore, $L^+$ includes all strings in
+  $L^*$ except for the empty string $\epsilon$. These three
+  operations—concatenation, Kleene star, and Kleene plus—are the essential
+  building blocks for defining the patterns found in regular languages.
+  
+  Having formally defined the concept of a regular language, we now turn to the
+  standard notation used to describe them: **regular expressions**, often
+  abbreviated as *regex*. A regular expression is a compact algebraic formula for
+  specifying a set of strings. Think of it as a specialized "pattern language,"
+  purpose-built for finding and manipulating text. Every regular expression
+  defines a regular language, and conversely, every regular language can be
+  described by a regular expression.
+  
+  The construction of regular expressions is recursive. We start with simple,
+  atomic expressions and combine them using a small set of powerful operators to
+  form more complex patterns. The most basic regular expressions are the
+  individual characters of our alphabet $\Sigma$. For example, the regular
+  expression `a` describes the language $L(\text{a}) = \{\text{"a"}\}$. From this
+  foundation, we use three fundamental operations to build more elaborate
+  expressions:
+  
+  - **Concatenation**: This is the default operation, specified by placing one
+    expression after another. The regex `book` is the concatenation of the
+    expressions `b`, `o`, `o`, and `k`. It describes the language whose only
+    member is the string "book". Formally, if $R_1$ and $R_2$ are regular
+    expressions for languages $L(R_1)$ and $L(R_2)$, their concatenation $R_1R_2$
+    defines the language
+    $L(R_1R_2) = \{ xy \mid x \in L(R_1) \text{ and } y \in L(R_2) \}$. This means
+    any string from the first language followed by any string from the second.
+  
+  - **Union (Disjunction)**: The vertical bar `|`, often called a pipe, represents
+    choice. It functions like an "or" operator, matching any of the expressions it
+    separates. For instance, the regex `gray|grey` is useful for handling spelling
+    variations, as it matches either the string "gray" or "grey". The language it
+    defines is the set-theoretic union of the languages of its components:
+    $L(R_1|R_2) = L(R_1) \cup L(R_2)$.
+  
+  - **Kleene Star (Closure)**: The asterisk `*`, named after mathematician Stephen
+    Kleene, signifies "zero or more" repetitions of the immediately preceding
+    expression. For example, `a*` matches the empty string, "a", "aa", "aaa", and
+    so on. The language it defines is the set of all finite strings of 'a's,
+    including the empty string $\epsilon$. To apply the Kleene star to a sequence
+    of characters, we must group them with parentheses. This distinction is
+    crucial: `ab*` matches "a" followed by zero or more "b"s (e.g., "a", "ab",
+    "abb"), while `(ab)*` matches zero or more instances of the entire string "ab"
+    (e.g., "", "ab", "abab").
+  
+  To avoid ambiguity, these operators have a defined order of precedence. The
+  Kleene star has the highest precedence, followed by concatenation, and finally
+  union has the lowest. Therefore, `cat|dog*` is interpreted as `(cat)|(dog*)`,
+  not as `(cat|dog)*`. Parentheses can be used to override this default order,
+  just as in arithmetic. These three core operators, summarized for convenience in
+  Fig. 2.5, are all that is needed to describe any regular language.
+  
+  Let's put the basic operators of concatenation, union, and closure into
+  practice. Imagine we are given a small block of raw text and our goal is to
+  extract all dates and email addresses.
+  
+  Consider the following text:
+  
+  > The project kickoff is 03/15/2024. Please contact either
+  > jane.doe@university.edu or the lead, smith-j@dept.org, for more details. The
+  > final deadline is set for 04-20-2024.
+  
+  First, we will devise a pattern to find dates in the `MM/DD/YYYY` or
+  `MM-DD-YYYY` format. We can observe that a date consists of two digits, a
+  separator, two more digits, another separator, and finally four digits.
+  
+  - Two digits can be represented by `[0-9][0-9]`. This is a concatenation of two
+    character sets, each allowing any digit from 0 to 9.
+  - The separator is either a hyphen or a forward slash. We can represent this
+    choice using a character set as a form of union: `[-/]`.
+  - Four digits are `[0-9][0-9][0-9][0-9]`.
+  
+  By concatenating these components, we arrive at our first regular expression for
+  finding dates: `[0-9][0-9][-/.][0-9][0-9][-/.][0-9][0-9][0-9][0-9]`
+  
+  When applied to the text, this pattern would successfully match both
+  `03/15/2024` and `04-20-2024`.
+  
+  Next, let's build a pattern for email addresses. A simplified structure is a
+  sequence of characters for the username, an `@` symbol, and a sequence of
+  characters for the domain name. We can use the positive closure operator, `+`,
+  to mean "one or more" of the preceding character type.
+  
+  - A username can contain letters, numbers, periods, and hyphens. A pattern for
+    this is `[a-zA-Z0-9.-]+`.
+  - This is followed by the literal `@` symbol.
+  - The domain name is similar, often containing letters, numbers, and hyphens,
+    followed by a period and the top-level domain. We can model this as
+    `[a-zA-Z0-9-]+` followed by a literal `.` and finally `[a-zA-Z.]+`.
+  
+  Combining these gives us a basic expression for emails:
+  `[a-zA-Z0-9.-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]+`
+  
+  This pattern will match `jane.doe@university.edu` and `smith-j@dept.org`. These
+  examples show how a few simple operators can build powerful tools for locating
+  structured information within unstructured text.
+  
+  While the basic operators of union, concatenation, and Kleene star provide a
+  complete system for defining regular languages, most modern regular expression
+  engines offer a much richer and more convenient syntax. These extensions don't
+  add theoretical power—they can all be simulated with the basic operators—but
+  they make writing complex patterns significantly more concise and readable. We
+  will now expand our toolkit to include four key concepts: *character classes*,
+  *quantifiers*, *anchors*, and *capturing groups*. A comprehensive list of these
+  syntactic elements is provided in Fig. 2.7.
+  
+  A **character class**, denoted by square brackets `[]`, allows you to match any
+  single character from a specified set. For instance, `[aeiou]` will match any
+  lowercase vowel. Ranges are also permitted, so `[a-z]` matches any lowercase
+  letter and `[0-9]` matches any digit. A `^` as the first character inside the
+  brackets negates the class, so `[^0-9]` matches any character that is *not* a
+  digit. For convenience, several predefined character classes exist, such as `\d`
+  for digits (`[0-9]`), `\w` for "word" characters (letters, numbers, and
+  underscore), and `\s` for whitespace characters (spaces, tabs, newlines).
+  
+  **Quantifiers** control how many times a preceding part of an expression can
+  occur. The three most common are:
+  
+  - The asterisk `*` matches the preceding item zero or more times. `ab*c` matches
+    `ac`, `abc`, `abbc`, etc.
+  - The plus `+` matches one or more times. `ab+c` matches `abc` and `abbc`, but
+    not `ac`.
+  - The question mark `?` matches zero or one time, making the preceding item
+    optional. The pattern `colou?r` matches both "color" and "colour". For more
+    precise control, braces can specify a range of repetitions. For example,
+    `\d{3}` matches exactly three digits, while `\d{2,4}` matches between two and
+    four digits.
+  
+  **Anchors** are special characters that don't match any character in the string
+  but instead match a *position*. The caret `^` anchors the match to the beginning
+  of a line or string, while the dollar sign `$` anchors it to the end. The
+  pattern `^cat$` will only match the exact string "cat" and nothing else. Another
+  crucial anchor in computational linguistics is `\b`, which matches a word
+  boundary. This is the zero-width position between a word character (`\w`) and a
+  non-word character (`\W`). Using `\bcat\b` ensures you match the word "cat" but
+  not the "cat" in "caterpillar".
+  
+  Finally, **capturing groups**, created with parentheses `()`, serve two
+  purposes. First, they group part of a pattern so that operators like `*` or `+`
+  apply to the whole group, as in `(ab)+`, which matches `ab`, `abab`, and so on.
+  Second, and more importantly, they *capture* the portion of the string that
+  matched the enclosed pattern. This allows you to extract specific pieces of
+  information from a larger text. For example, in the string "Order: US 543", the
+  pattern `(US|EU) (\d+)` would not only match "US 543" but also allow you to
+  separately extract the captured groups "US" and "543".
+  
+  By combining these elements, we can build powerful and precise patterns.
+  Consider a pattern for matching simple email addresses:
+  `([\w.-]+)@([\w.-]+)\.([a-zA-Z]{2,})`. This expression uses character classes,
+  quantifiers, and capturing groups to identify and extract the username, domain
+  name, and top-level domain from a string. With this expanded syntax, regular
+  expressions become an indispensable tool for information extraction, as we will
+  see in the following case study.
+  
+  With our expanded toolkit of advanced operators, regular expressions become more
+  than just a tool for finding patterns; they are a mechanism for simple
+  *Information Extraction* (IE). The goal of IE is to identify and pull structured
+  data, like names, dates, or relationships, from unstructured text. While complex
+  IE requires more powerful machine learning models, regular expressions are
+  highly effective for tasks where the input data has a consistent, predictable
+  format.
+  
+  Let's consider a practical case study: extracting author and title information
+  from a bibliography file. Imagine our file contains entries formatted in a
+  consistent style, such as:
+  
+  `Chomsky, N. (1957). *Syntactic Structures*. Mouton.`
+  
+  Our goal is to write a single regular expression that can read a line like this
+  and extract "Chomsky, N." as the author and "Syntactic Structures" as the title.
+  We can achieve this by designing a pattern that matches the entire line while
+  using capturing groups `(...)` to isolate the specific pieces of information we
+  want.
+  
+  Consider the following regular expression:
+  
+  `^([\w\s,.-]+)\s\(\d{4}\)\.\s\*([^*]+)\*.*$`
+  
+  Let's break this down:
+  
+  - `^` asserts our pattern must start at the beginning of the line.
+  - `([\w\s,.-]+)` is our first capturing group for the author. It matches one or
+    more characters that are either a word character (`\w`), whitespace (`\s`), a
+    comma, a period, or a hyphen.
+  - `\s\(\d{4}\)\.\s` matches the non-captured parts in between: a space, the
+    parenthesized four-digit year, a period, and another space.
+  - `\*([^*]+)\*` is our second capturing group. It first matches a literal
+    asterisk (`\*`). The group itself, `([^*]+)`, is a crucial trick: it matches
+    one or more characters that are *not* a closing asterisk. This non-greedy
+    approach ensures we only capture the text of the title. It concludes by
+    matching the final literal asterisk.
+  - `.*$` matches the rest of the line until the end.
+  
+  When this expression is applied to each line of a bibliography, a program can
+  directly access the content of the capturing groups for every successful match.
+  The text matched by the first group is the author, and the text from the second
+  is the title. As **Fig. 2.8** demonstrates, this technique effectively
+  transforms a simple text file into a list of structured records. This approach
+  is powerful but brittle; it relies on the strict consistency of the input
+  format. A missing year or a title not enclosed in asterisks would cause the
+  pattern to fail. Nonetheless, for well-formatted data, regular expressions
+  provide a direct and efficient method for rudimentary information extraction.
+  
+  While regular expressions provide a compact notation for *describing* patterns
+  in text, they don't specify *how* a computer should perform the matching. For
+  that, we turn to a more formal computational model. The abstract machine that
+  recognizes the languages described by regular expressions is known as a
+  **finite-state automaton**, often abbreviated as FSA or simply a finite
+  automaton.
+  
+  An FSA is an idealized computational device, one of the simplest models of
+  computation. The core idea is that the machine can only be in one of a finite
+  number of *states* at any given time. It processes an input string one symbol at
+  a time from left to right. As it reads each symbol, it *transitions* from its
+  current state to another state. The specific transition is determined by the
+  current state and the input symbol being read.
+  
+  Formally, an FSA can be visualized as a directed graph:
+  
+  - The **states** are represented by nodes (circles).
+  - The **transitions** are represented by labeled edges between the nodes.
+  - There is one special **start state**, where the machine begins processing.
+  - One or more states are designated as **final states** or **accept states**,
+    often drawn with a double circle.
+  
+  The process of recognizing a string begins at the start state. The automaton
+  consumes the input string symbol by symbol, following the corresponding
+  transition edge from state to state. After the final symbol is read, the machine
+  stops. If it has landed in a final (accept) state, the string is considered
+  **accepted**. If it ends in any other state, the string is **rejected**. The set
+  of all strings accepted by an FSA defines the formal language it recognizes. The
+  crucial insight is that finite automata recognize precisely the class of regular
+  languages. This means that for any regular expression, an equivalent FSA can be
+  built to recognize the same set of strings, and vice versa. This equivalence
+  forms the theoretical foundation for implementing regular expression engines.
+  
+  While a state diagram provides an intuitive picture of a finite automaton, a
+  formal definition allows us to be precise. We will begin with the
+  **Deterministic Finite Automaton (DFA)**, a type of FSA where every move is
+  uniquely determined by the current state and the input symbol. There is no
+  ambiguity; from any state, a given character leads to exactly one other state.
+  
+  Formally, a DFA is a 5-tuple $M = (Q, \Sigma, \delta, q_0, F)$ where:
+  
+  1. $Q$ is a finite set of states.
+  2. $\Sigma$ is a finite set of input symbols, called the alphabet.
+  3. $\delta$ is the transition function, which maps a state and an input symbol
+     to a state. Its signature is $\delta: Q \times \Sigma \to Q$. This function
+     is the "program" of the machine, dictating every possible move.
+  4. $q_0 \in Q$ is the designated start state.
+  5. $F \subseteq Q$ is the set of final or accepting states.
+  
+  Let's ground this formal definition using the state diagram shown in **Fig.
+  2.10**, which depicts a DFA that recognizes the language of all strings ending
+  in `ing`.
+  
+  The components of this specific automaton can be formally defined as follows:
+  
+  - **States ($Q$):** The circles in the diagram represent the states. We can name
+    them $\{q_0, q_1, q_2, q_3\}$. Each state represents a stage in the
+    recognition process, essentially remembering how much of the target suffix
+    (`ing`) we have just seen. For instance, $q_0$ is the initial state, $q_1$ is
+    the state after seeing an `i`, $q_2$ after seeing `in`, and $q_3$ after seeing
+    `ing`.
+  
+  - **Alphabet ($\Sigma$):** This is the set of all characters the machine can
+    process. For simplicity, let's assume it's the set of all lowercase English
+    letters, $\{a, b, c, \dots, z\}$.
+  
+  - **Start State ($q_0$):** In the diagram, $q_0$ is marked as the start state by
+    an incoming arrow that originates from no other state. This is where
+    processing for any input string begins.
+  
+  - **Final States ($F$):** The set of final states is $\{q_3\}$. In diagrams,
+    final states are indicated by a double circle. If the machine's final state
+    after reading an entire input string is a member of $F$, the string is
+    *accepted*.
+  
+  - **Transition Function ($\delta$):** The labeled arrows represent the
+    transition function. For example, the arrow from $q_0$ to $q_1$ labeled `i`
+    means that $\delta(q_0, i) = q_1$. The deterministic nature is clear: from
+    $q_1$, an `n` must lead to $q_2$, while any other character (like `a` or `i`)
+    might lead back to a different, specific state. For example, if the machine is
+    in state $q_1$ (it has just seen an `i`) and the next character is another
+    `i`, the machine would stay in state $q_1$, since this new `i` could be the
+    start of a new `ing` sequence. This corresponds to a transition
+    $\delta(q_1, i) = q_1$. In contrast, if it sees a `z`, the sequence is broken,
+    so the transition might be $\delta(q_1, z) = q_0$. A complete DFA specifies a
+    transition for every state and every symbol in the alphabet.
+  
+  To understand how a DFA operates, let's trace the execution of a machine
+  designed to recognize a simplified "sheep language." This machine accepts
+  strings that match the regular expression `ba+!`, such as `ba!`, `baa!`, and so
+  on.
+  
+  Let's formally define this DFA, $M$, with the 5-tuple
+  $(Q, \Sigma, \delta, q_0, F)$:
+  
+  - $Q = \{q_0, q_1, q_2, q_3, q_{dead}\}$ are the states.
+  - $\Sigma = \{a, b, !\}$ is the alphabet.
+  - $q_0$ is the start state.
+  - $F = \{q_3\}$ is the set of final (or accepting) states.
+  - $\delta$ is the transition function, defined as follows:
+    - $\delta(q_0, b) \to q_1$
+    - $\delta(q_1, a) \to q_2$
+    - $\delta(q_2, a) \to q_2$
+    - $\delta(q_2, !) \to q_3$
+    - Any other transition leads to $q_{dead}$. For example,
+      $\delta(q_0, a) \to q_{dead}$ or $\delta(q_1, b) \to q_{dead}$. Once in
+      $q_{dead}$, the machine stays there for any input.
+  
+  The machine works by reading an input string one character at a time from left
+  to right, updating its current state according to the transition function
+  $\delta$. A string is *accepted* if the machine is in a final state after
+  reading the *entire* string. Otherwise, it is *rejected*.
+  
+  ______________________________________________________________________
+  
+  **Example 1: Tracing an accepted string `baa!`**
+  
+  1. The machine begins in the start state, $q_0$.
+  2. It reads the first character, `b`. Following the transition $\delta(q_0, b)$,
+     it moves to state $q_1$.
+  3. It reads the next character, `a`. Following $\delta(q_1, a)$, it moves to
+     state $q_2$.
+  4. It reads the third character, `a`. Following $\delta(q_2, a)$, it remains in
+     state $q_2$.
+  5. It reads the final character, `!`. Following $\delta(q_2, !)$, it moves to
+     state $q_3$.
+  
+  The machine has now consumed the entire string and is in state $q_3$. Since
+  $q_3$ is in our set of final states $F$, the string `baa!` is **accepted**.
+  
+  ______________________________________________________________________
+  
+  **Example 2: Tracing a rejected string `ba`**
+  
+  1. The machine starts in $q_0$.
+  2. It reads `b` and moves to state $q_1$.
+  3. It reads `a` and moves to state $q_2$.
+  
+  The input string is now exhausted. The machine's final state is $q_2$. Since
+  $q_2$ is *not* in the set of final states $F$, the string `ba` is **rejected**.
+  This example shows that simply passing through an accepting state is not enough;
+  the machine must *end* in one.
+  
+  ______________________________________________________________________
+  
+  **Example 3: Tracing a rejected string `aba!`**
+  
+  1. The machine starts in $q_0$.
+  2. It reads the first character, `a`. Our transition function does not have a
+     defined path for `a` from $q_0$, except to the "dead" state. So, the machine
+     moves to $q_{dead}$.
+  3. For every subsequent character (`b`, `!`), the machine will remain in
+     $q_{dead}$.
+  
+  At the end of the string, the machine is in state $q_{dead}$. Since
+  $q_{dead} \notin F$, the string `aba!` is **rejected**. This demonstrates the
+  deterministic nature of the DFA: for any state and any input symbol, there is
+  exactly one move to make.
+  
+  While deterministic finite automata provide a clear, unambiguous model of
+  computation, they are not always the most intuitive tool for designing a
+  language recognizer. For any given state and input symbol, a DFA has exactly one
+  choice. This rigidity can lead to complex automata for relatively simple
+  languages. To overcome this, we introduce a more flexible model: the
+  *non-deterministic finite automaton* (NFA).
+  
+  Non-determinism can be thought of as the power of "choice" or "parallel
+  exploration." An NFA can have multiple possible next states for a given input
+  symbol. Furthermore, it can change state even without consuming any input, a
+  feature known as an *epsilon transition* ($\epsilon$-transition). These two
+  features are the core of what makes NFAs non-deterministic.
+  
+  Formally, an NFA is also a 5-tuple $(Q, \Sigma, \delta, q_0, F)$, but its
+  transition function, $\delta$, is defined differently.
+  
+  - $Q$: a finite set of states.
+  - $\Sigma$: a finite input alphabet.
+  - $q_0 \in Q$: the start state.
+  - $F \subseteq Q$: the set of final states.
+  - $\delta: Q \times (\Sigma \cup \{\epsilon\}) \to 2^Q$: the transition
+    function.
+  
+  The crucial difference lies in $\delta$. The function takes a state and a symbol
+  from the alphabet (or the special symbol $\epsilon$) and returns a *set* of
+  possible next states. The notation $2^Q$ represents the power set of $Q$—the set
+  of all possible subsets of $Q$. If, from state $q_i$ on input 'a', the machine
+  can transition to either $q_j$ or $q_k$, we would write
+  $\delta(q_i, a) = \{q_j, q_k\}$. If there is no transition from $q_i$ on input
+  'a', then $\delta(q_i, a) = \emptyset$ (the empty set).
+  
+  How does an NFA process an input string? Since it can be in multiple states at
+  once, we can imagine it exploring all possible paths simultaneously. When the
+  NFA reads an input symbol, it follows all available transitions for that symbol
+  from all of its current states. The machine *accepts* a string if, after the
+  entire string has been consumed, *at least one* of these parallel paths ends in
+  a final state. It's as if the machine can magically guess the correct path to
+  take to an accepting state if one exists.
+  
+  Consider the NFA in **Fig. 2.12**, which recognizes the language of the regular
+  expression `a*b*`. The automaton has a start state $q_0$ and a final state
+  $q_1$. From $q_0$, there is a loop back to itself on the input 'a', allowing it
+  to process any number of 'a's. The key non-deterministic feature is an
+  $\epsilon$-transition from $q_0$ to $q_1$. This transition allows the machine to
+  move from the 'a'-processing state to the 'b'-processing state *without reading
+  any input*. Finally, state $q_1$ has a loop back to itself on input 'b',
+  allowing it to process any number of 'b's.
+  
+  Let's trace the input "ab". We start in state $q_0$. On reading 'a', we stay in
+  $q_0$. Now, the machine is in state $q_0$ with 'b' left to read. It must first
+  decide whether to take the $\epsilon$-transition. In essence, we track the set
+  of all possible current states. Before reading 'b', the machine could be in
+  $q_0$ or, by following the $\epsilon$-transition, it could also be in $q_1$.
+  From this set of states $\{q_0, q_1\}$, we read 'b'. There is no 'b' transition
+  from $q_0$, so that path dies. There is a 'b' transition from $q_1$ to itself,
+  so that path continues. After reading 'b', the machine is in the set of states
+  $\{q_1\}$. Since the input is consumed and the set of active states contains a
+  final state ($q_1$), the string "ab" is accepted.
+  
+  The primary advantage of NFAs is that they are often far simpler and more
+  compact than their deterministic counterparts. Designing an NFA to recognize a
+  language described by a regular expression is frequently a more direct and
+  intuitive process. This simplicity is a significant benefit, even if the
+  underlying model of computation seems more abstract. As we will see, despite
+  their apparent power of "guessing," NFAs are not more powerful than DFAs; they
+  recognize the exact same class of languages—the regular languages. The next
+  sections will prove this fundamental equivalence.
+  
+  We have now introduced two formalisms: regular expressions, a compact notation
+  for *describing* string patterns, and finite automata, an abstract machine for
+  *recognizing* them. The connection between these two is not a coincidence; it is
+  a deep and fundamental result in computer science, formalized by *Kleene's
+  theorem*.[^1]
+  
+  Kleene's theorem states that any language that can be described by a regular
+  expression can be recognized by a finite automaton, and vice-versa. This
+  establishes a perfect equivalence in expressive power. The class of languages
+  that can be defined by either of these formalisms is known as the **regular
+  languages**. This equivalence is a cornerstone of formal language theory and has
+  immense practical implications for computational linguistics.
+  
+  The theorem can be understood as a two-part statement:
+  
+  - **Part 1: From Regular Expression to Automaton.** For any regular expression
+    *r*, there exists an equivalent non-deterministic finite automaton (NFA) that
+    accepts the language L(*r*). This is the constructive direction that powers
+    practical applications. It gives us a blueprint for taking a human-readable
+    pattern and compiling it into an executable machine.
+  
+  - **Part 2: From Automaton to Regular Expression.** For any finite automaton *M*
+    (either deterministic or non-deterministic), there exists a regular expression
+    *r* that describes the exact same language, such that L(*r*) = L(*M*). This
+    completes the proof of equivalence, showing the mapping works in both
+    directions.
+  
+  This powerful connection means that we can use the concise, declarative syntax
+  of regular expressions to specify complex patterns, while relying on the
+  efficient, well-understood mechanics of automata to perform the actual string
+  processing. When a programmer writes a regular expression, the system's
+  underlying engine can compile it into a highly optimized automaton to match
+  text. This provides a guaranteed bridge between a formal description and its
+  practical implementation. In the following sections, we will demystify this
+  process by examining the standard algorithms—Thompson's construction and the
+  subset construction—that make this conversion possible.
+  
+  The equivalence between regular expressions and finite automata, established by
+  Kleene's theorem, is not merely a theoretical curiosity. It provides a practical
+  pathway for implementation: we can convert a regular expression, which is easy
+  for humans to write, into an NFA, which is a straightforward computational
+  model. Thompson's construction is a classic and elegant algorithm that
+  accomplishes exactly this. The algorithm is recursive, meaning it defines how to
+  build an NFA for a complex expression by first building NFAs for its simpler
+  sub-expressions.
+  
+  The process starts with two base cases for the simplest possible regular
+  expressions:
+  
+  - **A single symbol:** For a regular expression consisting of a single symbol
+    `a` from the alphabet $\Sigma$, we construct an NFA with a new start state and
+    a new final state, linked by a single transition labeled `a`.
+  - **The empty string:** For the empty string, $\epsilon$, we construct an NFA
+    with a new start and final state, linked by a single $\epsilon$-transition.
+  
+  From these atomic components, we build larger NFAs using rules that directly
+  mirror the operators in the regular expression. Let's assume we have already
+  constructed NFAs for the sub-expressions `s` and `t`, which we will call `N(s)`
+  and `N(t)`.
+  
+  1. **Union (s|t):** To construct the NFA for the union `s|t`, we create a new
+     start state and a new final state. We then add $\epsilon$-transitions from
+     the new start state to the original start states of both `N(s)` and `N(t)`.
+     We also add $\epsilon$-transitions from the original final states of `N(s)`
+     and `N(t)` to our new final state. The original final states are no longer
+     marked as final. This construction creates a machine that can
+     non-deterministically choose to traverse either the path for `s` or the path
+     for `t`.
+  
+  2. **Concatenation (st):** For the concatenation `st`, the start state of `N(s)`
+     becomes the overall start state, and the final state of `N(t)` becomes the
+     overall final state. We connect the two machines by adding an
+     $\epsilon$-transition from the final state of `N(s)` to the start state of
+     `N(t)`. The final state of `N(s)` is then unmarked. This forces the machine
+     to complete the path for `s` before beginning the path for `t`.
+  
+  3. **Kleene Star (s\*):** To construct the NFA for `s*`, we again create a new
+     start state and a new final state. We add an $\epsilon$-transition from the
+     new start state directly to the new final state to handle the case of zero
+     occurrences of `s`. We also add $\epsilon$-transitions from the new start
+     state to the start state of `N(s)` and from the final state of `N(s)` to the
+     new final state. Crucially, to allow for one or more repetitions, we add a
+     "loop-back" $\epsilon$-transition from the final state of `N(s)` to its own
+     start state.
+  
+  The power of this method lies in its compositionality. As illustrated in **Fig.
+  2.14**, to build an NFA for a complex expression like `(a|b)*c`, we simply apply
+  these rules recursively. We first construct the NFAs for `a` and `b`, combine
+  them with the union rule to get `N(a|b)`, apply the Kleene star rule to this
+  result to get `N((a|b)*)`, and finally use the concatenation rule to join it
+  with `N(c)`. The resulting NFA has a predictable structure—always with a single
+  start state and a single final state—making it a systematic and reliable method
+  for converting any regular expression into a functionally equivalent NFA.
+  
+  While Non-deterministic Finite Automata (NFAs) offer great flexibility for
+  design, their operational mechanics can be inefficient to simulate directly. A
+  computer must track multiple possible paths simultaneously for a given input
+  string. In contrast, Deterministic Finite Automata (DFAs) are computationally
+  straightforward, as there is only one possible path for any input. Fortunately,
+  a fundamental algorithm known as **subset construction** provides a systematic
+  way to convert any NFA into an equivalent DFA that recognizes the same language.
+  This process is crucial because it proves that NFAs, despite their
+  non-determinism, do not possess any more computational power than DFAs and
+  guarantees that we can always build an efficient deterministic machine from a
+  simpler non-deterministic design.
+  
+  The core idea behind subset construction is that each state in the new DFA
+  corresponds to a *set of states* from the original NFA. A DFA state represents
+  the set of all possible states the NFA could be in after processing a particular
+  sequence of input symbols. The algorithm works as follows:
+  
+  1. **Create the DFA start state:** The start state of the DFA is the set
+     containing the NFA's start state and any other states reachable from it via
+     ε-transitions (the *ε-closure*).
+  2. **Iteratively create new states and transitions:** For each newly created DFA
+     state $D_{new}$ and for each symbol $c$ in the alphabet Σ:
+     - Find the set of all states in the NFA that can be reached from any state in
+       $D_{new}$ by following a transition on symbol $c$.
+     - Compute the ε-closure of this resulting set. This new set of NFA states
+       becomes a state in our DFA.
+     - Add a transition in the DFA from $D_{new}$ to this new state on symbol $c$.
+  3. **Repeat until convergence:** Continue this process until no new DFA states
+     are generated.
+  4. **Define final states:** Any state in the DFA that contains at least one of
+     the original NFA's final states becomes a final state in the new DFA.
+  
+  This procedure can seem abstract, but it becomes clear when traced. The table in
+  **Fig. 2.15** provides a step-by-step trace of the subset construction algorithm
+  applied to a sample NFA. Each row corresponds to a newly discovered DFA state,
+  showing the set of NFA states it represents and how its transitions are computed
+  for each symbol in the alphabet. By following the table, you can see how the
+  algorithm systematically explores all reachable combinations of NFA states,
+  creating a finite and deterministic map of the NFA's behavior. The subset
+  construction algorithm is a cornerstone result, proving the equivalence of NFAs
+  and DFAs and providing a practical method for turning conceptual models into
+  efficient implementations.
+  
+  Finite-state automata are excellent tools for *recognition*. They provide a
+  formal mechanism to answer a simple yes/no question: "Is this string a member of
+  the language we have defined?" While this is a fundamental capability, many
+  tasks in computational linguistics require more. We often need to *transform*
+  one string into another, not just accept or reject it.
+  
+  This process of mapping an input string to a corresponding output string is
+  called *transduction*. Consider the task of morphological analysis, where we
+  might want to generate a plural noun from its singular form (e.g., mapping
+  `goose` to `geese`) or translate a word from one language to another. An FSA, by
+  its nature, cannot perform this task. To model such relationships, we extend the
+  finite automaton to a more powerful machine: the **Finite-State Transducer
+  (FST)**.
+  
+  An FST is conceptually very similar to a finite automaton, with one crucial
+  enhancement: each transition is augmented with an output symbol. Where an FSA
+  transition from one state to another is labeled with an input symbol, an FST
+  transition is labeled with an *input:output* pair. As the FST consumes an input
+  string by moving from state to state, it simultaneously generates an output
+  string by appending the output symbol from each traversed arc. The final output
+  is the sequence of symbols generated along a successful path from the start
+  state to a final state.
+  
+  Formally, an FST is like an NFA, but its transition function $\delta$ also
+  produces output. For an input alphabet $\Sigma$ and an output alphabet $\Gamma$,
+  the transition function maps a state and an input symbol to a set of pairs,
+  where each pair contains a new state and an output string:
+  
+  $\delta: Q \times (\Sigma \cup \{\epsilon\}) \to 2^{Q \times \Gamma^*}$
+  
+  This definition allows a single input to map to multiple possible outputs, or
+  for output to be produced even on an $\epsilon$-input, making FSTs a flexible
+  tool for modeling complex string-to-string relationships. Their utility in
+  computational linguistics is immense, especially for tasks involving morphology.
+  They can elegantly capture rules for inflectional morphology, such as
+  pluralization and verb conjugation, and derivational morphology, like adding
+  prefixes and suffixes. We will now explore a practical case study of this
+  application.
+  
+  Let's consider a practical application of Finite-State Transducers: modeling
+  English noun morphology. While FSAs can recognize valid words, FSTs can be used
+  to transform them, making FSTs a natural fit for tasks like inflectional
+  morphology, which involves changing a word's form to reflect grammatical
+  features like number. The formation of noun plurals in English is a classic
+  example that, while seemingly simple, is governed by a set of well-defined
+  rules.
+  
+  Most nouns form their plural by simply adding an *-s* (e.g., *cat* → *cats*).
+  However, nouns ending in sounds like /s/, /z/, or /ʃ/ (spelled with *s, z, x,
+  sh, ch*) require an *-es* suffix (e.g., *fox* → *foxes*). We can capture this
+  logic elegantly in an FST, as shown in Fig. 2.17. An FST for pluralization maps
+  an input string (the singular noun) to an output string (the plural form).
+  
+  Consider the input word *cat*. The transducer would process this by following a
+  path where each input character is mapped to itself as output. Upon reaching a
+  final state after consuming the entire word, a final transition is taken that
+  reads no input symbol ($\epsilon$) but outputs an *s*. The full transduction is
+  thus `c:c`, `a:a`, `t:t`, `ε:s`, mapping the input *cat* to the output *cats*.
+  
+  Now, consider the input *fox*. The machine again maps `f:f` and `o:o`. However,
+  upon reading the final *x*, the machine is designed to follow a different path.
+  Instead of a simple `x:x` transition, it takes a specific transition labeled
+  `x:es`. This single transition handles the morphological rule for this class of
+  nouns, correctly producing the output *foxes*.
+  
+  This simple FST demonstrates the power of this formalism. It encodes multiple
+  linguistic rules into a single, efficient computational model. Different paths
+  through the machine correspond to different morphological processes. While a
+  comprehensive FST for English morphology would be far more complex,
+  incorporating rules for words ending in *-y* (*fly* → *flies*) and handling
+  irregular forms (*mouse* → *mice*), this case study illustrates the fundamental
+  utility of FSTs in computational morphology.
+  
+  Despite their utility for modeling word-level phenomena, regular expressions and
+  finite automata have a crucial limitation: their finite memory. An FSA can only
+  remember which of its finite set of states it is currently in. This is
+  sufficient for recognizing local patterns, but it proves inadequate for
+  capturing certain long-distance dependencies found in the syntax of many natural
+  languages.
+  
+  A classic example of a structure that regular languages cannot handle is *center
+  embedding*, where a phrase is placed in the middle of another phrase of the same
+  type. Consider the following sentences:
+  
+  - The cat meowed.
+  - The cat _the dog chased_ meowed.
+  - The cat _the dog the rat bit chased_ meowed.
+  
+  To verify the grammatical correctness of these sentences, a model must match
+  each noun phrase subject ("the cat", "the dog", "the rat") with its
+  corresponding verb ("bit", "chased", "meowed"). As the depth of embedding
+  increases, the model must "remember" an increasing number of subjects before it
+  encounters their verbs. An FSA, with its fixed number of states, cannot store an
+  unbounded number of pending subjects.
+  
+  Formally, this problem is equivalent to recognizing the language
+  $L = \{a^n b^n | n \ge 0\}$. This language consists of some number of *a*'s
+  followed by the *exact same number* of *b*'s. No finite automaton can recognize
+  this language. To do so, it would need to count the number of *a*'s, which could
+  be infinite. This would require an infinite number of states, contradicting the
+  definition of an FSA. This fundamental inability to count and store unbounded
+  information means we require more powerful formalisms, like context-free
+  grammars, to model the hierarchical structure of sentences.
+  
+  In this chapter, we have laid the formal and computational groundwork for
+  processing language at its most fundamental level: the word. We began with
+  *regular expressions*, a practical and powerful tool for describing and matching
+  patterns in text. We then delved into their theoretical counterpart, the
+  *finite-state automaton*, exploring both deterministic (DFA) and
+  non-deterministic (NFA) variants. The essential takeaway, formalized in Kleene's
+  theorem, is that these two perspectives are equivalent in their descriptive
+  power; anything a regular expression can describe, a finite automaton can
+  recognize, and vice versa.
+  
+  We extended this model from simple recognition to transformation using
+  *Finite-State Transducers (FSTs)*, demonstrating their utility in tasks like
+  morphological analysis. However, the power of this machinery has clear
+  boundaries. The finite-state model is fundamentally limited by its lack of
+  memory. It cannot, for instance, recognize a language like
+  $L = \{a^n b^n \mid n \ge 0\}$, which requires counting the number of *a*'s to
+  ensure an equal number of *b*'s.
+  
+  This limitation is not merely a theoretical curiosity. It means that regular
+  languages cannot model many syntactic phenomena in human language, such as the
+  nested structures found in center-embedded clauses. To capture the hierarchical
+  nature of sentences, we need a more powerful class of grammars. Having mastered
+  the tools for modeling words, we are now prepared to move up the linguistic
+  hierarchy. The subsequent chapters will build upon this foundation, introducing
+  the formalisms necessary to parse phrases, clauses, and full sentences, and
+  thereby unlock a deeper computational understanding of syntactic structure.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+  
+  [^1]: Kleene, Stephen C. (1956). "Representation of events in nerve nets and finite
+  automata". In C. Shannon and J. McCarthy (eds.), *Automata Studies*. Princeton
+  University Press.
+hash: f97b9a8ce5a567a7581ccc41bf9a4fb84c5cea195857b109ad6213fd22f38058
+response:
+  A simple, clean-line illustration depicting a person's hands operating a
+  traditional wooden handloom. The focus is not on the person, but on the process.
+  To the side of the loom, a visible punch card or paper guide with a clear,
+  repeating geometric pattern (e.g., a sequence of simple chevrons and diamonds)
+  is being fed into the loom's mechanism. The section of cloth emerging from the
+  loom clearly displays this exact pattern being woven into its fabric. The
+  overall style should be minimalist and schematic, almost like a technical
+  diagram, to emphasize the direct relationship between the abstract pattern
+  instructions and the concrete textile being created.
+duration: 16794 ms
+usage_stats:
+  {
+    "candidates_token_count": 130,
+    "prompt_token_count": 11282,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 11282
+      }
+    ],
+    "thoughts_token_count": 1516,
+    "total_token_count": 12928
+  }
+...

@@ -1,0 +1,95 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  While the basic operators of union, concatenation, and Kleene star provide a
+  complete system for defining regular languages, most modern regular expression
+  engines offer a much richer and more convenient syntax. These extensions don't
+  add theoretical power—they can all be simulated with the basic operators—but
+  they make writing complex patterns significantly more concise and readable. We
+  will now expand our toolkit to include four key concepts: *character classes*,
+  *quantifiers*, *anchors*, and *capturing groups*. A comprehensive list of these
+  syntactic elements is provided in Fig. 2.7.
+  
+  A **character class**, denoted by square brackets `[]`, allows you to match any
+  single character from a specified set. For instance, `[aeiou]` will match any
+  lowercase vowel. Ranges are also permitted, so `[a-z]` matches any lowercase
+  letter and `[0-9]` matches any digit. A `^` as the first character inside the
+  brackets negates the class, so `[^0-9]` matches any character that is *not* a
+  digit. For convenience, several predefined character classes exist, such as `\d`
+  for digits (`[0-9]`), `\w` for "word" characters (letters, numbers, and
+  underscore), and `\s` for whitespace characters (spaces, tabs, newlines).
+  
+  **Quantifiers** control how many times a preceding part of an expression can
+  occur. The three most common are:
+  
+  - The asterisk `*` matches the preceding item zero or more times. `ab*c` matches
+    `ac`, `abc`, `abbc`, etc.
+  - The plus `+` matches one or more times. `ab+c` matches `abc` and `abbc`, but
+    not `ac`.
+  - The question mark `?` matches zero or one time, making the preceding item
+    optional. The pattern `colou?r` matches both "color" and "colour". For more
+    precise control, braces can specify a range of repetitions. For example,
+    `\d{3}` matches exactly three digits, while `\d{2,4}` matches between two and
+    four digits.
+  
+  **Anchors** are special characters that don't match any character in the string
+  but instead match a *position*. The caret `^` anchors the match to the beginning
+  of a line or string, while the dollar sign `$` anchors it to the end. The
+  pattern `^cat$` will only match the exact string "cat" and nothing else. Another
+  crucial anchor in computational linguistics is `\b`, which matches a word
+  boundary. This is the zero-width position between a word character (`\w`) and a
+  non-word character (`\W`). Using `\bcat\b` ensures you match the word "cat" but
+  not the "cat" in "caterpillar".
+  
+  Finally, **capturing groups**, created with parentheses `()`, serve two
+  purposes. First, they group part of a pattern so that operators like `*` or `+`
+  apply to the whole group, as in `(ab)+`, which matches `ab`, `abab`, and so on.
+  Second, and more importantly, they *capture* the portion of the string that
+  matched the enclosed pattern. This allows you to extract specific pieces of
+  information from a larger text. For example, in the string "Order: US 543", the
+  pattern `(US|EU) (\d+)` would not only match "US 543" but also allow you to
+  separately extract the captured groups "US" and "543".
+  
+  By combining these elements, we can build powerful and precise patterns.
+  Consider a pattern for matching simple email addresses:
+  `([\w.-]+)@([\w.-]+)\.([a-zA-Z]{2,})`. This expression uses character classes,
+  quantifiers, and capturing groups to identify and extract the username, domain
+  name, and top-level domain from a string. With this expanded syntax, regular
+  expressions become an indispensable tool for information extraction, as we will
+  see in the following case study.
+  
+  This fragment refers to Fig. 2.7, which is a table. Its description is as
+  follows:
+  
+  A table detailing advanced regular expression syntax. Columns will include
+  'Syntax' (e.g., `[a-z]`), 'Description' (e.g., 'Character class for any
+  lowercase letter'), and 'Example'. It will cover quantifiers (\*, +, ?),
+  character classes, anchors, and capturing groups.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: bf97e2abeff8117468addf08e467a1bc7713d88ca83f39c1547c48ced60e2555
+response:
+  caption: Fig. 2.7: A summary of common extended regular expression syntax.
+  latex: \begin{tabular}{lll}\toprule\textbf{Syntax} & \textbf{Description} & \textbf{Example} \\\midrule\multicolumn{3}{l}{\textit{Character Classes}} \\\texttt{[abc]} & Match any character from the set. & \texttt{[aeiou]} matches 'a' in 'cat'. \\\texttt{[\^{}abc]} & Match any character not in the set. & \texttt{[\^{}0-9]} matches 'a' in 'a1'. \\\texttt{[a-z]} & Match any character in the range. & \texttt{[a-z]} matches 'c' in 'cat'. \\\texttt{\textbackslash d} & Match any digit character. & \texttt{\textbackslash d} matches '5' in 'file\_5'. \\\texttt{\textbackslash w} & Match any word character (alphanumeric or \_). & \texttt{\textbackslash w} matches '\_' in 'a\_b'. \\\texttt{\textbackslash s} & Match any whitespace character. & \texttt{\textbackslash s} matches the space in 'a b'. \\\midrule\multicolumn{3}{l}{\textit{Quantifiers}} \\\texttt{*} & Match preceding element 0 or more times. & \texttt{ab*c} matches 'ac' and 'abc'. \\\texttt{+} & Match preceding element 1 or more times. & \texttt{ab+c} matches 'abc' and 'abbc'. \\\texttt{?} & Match preceding element 0 or 1 time. & \texttt{colou?r} matches 'color'. \\\texttt{\{n\}} & Match preceding element exactly n times. & \texttt{\textbackslash d\{3\}} matches '123'. \\\texttt{\{n,m\}} & Match preceding element from n to m times. & \texttt{\textbackslash d\{2,4\}} matches '99' and '1234'. \\\midrule\multicolumn{3}{l}{\textit{Anchors}} \\\texttt{\^{}} & Anchor match to the start of the string/line. & \texttt{\^{}cat} matches 'cat' in 'catdog'. \\\texttt{\$} & Anchor match to the end of the string/line. & \texttt{cat\$} matches 'cat' in 'tomcat'. \\\texttt{\textbackslash b} & Match a word boundary position. & \texttt{\textbackslash bcat\textbackslash b} matches 'cat', not in 'caterpillar'. \\\midrule\multicolumn{3}{l}{\textit{Capturing Groups}} \\\texttt{(...)} & Group pattern and capture the matched string. & \texttt{(US|EU)} captures 'US' from 'Order: US 543'. \\\bottomrule\end{tabular}
+duration: 65180 ms
+usage_stats:
+  {
+    "candidates_token_count": 647,
+    "prompt_token_count": 1048,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1048
+      }
+    ],
+    "thoughts_token_count": 8555,
+    "total_token_count": 10250
+  }
+...

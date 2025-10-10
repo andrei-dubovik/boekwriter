@@ -1,0 +1,36 @@
+{model: str, query: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-flash-image-preview
+query: image
+prompt:
+  A simple, clean-line illustration depicting a person's hands operating a
+  traditional wooden handloom. The focus is not on the person, but on the process.
+  To the side of the loom, a visible punch card or paper guide with a clear,
+  repeating geometric pattern (e.g., a sequence of simple chevrons and diamonds)
+  is being fed into the loom's mechanism. The section of cloth emerging from the
+  loom clearly displays this exact pattern being woven into its fabric. The
+  overall style should be minimalist and schematic, almost like a technical
+  diagram, to emphasize the direct relationship between the abstract pattern
+  instructions and the concrete textile being created.
+hash: 0ad39baf0615d017eb8b84557dabcb67a68fafbe89892dbc17973a3457942978
+response: image-2.png
+duration: 5444 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 140,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 140
+      }
+    ],
+    "total_token_count": 1430
+  }
+...

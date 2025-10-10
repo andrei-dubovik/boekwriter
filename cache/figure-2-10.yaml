@@ -1,0 +1,143 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  While a state diagram provides an intuitive picture of a finite automaton, a
+  formal definition allows us to be precise. We will begin with the
+  **Deterministic Finite Automaton (DFA)**, a type of FSA where every move is
+  uniquely determined by the current state and the input symbol. There is no
+  ambiguity; from any state, a given character leads to exactly one other state.
+  
+  Formally, a DFA is a 5-tuple $M = (Q, \Sigma, \delta, q_0, F)$ where:
+  
+  1. $Q$ is a finite set of states.
+  2. $\Sigma$ is a finite set of input symbols, called the alphabet.
+  3. $\delta$ is the transition function, which maps a state and an input symbol
+     to a state. Its signature is $\delta: Q \times \Sigma \to Q$. This function
+     is the "program" of the machine, dictating every possible move.
+  4. $q_0 \in Q$ is the designated start state.
+  5. $F \subseteq Q$ is the set of final or accepting states.
+  
+  Let's ground this formal definition using the state diagram shown in **Fig.
+  2.10**, which depicts a DFA that recognizes the language of all strings ending
+  in `ing`.
+  
+  The components of this specific automaton can be formally defined as follows:
+  
+  - **States ($Q$):** The circles in the diagram represent the states. We can name
+    them $\{q_0, q_1, q_2, q_3\}$. Each state represents a stage in the
+    recognition process, essentially remembering how much of the target suffix
+    (`ing`) we have just seen. For instance, $q_0$ is the initial state, $q_1$ is
+    the state after seeing an `i`, $q_2$ after seeing `in`, and $q_3$ after seeing
+    `ing`.
+  
+  - **Alphabet ($\Sigma$):** This is the set of all characters the machine can
+    process. For simplicity, let's assume it's the set of all lowercase English
+    letters, $\{a, b, c, \dots, z\}$.
+  
+  - **Start State ($q_0$):** In the diagram, $q_0$ is marked as the start state by
+    an incoming arrow that originates from no other state. This is where
+    processing for any input string begins.
+  
+  - **Final States ($F$):** The set of final states is $\{q_3\}$. In diagrams,
+    final states are indicated by a double circle. If the machine's final state
+    after reading an entire input string is a member of $F$, the string is
+    *accepted*.
+  
+  - **Transition Function ($\delta$):** The labeled arrows represent the
+    transition function. For example, the arrow from $q_0$ to $q_1$ labeled `i`
+    means that $\delta(q_0, i) = q_1$. The deterministic nature is clear: from
+    $q_1$, an `n` must lead to $q_2$, while any other character (like `a` or `i`)
+    might lead back to a different, specific state. For example, if the machine is
+    in state $q_1$ (it has just seen an `i`) and the next character is another
+    `i`, the machine would stay in state $q_1$, since this new `i` could be the
+    start of a new `ing` sequence. This corresponds to a transition
+    $\delta(q_1, i) = q_1$. In contrast, if it sees a `z`, the sequence is broken,
+    so the transition might be $\delta(q_1, z) = q_0$. A complete DFA specifies a
+    transition for every state and every symbol in the alphabet.
+  
+  This fragment refers to Fig. 2.10. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A state diagram of a simple Deterministic Finite Automaton (DFA). The diagram
+  will show a machine recognizing strings ending in 'ing'. It will feature nodes
+  for states (circles), a designated start state (incoming arrow), final states
+  (double circles), and labeled directed edges for transitions.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 1070fef398735ac208a50952eecd586fb335e3ffe105f9ed9724a6308f27fba3
+response:
+  caption:
+    A state diagram of a simple Deterministic Finite Automaton (DFA) that recognizes
+    strings ending in 'ing', as described in the text. The states q0, q1, q2, and q3
+    represent having seen '', 'i', 'in', and 'ing' respectively. q0 is the start
+    state and q3 (double circle) is the final (accepting) state.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="black"/>
+        </marker>
+      </defs>
+      <style>.state-label { font: 12px sans-serif; text-anchor: middle; dominant-baseline: central; } .trans-label { font: 11px sans-serif; text-anchor: middle; fill: #111; }</style>
+      <g fill="none" stroke="black" stroke-width="1" marker-end="url(#arrowhead)">
+        <path d="M 30 150 h 20"/>
+        <path d="M 90 150 h 40"/>
+        <path d="M 170 150 h 40"/>
+        <path d="M 250 150 h 40"/>
+        <path d="M 60 130 A 15 15 0 1 1 80 130"/>
+        <path d="M 140 130 A 15 15 0 1 1 160 130"/>
+        <path d="M 133 160 C 110 190, 90 190, 67 160"/>
+        <path d="M 213 140 C 190 110, 170 110, 147 140"/>
+        <path d="M 210 165 C 170 220, 110 220, 70 165"/>
+        <path d="M 290 140 C 240 80, 200 80, 150 140"/>
+        <path d="M 290 165 C 230 240, 110 240, 50 165"/>
+      </g>
+      <g stroke="black" stroke-width="1.5" fill="#fefefe">
+        <circle cx="70" cy="150" r="20"/>
+        <circle cx="150" cy="150" r="20"/>
+        <circle cx="230" cy="150" r="20"/>
+        <circle cx="310" cy="150" r="20"/>
+        <circle cx="310" cy="150" r="25" fill="none"/>
+      </g>
+      <g class="state-label">
+        <text x="70" y="150">q0</text>
+        <text x="150" y="150">q1</text>
+        <text x="230" y="150">q2</text>
+        <text x="310" y="150">q3</text>
+      </g>
+      <g class="trans-label">
+        <text x="110" y="138">i</text>
+        <text x="190" y="138">n</text>
+        <text x="270" y="138">g</text>
+        <text x="70" y="112">other</text>
+        <text x="150" y="112">i</text>
+        <text x="100" y="183">other</text>
+        <text x="180" y="118">i</text>
+        <text x="140" y="212">other</text>
+        <text x="220" y="90">i</text>
+        <text x="170" y="232">other</text>
+      </g>
+    </svg>
+duration: 69510 ms
+usage_stats:
+  {
+    "candidates_token_count": 1039,
+    "prompt_token_count": 1001,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1001
+      }
+    ],
+    "thoughts_token_count": 8556,
+    "total_token_count": 10596
+  }
+...

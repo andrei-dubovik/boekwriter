@@ -1,0 +1,103 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  With our expanded toolkit of advanced operators, regular expressions become more
+  than just a tool for finding patterns; they are a mechanism for simple
+  *Information Extraction* (IE). The goal of IE is to identify and pull structured
+  data, like names, dates, or relationships, from unstructured text. While complex
+  IE requires more powerful machine learning models, regular expressions are
+  highly effective for tasks where the input data has a consistent, predictable
+  format.
+  
+  Let's consider a practical case study: extracting author and title information
+  from a bibliography file. Imagine our file contains entries formatted in a
+  consistent style, such as:
+  
+  `Chomsky, N. (1957). *Syntactic Structures*. Mouton.`
+  
+  Our goal is to write a single regular expression that can read a line like this
+  and extract "Chomsky, N." as the author and "Syntactic Structures" as the title.
+  We can achieve this by designing a pattern that matches the entire line while
+  using capturing groups `(...)` to isolate the specific pieces of information we
+  want.
+  
+  Consider the following regular expression:
+  
+  `^([\w\s,.-]+)\s\(\d{4}\)\.\s\*([^*]+)\*.*$`
+  
+  Let's break this down:
+  
+  - `^` asserts our pattern must start at the beginning of the line.
+  - `([\w\s,.-]+)` is our first capturing group for the author. It matches one or
+    more characters that are either a word character (`\w`), whitespace (`\s`), a
+    comma, a period, or a hyphen.
+  - `\s\(\d{4}\)\.\s` matches the non-captured parts in between: a space, the
+    parenthesized four-digit year, a period, and another space.
+  - `\*([^*]+)\*` is our second capturing group. It first matches a literal
+    asterisk (`\*`). The group itself, `([^*]+)`, is a crucial trick: it matches
+    one or more characters that are *not* a closing asterisk. This non-greedy
+    approach ensures we only capture the text of the title. It concludes by
+    matching the final literal asterisk.
+  - `.*$` matches the rest of the line until the end.
+  
+  When this expression is applied to each line of a bibliography, a program can
+  directly access the content of the capturing groups for every successful match.
+  The text matched by the first group is the author, and the text from the second
+  is the title. As **Fig. 2.8** demonstrates, this technique effectively
+  transforms a simple text file into a list of structured records. This approach
+  is powerful but brittle; it relies on the strict consistency of the input
+  format. A missing year or a title not enclosed in asterisks would cause the
+  pattern to fail. Nonetheless, for well-formatted data, regular expressions
+  provide a direct and efficient method for rudimentary information extraction.
+  
+  This fragment refers to Fig. 2.8, which is a table. Its description is as
+  follows:
+  
+  A two-column table demonstrating the information extraction case study. The left
+  column will contain raw strings from a sample bibliography file. The right
+  column will show the structured data (e.g., 'Author' and 'Title') extracted by
+  applying a regular expression to the corresponding string on the left.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: 4a2647e6ada13b41adc3fd395a889caee6f8694cceec950327040597d952ea4a
+response:
+  caption:
+    Fig. 2.8: Using a regular expression with capturing groups to extract structured
+    data (author, title) from formatted bibliography entries.
+  latex:
+    \begin{tabular}{p{0.5\textwidth}l}
+    \toprule
+    \textbf{Input String} & \textbf{Extracted Data} \\
+    \midrule
+    \texttt{Chomsky, N. (1957). *Syntactic Structures*. Mouton.} & 
+    \begin{tabular}[t]{@{}l@{}} \textbf{Author:} Chomsky, N. \\ \textbf{Title:} Syntactic Structures \end{tabular} \\
+    \addlinespace
+    \texttt{Bird, S., Klein, E., and Loper, E. (2009). *Natural Language Processing with Python*. O'Reilly Media.} & 
+    \begin{tabular}[t]{@{}l@{}} \textbf{Author:} Bird, S., Klein, E., and Loper, E. \\ \textbf{Title:} Natural Language Processing with Python \end{tabular} \\
+    \addlinespace
+    \texttt{Manning, C. D., Schutze, H. (1999). *Foundations of Statistical Natural Language Processing*. MIT Press.} & 
+    \begin{tabular}[t]{@{}l@{}} \textbf{Author:} Manning, C. D., Schutze, H. \\ \textbf{Title:} Foundations of Statistical Natural Language Processing \end{tabular} \\
+    \bottomrule
+    \end{tabular}
+duration: 23169 ms
+usage_stats:
+  {
+    "candidates_token_count": 347,
+    "prompt_token_count": 775,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 775
+      }
+    ],
+    "thoughts_token_count": 2550,
+    "total_token_count": 3672
+  }
+...

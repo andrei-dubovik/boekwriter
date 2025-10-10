@@ -1,0 +1,132 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  While deterministic finite automata provide a clear, unambiguous model of
+  computation, they are not always the most intuitive tool for designing a
+  language recognizer. For any given state and input symbol, a DFA has exactly one
+  choice. This rigidity can lead to complex automata for relatively simple
+  languages. To overcome this, we introduce a more flexible model: the
+  *non-deterministic finite automaton* (NFA).
+  
+  Non-determinism can be thought of as the power of "choice" or "parallel
+  exploration." An NFA can have multiple possible next states for a given input
+  symbol. Furthermore, it can change state even without consuming any input, a
+  feature known as an *epsilon transition* ($\epsilon$-transition). These two
+  features are the core of what makes NFAs non-deterministic.
+  
+  Formally, an NFA is also a 5-tuple $(Q, \Sigma, \delta, q_0, F)$, but its
+  transition function, $\delta$, is defined differently.
+  
+  - $Q$: a finite set of states.
+  - $\Sigma$: a finite input alphabet.
+  - $q_0 \in Q$: the start state.
+  - $F \subseteq Q$: the set of final states.
+  - $\delta: Q \times (\Sigma \cup \{\epsilon\}) \to 2^Q$: the transition
+    function.
+  
+  The crucial difference lies in $\delta$. The function takes a state and a symbol
+  from the alphabet (or the special symbol $\epsilon$) and returns a *set* of
+  possible next states. The notation $2^Q$ represents the power set of $Q$—the set
+  of all possible subsets of $Q$. If, from state $q_i$ on input 'a', the machine
+  can transition to either $q_j$ or $q_k$, we would write
+  $\delta(q_i, a) = \{q_j, q_k\}$. If there is no transition from $q_i$ on input
+  'a', then $\delta(q_i, a) = \emptyset$ (the empty set).
+  
+  How does an NFA process an input string? Since it can be in multiple states at
+  once, we can imagine it exploring all possible paths simultaneously. When the
+  NFA reads an input symbol, it follows all available transitions for that symbol
+  from all of its current states. The machine *accepts* a string if, after the
+  entire string has been consumed, *at least one* of these parallel paths ends in
+  a final state. It's as if the machine can magically guess the correct path to
+  take to an accepting state if one exists.
+  
+  Consider the NFA in **Fig. 2.12**, which recognizes the language of the regular
+  expression `a*b*`. The automaton has a start state $q_0$ and a final state
+  $q_1$. From $q_0$, there is a loop back to itself on the input 'a', allowing it
+  to process any number of 'a's. The key non-deterministic feature is an
+  $\epsilon$-transition from $q_0$ to $q_1$. This transition allows the machine to
+  move from the 'a'-processing state to the 'b'-processing state *without reading
+  any input*. Finally, state $q_1$ has a loop back to itself on input 'b',
+  allowing it to process any number of 'b's.
+  
+  Let's trace the input "ab". We start in state $q_0$. On reading 'a', we stay in
+  $q_0$. Now, the machine is in state $q_0$ with 'b' left to read. It must first
+  decide whether to take the $\epsilon$-transition. In essence, we track the set
+  of all possible current states. Before reading 'b', the machine could be in
+  $q_0$ or, by following the $\epsilon$-transition, it could also be in $q_1$.
+  From this set of states $\{q_0, q_1\}$, we read 'b'. There is no 'b' transition
+  from $q_0$, so that path dies. There is a 'b' transition from $q_1$ to itself,
+  so that path continues. After reading 'b', the machine is in the set of states
+  $\{q_1\}$. Since the input is consumed and the set of active states contains a
+  final state ($q_1$), the string "ab" is accepted.
+  
+  The primary advantage of NFAs is that they are often far simpler and more
+  compact than their deterministic counterparts. Designing an NFA to recognize a
+  language described by a regular expression is frequently a more direct and
+  intuitive process. This simplicity is a significant benefit, even if the
+  underlying model of computation seems more abstract. As we will see, despite
+  their apparent power of "guessing," NFAs are not more powerful than DFAs; they
+  recognize the exact same class of languages—the regular languages. The next
+  sections will prove this fundamental equivalence.
+  
+  This fragment refers to Fig. 2.12. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A state diagram of a Non-deterministic Finite Automaton (NFA). This diagram will
+  illustrate key features of non-determinism, such as a state having multiple
+  transitions for the same input symbol and epsilon (ε) transitions, for a
+  language like `a*b*`.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 029b757b0297645f524ff252663d722c91bf896fe7eb971c693eb9b2b6259383
+response:
+  caption:
+    A Non-deterministic Finite Automaton (NFA) for the language described by the
+    regular expression a*b*. State q₀ is the start state, and q₁ is the final state.
+    The ε-transition allows the machine to move from the 'a'-processing state to the
+    'b'-processing state without consuming input.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="black"/>
+        </marker>
+      </defs>
+      <g stroke="black" stroke-width="2" fill="white" font-family="sans-serif" font-size="16" text-anchor="middle">
+        <circle cx="100" cy="150" r="25"/>
+        <text x="100" y="155" fill="black" stroke-width="0">q&#8320;</text>
+        <path d="M40,150 L 75,150" fill="none" marker-end="url(#arrowhead)"/>
+        <circle cx="300" cy="150" r="25"/>
+        <circle cx="300" cy="150" r="20" fill="none"/>
+        <text x="300" y="155" fill="black" stroke-width="0">q&#8321;</text>
+        <path d="M125,150 L 275,150" fill="none" marker-end="url(#arrowhead)"/>
+        <text x="200" y="140" fill="black" stroke-width="0">&#949;</text>
+        <path d="M 93,126 A 30 30 0 1 1 107,126" fill="none" marker-end="url(#arrowhead)"/>
+        <text x="100" y="95" fill="black" stroke-width="0">a</text>
+        <path d="M 293,126 A 30 30 0 1 1 307,126" fill="none" marker-end="url(#arrowhead)"/>
+        <text x="300" y="95" fill="black" stroke-width="0">b</text>
+      </g>
+    </svg>
+duration: 45605 ms
+usage_stats:
+  {
+    "candidates_token_count": 628,
+    "prompt_token_count": 1231,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1231
+      }
+    ],
+    "thoughts_token_count": 4809,
+    "total_token_count": 6668
+  }
+...

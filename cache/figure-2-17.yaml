@@ -1,0 +1,111 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Let's consider a practical application of Finite-State Transducers: modeling
+  English noun morphology. While FSAs can recognize valid words, FSTs can be used
+  to transform them, making FSTs a natural fit for tasks like inflectional
+  morphology, which involves changing a word's form to reflect grammatical
+  features like number. The formation of noun plurals in English is a classic
+  example that, while seemingly simple, is governed by a set of well-defined
+  rules.
+  
+  Most nouns form their plural by simply adding an *-s* (e.g., *cat* → *cats*).
+  However, nouns ending in sounds like /s/, /z/, or /ʃ/ (spelled with *s, z, x,
+  sh, ch*) require an *-es* suffix (e.g., *fox* → *foxes*). We can capture this
+  logic elegantly in an FST, as shown in Fig. 2.17. An FST for pluralization maps
+  an input string (the singular noun) to an output string (the plural form).
+  
+  Consider the input word *cat*. The transducer would process this by following a
+  path where each input character is mapped to itself as output. Upon reaching a
+  final state after consuming the entire word, a final transition is taken that
+  reads no input symbol ($\epsilon$) but outputs an *s*. The full transduction is
+  thus `c:c`, `a:a`, `t:t`, `ε:s`, mapping the input *cat* to the output *cats*.
+  
+  Now, consider the input *fox*. The machine again maps `f:f` and `o:o`. However,
+  upon reading the final *x*, the machine is designed to follow a different path.
+  Instead of a simple `x:x` transition, it takes a specific transition labeled
+  `x:es`. This single transition handles the morphological rule for this class of
+  nouns, correctly producing the output *foxes*.
+  
+  This simple FST demonstrates the power of this formalism. It encodes multiple
+  linguistic rules into a single, efficient computational model. Different paths
+  through the machine correspond to different morphological processes. While a
+  comprehensive FST for English morphology would be far more complex,
+  incorporating rules for words ending in *-y* (*fly* → *flies*) and handling
+  irregular forms (*mouse* → *mice*), this case study illustrates the fundamental
+  utility of FSTs in computational morphology.
+  
+  This fragment refers to Fig. 2.17. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A state diagram of a Finite-State Transducer (FST) for English noun
+  pluralization. The transitions will be labeled with input:output pairs (e.g.,
+  `x:es`). The diagram will trace the paths for inputs like 'cat' and 'fox' to
+  produce the outputs 'cats' and 'foxes'.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 00e47c49dad86fe43e3742385bf1464a68bee2c9d04bec2b30e44618fa67f1a7
+response:
+  caption:
+    A state diagram of a Finite-State Transducer (FST) for English noun
+    pluralization, corresponding to Fig. 2.17. The diagram shows a start state (q₀)
+    with a self-loop for most characters (labeled 'other:other'). From this state, a
+    transition on no input (ε) outputs an 's' to form regular plurals like 'cats',
+    leading to the final state q₁. A separate path handles nouns ending in 's', 'z',
+    or 'x'; it transduces these characters to 'es' and leads to a second final
+    state, q₂, correctly forming plurals like 'foxes'.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="black"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <g id="q0">
+        <circle cx="250" cy="300" r="40" stroke="black" stroke-width="2" fill="white"/>
+        <text x="250" y="305" font-family="Verdana, sans-serif" font-size="20" text-anchor="middle" alignment-baseline="middle">q&#8320;</text>
+      </g>
+      <g id="q1">
+        <circle cx="650" cy="180" r="40" stroke="black" stroke-width="2" fill="white"/>
+        <circle cx="650" cy="180" r="34" stroke="black" stroke-width="2" fill="white"/>
+        <text x="650" y="185" font-family="Verdana, sans-serif" font-size="20" text-anchor="middle" alignment-baseline="middle">q&#8321;</text>
+      </g>
+      <g id="q2">
+        <circle cx="650" cy="420" r="40" stroke="black" stroke-width="2" fill="white"/>
+        <circle cx="650" cy="420" r="34" stroke="black" stroke-width="2" fill="white"/>
+        <text x="650" y="425" font-family="Verdana, sans-serif" font-size="20" text-anchor="middle" alignment-baseline="middle">q&#8322;</text>
+      </g>
+      <path d="M 150,300 L 210,300" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+      <path d="M 230,262 A 50,50 0 1,0 230,338" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrowhead)" transform="rotate(-10, 250, 300)"/>
+      <text x="140" y="260" font-family="monospace" font-size="20">other:other</text>
+      <path d="M 290,290 Q 450,180 610,180" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+      <text x="450" y="225" font-family="monospace" font-size="20" text-anchor="middle">&#949;:s</text>
+      <path d="M 290,310 Q 450,420 610,420" stroke="black" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+      <text x="450" y="375" font-family="monospace" font-size="20" text-anchor="middle">
+        <tspan x="450" dy="0">s:es, z:es</tspan>
+        <tspan x="450" dy="1.2em">x:es</tspan>
+      </text>
+    </svg>
+duration: 63284 ms
+usage_stats:
+  {
+    "candidates_token_count": 1015,
+    "prompt_token_count": 693,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 693
+      }
+    ],
+    "thoughts_token_count": 7438,
+    "total_token_count": 9146
+  }
+...
