@@ -15,11 +15,12 @@ from mako.template import Template
 from markdown_it import MarkdownIt
 from markdown_it.tree import SyntaxTreeNode
 from mdit_py_plugins.dollarmath import dollarmath_plugin
+from mdit_py_plugins.footnote import footnote_plugin
 
 # Define constants
 SUPERSCRIPTS = '¹|²|³|⁴|⁵|⁶|⁷|⁸|⁹'
 BUILD = Path('build')
-md = MarkdownIt('commonmark').use(dollarmath_plugin)
+md = MarkdownIt('commonmark').use(dollarmath_plugin).use(footnote_plugin)
 
 # Initialize a logger
 LOGGER = logging.getLogger('latex')
@@ -143,44 +144,59 @@ def svg2pdf(path):
 
 def md2tex(obj):
     """Covert a parsed Markdown to LaTeX."""
-    match obj:
-        case SyntaxTreeNode(type='softbreak'):
-            return ' '
-        case SyntaxTreeNode(type='text'):
-            return obj.content
-        case SyntaxTreeNode(type='math_inline'):
-            formula = obj.content
-            formula = formula.replace('\n', ' ')
-            formula = re.sub("(?<![a-zA-Z])'(.+?)'", r"\\ltq{}\1\\rtq{}", formula)  # single quotes
-            formula = re.sub('"(.+?)"', r"\\ltq{}\1\\rtq{}", formula)  # double quotes
-            formula = '$' + formula + '$'
-            if len(obj.parent.children) == 1:  # display formula
+    footnotes = {}
+
+    def convert(obj):
+        match obj:
+            case SyntaxTreeNode(type='softbreak'):
+                return ' '
+            case SyntaxTreeNode(type='text'):
+                return obj.content
+            case SyntaxTreeNode(type='math_inline'):
+                formula = obj.content
+                formula = formula.replace('\n', ' ')
+                formula = re.sub("(?<![a-zA-Z])'(.+?)'", r"\\ltq{}\1\\rtq{}", formula)  # single quotes
+                formula = re.sub('"(.+?)"', r"\\ltq{}\1\\rtq{}", formula)  # double quotes
                 formula = '$' + formula + '$'
-            return '\0' + formula + '\0'  # \0 markup skips normalization later-on
-        case SyntaxTreeNode(type='code_inline'):
-            code = obj.content.replace('{', r'\{').replace('}', r'\}')  # escape curly brackets
-            code = code.replace(' ', r'\ ')  # fixed-width space
-            code = re.sub("(?<![a-zA-Z])'(.+?)'", "`\\1'", code)  # single-quotes
-            code = re.sub('"(.+?)"', "`\\1'", code)  # double quotes
-            return '\0\\texttt{' + code + '}\0'  # \0 markup skips normalization later-on
-        case SyntaxTreeNode(type='paragraph'):
-            return md2tex(obj.children) + '\n\n'
-        case SyntaxTreeNode(type='em'):
-            return r'\emph{' + md2tex(obj.children) + '}'
-        case SyntaxTreeNode(type='strong'):
-            return r'\textbf{' + md2tex(obj.children) + '}'
-        case SyntaxTreeNode(type='ordered_list'):
-            return '\\begin{enumerate}\n\n' + md2tex(obj.children) + '\\end{enumerate}\n\n'
-        case SyntaxTreeNode(type='bullet_list'):
-            return '\\begin{itemize}\n\n' + md2tex(obj.children) + '\\end{itemize}\n\n'
-        case SyntaxTreeNode(type='list_item'):
-            return '\\item ' + md2tex(obj.children)
-        case SyntaxTreeNode():
-            return md2tex(obj.children)
-        case list():
-            return ''.join(md2tex(v) for v in obj)
-        case _:
-            return ''
+                if len(obj.parent.children) == 1:  # display formula
+                    formula = '$' + formula + '$'
+                return '\0' + formula + '\0'  # \0 markup skips normalization later-on
+            case SyntaxTreeNode(type='code_inline'):
+                code = obj.content.replace('{', r'\{').replace('}', r'\}')  # escape curly brackets
+                code = code.replace(' ', r'\ ')  # fixed-width space
+                code = re.sub("(?<![a-zA-Z])'(.+?)'", "`\\1'", code)  # single-quotes
+                code = re.sub('"(.+?)"', "`\\1'", code)  # double quotes
+                return '\0\\texttt{' + code + '}\0'  # \0 markup skips normalization later-on
+            case SyntaxTreeNode(type='paragraph'):
+                return convert(obj.children) + '\n\n'
+            case SyntaxTreeNode(type='em'):
+                return r'\emph{' + convert(obj.children) + '}'
+            case SyntaxTreeNode(type='strong'):
+                return r'\textbf{' + convert(obj.children) + '}'
+            case SyntaxTreeNode(type='ordered_list'):
+                return '\\begin{enumerate}\n\n' + convert(obj.children) + '\\end{enumerate}\n\n'
+            case SyntaxTreeNode(type='bullet_list'):
+                return '\\begin{itemize}\n\n' + convert(obj.children) + '\\end{itemize}\n\n'
+            case SyntaxTreeNode(type='list_item'):
+                return '\\item ' + convert(obj.children)
+            case SyntaxTreeNode(type='footnote_ref'):
+                return '\\footnote{%s}' % obj.meta['label']
+            case SyntaxTreeNode(type='footnote'):
+                footnotes[obj.meta['label']] = convert(obj.children).strip()
+                return ''
+            case SyntaxTreeNode():
+                return convert(obj.children)
+            case list():
+                return ''.join(convert(v) for v in obj)
+            case _:
+                return ''
+
+    text = convert(obj)
+
+    # Postprocessing for footnotes
+    text = re.sub(r'\\footnote\{(.*?)\}', lambda m: r'\footnote{%s}' % footnotes[m.group(1)], text)
+
+    return text
 
 
 def normalize(text):
@@ -201,7 +217,7 @@ def normalize_span(match):
 
 
 def detect_footnotes(text):
-    """Identify footnotes, format as LaTeX."""
+    """Identify non-Markdown footnotes, format as LaTeX."""
     footnotes = {}
 
     def fnmark(match):

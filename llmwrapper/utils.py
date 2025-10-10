@@ -11,6 +11,7 @@ import re
 # Import external libraries
 from lxml import etree
 from mdit_py_plugins.dollarmath import dollarmath_plugin
+from mdit_py_plugins.footnote import footnote_plugin
 import mdformat
 
 
@@ -31,8 +32,38 @@ class DollarMath():
     RENDERERS = {'math_inline': math_inline}
     POSTPROCESSORS = {'text': escape_text}
 
-# Enable LaTeX support in mdformat
+
+class Footnote():
+    """A basic footnote plugin for mdformat."""
+    @staticmethod
+    def update_mdit(mdit):
+        mdit.use(footnote_plugin)
+
+    @staticmethod
+    def footnote_ref(node, context):
+        return f'[^{node.meta["label"]}]'
+
+    @staticmethod
+    def footnote_block(node, context):
+        return '\n\n'.join(child.render(context) for child in node.children)
+
+    @staticmethod
+    def footnote(node, context):
+        if len(node.children) > 1:
+            # Unlikely an LLM would put several paragraphs in a footnote
+            raise RuntimeError('not implemented')
+        return f'[^{node.meta["label"]}]: ' + node.children[0].render(context)
+
+    RENDERERS = {
+        'footnote_ref': footnote_ref,
+        'footnote_block': footnote_block,
+        'footnote': footnote,
+    }
+
+
+# Enable LaTeX and footnote support in mdformat
 mdformat.plugins.PARSER_EXTENSIONS['dollarmath'] = DollarMath
+mdformat.plugins.PARSER_EXTENSIONS['footnote'] = Footnote
 
 
 def deephash(obj):
@@ -82,7 +113,7 @@ def reflow(obj, width=80):
             return mdformat.text(
                 obj,
                 options = {'wrap': width, 'number': True},
-                extensions = {'dollarmath'},
+                extensions = {'dollarmath', 'footnote'},
             ).rstrip()
         case _:
             return obj

@@ -97,7 +97,7 @@ def load_prompt(path, query, **kwargs):
     prompt['prompt'] = mdformat.text(
         prompt['prompt'],
         options = {'wrap': 80, 'number': True},
-        extensions = {'dollarmath'},
+        extensions = {'dollarmath', 'footnote'},
     ).rstrip()
 
     # Expand the schema
