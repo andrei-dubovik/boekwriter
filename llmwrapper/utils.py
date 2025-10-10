@@ -26,10 +26,17 @@ class DollarMath():
         return f'${node.content}$'
 
     @staticmethod
+    def math_block(node, context):
+        return f'$${node.content}$$'
+
+    @staticmethod
     def escape_text(text, node, context):
         return text.replace('$', '\\$')
 
-    RENDERERS = {'math_inline': math_inline}
+    RENDERERS = {
+        'math_inline': math_inline,
+        'math_block': math_block,
+    }
     POSTPROCESSORS = {'text': escape_text}
 
 

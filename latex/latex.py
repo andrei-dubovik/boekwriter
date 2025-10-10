@@ -154,6 +154,7 @@ def md2tex(obj):
     footnotes = {}
 
     def convert(obj):
+        # '\0' markup in fomulas and code blocks guards against post-processing
         match obj:
             case SyntaxTreeNode(type='softbreak'):
                 return ' '
@@ -166,11 +167,19 @@ def md2tex(obj):
                 formula = '$' + formula + '$'
                 if len(obj.parent.children) == 1:  # display formula
                     formula = '$' + formula + '$'
-                return '\0' + formula + '\0'  # \0 markup skips normalization later-on
+                return '\0' + formula + '\0'
+            case SyntaxTreeNode(type='math_block'):
+                formula = obj.content.strip()
+                formula = normalize_quotes(formula, 'formula')
+                if formula.find('\n') == -1:
+                    formula = '$$' + formula + '$$'
+                else:
+                    formula = '$$\n' + formula + '\n$$'
+                return '\0' + formula + '\0\n\n'
             case SyntaxTreeNode(type='code_inline'):
                 code = obj.content
                 sep = find_delimiter(code)
-                return f'\0\\Verb{sep}' + code + f'{sep}\0'  # \0 markup skips normalization later-on
+                return f'\0\\Verb{sep}' + code + f'{sep}\0'
             case SyntaxTreeNode(type='paragraph'):
                 return convert(obj.children) + '\n\n'
             case SyntaxTreeNode(type='em'):
