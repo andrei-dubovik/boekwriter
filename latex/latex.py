@@ -238,17 +238,18 @@ def normalize_quotes(text, context):
     """Normalize quote usage depending on context."""
     match context:
         case 'text':
-            text = re.sub("(?<![a-zA-Z}])'(.*?)'", "``\\1''", text)  # single quotes
-            text = re.sub('"(.*?)"', "``\\1''", text)  # double quotes
+            text = re.sub("(?<![a-zA-Z}])'(.*?)'", "`\\1'", text)  # single quotes
+            text = re.sub('"(.*?)"', "`\\1'", text)  # double quotes
         case 'formula':
             text = re.sub("(?<![a-zA-Z}])'([^`]+?)'", r"\\ltq{}\1\\rtq{}", text)  # single quotes
             text = re.sub("`([^']+?)`", r"\\ltq{}\1\\rtq{}", text)  # backquotes
             text = re.sub('"(.*?)"', r"\\ltq{}\1\\rtq{}", text)  # double quotes
         case 'table':
-            text = re.sub("(?<![a-zA-Z}])'([^`]+?)'", r"``\1''", text)  # single quotes
-            text = re.sub("`([^']+?)`", r"``\1''", text)  # backquotes
+            text = re.sub("``(.*?)''", r"`\1'", text)  # double LaTeX quotes
+            text = re.sub("(?<![a-zA-Z}])'([^`]+?)'", r"`\1'", text)  # single quotes
+            text = re.sub("`([^']+?)`", r"`\1'", text)  # backquotes
             text = re.sub(r'(?<!\\)\\"', r'"', text)  # unescape double quotes
-            text = re.sub('"(.*?)"', r"``\1''", text)  # double quotes
+            text = re.sub('"(.*?)"', r"`\1'", text)  # double quotes
 
     return text
 
@@ -259,7 +260,7 @@ class TestQuoteNormalization(unittest.TestCase):
     cases = {
         'text': [
             ('(e.g., "", "ab", "abab")',
-             "(e.g., ``'', ``ab'', ``abab'')"),
+             "(e.g., `', `ab', `abab')"),
             ("uncertainty doesn't come",
              "uncertainty doesn't come"),
             (r"the number of \emph{a}'s to ensure an equal number of \emph{b}'s",
@@ -271,11 +272,13 @@ class TestQuoteNormalization(unittest.TestCase):
         ],
         'table': [
             ("Identify ``Ada Lovelace'' (Person) and ``Google'' (Organization)",
-             "Identify ``Ada Lovelace'' (Person) and ``Google'' (Organization)"),
+             "Identify `Ada Lovelace' (Person) and `Google' (Organization)"),
             (r'\texttt{gray|grey} matches "gray" or "grey"',
-             r"\texttt{gray|grey} matches ``gray'' or ``grey''"),
+             r"\texttt{gray|grey} matches `gray' or `grey'"),
             (r'Providing \"ground truth\" data for',
-             r"Providing ``ground truth'' data for"),
+             r"Providing `ground truth' data for"),
+            (r"She can't go. & \texttt{['She', 'ca', 'n't', 'go', '.']}",
+             r"She can't go. & \texttt{[`She', `ca', `n't', `go', `.']}"),
         ],
     }
 
