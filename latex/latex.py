@@ -247,6 +247,7 @@ def normalize_quotes(text, context):
         case 'table':
             text = re.sub("(?<![a-zA-Z}])'([^`]+?)'", r"``\1''", text)  # single quotes
             text = re.sub("`([^']+?)`", r"``\1''", text)  # backquotes
+            text = re.sub(r'(?<!\\)\\"', r'"', text)  # unescape double quotes
             text = re.sub('"(.*?)"', r"``\1''", text)  # double quotes
 
     return text
@@ -273,6 +274,8 @@ class TestQuoteNormalization(unittest.TestCase):
              "Identify ``Ada Lovelace'' (Person) and ``Google'' (Organization)"),
             (r'\texttt{gray|grey} matches "gray" or "grey"',
              r"\texttt{gray|grey} matches ``gray'' or ``grey''"),
+            (r'Providing \"ground truth\" data for',
+             r"Providing ``ground truth'' data for"),
         ],
     }
 
