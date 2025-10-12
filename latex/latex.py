@@ -87,6 +87,7 @@ def render_chunk(file, chunk):
 
         if figure['type'] == 'Table':
             latex = normalize_quotes(figure['table'], 'table')
+            file.write(r'\small')
             file.write(latex)
         else:
             svg_path = Path(BUILD/f'fig-{figure["number"]}.svg')
