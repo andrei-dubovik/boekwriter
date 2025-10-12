@@ -72,6 +72,8 @@ def render_chunk(file, chunk):
         caption = re.sub(f'^(Fig.|Figure) {figure["number"]}(:|.) *', '', figure['caption'])
         caption = caption.replace('\n', ' ')
         caption = normalize(caption)
+        # Escape XML tags
+        caption = re.sub('(<.*?>)', r'\\Verb{\1}', caption)
 
         text = text.replace('Fig. ' + figure['number'], lbl)
         paras = (p for p in text.split('\n\n'))
