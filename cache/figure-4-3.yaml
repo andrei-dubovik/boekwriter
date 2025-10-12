@@ -1,0 +1,140 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Calculating the true probability of a word given its entire history is
+  practically impossible. The conditional probability term from the chain rule,
+  $P(w_i | w_1, \dots, w_{i-1})$, requires us to estimate the likelihood of a word
+  appearing after a unique, and often very long, sequence of preceding words. For
+  any reasonably sized corpus, most long sequences will have never appeared
+  before. For example, the probability of the word *exam* following the sequence
+  *The students who had been studying all night for the final computational
+  linguistics...* would be impossible to compute directly, as this specific
+  history is unlikely to exist in our training data. This extreme data sparsity
+  makes the full chain rule model intractable.
+  
+  To make the problem manageable, we introduce a crucial simplifying assumption.
+  The **Markov assumption**, named after the mathematician Andrey Markov, states
+  that the probability of the next word depends only on a fixed window of the *k*
+  most recent words, rather than the entire preceding sequence. We effectively
+  assume that the distant past is irrelevant for predicting the immediate future.
+  While this is not strictly true for human language—which contains long-distance
+  dependencies—it provides a powerful and computationally feasible approximation.
+  
+  Formally, we approximate the true conditional probability as follows:
+  
+  $P(w_i | w_1, w_2, \dots, w_{i-1}) \approx P(w_i | w_{i-k}, \dots, w_{i-1})$
+  
+  This assumption dramatically reduces the complexity of our model. Instead of
+  needing to see every possible sentence prefix to make a prediction, we only need
+  to have seen the most recent few words. **Fig. 4.3** provides a visual
+  representation of this simplification, contrasting the complex web of
+  dependencies in the full chain rule with the streamlined, local dependencies
+  used in a model based on the Markov assumption. This simplification is the
+  foundation of the N-gram model.
+  
+  The size of the conditioning window, *k*, determines the order of the Markov
+  model. This leads directly to the different types of N-gram models we will
+  explore:
+  
+  - **Unigram Model (k=0):** We assume a word's probability is independent of any
+    prior words. This is the simplest, but weakest, assumption.
+    $P(w_i | w_1, \dots, w_{i-1}) \approx P(w_i)$
+  
+  - **Bigram Model (k=1):** The probability of a word depends only on the single
+    immediately preceding word.
+    $P(w_i | w_1, \dots, w_{i-1}) \approx P(w_i | w_{i-1})$
+  
+  - **Trigram Model (k=2):** The probability of a word depends on the previous two
+    words. $P(w_i | w_1, \dots, w_{i-1}) \approx P(w_i | w_{i-2}, w_{i-1})$
+  
+  By making this trade-off—sacrificing perfect linguistic representation for
+  statistical feasibility—we can build models that are surprisingly effective at
+  capturing local word patterns and predicting likely sequences.
+  
+  This fragment refers to Fig. 4.3. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A 'before and after' style diagram. The 'before' side shows the full chain rule
+  dependencies for a word, with arrows pointing from all previous words in the
+  sequence. The 'after' side shows the simplified Markov assumption for a trigram
+  model, with arrows pointing only from the previous two words, visually
+  demonstrating the reduction in complexity.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 2f7ea08c08e87b31fc35137da051c7b9bd6c09e664f5413826fb42a90af6c5ea
+response:
+  caption:
+    Fig. 4.3: A diagram contrasting the full chain rule model with a simplified
+    trigram model based on the Markov assumption. The left side shows the
+    probability of a word being dependent on all preceding words, while the right
+    side shows the probability being dependent on only the two preceding words,
+    illustrating a significant reduction in complexity.
+  svg:
+    <svg xmlns="http://www.w.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+      <style>.title{font-family:sans-serif;font-size:20px;font-weight:bold;text-anchor:middle;}.label{font-family:sans-serif;font-size:18px;text-anchor:middle;}.formula{font-family:serif;font-size:18px;text-anchor:middle;}.sub{font-size:0.8em;baseline-shift:sub;}</style>
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <g id="left-panel">
+        <text x="200" y="80" class="title">Full Chain Rule</text>
+        <g class="nodes">
+          <circle cx="50" cy="250" r="25" fill="#f0f0f0" stroke="#333" stroke-width="1.5"/>
+          <text x="50" y="255" class="label">w<tspan class="sub">1</tspan></text>
+          <circle cx="150" cy="250" r="25" fill="#f0f0f0" stroke="#333" stroke-width="1.5"/>
+          <text x="150" y="255" class="label">w<tspan class="sub">2</tspan></text>
+          <text x="225" y="255" class="label" font-size="24px">...</text>
+          <circle cx="300" cy="250" r="25" fill="#f0f0f0" stroke="#333" stroke-width="1.5"/>
+          <text x="300" y="255" class="label">w<tspan class="sub">i-1</tspan></text>
+          <circle cx="200" cy="400" r="25" fill="#e0e8f0" stroke="#005a9c" stroke-width="2"/>
+          <text x="200" y="405" class="label">w<tspan class="sub">i</tspan></text>
+        </g>
+        <g class="arrows" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)">
+          <path d="M65,272 C 80,320, 150,375, 178,390"/>
+          <path d="M157,275 C 160,320, 175,375, 187,390"/>
+          <path d="M288,274 C 270,320, 225,375, 212,390"/>
+        </g>
+        <text x="200" y="500" class="formula">P(w<tspan class="sub">i</tspan> | w<tspan class="sub">1</tspan>, w<tspan class="sub">2</tspan>, ..., w<tspan class="sub">i-1</tspan>)</text>
+      </g>
+      <g id="right-panel">
+        <text x="600" y="80" class="title">Markov Assumption (Trigram)</text>
+        <g class="nodes">
+          <text x="475" y="255" class="label" font-size="24px">...</text>
+          <circle cx="550" cy="250" r="25" fill="#f0f0f0" stroke="#333" stroke-width="1.5"/>
+          <text x="550" y="255" class="label">w<tspan class="sub">i-2</tspan></text>
+          <circle cx="650" cy="250" r="25" fill="#f0f0f0" stroke="#333" stroke-width="1.5"/>
+          <text x="650" y="255" class="label">w<tspan class="sub">i-1</tspan></text>
+          <circle cx="600" cy="400" r="25" fill="#e0e8f0" stroke="#005a9c" stroke-width="2"/>
+          <text x="600" y="405" class="label">w<tspan class="sub">i</tspan></text>
+        </g>
+        <g class="arrows" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)">
+          <path d="M565,272 C 570,320, 580,375, 590,390"/>
+          <path d="M638,274 C 630,320, 615,375, 608,390"/>
+        </g>
+        <text x="600" y="500" class="formula">P(w<tspan class="sub">i</tspan> | w<tspan class="sub">i-2</tspan>, w<tspan class="sub">i-1</tspan>)</text>
+      </g>
+    </svg>
+duration: 29071 ms
+usage_stats:
+  {
+    "candidates_token_count": 1408,
+    "prompt_token_count": 866,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 866
+      }
+    ],
+    "thoughts_token_count": 2201,
+    "total_token_count": 4475
+  }
+...

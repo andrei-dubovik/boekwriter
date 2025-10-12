@@ -1,0 +1,36 @@
+{model: str, query: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-flash-image-preview
+query: image
+prompt:
+  An illustration of a person at a large wooden desk, meticulously sorting through
+  a diverse collection of written materials. To one side is a varied pile of
+  sources: a stack of newspapers, an open novel, a scientific journal, and a few
+  handwritten letters. The person is carefully examining one of these documents
+  before placing it into one of several neatly labeled folders, transforming the
+  chaotic pile into an organized and principled collection. The style should be
+  simple and clean, using monochromatic line art with minimal background detail,
+  keeping the focus on the deliberate human act of curating text from different
+  real-world sources.
+hash: 8847b5f2302172f9742c44ddfa7f18606f3131b64f0f7d02d20a66fec2395e02
+response: image-3.png
+duration: 6212 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 128,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 128
+      }
+    ],
+    "total_token_count": 1418
+  }
+...

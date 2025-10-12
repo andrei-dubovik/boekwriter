@@ -1,0 +1,130 @@
+{model: str, query: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: visuals
+prompt:
+  You are writing a chapter titled "Language Modeling with N-grams" in a book
+  called "Introduction to Computational Linguistics". The plan for the chapter is
+  a follows.
+  
+  01. This section introduces the core task of language modeling, which is to
+      assign a probability to a sequence of words.
+  02. We will formally define the probability of a sequence using the chain rule
+      of probability as a foundational concept.
+  03. The text explains how the simplifying Markov assumption allows us to
+      approximate this probability by considering only a fixed window of previous
+      words.
+  04. This part defines the N-gram model, detailing the specific cases of
+      unigrams, bigrams, and trigrams.
+  05. Readers will learn how to train N-gram models by calculating Maximum
+      Likelihood Estimation (MLE) probabilities from word counts in a corpus.
+  06. A detailed, step-by-step example is provided to demonstrate the calculation
+      of bigram probabilities from a small, sample text.
+  07. The chapter highlights the critical challenge of data sparsity, which
+      results in assigning zero probability to valid but unseen word sequences.
+  08. We introduce smoothing as the general technique used to solve the
+      zero-probability problem by reallocating probability mass to unseen events.
+  09. This section covers Laplace (add-one) smoothing, explaining its mechanism
+      and discussing its limitations.
+  10. The more sophisticated Good-Turing smoothing technique is explained,
+      focusing on its intuition of using counts of things seen once to estimate
+      the probability of unseen things.
+  11. We introduce perplexity as the standard intrinsic metric for evaluating the
+      quality and predictive power of a language model.
+  12. A brief case study illustrates how N-gram language models are practically
+      applied in tasks like keyboard text prediction.
+  13. The chapter concludes with a summary of key takeaways and a look ahead to
+      more advanced modeling techniques.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 8 aids. Explain the chosen aids in detail. Only list the items where an aid
+  has been chosen.
+hash: 229be0386eb534ee99908cb65d614ccd4559c479c7595af90096e6713ac2ae16
+response:
+- number: 3
+  aid: Diagram
+  description:
+    A 'before and after' style diagram. The 'before' side shows the full chain rule
+    dependencies for a word, with arrows pointing from all previous words in the
+    sequence. The 'after' side shows the simplified Markov assumption for a trigram
+    model, with arrows pointing only from the previous two words, visually
+    demonstrating the reduction in complexity.
+- number: 4
+  aid: Table
+  description:
+    A three-column table that breaks down a sample sentence like 'The cat sat on the
+    mat.' The first column lists all unigrams, the second lists all bigrams (e.g.,
+    '<s> The', 'The cat', ...), and the third lists all trigrams (e.g., '<s> <s>
+    The', '<s> The cat', ...), making the N-gram concept concrete.
+- number: 6
+  aid: Table
+  description:
+    A two-part table for a step-by-step calculation. The first part is a matrix of
+    bigram counts derived from a small sample corpus. The second part is a
+    corresponding matrix showing the final Maximum Likelihood Estimation (MLE)
+    probabilities, calculated by dividing each bigram count by its corresponding
+    unigram prefix count.
+- number: 7
+  aid: Table
+  description:
+    A bigram count matrix built from the sample corpus. The table would be
+    intentionally sparse, with most cells containing a '0' to visually emphasize how
+    many plausible word combinations were not seen in the training data,
+    illustrating the core challenge of data sparsity and the zero-probability
+    problem.
+- number: 8
+  aid: Diagram
+  description:
+    A conceptual diagram showing two bars representing the total probability mass.
+    The 'MLE' bar is divided only among seen events. The 'Smoothed' bar shows that a
+    small portion of the probability from each 'seen' section has been shaved off
+    and reallocated to a new section labeled 'unseen events', intuitively explaining
+    the redistribution process.
+- number: 9
+  aid: Table
+  description:
+    A comparison table building on the example from section 6. Columns would show:
+    the bigram, its original MLE count, its Laplace 'add-one' adjusted count, its
+    original MLE probability (with zeros), and its final Laplace-smoothed
+    probability (all non-zero). This provides a direct contrast of the results
+    before and after smoothing.
+- number: 10
+  aid: Chart
+  description:
+    A bar chart titled 'Frequency of Frequencies'. The x-axis represents a frequency
+    'r' (n-grams that appeared 1 time, 2 times, etc.), and the y-axis represents the
+    number of n-gram types (Nr) that had that frequency. This visualizes the
+    long-tail distribution that Good-Turing smoothing leverages to estimate the
+    probability of unseen events.
+- number: 12
+  aid: Illustration
+  description:
+    A clean illustration of a smartphone's virtual keyboard. A partial sentence is
+    typed in the text field (e.g., 'I am heading to the...'), and the predictive
+    text bar above the keyboard shows three probable next words (e.g., 'park',
+    'store', 'gym') that an N-gram model would suggest.
+duration: 29631 ms
+usage_stats:
+  {
+    "candidates_token_count": 785,
+    "prompt_token_count": 515,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 515
+      }
+    ],
+    "thoughts_token_count": 2476,
+    "total_token_count": 3776
+  }
+...

@@ -1,0 +1,184 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To make the concept of a balanced corpus concrete, we can examine one of the
+  most influential early examples: the *Brown University Standard Corpus of
+  Present-Day American English*, universally known as the Brown Corpus. Compiled
+  in the 1960s by Henry Kučera and W. Nelson Francis at Brown University, it was a
+  landmark achievement in linguistics. Its primary objective was to create a
+  one-million-word sample of American English text that was broadly representative
+  of the language as it was used in a single year, 1961. This made it the first
+  truly balanced, computer-readable corpus of its kind, setting a standard for
+  decades of future work in the field.
+  
+  The corpus consists of 500 text samples, or *documents*, each approximately
+  2,000 words long. These samples were meticulously drawn from 15 distinct genre
+  categories to ensure a wide-ranging representation of written English. As shown
+  in **Fig. 3.4**, these categories span a diverse spectrum, including *Press:
+  Reportage*, *Religion*, *Skills and Hobbies*, various genres of *Fiction*, and
+  academic prose from the *Learned* and *Scientific* categories. The creators
+  ensured that the number of samples from each category was proportional to its
+  prevalence in the publishing world at the time, providing a snapshot of the
+  literary landscape.
+  
+  This careful stratification is the essence of a balanced corpus. The goal is not
+  merely to amass text, but to create a microcosm of the language as it is
+  actually produced and consumed. By sampling from romance fiction as well as from
+  government documents, the Brown Corpus allows researchers to make more
+  generalizable claims about word frequencies, syntactic structures, and lexical
+  patterns across the language as a whole, rather than just within a single,
+  narrow domain. For instance, one could reliably compare the average sentence
+  length in journalistic writing versus scientific prose using this data.
+  
+  Although a million words is considered small by today's standards—where corpora
+  often contain billions of words—the methodological rigor of the Brown Corpus was
+  revolutionary. It provided the empirical data for some of the first large-scale
+  computational analyses of English vocabulary and grammar. Its design principles
+  have been replicated and adapted for creating similar corpora in many other
+  languages, a testament to its enduring influence. It demonstrated that a
+  principled, data-driven approach was essential for the scientific study of
+  language.
+  
+  This fragment refers to Fig. 3.4. The figure in question is a "Chart" and its
+  description is as follows:
+  
+  A bar chart titled 'Composition of the Brown Corpus'. The chart will visually
+  represent the distribution of the 15 text categories (e.g., Press: Reportage,
+  Religion, Skills and Hobbies, Fiction: General). Each bar will be labeled with
+  the category name and its size in words, illustrating the principle of a
+  balanced, genre-diverse sample of a language.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 19224ee2116e3edb1f541656853dc4107d415c3266f4eeb67ac823cc7a6fb930
+response:
+  caption:
+    Figure 3.4: Composition of the Brown Corpus, showing the approximate number of
+    words from each of the 15 genre categories. This distribution illustrates the
+    corpus's design as a balanced, representative sample of 1961 American English.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" font-family="sans-serif">
+      <rect width="100%" height="100%" fill="white"/>
+      <g transform="translate(200, 30)">
+        <g class="x-axis" transform="translate(0, 520)">
+          <line x1="0" y1="0" x2="540" y2="0" stroke="black"/>
+          <g transform="translate(0, 0)">
+            <line y2="5" stroke="black"/>
+            <text y="20" text-anchor="middle" font-size="12px">0k</text>
+          </g>
+          <g transform="translate(120, 0)">
+            <line y2="5" stroke="black"/>
+            <text y="20" text-anchor="middle" font-size="12px">40k</text>
+          </g>
+          <g transform="translate(240, 0)">
+            <line y2="5" stroke="black"/>
+            <text y="20" text-anchor="middle" font-size="12px">80k</text>
+          </g>
+          <g transform="translate(360, 0)">
+            <line y2="5" stroke="black"/>
+            <text y="20" text-anchor="middle" font-size="12px">120k</text>
+          </g>
+          <g transform="translate(480, 0)">
+            <line y2="5" stroke="black"/>
+            <text y="20" text-anchor="middle" font-size="12px">160k</text>
+          </g>
+          <text x="270" y="40" text-anchor="middle" font-size="14px" font-weight="bold">Approximate Word Count</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 4)">
+          <rect width="264" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Press: Reportage</text>
+          <text x="269" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">88,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 38.666666666666664)">
+          <rect width="162" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Press: Editorial</text>
+          <text x="167" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">54,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 73.33333333333333)">
+          <rect width="102" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Press: Reviews</text>
+          <text x="107" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">34,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 108)">
+          <rect width="102" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Religion</text>
+          <text x="107" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">34,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 142.66666666666666)">
+          <rect width="216" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Skills &amp; Hobbies</text>
+          <text x="221" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">72,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 177.33333333333331)">
+          <rect width="288" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Popular Lore</text>
+          <text x="293" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">96,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 212)">
+          <rect width="450" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Belles Lettres, etc.</text>
+          <text x="455" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">150,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 246.66666666666666)">
+          <rect width="180" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Miscellaneous</text>
+          <text x="185" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">60,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 281.3333333333333)">
+          <rect width="480" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Learned</text>
+          <text x="485" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">160,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 316)">
+          <rect width="174" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Fiction: General</text>
+          <text x="179" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">58,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 350.6666666666667)">
+          <rect width="144" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Fiction: Mystery</text>
+          <text x="149" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">48,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 385.3333333333333)">
+          <rect width="36" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Fiction: Sci-Fi</text>
+          <text x="41" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">12,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 420)">
+          <rect width="174" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Fiction: Adventure</text>
+          <text x="179" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">58,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 454.6666666666667)">
+          <rect width="174" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Fiction: Romance</text>
+          <text x="179" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">58,000</text>
+        </g>
+        <g class="bar-group" transform="translate(0, 489.3333333333333)">
+          <rect width="54" height="26.666666666666668" fill="#4682B4"/>
+          <text x="-10" y="13.333333333333334" dominant-baseline="middle" text-anchor="end" font-size="14px">Humor</text>
+          <text x="59" y="13.333333333333334" dominant-baseline="middle" text-anchor="start" font-size="12px">18,000</text>
+        </g>
+      </g>
+    </svg>
+duration: 61925 ms
+usage_stats:
+  {
+    "candidates_token_count": 3212,
+    "prompt_token_count": 696,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 696
+      }
+    ],
+    "thoughts_token_count": 5098,
+    "total_token_count": 9006
+  }
+...

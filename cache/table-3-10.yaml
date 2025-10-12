@@ -1,0 +1,89 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  While tokenization might seem as trivial as splitting a string by its whitespace
+  characters, this simplistic approach quickly fails on real-world text. A simple
+  programmatic split on the sentence "She can't go." would likely yield
+  `['She', "can't", 'go.']`, a result that is suboptimal for most analyses. The
+  token *go.* incorrectly bundles the word with its sentence-terminating
+  punctuation, and *can't* merges two distinct morphemes: the modal verb *can* and
+  the negation particle *not*. A robust tokenizer must navigate a landscape of
+  such linguistic ambiguities.
+  
+  The primary challenges revolve around punctuation and multi-word expressions.
+  Consider the following common issues:
+  
+  - **Contractions and Possessives:** English contractions like *can't*,
+    *they're*, or *it's* are a frequent hurdle. For analytical consistency, these
+    are often split into their constituent parts. A standard approach, used in
+    corpora like the Penn Treebank, is to separate the clitic. For instance,
+    *can't* becomes two tokens, `ca` and `n't`, while *it's* becomes `It` and
+    `'s`.[^1] This separation preserves morphological information that is crucial
+    for downstream tasks like part-of-speech tagging. Similarly, sentence-final
+    punctuation, such as periods, question marks, and exclamation points, should
+    almost always be treated as separate tokens.
+  
+  - **Ambiguous Punctuation:** The period is particularly problematic. It can
+    signal the end of a sentence, but it also appears within abbreviations (e.g.,
+    *U.S.*, *Dr.*), numbers (e.g., *3.14*), and URLs. A naive tokenizer that
+    splits on every period would incorrectly break apart these meaningful units. A
+    sophisticated tokenizer must use contextual clues to determine if a period is
+    a sentence boundary or an internal character of a token.
+  
+  - **Hyphenation:** Hyphens present another form of ambiguity. In a term like
+    *state-of-the-art*, the hyphenated phrase acts as a single adjectival unit and
+    is best kept as one token. However, hyphens can also be used for line-breaking
+    (soft hyphens) or to connect words that do not form a permanent compound, such
+    as in *a well-written but ultimately flawed argument*. The tokenizer's
+    behavior for hyphenated words is often guided by a combination of pre-defined
+    rules and lexical resources.
+  
+  These examples illustrate that tokenization is not a solved problem but a series
+  of language-specific engineering decisions. A well-designed tokenizer must
+  implement a cascade of rules to correctly segment a text stream. The table in
+  Fig. 3.10 provides several examples of challenging input strings and the desired
+  token sequences, highlighting the nuanced logic required for this foundational
+  step.
+  
+  This fragment refers to Fig. 3.10, which is a table. Its description is as
+  follows:
+  
+  A two-column table illustrating common tokenization challenges. The first
+  column, 'Input String', will contain examples like 'She can't go.', 'It's a
+  state-of-the-art device.', and 'He lives in the U.S.'. The second column,
+  'Correct Token Sequence', will show the desired output, such as \['She', 'ca',
+  'n't', 'go', '.'\], \['It', ''s', 'a', 'state-of-the-art', 'device', '.'\], and
+  \['He', 'lives', 'in', 'the', 'U.S.', '.'\].
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+  
+  [^1]: The split of *can't* into `ca` and `n't` may seem unusual, but it reflects a
+  convention designed to regularize patterns for parsing algorithms.
+hash: 17cee28421b902d56f8eceb9a68976999cce984a3178f08ced3c1550a4bb0466
+response:
+  caption:
+    Fig. 3.10: A table illustrating common tokenization challenges with example
+    input strings and their correctly tokenized sequences.
+  latex: \begin{tabular}{ll}\toprule\textbf{Input String} & \textbf{Correct Token Sequence} \\\midrule She can't go. & \texttt{['She', 'ca', 'n't', 'go', '.']} \\It's a state-of-the-art device. & \texttt{['It', '\textquotesingle s', 'a', 'state-of-the-art', 'device', '.']} \\He lives in the U.S. & \texttt{['He', 'lives', 'in', 'the', 'U.S.', '.']} \\\bottomrule\end{tabular}
+duration: 20835 ms
+usage_stats:
+  {
+    "candidates_token_count": 178,
+    "prompt_token_count": 907,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 907
+      }
+    ],
+    "thoughts_token_count": 2134,
+    "total_token_count": 3219
+  }
+...

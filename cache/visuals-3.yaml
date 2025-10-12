@@ -1,0 +1,148 @@
+{model: str, query: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: visuals
+prompt:
+  You are writing a chapter titled "Corpus Linguistics and Text Normalization" in
+  a book called "Introduction to Computational Linguistics". The plan for the
+  chapter is a follows.
+  
+  01. This chapter begins by introducing the concept of a linguistic corpus as the
+      empirical foundation for modern data-driven computational linguistics.
+  02. We will define a corpus as a large, structured, and principled collection of
+      authentic text or speech samples.
+  03. The discussion then explores various types of corpora, including balanced,
+      specialized, parallel, and annotated corpora, each designed for different
+      analytical purposes.
+  04. A detailed example of the pioneering Brown Corpus will be presented to
+      illustrate the principles of balanced corpus design.
+  05. Next, we will cover the essential steps of corpus construction, from data
+      acquisition and sampling to cleaning and metadata inclusion.
+  06. The crucial process of corpus annotation is explained, showing how
+      linguistic information like part-of-speech tags or syntactic trees is added
+      to raw text.
+  07. A case study on the Penn Treebank will demonstrate a complex, multi-layered
+      annotation schema in action.
+  08. We then transition to the practical pre-processing pipeline known as text
+      normalization, which is necessary to prepare raw text for computational
+      analysis.
+  09. The fundamental task of tokenization is introduced as the process of
+      segmenting a character stream into a sequence of meaningful units called
+      tokens.
+  10. An example will highlight common tokenization challenges, such as handling
+      contractions, hyphenated words, and sentence-final punctuation.
+  11. Stemming is presented as a heuristic-based process for crudely chopping off
+      word endings to obtain a common base form.
+  12. We will illustrate the mechanics of the widely-used Porter Stemmer algorithm
+      with a concrete example.
+  13. Lemmatization is then introduced as a more sophisticated, dictionary-based
+      approach to finding the true morphological root or lemma of a word.
+  14. A direct comparison of stemming versus lemmatization outputs will clarify
+      the trade-offs between these two normalization techniques.
+  15. Other simple yet important normalization steps, such as case folding and the
+      removal of stop words, are also briefly discussed.
+  16. A step-by-step example will walk through the complete normalization of a
+      single sentence, applying tokenization, lowercasing, and lemmatization.
+  17. Finally, we will mention popular software libraries and tools that provide
+      robust implementations of these text normalization techniques.
+  18. The chapter concludes by summarizing how carefully constructed corpora and
+      systematic text normalization are indispensable first steps for nearly all
+      downstream NLP tasks.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 8 aids. Explain the chosen aids in detail. Only list the items where an aid
+  has been chosen.
+hash: 51e96c4c8ce03bd380c654ce5c3e7dbd531b55e7758615210a193ac8c06ca1dd
+response:
+- number: 3
+  aid: Table
+  description:
+    A table comparing four major types of corpora: balanced, specialized, parallel,
+    and annotated. Columns will include 'Corpus Type', 'Description' (a brief
+    definition), 'Primary Use Case' (e.g., general language modeling,
+    domain-specific NLP, machine translation, linguistic analysis), and 'Examples'
+    (e.g., Brown Corpus/BNC, a corpus of legal texts, Europarl, Penn Treebank).
+- number: 4
+  aid: Chart
+  description:
+    A bar chart titled 'Composition of the Brown Corpus'. The chart will visually
+    represent the distribution of the 15 text categories (e.g., Press: Reportage,
+    Religion, Skills and Hobbies, Fiction: General). Each bar will be labeled with
+    the category name and its size in words, illustrating the principle of a
+    balanced, genre-diverse sample of a language.
+- number: 5
+  aid: Diagram
+  description:
+    A flowchart diagram illustrating the key stages of corpus construction. The
+    diagram will show a progression with boxes for each stage: '1. Defining Corpus
+    Goals', '2. Data Acquisition' (e.g., web scraping, OCR), '3. Data Cleaning', '4.
+    Structuring and Formatting' (e.g., XML/JSON), and '5. Metadata Inclusion' (e.g.,
+    source, author, date). Arrows will connect the boxes to show the workflow.
+- number: 7
+  aid: Diagram
+  description:
+    A tree diagram showing the full syntactic parse of a sample sentence (e.g., 'The
+    old man sat on the chair.') according to the Penn Treebank annotation schema.
+    The diagram will show the hierarchical constituent structure, with nodes labeled
+    with phrasal categories (S, NP, VP, PP) and leaves labeled with part-of-speech
+    tags (DT, JJ, NN, VBD, IN) and the corresponding words.
+- number: 10
+  aid: Table
+  description:
+    A two-column table illustrating common tokenization challenges. The first
+    column, 'Input String', will contain examples like 'She can't go.', 'It's a
+    state-of-the-art device.', and 'He lives in the U.S.'. The second column,
+    'Correct Token Sequence', will show the desired output, such as \['She', 'ca',
+    'n't', 'go', '.'\], \['It', ''s', 'a', 'state-of-the-art', 'device', '.'\], and
+    \['He', 'lives', 'in', 'the', 'U.S.', '.'\].
+- number: 12
+  aid: Table
+  description:
+    A table demonstrating the step-by-step application of the Porter Stemmer
+    algorithm on a complex word like 'normalization'. The table will have three
+    columns: 'Step', 'Rule Applied', and 'Word Form'. It will show the word's
+    transformation through successive suffix-stripping rules (e.g., -ational ->
+    -ate, -ate -> '', -ion -> '') until it reaches its final stemmed form 'normal'.
+- number: 14
+  aid: Table
+  description:
+    A comparative table contrasting the outputs of stemming and lemmatization. The
+    table will have three columns: 'Original Word', 'Stemmed Form (Porter)', and
+    'Lemmatized Form'. Rows will contain sets of related words such as 'studies',
+    'studying', 'study', 'better', and 'mice'. The output will clearly show that
+    stemming is a crude heuristic (e.g., 'studi') while lemmatization returns the
+    correct dictionary form (e.g., 'study', 'good', 'mouse').
+- number: 16
+  aid: Diagram
+  description:
+    A pipeline diagram illustrating the complete normalization process for a single
+    sentence: 'The quickest foxes are jumping.' The diagram will show the sentence
+    passing through a series of processing boxes: '1. Original Sentence', '2.
+    Tokenization', '3. Case Folding (Lowercase)', and '4. Lemmatization'. The output
+    of each box will be shown explicitly, culminating in the final list of
+    normalized tokens: \['the', 'quick', 'fox', 'be', 'jump', '.'\].
+duration: 36769 ms
+usage_stats:
+  {
+    "candidates_token_count": 1003,
+    "prompt_token_count": 684,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 684
+      }
+    ],
+    "thoughts_token_count": 3282,
+    "total_token_count": 4969
+  }
+...

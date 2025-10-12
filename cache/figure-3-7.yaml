@@ -1,0 +1,151 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  While the concept of annotation can be applied simply, such as labeling
+  documents for sentiment, some corpora feature incredibly rich, multi-layered
+  annotation schemas. Perhaps the most influential example of such a resource in
+  the history of computational linguistics is the **Penn Treebank (PTB)**.
+  Developed at the University of Pennsylvania, the PTB project annotated a large
+  corpus, primarily consisting of over a million words from *Wall Street Journal*
+  articles, with detailed linguistic information. Its release provided a large,
+  consistent, and publicly available dataset that became the standard benchmark
+  for developing and evaluating a generation of NLP models, particularly syntactic
+  parsers.
+  
+  The annotation in the Penn Treebank is applied in layers. The first and most
+  fundamental layer is **Part-of-Speech (POS) tagging**. Every single word in the
+  corpus is assigned a grammatical tag based on a detailed tagset. The PTB tagset
+  uses 36 distinct POS tags and 12 other tags for punctuation and currency
+  symbols. This level of granularity is crucial for computational analysis; for
+  instance, the tagset distinguishes between a singular noun (`NN`), a plural noun
+  (`NNS`), a proper noun (`NNP`), a base form verb (`VB`), a verb in the past
+  tense (`VBD`), and a verb in the present participle form (`VBG`). This
+  fine-grained information is far more useful for a computational model than
+  simply labeling all of these as "noun" or "verb".
+  
+  The second and most famous layer of annotation is the **syntactic treebank**,
+  from which the project gets its name. On top of the POS tags, the sentences were
+  parsed into their constituent structures, creating a "tree" that represents the
+  sentence's grammatical organization. This type of annotation is known as a
+  *constituency parse* or *phrase-structure parse*. It hierarchically groups words
+  into phrases, which are in turn grouped into larger phrases, until the entire
+  sentence is accounted for. Common phrasal labels include NP (Noun Phrase), VP
+  (Verb Phrase), PP (Prepositional Phrase), and ADJP (Adjective Phrase), with S
+  representing the entire sentence clause.
+  
+  A visual representation of this structure for the sentence 'The old man sat on
+  the chair' is shown in **Fig. 3.7**. At the lowest level of the tree, each word
+  is connected to its POS tag (e.g., 'man' is a `NN`, 'sat' is a `VBD`). These
+  tagged words form the *terminal nodes*. Above them, the tree groups words into
+  phrasal constituents. 'The', 'old', and 'man' are grouped into a Noun Phrase
+  (`NP`). Similarly, 'on the chair' forms a Prepositional Phrase (`PP`). These
+  phrases are then nested within larger ones; the `PP` is part of the Verb Phrase
+  (`VP`), 'sat on the chair'. Finally, the initial `NP` and the `VP` combine to
+  form the complete sentence, labeled with the root symbol `S`. In the corpus
+  files, this hierarchical structure is typically stored using a bracketed
+  notation, like this:
+  
+  `(S (NP (DT The) (JJ old) (NN man)) (VP (VBD sat) (PP (IN on) (NP (DT the) (NN chair)))) (. .))`
+  
+  The influence of the Penn Treebank extends beyond these two layers. The same
+  underlying text has since been enriched with further layers of annotation in
+  subsequent projects. For example, **PropBank** added a layer of semantic role
+  labels, identifying *who* did *what* to *whom*. Later, projects like
+  **OntoNotes** added annotations for coreference (linking pronouns like 'he' and
+  'it' to the entities they refer to), word senses, and named entities. This
+  demonstrates how a well-designed base corpus can serve as a scaffold for
+  building even richer linguistic resources over time. The legacy of the Penn
+  Treebank is a testament to the power of high-quality, deeply annotated data in
+  driving scientific progress and enabling the development of sophisticated
+  language understanding technologies.
+  
+  This fragment refers to Fig. 3.7. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A tree diagram showing the full syntactic parse of a sample sentence (e.g., 'The
+  old man sat on the chair.') according to the Penn Treebank annotation schema.
+  The diagram will show the hierarchical constituent structure, with nodes labeled
+  with phrasal categories (S, NP, VP, PP) and leaves labeled with part-of-speech
+  tags (DT, JJ, NN, VBD, IN) and the corresponding words.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 7725a9d1011da7d2d9a9aee4326ef8d996e31d133a791fcd42a8a7e0dd4b6998
+response:
+  caption:
+    A Penn Treebank syntactic parse tree for the sentence 'The old man sat on the
+    chair.' The diagram shows the hierarchical constituent structure, with nodes for
+    phrasal categories (S, NP, VP, PP), part-of-speech tags (DT, JJ, NN, VBD, IN),
+    and the individual words.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" font-family="sans-serif" font-size="20" text-anchor="middle">
+      <rect width="100%" height="100%" fill="white"/>
+      <g stroke="black" stroke-width="1.5">
+        <line x1="412.5" y1="150" x2="150" y2="410"/>
+        <line x1="412.5" y1="150" x2="403.125" y2="270"/>
+        <line x1="412.5" y1="150" x2="675" y2="480"/>
+        <line x1="403.125" y1="270" x2="325" y2="480"/>
+        <line x1="403.125" y1="270" x2="481.25" y2="340"/>
+        <line x1="150" y1="410" x2="75" y2="480"/>
+        <line x1="150" y1="410" x2="150" y2="480"/>
+        <line x1="150" y1="410" x2="225" y2="480"/>
+        <line x1="481.25" y1="340" x2="425" y2="480"/>
+        <line x1="481.25" y1="340" x2="537.5" y2="410"/>
+        <line x1="537.5" y1="410" x2="500" y2="480"/>
+        <line x1="537.5" y1="410" x2="575" y2="480"/>
+        <line x1="75" y1="480" x2="75" y2="550"/>
+        <line x1="150" y1="480" x2="150" y2="550"/>
+        <line x1="225" y1="480" x2="225" y2="550"/>
+        <line x1="325" y1="480" x2="325" y2="550"/>
+        <line x1="425" y1="480" x2="425" y2="550"/>
+        <line x1="500" y1="480" x2="500" y2="550"/>
+        <line x1="575" y1="480" x2="575" y2="550"/>
+        <line x1="675" y1="480" x2="675" y2="550"/>
+      </g>
+      <g dominant-baseline="central">
+        <text x="412.5" y="150">S</text>
+        <text x="403.125" y="270">VP</text>
+        <text x="150" y="410">NP</text>
+        <text x="481.25" y="340">PP</text>
+        <text x="537.5" y="410">NP</text>
+        <text x="75" y="480">DT</text>
+        <text x="150" y="480">JJ</text>
+        <text x="225" y="480">NN</text>
+        <text x="325" y="480">VBD</text>
+        <text x="425" y="480">IN</text>
+        <text x="500" y="480">DT</text>
+        <text x="575" y="480">NN</text>
+        <text x="675" y="480">.</text>
+        <g font-style="italic">
+          <text x="75" y="550">The</text>
+          <text x="150" y="550">old</text>
+          <text x="225" y="550">man</text>
+          <text x="325" y="550">sat</text>
+          <text x="425" y="550">on</text>
+          <text x="500" y="550">the</text>
+          <text x="575" y="550">chair</text>
+          <text x="675" y="550">.</text>
+        </g>
+      </g>
+    </svg>
+duration: 73662 ms
+usage_stats:
+  {
+    "candidates_token_count": 1231,
+    "prompt_token_count": 1069,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1069
+      }
+    ],
+    "thoughts_token_count": 8394,
+    "total_token_count": 10694
+  }
+...

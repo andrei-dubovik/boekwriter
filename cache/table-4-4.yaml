@@ -1,0 +1,100 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The Markov assumption provides a practical way to approximate the chain rule of
+  probability. The class of models built on this simplifying assumption is known
+  as **N-gram models**, where an N-gram is simply a contiguous sequence of N
+  words. These models form a foundational technique in statistical language
+  modeling. The value of 'N' determines the size of the context window we consider
+  when predicting the next word. While theoretically N can be any positive
+  integer, in practice we most commonly encounter N=1, 2, or 3.
+  
+  The simplest case is the **unigram model** (N=1). This model makes the radical
+  assumption that each word is generated independently of all others. The
+  probability of a word depends only on its own frequency in the training corpus,
+  not on any preceding context. The approximation of the conditional probability
+  thus becomes:
+  
+  $P(w_i | w_1, \dots, w_{i-1}) \approx P(w_i)$
+  
+  Calculating the probability of an entire sentence $W = (w_1, \dots, w_k)$ under
+  a unigram model is therefore just the product of the individual probabilities of
+  its words:
+  
+  $P(W) = \prod_{i=1}^{k} P(w_i)$
+  
+  While this model discards all syntactic and semantic context, its simplicity
+  makes it a useful baseline for comparison.
+  
+  A more powerful and common model is the **bigram model** (N=2). Here, we apply
+  the first-order Markov assumption: the probability of a word depends only on the
+  single word that immediately precedes it.
+  
+  $P(w_i | w_1, \dots, w_{i-1}) \approx P(w_i | w_{i-1})$
+  
+  To properly handle the beginning and end of a sentence, we introduce special
+  tokens. We prepend a start-of-sentence token, `<s>`, and append an
+  end-of-sentence token, `</s>`. The probability of the first word is now
+  conditioned on the start token, $P(w_1 | \text{<s>})$, and the model must also
+  predict the end token, $P(\text{</s>} | w_k)$. The full probability of the
+  sentence $W$ is:
+  
+  $P(W) = P(w_1 | \text{<s>}) \times \prod_{i=2}^{k} P(w_i | w_{i-1}) \times P(\text{</s>} | w_k)$
+  
+  Extending this logic, a **trigram model** (N=3) uses a second-order Markov
+  assumption, where the probability of a word is conditioned on the two preceding
+  words.
+  
+  $P(w_i | w_1, \dots, w_{i-1}) \approx P(w_i | w_{i-2}, w_{i-1})$
+  
+  For trigram models, we need two start-of-sentence tokens, `<s> <s>`, to provide
+  the necessary two-word context for the first word of the sentence.
+  
+  The general pattern holds for any N, but bigram and trigram models represent a
+  sweet spot. They capture useful local context without becoming computationally
+  unwieldy. The table in **Fig. 4.4** provides a concrete example, breaking down a
+  simple sentence to illustrate how unigrams, bigrams, and trigrams are extracted.
+  As N increases, the model can capture longer-distance dependencies and
+  potentially become more accurate. However, this comes at a cost. The number of
+  possible N-grams grows exponentially with N, meaning we are far less likely to
+  have seen any specific long N-gram in our training data. This issue, known as
+  data sparsity, is a central challenge we will address next.
+  
+  This fragment refers to Fig. 4.4, which is a table. Its description is as
+  follows:
+  
+  A three-column table that breaks down a sample sentence like 'The cat sat on the
+  mat.' The first column lists all unigrams, the second lists all bigrams (e.g.,
+  '<s> The', 'The cat', ...), and the third lists all trigrams (e.g., '<s> <s>
+  The', '<s> The cat', ...), making the N-gram concept concrete.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: 7cff9d498132aa6197c4ab195dfb2fb380b3974c8a92aec72e393fd33701b62b
+response:
+  caption:
+    Fig. 4.4: A breakdown of the sentence 'The cat sat on the mat.' into unigrams,
+    bigrams, and trigrams. The special tokens <s> and </s> are used to model the
+    start and end of the sentence for the bigram and trigram models.
+  latex: \begin{tabular}{lll}\toprule\textbf{Unigrams (N=1)} & \textbf{Bigrams (N=2)} & \textbf{Trigrams (N=3)} \\\midrule The & \texttt{<s>} The & \texttt{<s> <s>} The \\cat & The cat & \texttt{<s>} The cat \\sat & cat sat & The cat sat \\on & sat on & cat sat on \\the & on the & sat on the \\mat & the mat & on the mat \\. & mat . & the mat . \\& . \texttt{</s>} & mat . \texttt{</s>} \\\bottomrule\end{tabular}
+duration: 28374 ms
+usage_stats:
+  {
+    "candidates_token_count": 222,
+    "prompt_token_count": 985,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 985
+      }
+    ],
+    "thoughts_token_count": 3111,
+    "total_token_count": 4318
+  }
+...

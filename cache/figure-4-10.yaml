@@ -1,0 +1,145 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  While Laplace smoothing offers a simple fix for the zero-probability problem, it
+  is a blunt instrument. It reallocates probability mass equally among all unseen
+  n-grams, regardless of how likely they might be, and it does so by taking too
+  much probability away from high-frequency counts. A more sophisticated and
+  empirically grounded approach is **Good-Turing smoothing**, named after its
+  creators Alan Turing and I.J. Good.
+  
+  The core intuition behind Good-Turing is both clever and powerful: to estimate
+  the probability of things you *haven't* seen, you should look at the frequency
+  of things you've only seen *once*. Why? An n-gram that has occurred just once (a
+  singleton) is on the verge of novelty. It was, until recently, an unseen event.
+  The population of these singletons, therefore, provides our best evidence for
+  the rate at which new, previously unseen events will appear in the future.
+  
+  To formalize this, we first need to count the *frequency of frequencies*. Let
+  $N_c$ be the number of n-gram *types* that occur exactly $c$ times in the
+  corpus. For example, $N_1$ is the count of all singleton n-grams (those that
+  appeared only once), $N_2$ is the count of all n-gram types that appeared twice,
+  and so on. When we plot these values for a large corpus, we typically see a
+  long-tailed distribution, as shown in Fig. 4.10. The number of singletons
+  ($N_1$) is very large, followed by a smaller $N_2$, an even smaller $N_3$, and
+  so on.
+  
+  !\[Fig. 4.10\](description: A bar chart titled 'Frequency of Frequencies'. The
+  x-axis represents a frequency 'r' (n-grams that appeared 1 time, 2 times, etc.),
+  and the y-axis represents the number of n-gram types (Nr) that had that
+  frequency. This visualizes the long-tail distribution that Good-Turing smoothing
+  leverages to estimate the probability of unseen events.)
+  
+  Good-Turing uses this distribution to estimate the total probability mass that
+  should be reserved for all zero-count n-grams combined. The estimate is
+  remarkably simple:
+  
+  $P_{\text{unseen}} = \frac{N_1}{N}$
+  
+  Here, $N$ is the total number of n-gram tokens in the corpus. We are effectively
+  reassigning the probability mass of the singleton bucket to the zero-count
+  bucket. The logic is that the $N_1$ singletons we observed are a good proxy for
+  the number of new n-grams we would expect to find if we doubled the size of our
+  corpus.
+  
+  Of course, if we allocate this probability to unseen events, we must reduce the
+  probability of the events we have seen to ensure all probabilities still sum to
+  1\. Good-Turing does this by adjusting the count $c$ for any n-gram that appeared
+  $c > 0$ times. This adjusted count, denoted $c^*$, is used in place of the
+  original MLE count. The formula is:
+  
+  $c^* = (c+1) \frac{N_{c+1}}{N_c}$
+  
+  The new probability for an n-gram that was seen $c$ times is then
+  $P_{GT} = \frac{c^*}{N}$. The formula for $c^*$ may seem complex, but its effect
+  is intuitive. Since for most corpora $N_{c+1} < N_c$ (there are fewer bigrams
+  that appear 10 times than 9 times), the ratio $\frac{N_{c+1}}{N_c}$ will be less
+  than 1. This means the adjusted count $c^*$ will almost always be slightly less
+  than the original count $c$ ($c^* < c$), effectively discounting it. The amount
+  of the discount is not arbitrary, as in Laplace smoothing, but is determined by
+  the actual distribution of word counts in the corpus.
+  
+  A significant practical problem arises with this formula: what if we encounter
+  an $N_c$ for which there is no observed $N_{c+1}$? For example, we might have
+  n-grams that occurred 9 times ($N_9 > 0$) but none that occurred 10 times
+  ($N_{10} = 0$). This would make $c^*$ for n-grams with a count of 9 equal to
+  zero, which is clearly not right. To solve this and other issues related to
+  sparse frequency-of-frequency counts, a variation called **Simple Good-Turing**
+  is typically used in practice. It involves fitting a smooth curve to the plot of
+  $N_c$ vs. $c$, providing a reliable estimate for $N_c$ even when the observed
+  value is zero.
+  
+  In summary, Good-Turing smoothing provides a far more principled method for
+  handling unseen events than Laplace smoothing. By leveraging the distribution of
+  the corpus itself—specifically using the count of singletons as an estimate for
+  the unknown—it creates a more accurate and reliable language model.
+  
+  This fragment refers to Fig. 4.10. The figure in question is a "Chart" and its
+  description is as follows:
+  
+  A bar chart titled 'Frequency of Frequencies'. The x-axis represents a frequency
+  'r' (n-grams that appeared 1 time, 2 times, etc.), and the y-axis represents the
+  number of n-gram types (Nr) that had that frequency. This visualizes the
+  long-tail distribution that Good-Turing smoothing leverages to estimate the
+  probability of unseen events.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 2a748fb2c8175c054b8e78597e631c0d8cd93606e700ad401d8a844c5ee01a33
+response:
+  caption:
+    Fig. 4.10: A bar chart showing the 'Frequency of Frequencies' for n-grams,
+    illustrating the long-tail distribution used in Good-Turing smoothing.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+      <style>.background { fill: white; } .axis { stroke: black; stroke-width: 2; fill: none; } .tick { stroke: #888; stroke-width: 1; } .bar { fill: #4682B4; } .label { font-family: sans-serif; font-size: 14px; text-anchor: middle; } .tick-label { font-family: sans-serif; font-size: 12px; text-anchor: middle; }</style>
+      <rect class="background" width="100%" height="100%"/>
+      <path class="axis" d="M 60 20 L 60 250 L 380 250"/>
+      <line class="tick" x1="55" y1="200" x2="60" y2="200"/>
+      <line class="tick" x1="55" y1="150" x2="60" y2="150"/>
+      <line class="tick" x1="55" y1="100" x2="60" y2="100"/>
+      <line class="tick" x1="55" y1="50" x2="60" y2="50"/>
+      <rect class="bar" x="68" y="40" width="24" height="210"/>
+      <rect class="bar" x="100" y="130" width="24" height="120"/>
+      <rect class="bar" x="132" y="170" width="24" height="80"/>
+      <rect class="bar" x="164" y="195" width="24" height="55"/>
+      <rect class="bar" x="196" y="210" width="24" height="40"/>
+      <rect class="bar" x="228" y="220" width="24" height="30"/>
+      <rect class="bar" x="260" y="228" width="24" height="22"/>
+      <rect class="bar" x="292" y="234" width="24" height="16"/>
+      <rect class="bar" x="324" y="238" width="24" height="12"/>
+      <rect class="bar" x="356" y="241" width="24" height="9"/>
+      <text class="tick-label" x="80" y="265">1</text>
+      <text class="tick-label" x="112" y="265">2</text>
+      <text class="tick-label" x="144" y="265">3</text>
+      <text class="tick-label" x="176" y="265">4</text>
+      <text class="tick-label" x="208" y="265">5</text>
+      <text class="tick-label" x="240" y="265">6</text>
+      <text class="tick-label" x="272" y="265">7</text>
+      <text class="tick-label" x="304" y="265">8</text>
+      <text class="tick-label" x="336" y="265">9</text>
+      <text class="tick-label" x="368" y="265">10</text>
+      <text class="label" x="220" y="285">Frequency (r)</text>
+      <text class="label" x="25" y="135" transform="rotate(-90 25,135)">Number of n-gram types (Nr)</text>
+    </svg>
+duration: 54563 ms
+usage_stats:
+  {
+    "candidates_token_count": 972,
+    "prompt_token_count": 1306,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1306
+      }
+    ],
+    "thoughts_token_count": 5702,
+    "total_token_count": 7980
+  }
+...

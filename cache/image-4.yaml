@@ -1,0 +1,35 @@
+{model: str, query: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-flash-image-preview
+query: image
+prompt:
+  A simple, clean illustration showing a close-up of a person's hands holding a
+  modern smartphone. The focus is on the phone's screen, where a user has typed
+  the incomplete sentence, "I am looking forward to the". Just above the on-screen
+  keyboard, three distinct word suggestions are prominently displayed,
+  representing the most likely next words to complete the phrase—for example,
+  "weekend", "meeting", and "game". The style should be minimalist, using clean
+  lines and a limited color palette to emphasize the interaction between the human
+  typist and the predictive suggestions.
+hash: 6f2aed8ae68a1db033641fe4a04099dab5d3a797f41a1a14c3cefc3e93d97726
+response: image-4.png
+duration: 5067 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 124,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 124
+      }
+    ],
+    "total_token_count": 1414
+  }
+...

@@ -1,0 +1,92 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The choice between stemming and lemmatization represents a fundamental trade-off
+  between computational efficiency and linguistic accuracy. While both techniques
+  aim to reduce words to a base form, their approaches and the quality of their
+  outputs differ significantly. Stemming is a heuristic, rule-based process that
+  works by crudely chopping off word endings. Lemmatization, in contrast, uses
+  morphological analysis and a dictionary to return the proper base form, or
+  *lemma*, of a word.
+  
+  This distinction is most apparent when observing their outputs. A stemmer like
+  the Porter algorithm will reduce *studies*, *studying*, and *study* to the
+  common stem "studi"—a character sequence that is not a valid English word. A
+  lemmatizer, on the other hand, will correctly map all three forms to the
+  dictionary headword "study". The gap in sophistication widens with irregular
+  forms. Stemmers are typically unable to connect words like *better* to *good*,
+  or *mice* to *mouse*, as there is no simple affix-stripping rule that governs
+  these relationships. Lemmatization, with its reliance on a comprehensive
+  lexicon, handles these cases correctly. The comparative examples in **Fig.
+  3.14** clearly illustrate these differences.
+  
+  So, when should one be preferred over the other?
+  
+  - **Stemming** is chosen when speed and performance are the primary concerns.
+    For applications like search engines, the goal is often just to ensure a query
+    for "studying" also retrieves documents containing "studies". The linguistic
+    inelegance of the stem "studi" is irrelevant as long as it successfully
+    collapses the variants together. Stemming can also process unknown words that
+    are not in a dictionary.
+  
+  - **Lemmatization** is essential for tasks requiring a deeper semantic
+    understanding. In machine translation, question answering, or sentiment
+    analysis, knowing that "better" relates to "good" is crucial for correct
+    interpretation. The cost of this accuracy is a slower process that depends on
+    a lexicon and often requires part-of-speech information to resolve ambiguity
+    (e.g., to lemmatize "saw" to "see" or "saw").
+  
+  Ultimately, the decision rests on the specific needs of your NLP pipeline. If
+  you require a fast and simple method for collapsing word forms and can tolerate
+  some imprecision, stemming is a reasonable choice. If your application demands
+  linguistic correctness, lemmatization is the superior, more principled approach.
+  
+  This fragment refers to Fig. 3.14, which is a table. Its description is as
+  follows:
+  
+  A comparative table contrasting the outputs of stemming and lemmatization. The
+  table will have three columns: 'Original Word', 'Stemmed Form (Porter)', and
+  'Lemmatized Form'. Rows will contain sets of related words such as 'studies',
+  'studying', 'study', 'better', and 'mice'. The output will clearly show that
+  stemming is a crude heuristic (e.g., 'studi') while lemmatization returns the
+  correct dictionary form (e.g., 'study', 'good', 'mouse').
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: 254961c6d40d9029a645332d51a69ddfc53482bfd3554e771bfa4c03616bb288
+response:
+  caption:
+    Fig. 3.14: A comparative table contrasting the outputs of stemming and
+    lemmatization. The table shows how stemming provides a crude, heuristic
+    reduction (e.g., 'studi') while lemmatization returns the correct dictionary
+    form (e.g., 'study', 'good', 'mouse').
+  latex:
+    \begin{tabular}{lll}\toprule
+    \textbf{Original Word} & \textbf{Stemmed Form (Porter)} & \textbf{Lemmatized Form} \\ \midrule
+    studies & studi & study \\
+    studying & studi & study \\
+    study & studi & study \\ \midrule
+    better & better & good \\
+    mice & mice & mouse \\ \bottomrule
+    \end{tabular}
+duration: 15343 ms
+usage_stats:
+  {
+    "candidates_token_count": 173,
+    "prompt_token_count": 735,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 735
+      }
+    ],
+    "thoughts_token_count": 1571,
+    "total_token_count": 2479
+  }
+...

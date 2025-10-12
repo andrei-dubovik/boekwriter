@@ -1,0 +1,121 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Building a corpus is a more deliberate and structured process than simply
+  downloading a large amount of text. The goal is to create a resource that is
+  balanced, representative, and suitable for the research questions it is intended
+  to answer. This construction process generally follows a series of essential
+  steps, as illustrated in the workflow in **Fig. 3.5**.
+  
+  The first stage is *data acquisition*. The source of the text depends entirely
+  on the corpus's purpose. For a corpus of contemporary news, one might use web
+  scraping to gather articles from various online newspapers. For a historical
+  corpus, the process might involve digitizing physical books and manuscripts
+  using Optical Character Recognition (OCR). Other sources include parliamentary
+  records, social media feeds, or transcribed speech. A crucial part of
+  acquisition is *sampling*. Rather than collecting all available data, which may
+  be impractical or introduce bias, we select a representative sample. For a
+  balanced corpus like the Brown Corpus, this meant carefully selecting texts from
+  15 different genres to ensure the sample reflected the broad range of published
+  American English at the time.
+  
+  Once the raw data is collected, it must undergo extensive *data cleaning*. Text
+  from the web is often riddled with non-linguistic noise, such as HTML tags,
+  advertisements, navigation menus, and JavaScript code, all of which must be
+  stripped away. Scanned documents may contain OCR errors that need correction.
+  This stage is often labor-intensive but is critical for the quality of the final
+  corpus; the principle of "garbage in, garbage out" applies with full force.
+  
+  After cleaning, the text is structured and formatted, often using standards like
+  XML (eXtensible Markup Language) or JSON (JavaScript Object Notation). This
+  provides a consistent format and, more importantly, allows for the inclusion of
+  *metadata*—literally, "data about the data." Metadata provides essential
+  contextual information for each document. For a newspaper article, metadata
+  might include:
+  
+  - The publication source (e.g., *The New York Times*)
+  - The publication date
+  - The author's name
+  - The article's section (e.g., "Business," "Sports")
+  
+  This structured information is invaluable. It allows researchers to not only
+  analyze the language itself but also to investigate how language use varies
+  across different sources, time periods, or genres. By following these steps, a
+  simple collection of raw text is transformed into a powerful and scientifically
+  valuable linguistic corpus.
+  
+  This fragment refers to Fig. 3.5. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A flowchart diagram illustrating the key stages of corpus construction. The
+  diagram will show a progression with boxes for each stage: '1. Defining Corpus
+  Goals', '2. Data Acquisition' (e.g., web scraping, OCR), '3. Data Cleaning', '4.
+  Structuring and Formatting' (e.g., XML/JSON), and '5. Metadata Inclusion' (e.g.,
+  source, author, date). Arrows will connect the boxes to show the workflow.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 69f21f4edf8a4bc51737d2783827497a992450a849dd30e13f45c451f84d540d
+response:
+  caption:
+    Fig. 3.5. A flowchart showing the key stages of corpus construction, from
+    defining goals and acquiring data to cleaning, formatting, and including
+    metadata.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+      <rect x="0" y="0" width="800" height="600" fill="white"/>
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+      </defs>
+      <style>.box { fill: #f0f8ff; stroke: #333; stroke-width: 2; } .main-text { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; text-anchor: middle; fill: #000; } .sub-text { font-family: Arial, Helvetica, sans-serif; font-size: 14px; text-anchor: middle; fill: #555; } .arrow { stroke: #333; stroke-width: 2.5; marker-end: url(#arrowhead); }</style>
+      <g>
+        <rect x="250" y="40" width="300" height="80" rx="10" class="box"/>
+        <text x="400" y="85" class="main-text">1. Defining Corpus Goals</text>
+      </g>
+      <line x1="400" y1="120" x2="400" y2="150" class="arrow"/>
+      <g>
+        <rect x="250" y="150" width="300" height="80" rx="10" class="box"/>
+        <text x="400" y="180" class="main-text">2. Data Acquisition</text>
+        <text x="400" y="205" class="sub-text">(e.g., web scraping, OCR)</text>
+      </g>
+      <line x1="400" y1="230" x2="400" y2="260" class="arrow"/>
+      <g>
+        <rect x="250" y="260" width="300" height="80" rx="10" class="box"/>
+        <text x="400" y="305" class="main-text">3. Data Cleaning</text>
+      </g>
+      <line x1="400" y1="340" x2="400" y2="370" class="arrow"/>
+      <g>
+        <rect x="250" y="370" width="300" height="80" rx="10" class="box"/>
+        <text x="400" y="400" class="main-text">4. Structuring and Formatting</text>
+        <text x="400" y="425" class="sub-text">(e.g., XML/JSON)</text>
+      </g>
+      <line x1="400" y1="450" x2="400" y2="480" class="arrow"/>
+      <g>
+        <rect x="250" y="480" width="300" height="80" rx="10" class="box"/>
+        <text x="400" y="510" class="main-text">5. Metadata Inclusion</text>
+        <text x="400" y="535" class="sub-text">(e.g., source, author, date)</text>
+      </g>
+    </svg>
+duration: 66527 ms
+usage_stats:
+  {
+    "candidates_token_count": 899,
+    "prompt_token_count": 719,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 719
+      }
+    ],
+    "thoughts_token_count": 7749,
+    "total_token_count": 9367
+  }
+...

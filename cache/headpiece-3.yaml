@@ -1,0 +1,772 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: headpiece
+prompt:
+  What follows is a text for a chapter from a book called "Introduction to
+  Computational Linguistics".
+  
+  <chapter>
+  
+  The evolution of computational linguistics is marked by a profound paradigm
+  shift, away from the purely theoretical and towards the empirically grounded.
+  Early efforts in the field often followed a *rationalist* tradition, where
+  linguists and computer scientists attempted to hand-craft intricate sets of
+  rules to capture a language's grammar. The goal was to build a logical model
+  based on linguistic theory and introspection. This approach, however, frequently
+  stumbled when faced with the immense complexity and variability of real-world
+  language. The resulting systems were often brittle, unable to handle exceptions,
+  idiomatic expressions, or the constant evolution of language use. They lacked
+  the flexibility to learn from experience.
+  
+  The modern, data-driven era is built on a different philosophy. The central
+  tenet is simple yet powerful: to create computational models that understand
+  human language, we must learn its properties directly from vast quantities of it
+  as it is actually written and spoken. This represents a turn towards an
+  *empirical* methodology, where direct observation of language data is the
+  primary source of knowledge. Rather than starting with abstract rules, we start
+  with the data itself and use statistical methods and machine learning to
+  discover the patterns, frequencies, and relationships that govern communication.
+  The guiding question is not "What *should* the rule be?" but "What does the
+  evidence in the data suggest?"
+  
+  This empirical foundation is made tangible through the **linguistic corpus**. A
+  corpus (Latin for 'body'; plural *corpora*) serves as the bedrock for nearly all
+  contemporary NLP. It is not just any random collection of text, but a large,
+  structured, and principled sample of authentic language use, curated for
+  analysis. The rise of the internet and the explosion in digital text, combined
+  with the availability of powerful computing resources, made it possible to
+  compile and process corpora on a scale previously unimaginable. This synergy of
+  data and computation is the engine behind the field's most significant
+  breakthroughs. Instead of a few thousand hand-analyzed sentences, models can now
+  learn from billions of words, enabling them to capture subtle statistical
+  nuances of language that would be impossible to codify by hand. From machine
+  translation to sentiment analysis, the algorithms we will explore in this book
+  all derive their power from learning from a corpus. This chapter, therefore, is
+  dedicated to this cornerstone of our field, exploring what a corpus is and how
+  we prepare its raw text for analysis.
+  
+  At its core, a linguistic corpus is far more than just a large collection of
+  text. To be useful for computational analysis, a corpus must be a *principled*
+  collection. We formally define a corpus as a large, structured, and
+  machine-readable collection of authentic text or speech samples, which has been
+  assembled according to explicit design criteria to be representative of a
+  specific language or language variety. Each component of this definition is
+  critical and distinguishes a corpus from a simple accumulation of digital text.
+  
+  The requirement for the collection to be *large* is a direct consequence of the
+  statistical nature of modern computational linguistics. Language is rife with
+  phenomena that are relatively rare; a small sample of text might not contain
+  enough examples of a particular word, phrase, or grammatical construction to
+  allow for meaningful statistical analysis or the robust training of a machine
+  learning model. The samples must also be *authentic*, meaning they consist of
+  naturally-occurring language produced by real speakers or writers for a genuine
+  communicative purpose. This is a crucial distinction from collections of
+  sentences invented by linguists to illustrate a specific point. We study
+  language as it is actually used, so we draw from real-world sources like news
+  articles, fiction, academic papers, and transcribed conversations.
+  
+  Perhaps the most important characteristics are that a corpus is *principled* and
+  *structured*. A principled collection is one built with a clear purpose and
+  methodology, unlike a random assortment of documents downloaded from the
+  internet. The design principles often aim for the corpus to be *balanced* and
+  *representative* of the language variety under study. For instance, a corpus of
+  "general American English" would not just contain news articles, but would be
+  carefully sampled to include a proportional mix of different genres like
+  fiction, conversation, and academic prose. The term *structured* refers to the
+  fact that the data is organized in a consistent, machine-readable format. At a
+  minimum, this includes consistent character encoding and document boundaries.
+  More advanced corpora contain rich metadata, such as the author, publication
+  date, and genre for each document, which is essential for many types of
+  analysis.
+  
+  Ultimately, a corpus serves as the empirical bedrock for computational
+  linguistics. It is the digital laboratory where we can observe linguistic
+  phenomena, test hypotheses, and gather frequency data. For the data-driven
+  models that dominate the field today, from N-gram models to large neural
+  networks, the corpus is the source of the training and evaluation data that
+  allows them to learn the patterns of human language. Without well-designed
+  corpora, the quantitative, evidence-based study of language at scale would be
+  impossible.
+  
+  Not all corpora are created equal. The design, content, and structure of a
+  corpus are dictated by the research questions it aims to answer or the NLP
+  application it is intended to support. This leads to several distinct types of
+  corpora, each with its own strengths and typical use cases. The most common
+  distinctions are based on the breadth of coverage (balanced vs. specialized),
+  the number of languages included (monolingual vs. parallel), and the presence of
+  linguistic metadata (raw vs. annotated).
+  
+  A *balanced corpus* aims to be a representative snapshot of a particular
+  language or language variety. To achieve this balance, its creators carefully
+  sample texts from a wide array of genres and domains—such as news reports,
+  fiction, academic articles, and transcripts of spoken conversations. The goal is
+  to mirror the proportions of these genres in the wider language, preventing any
+  single text type from dominating. This makes balanced corpora invaluable for
+  general linguistic inquiry or for training general-purpose language models that
+  are not tailored to a specific task. Classic examples include the pioneering
+  Brown Corpus for American English and the larger British National Corpus (BNC).
+  
+  In contrast, a *specialized corpus* (or *domain-specific corpus*) deliberately
+  focuses on a narrow slice of language. Instead of broad coverage, it offers deep
+  coverage of a particular subject matter, genre, or communicative setting. For
+  example, a corpus might consist solely of legal contracts, biomedical research
+  abstracts, or social media posts. This allows a model to learn the specific
+  vocabulary, jargon, and stylistic conventions of its domain, which is essential
+  for building high-performance applications like a medical information extraction
+  system or a financial sentiment analyzer.
+  
+  Another crucial type is the *parallel corpus*. This is a multilingual resource
+  that contains the same texts in two or more languages. The key feature of a
+  parallel corpus is *alignment*, where sentences or segments in one language are
+  explicitly linked to their translations in the other(s). They are the
+  cornerstone of statistical and neural machine translation, as they provide the
+  raw data from which a system can learn translational equivalences between words
+  and phrases. Prominent examples include the Europarl Corpus, which contains
+  proceedings from the European Parliament, and the Canadian Hansards, which
+  document parliamentary debates in English and French.
+  
+  The aforementioned types primarily describe the *content* of a corpus. An
+  orthogonal and critically important dimension is whether a corpus is
+  *annotated*. An annotated corpus contains not just the raw text, but also
+  explicit linguistic information added by human experts. This annotation can vary
+  in complexity:
+  
+  - **Part-of-speech (POS) tags:** Each word is labeled with its grammatical
+    category (e.g., noun, verb).
+  - **Syntactic annotation:** Sentences are parsed into tree structures
+    representing their grammatical constituency or dependency relations. A corpus
+    with such annotation is often called a *treebank*.
+  - **Semantic annotation:** Words or phrases are tagged with information about
+    their meaning, such as their role in an event (semantic role labeling).
+  
+  Annotated corpora are fundamental for supervised machine learning, as they
+  provide the "ground truth" data needed to train and evaluate models for specific
+  tasks like POS tagging or parsing. The influential Penn Treebank is a prime
+  example, containing detailed POS and syntactic annotation.
+  
+  These categories are not mutually exclusive; a corpus can be, for instance, an
+  annotated, specialized, parallel corpus. The choice of which type to use is one
+  of the most important decisions in any NLP project, as the data ultimately
+  determines the capabilities and limitations of the resulting model. Fig. 3.3
+  provides a concise summary of these major corpus types, their primary use cases,
+  and well-known examples.
+  
+  To make the concept of a balanced corpus concrete, we can examine one of the
+  most influential early examples: the *Brown University Standard Corpus of
+  Present-Day American English*, universally known as the Brown Corpus. Compiled
+  in the 1960s by Henry Kučera and W. Nelson Francis at Brown University, it was a
+  landmark achievement in linguistics. Its primary objective was to create a
+  one-million-word sample of American English text that was broadly representative
+  of the language as it was used in a single year, 1961. This made it the first
+  truly balanced, computer-readable corpus of its kind, setting a standard for
+  decades of future work in the field.
+  
+  The corpus consists of 500 text samples, or *documents*, each approximately
+  2,000 words long. These samples were meticulously drawn from 15 distinct genre
+  categories to ensure a wide-ranging representation of written English. As shown
+  in **Fig. 3.4**, these categories span a diverse spectrum, including *Press:
+  Reportage*, *Religion*, *Skills and Hobbies*, various genres of *Fiction*, and
+  academic prose from the *Learned* and *Scientific* categories. The creators
+  ensured that the number of samples from each category was proportional to its
+  prevalence in the publishing world at the time, providing a snapshot of the
+  literary landscape.
+  
+  This careful stratification is the essence of a balanced corpus. The goal is not
+  merely to amass text, but to create a microcosm of the language as it is
+  actually produced and consumed. By sampling from romance fiction as well as from
+  government documents, the Brown Corpus allows researchers to make more
+  generalizable claims about word frequencies, syntactic structures, and lexical
+  patterns across the language as a whole, rather than just within a single,
+  narrow domain. For instance, one could reliably compare the average sentence
+  length in journalistic writing versus scientific prose using this data.
+  
+  Although a million words is considered small by today's standards—where corpora
+  often contain billions of words—the methodological rigor of the Brown Corpus was
+  revolutionary. It provided the empirical data for some of the first large-scale
+  computational analyses of English vocabulary and grammar. Its design principles
+  have been replicated and adapted for creating similar corpora in many other
+  languages, a testament to its enduring influence. It demonstrated that a
+  principled, data-driven approach was essential for the scientific study of
+  language.
+  
+  Building a corpus is a more deliberate and structured process than simply
+  downloading a large amount of text. The goal is to create a resource that is
+  balanced, representative, and suitable for the research questions it is intended
+  to answer. This construction process generally follows a series of essential
+  steps, as illustrated in the workflow in **Fig. 3.5**.
+  
+  The first stage is *data acquisition*. The source of the text depends entirely
+  on the corpus's purpose. For a corpus of contemporary news, one might use web
+  scraping to gather articles from various online newspapers. For a historical
+  corpus, the process might involve digitizing physical books and manuscripts
+  using Optical Character Recognition (OCR). Other sources include parliamentary
+  records, social media feeds, or transcribed speech. A crucial part of
+  acquisition is *sampling*. Rather than collecting all available data, which may
+  be impractical or introduce bias, we select a representative sample. For a
+  balanced corpus like the Brown Corpus, this meant carefully selecting texts from
+  15 different genres to ensure the sample reflected the broad range of published
+  American English at the time.
+  
+  Once the raw data is collected, it must undergo extensive *data cleaning*. Text
+  from the web is often riddled with non-linguistic noise, such as HTML tags,
+  advertisements, navigation menus, and JavaScript code, all of which must be
+  stripped away. Scanned documents may contain OCR errors that need correction.
+  This stage is often labor-intensive but is critical for the quality of the final
+  corpus; the principle of "garbage in, garbage out" applies with full force.
+  
+  After cleaning, the text is structured and formatted, often using standards like
+  XML (eXtensible Markup Language) or JSON (JavaScript Object Notation). This
+  provides a consistent format and, more importantly, allows for the inclusion of
+  *metadata*—literally, "data about the data." Metadata provides essential
+  contextual information for each document. For a newspaper article, metadata
+  might include:
+  
+  - The publication source (e.g., *The New York Times*)
+  - The publication date
+  - The author's name
+  - The article's section (e.g., "Business," "Sports")
+  
+  This structured information is invaluable. It allows researchers to not only
+  analyze the language itself but also to investigate how language use varies
+  across different sources, time periods, or genres. By following these steps, a
+  simple collection of raw text is transformed into a powerful and scientifically
+  valuable linguistic corpus.
+  
+  Raw text, while useful, is merely a sequence of characters. For a computer to
+  perform sophisticated linguistic analysis, this raw data must be enriched with
+  explicit, structured linguistic information. The process of adding this
+  expert-level information to a corpus is known as *annotation* or *markup*.
+  Annotation transforms a simple collection of texts into a powerful,
+  machine-readable resource that can be used to train and evaluate computational
+  models. It provides the "ground truth" data that data-driven algorithms learn
+  from. For example, to build a system that automatically identifies nouns and
+  verbs, we first need a corpus where human experts have already labeled thousands
+  of examples of nouns and verbs.
+  
+  The annotation process is often a meticulous and costly undertaking, typically
+  performed by trained linguists following a detailed set of instructions known as
+  an *annotation guideline*. To ensure the quality and consistency of the labels,
+  it is common practice to have multiple annotators label a portion of the same
+  data independently. The level of consensus between them is then measured using a
+  metric called *inter-annotator agreement (IAA)*. A high IAA score indicates that
+  the annotation guidelines are clear and the resulting labels are reliable, which
+  is crucial for building robust NLP systems.
+  
+  Annotation can be performed at various linguistic levels, with the specific
+  choice of what to mark up—the *annotation schema*—depending on the intended use
+  of the corpus. Some of the most common types of annotation include:
+  
+  - **Part-of-Speech (POS) Tagging:** This is one of the most fundamental layers
+    of annotation. Each word or token in the text is assigned a tag indicating its
+    grammatical category. For instance, the sentence "The cat sat on the mat"
+    might be annotated as: `The/DT cat/NN sat/VBD on/IN the/DT mat/NN ./.` Here,
+    `DT` stands for determiner, `NN` for noun, `VBD` for past-tense verb, and `IN`
+    for preposition.
+  
+  - **Syntactic Annotation (Parsing):** This layer reveals the grammatical
+    structure of sentences. One popular approach is *constituency parsing*, which
+    groups words into nested phrases. The same sentence could be represented with
+    brackets to show its phrasal structure:
+    `(S (NP (DT The) (NN cat)) (VP (VBD sat) (PP (IN on) (NP (DT the) (NN mat)))))`.
+    This annotation shows that "The cat" is a Noun Phrase (NP) and "sat on the
+    mat" is a Verb Phrase (VP), which together form the sentence (S).
+  
+  - **Semantic Annotation:** This involves marking up meaning-related information.
+    This can range from *word sense disambiguation*, where a word like "bank" is
+    tagged with its specific meaning (e.g., river bank vs. financial institution),
+    to *named entity recognition*, where mentions of people, organizations, and
+    locations are identified. Another crucial type is *coreference resolution*,
+    which links expressions that refer to the same entity, such as connecting "Dr.
+    Evans," "she," and "the professor" throughout a text.
+  
+  Ultimately, an annotated corpus is an embodiment of linguistic data tailored for
+  a specific computational task. The richness and reliability of the annotations
+  directly determine the potential and limitations of the models trained on it.
+  This deep connection between linguistic theory, annotation practice, and
+  computational modeling is exemplified by seminal projects like the Penn
+  Treebank.
+  
+  While the concept of annotation can be applied simply, such as labeling
+  documents for sentiment, some corpora feature incredibly rich, multi-layered
+  annotation schemas. Perhaps the most influential example of such a resource in
+  the history of computational linguistics is the **Penn Treebank (PTB)**.
+  Developed at the University of Pennsylvania, the PTB project annotated a large
+  corpus, primarily consisting of over a million words from *Wall Street Journal*
+  articles, with detailed linguistic information. Its release provided a large,
+  consistent, and publicly available dataset that became the standard benchmark
+  for developing and evaluating a generation of NLP models, particularly syntactic
+  parsers.
+  
+  The annotation in the Penn Treebank is applied in layers. The first and most
+  fundamental layer is **Part-of-Speech (POS) tagging**. Every single word in the
+  corpus is assigned a grammatical tag based on a detailed tagset. The PTB tagset
+  uses 36 distinct POS tags and 12 other tags for punctuation and currency
+  symbols. This level of granularity is crucial for computational analysis; for
+  instance, the tagset distinguishes between a singular noun (`NN`), a plural noun
+  (`NNS`), a proper noun (`NNP`), a base form verb (`VB`), a verb in the past
+  tense (`VBD`), and a verb in the present participle form (`VBG`). This
+  fine-grained information is far more useful for a computational model than
+  simply labeling all of these as "noun" or "verb".
+  
+  The second and most famous layer of annotation is the **syntactic treebank**,
+  from which the project gets its name. On top of the POS tags, the sentences were
+  parsed into their constituent structures, creating a "tree" that represents the
+  sentence's grammatical organization. This type of annotation is known as a
+  *constituency parse* or *phrase-structure parse*. It hierarchically groups words
+  into phrases, which are in turn grouped into larger phrases, until the entire
+  sentence is accounted for. Common phrasal labels include NP (Noun Phrase), VP
+  (Verb Phrase), PP (Prepositional Phrase), and ADJP (Adjective Phrase), with S
+  representing the entire sentence clause.
+  
+  A visual representation of this structure for the sentence 'The old man sat on
+  the chair' is shown in **Fig. 3.7**. At the lowest level of the tree, each word
+  is connected to its POS tag (e.g., 'man' is a `NN`, 'sat' is a `VBD`). These
+  tagged words form the *terminal nodes*. Above them, the tree groups words into
+  phrasal constituents. 'The', 'old', and 'man' are grouped into a Noun Phrase
+  (`NP`). Similarly, 'on the chair' forms a Prepositional Phrase (`PP`). These
+  phrases are then nested within larger ones; the `PP` is part of the Verb Phrase
+  (`VP`), 'sat on the chair'. Finally, the initial `NP` and the `VP` combine to
+  form the complete sentence, labeled with the root symbol `S`. In the corpus
+  files, this hierarchical structure is typically stored using a bracketed
+  notation, like this:
+  
+  `(S (NP (DT The) (JJ old) (NN man)) (VP (VBD sat) (PP (IN on) (NP (DT the) (NN chair)))) (. .))`
+  
+  The influence of the Penn Treebank extends beyond these two layers. The same
+  underlying text has since been enriched with further layers of annotation in
+  subsequent projects. For example, **PropBank** added a layer of semantic role
+  labels, identifying *who* did *what* to *whom*. Later, projects like
+  **OntoNotes** added annotations for coreference (linking pronouns like 'he' and
+  'it' to the entities they refer to), word senses, and named entities. This
+  demonstrates how a well-designed base corpus can serve as a scaffold for
+  building even richer linguistic resources over time. The legacy of the Penn
+  Treebank is a testament to the power of high-quality, deeply annotated data in
+  driving scientific progress and enabling the development of sophisticated
+  language understanding technologies.
+  
+  Having established the importance of corpora as the source of our language data,
+  we now confront a practical challenge. Raw text, as it exists in the wild, is
+  inherently "noisy" and inconsistent from a computational standpoint. To a
+  computer, which sees text as a simple sequence of characters, the strings *run*,
+  *Run*, and *running* are entirely distinct entities. Similarly, abbreviations
+  like *U.S.A.* and *USA*, or words connected by punctuation like
+  *state-of-the-art*, are treated as unique items, different from their
+  constituent parts. This surface-level variation, while trivial for a human
+  reader to interpret, creates significant problems for our algorithms. If left
+  unaddressed, it leads to a needlessly large vocabulary and exacerbates the
+  problem of data sparsity, where many meaningful word forms appear too
+  infrequently in the corpus for a statistical model to learn from them
+  effectively.
+  
+  This brings us to the indispensable process of **text normalization**, often
+  referred to as text pre-processing. Text normalization is the task of cleaning
+  raw text and transforming it into a more canonical, standardized format. The
+  primary goal is to group together different surface forms of what is essentially
+  the same conceptual word, ensuring they are treated consistently by downstream
+  models. This process is best conceptualized as a *pipeline*, a sequence of
+  operations where raw text is passed from one stage to the next. In the following
+  sections, we will dissect the core components of this pipeline, starting with
+  the fundamental task of **tokenization**—breaking text into words—before moving
+  on to techniques like **stemming** and **lemmatization** for reducing words to
+  their root forms. These foundational steps are the bedrock upon which nearly all
+  subsequent NLP analysis is built.
+  
+  After acquiring a raw text, the first and most fundamental step in preparing it
+  for analysis is *tokenization*. This is the process of segmenting a continuous
+  stream of characters into a sequence of discrete, meaningful units called
+  *tokens*. For English and many other languages, these tokens often correspond to
+  words, numbers, and punctuation marks. To a computer, a text file is simply a
+  long sequence of bytes; it has no inherent understanding of where one word ends
+  and another begins. Tokenization imposes the first layer of linguistic structure
+  onto this raw data, transforming it from an undifferentiated string into a list
+  of items that our algorithms can count, compare, and analyze.
+  
+  Consider the simple sentence: `The quick brown fox jumps.` A standard tokenizer
+  would break this string into the following list of six tokens:
+  
+  `['The', 'quick', 'brown', 'fox', 'jumps', '.']`
+  
+  Notice that the final period is treated as a separate token. This is a common
+  and important choice, as it separates the word "jumps" from the
+  sentence-boundary marker. By isolating punctuation, we can analyze it as a
+  distinct feature or choose to ignore it later, but the decision is preserved.
+  Without tokenization, we would be left to work with individual characters or
+  complex string-matching rules, making even simple tasks like counting word
+  occurrences unnecessarily difficult. The sequence of tokens becomes the primary
+  input for most subsequent NLP tasks, from part-of-speech tagging to parsing and
+  language modeling.
+  
+  This process also allows us to introduce two foundational concepts in corpus
+  linguistics: *tokens* and *types*. A **token** is an instance of a word or
+  symbol in the text. In the sentence, "The cat sat on the mat.", there are seven
+  tokens in total. A **type**, on the other hand, is a unique word or symbol in
+  the vocabulary. The set of types for that sentence would be
+  `{The, cat, sat, on, the, mat, .}`. If we are being case-sensitive, this set
+  contains seven unique types. If we ignore case, then 'The' and 'the' would be
+  instances of the same type, reducing our type count to six. The collection of
+  all unique types in a corpus is known as its **vocabulary**, often denoted as
+  *V*. The distinction is crucial: the total number of tokens tells us the length
+  of the corpus, while the number of types tells us the size of its vocabulary.
+  
+  At first glance, tokenization might seem as simple as splitting a string by its
+  whitespace characters. This naive approach, however, quickly breaks down when
+  faced with the messiness of real-world text. Language is filled with ambiguities
+  that challenge simple rules. For instance, how should we handle a date like
+  `03/25/2024`? Is it one token or five (`03`, `/`, `25`, `/`, `2024`)? What about
+  a monetary value like `$45.50`? Or a single contraction like "don't", which
+  could be treated as one token (`don't`) or two (`do`, `n't`) to separate the
+  verb from the negation. As we will see next, successfully navigating these edge
+  cases is crucial for building a reliable NLP pipeline.
+  
+  While tokenization might seem as trivial as splitting a string by its whitespace
+  characters, this simplistic approach quickly fails on real-world text. A simple
+  programmatic split on the sentence "She can't go." would likely yield
+  `['She', "can't", 'go.']`, a result that is suboptimal for most analyses. The
+  token *go.* incorrectly bundles the word with its sentence-terminating
+  punctuation, and *can't* merges two distinct morphemes: the modal verb *can* and
+  the negation particle *not*. A robust tokenizer must navigate a landscape of
+  such linguistic ambiguities.
+  
+  The primary challenges revolve around punctuation and multi-word expressions.
+  Consider the following common issues:
+  
+  - **Contractions and Possessives:** English contractions like *can't*,
+    *they're*, or *it's* are a frequent hurdle. For analytical consistency, these
+    are often split into their constituent parts. A standard approach, used in
+    corpora like the Penn Treebank, is to separate the clitic. For instance,
+    *can't* becomes two tokens, `ca` and `n't`, while *it's* becomes `It` and
+    `'s`.[^1] This separation preserves morphological information that is crucial
+    for downstream tasks like part-of-speech tagging. Similarly, sentence-final
+    punctuation, such as periods, question marks, and exclamation points, should
+    almost always be treated as separate tokens.
+  
+  - **Ambiguous Punctuation:** The period is particularly problematic. It can
+    signal the end of a sentence, but it also appears within abbreviations (e.g.,
+    *U.S.*, *Dr.*), numbers (e.g., *3.14*), and URLs. A naive tokenizer that
+    splits on every period would incorrectly break apart these meaningful units. A
+    sophisticated tokenizer must use contextual clues to determine if a period is
+    a sentence boundary or an internal character of a token.
+  
+  - **Hyphenation:** Hyphens present another form of ambiguity. In a term like
+    *state-of-the-art*, the hyphenated phrase acts as a single adjectival unit and
+    is best kept as one token. However, hyphens can also be used for line-breaking
+    (soft hyphens) or to connect words that do not form a permanent compound, such
+    as in *a well-written but ultimately flawed argument*. The tokenizer's
+    behavior for hyphenated words is often guided by a combination of pre-defined
+    rules and lexical resources.
+  
+  These examples illustrate that tokenization is not a solved problem but a series
+  of language-specific engineering decisions. A well-designed tokenizer must
+  implement a cascade of rules to correctly segment a text stream. The table in
+  Fig. 3.10 provides several examples of challenging input strings and the desired
+  token sequences, highlighting the nuanced logic required for this foundational
+  step.
+  
+  Once text has been tokenized, a common next step is to reduce the different
+  inflectional forms of a word to a common base. For instance, in a search
+  application, we want a query for *“study computational linguistics”* to match
+  documents containing the words *“studies”*, *“studying”*, or *“studied”*. The
+  simplest and most computationally efficient way to achieve this is through
+  **stemming**. Stemming is a heuristic-based process for crudely chopping off
+  word endings—primarily suffixes—to obtain a common base form, known as a *stem*.
+  
+  It is crucial to understand that stemming is not a formal linguistic analysis.
+  It operates on word strings using a pre-defined set of rules and has no
+  knowledge of context or part of speech. The goal is not to produce a
+  linguistically correct root word, but rather to ensure that a group of related
+  words maps to the same stem. For example, the words *computation*,
+  *computational*, and *compute* might all be reduced to the stem `comput`. Notice
+  that the stem itself is not always a valid English word, which is perfectly
+  acceptable for the purposes of stemming. The process is a form of
+  *conflation*—collapsing distinctions between different word forms.
+  
+  The heuristic nature of stemming, while fast, inevitably leads to two types of
+  errors:
+  
+  - **Over-stemming:** This occurs when too much of a word is removed, causing
+    words with different meanings to be conflated into the same stem. For example,
+    a stemmer might incorrectly reduce both *universal* and *university* to the
+    stem `univers`, treating them as the same concept. This is a false positive.
+  - **Under-stemming:** This is the opposite problem, where the stemmer fails to
+    reduce words that are actually related to the same stem. A simple stemmer
+    might fail to relate *data* and *datum*, or *adhesion* and *adhesive*, because
+    its rules are not sophisticated enough to handle their specific morphological
+    patterns. This is a false negative.
+  
+  Despite these limitations, stemming is a powerful and widely used technique,
+  especially in applications like information retrieval where speed is critical
+  and the occasional error has a minimal impact on overall performance. The
+  simplicity of the approach makes it an attractive first step in the
+  normalization pipeline. Numerous algorithms for stemming exist, each with its
+  own set of rules and trade-offs between aggression and accuracy. The most
+  influential of these is the Porter Stemmer, which we will examine next.
+  
+  One of the most influential and widely used stemming algorithms is the Porter
+  Stemmer, developed by Martin Porter in 1980. It provides a simple yet effective
+  heuristic for removing common morphological and inflectional endings from
+  English words. The algorithm does not rely on a dictionary but instead applies a
+  sequence of suffix-stripping rules in a series of steps.
+  
+  The Porter Stemmer operates through five distinct phases, applied in a fixed
+  order. Each phase consists of a set of rules, such as "if the word ends in
+  `-ational`, replace it with `-ate`". For a rule to fire, the word must not only
+  match the suffix but the remaining stem must also satisfy a certain length
+  condition. This condition, known as the "measure," roughly counts the number of
+  vowel-consonant sequences in the stem. This prevents the algorithm from being
+  overly aggressive on short words; for instance, it stops *relate* from being
+  incorrectly reduced to *rel*. The key principle is that if multiple rules within
+  a step could apply, only one is chosen—typically the one with the longest
+  matching suffix.
+  
+  To make this concrete, let's consider how the algorithm would process the word
+  *normalization*. The process, which is detailed step-by-step in Fig. 3.12,
+  demonstrates the sequential nature of the rules. The word is transformed
+  iteratively as it passes through the phases. In Step 2, the rule (`-ational` →
+  `-ate`) reduces *normalization* to *normalize*. In a subsequent step, the rule
+  (`-ize` → ` `) further reduces it to *normal*. Finally, after passing through
+  all five steps, the algorithm terminates, yielding the final stemmed form
+  *normal*.
+  
+  It is crucial to remember that the Porter Stemmer is a **heuristic**. Its output
+  is not guaranteed to be a linguistically correct root (e.g., *university*
+  becomes *univers*). However, its strength lies in its speed and its ability to
+  consistently map variants like *normalize*, *normalized*, and *normalization* to
+  the same token. This consistency is often exactly what is needed for downstream
+  tasks like information retrieval, where the goal is to match query terms to
+  documents regardless of their specific inflectional form.
+  
+  While stemming provides a quick and often effective method for normalization,
+  its heuristic nature can be a blunt instrument, sometimes producing non-words. A
+  more sophisticated and linguistically principled approach is **lemmatization**.
+  The goal of lemmatization is to reduce a word not to a "stem," but to its
+  *lemma*—the canonical or dictionary headword form. For instance, the lemma for
+  `cars` is `car`, the lemma for `feet` is `foot`, and the lemma for `running` is
+  `run`. The lemma represents the abstract concept of the word, under which all
+  its inflected variants (like plural nouns or conjugated verbs) are grouped.
+  
+  Unlike stemming's crude suffix-stripping rules, a lemmatizer relies on a deeper
+  understanding of a language's morphology. The process involves more than just
+  algorithmic transformation; it is a form of analysis. To correctly identify the
+  lemma, a system typically requires two components:
+  
+  1. A **dictionary** (or a more complex lexical resource) containing valid words
+     and their corresponding lemmas.
+  2. **Morphological analysis** rules to handle inflections. For regular forms
+     like `books` → `book`, this might seem simple, but the real power of
+     lemmatization lies in its ability to handle irregular forms that do not
+     follow simple patterns.
+  
+  Crucially, effective lemmatization often requires knowing the word's
+  part-of-speech (POS) in the context of the sentence. A word's lemma can change
+  completely depending on its grammatical role. Because of this dependency,
+  lemmatization is often performed as a step immediately following POS tagging
+  (see Chapter 5). Consider the word `saw` in two different contexts:
+  
+  - In "I *saw* a bird," `saw` is a verb. A POS-aware lemmatizer would correctly
+    identify its lemma as the verb `see`.
+  - In "He used a *saw*," `saw` is a noun. Its lemma is simply `saw`.
+  
+  Without the part-of-speech context, a lemmatizer would be forced to guess or
+  default to the most common form, potentially introducing errors. This ability to
+  disambiguate based on context is a significant advantage over stemming, which
+  would likely leave the word `saw` unchanged in both cases.
+  
+  This reliance on linguistic knowledge allows lemmatization to handle a wide
+  range of complex and irregular cases that are impossible for a stemmer to
+  resolve. For example, it correctly maps irregular verbs like `went` to `go` and
+  `was` to `be`. It can also handle non-standard plurals, such as `geese` to
+  `goose` and `corpora` to `corpus`. Furthermore, it can consolidate comparative
+  and superlative adjectives, reducing both `better` and `best` to the lemma
+  `good`. This ability to group words based on their shared meaning, rather than
+  just their orthographic similarity, is invaluable for many semantic analysis
+  tasks. Many lemmatization algorithms, such as the one included in the popular
+  lexical database WordNet[^1], are built upon these large, hand-crafted resources
+  that map inflected forms to their base lemmas.
+  
+  The choice between stemming and lemmatization represents a fundamental trade-off
+  between computational efficiency and linguistic accuracy. While both techniques
+  aim to reduce words to a base form, their approaches and the quality of their
+  outputs differ significantly. Stemming is a heuristic, rule-based process that
+  works by crudely chopping off word endings. Lemmatization, in contrast, uses
+  morphological analysis and a dictionary to return the proper base form, or
+  *lemma*, of a word.
+  
+  This distinction is most apparent when observing their outputs. A stemmer like
+  the Porter algorithm will reduce *studies*, *studying*, and *study* to the
+  common stem "studi"—a character sequence that is not a valid English word. A
+  lemmatizer, on the other hand, will correctly map all three forms to the
+  dictionary headword "study". The gap in sophistication widens with irregular
+  forms. Stemmers are typically unable to connect words like *better* to *good*,
+  or *mice* to *mouse*, as there is no simple affix-stripping rule that governs
+  these relationships. Lemmatization, with its reliance on a comprehensive
+  lexicon, handles these cases correctly. The comparative examples in **Fig.
+  3.14** clearly illustrate these differences.
+  
+  So, when should one be preferred over the other?
+  
+  - **Stemming** is chosen when speed and performance are the primary concerns.
+    For applications like search engines, the goal is often just to ensure a query
+    for "studying" also retrieves documents containing "studies". The linguistic
+    inelegance of the stem "studi" is irrelevant as long as it successfully
+    collapses the variants together. Stemming can also process unknown words that
+    are not in a dictionary.
+  
+  - **Lemmatization** is essential for tasks requiring a deeper semantic
+    understanding. In machine translation, question answering, or sentiment
+    analysis, knowing that "better" relates to "good" is crucial for correct
+    interpretation. The cost of this accuracy is a slower process that depends on
+    a lexicon and often requires part-of-speech information to resolve ambiguity
+    (e.g., to lemmatize "saw" to "see" or "saw").
+  
+  Ultimately, the decision rests on the specific needs of your NLP pipeline. If
+  you require a fast and simple method for collapsing word forms and can tolerate
+  some imprecision, stemming is a reasonable choice. If your application demands
+  linguistic correctness, lemmatization is the superior, more principled approach.
+  
+  In addition to morphological normalization, two other simple yet powerful
+  techniques are often included in a standard pre-processing pipeline: *case
+  folding* and *stop word removal*. Case folding is the process of converting all
+  characters in the text to a single, uniform case—typically lowercase. This
+  ensures that words like `Book`, `book`, and `BOOK` are all treated as a single
+  token. The primary benefit is a reduction in the size of the vocabulary, which
+  helps consolidate word counts and is advantageous for many statistical models.
+  However, this is a lossy transformation. Casing can carry important information,
+  such as distinguishing the proper noun `US` (United States) from the pronoun
+  `us`, or the name `Brown` from the color `brown`. For tasks like Named Entity
+  Recognition, preserving the original case is often crucial.
+  
+  Stop word removal is the process of filtering out common words that are
+  considered to have little semantic value for a given task. These *stop words*
+  are typically the most frequent words in a language and include:
+  
+  - Articles (`a`, `an`, `the`)
+  - Prepositions (`in`, `on`, `of`, `for`)
+  - Conjunctions (`and`, `but`, `or`)
+  - Pronouns (`he`, `she`, `it`)
+  
+  Because these words appear in nearly all documents, they can dominate
+  frequency-based analyses without contributing much to the overall topic or
+  meaning. The removal process involves comparing tokens against a pre-compiled,
+  language-specific list of stop words and discarding any matches. Like case
+  folding, this technique must be applied with care. For sentiment analysis,
+  removing the word `not` could completely invert a phrase's meaning. For machine
+  translation, these function words are grammatically indispensable. Thus, the
+  decision to use these normalization steps depends entirely on the goals of the
+  downstream application.
+  
+  To solidify our understanding, let's walk through the complete normalization of
+  a single sentence from raw string to a final, processed list of tokens. This
+  multi-stage pipeline, which combines the techniques we have just discussed, is a
+  standard prerequisite for most language analysis tasks. The entire process is
+  visually summarized in the flowchart shown in Fig. 3.16.
+  
+  Our starting point is the simple declarative sentence:
+  
+  `'The quickest foxes are jumping.'`
+  
+  The first step is **tokenization**. The raw string is segmented into a sequence
+  of individual tokens, carefully separating punctuation from the final word. This
+  yields the list:
+  
+  `['The', 'quickest', 'foxes', 'are', 'jumping', '.']`
+  
+  Next, we apply **case folding** to standardize the text by converting all
+  alphabetic tokens to lowercase. This step ensures that 'The' and 'the' are not
+  treated as two distinct words, resulting in:
+  
+  `['the', 'quickest', 'foxes', 'are', 'jumping', '.']`
+  
+  Finally, we perform **lemmatization**. Each token is reduced to its
+  morphological root, or lemma. A morphologically-aware lemmatizer will convert
+  the superlative adjective 'quickest' to 'quick', the plural noun 'foxes' to
+  'fox', and the inflected verb forms 'are' and 'jumping' to their base forms,
+  'be' and 'jump', respectively. The determiner and punctuation remain unchanged.
+  The final, normalized output is a list of standardized tokens:
+  
+  `['the', 'quick', 'fox', 'be', 'jump', '.']`
+  
+  This sequence, stripped of its surface-level grammatical variations, is now in a
+  canonical form suitable for subsequent quantitative analysis, such as frequency
+  counting or feature extraction for a machine learning model.
+  
+  Fortunately, implementing the text normalization pipeline from scratch is rarely
+  necessary. A rich ecosystem of open-source software libraries provides robust,
+  well-tested, and often multilingual implementations of these fundamental tasks.
+  These tools allow practitioners to focus on higher-level modeling rather than
+  re-implementing core components.
+  
+  Some of the most prominent libraries include:
+  
+  - **NLTK (Natural Language Toolkit):** A comprehensive library that is excellent
+    for educational purposes. It provides a wide array of tokenizers, multiple
+    stemmer implementations including the Porter and Lancaster algorithms, and a
+    lemmatizer that leverages the WordNet lexical database.
+  - **spaCy:** Designed for production use, spaCy is known for its speed and
+    efficiency. Its processing pipeline handles tokenization, lemmatization, and
+    other tasks in a highly optimized manner, offering pre-trained models for
+    dozens of languages.
+  - **Scikit-learn:** While primarily a machine learning library, its text feature
+    extraction modules (e.g., `CountVectorizer`) seamlessly integrate
+    normalization steps like tokenization, lowercasing, and stop word removal into
+    the model training workflow.
+  - **Stanza:** Developed by the Stanford NLP Group, Stanza offers high-accuracy,
+    pre-trained models for many human languages, providing a full pipeline from
+    tokenization and lemmatization to more advanced syntactic analysis.
+  
+  This chapter has established the two foundational pillars of empirical language
+  processing: the linguistic corpus and text normalization. These are not merely
+  administrative preliminaries; they are the indispensable first steps that enable
+  every subsequent task we will explore. A principled, well-constructed corpus
+  acts as the ground truth—the source of authentic language data from which
+  statistical patterns and linguistic structures are learned. However, this raw
+  data is rarely suitable for direct computation.
+  
+  The text normalization pipeline, with its crucial stages of *tokenization*,
+  *case folding*, *lemmatization*, and *stop word removal*, transforms chaotic,
+  unstructured text into a clean, consistent format. This standardization is what
+  allows algorithms to treat "run," "ran," and "running" as instances of the same
+  underlying concept. Without this careful preparation, the statistical models and
+  parsers discussed in the following chapters would be confounded by superficial
+  variations, leading to poor performance. In short, the quality of corpus
+  construction and normalization directly determines the potential success of any
+  downstream NLP application, from part-of-speech tagging to machine translation.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+  
+  [^1]: WordNet is a large lexical database of English. Nouns, verbs, adjectives and
+  adverbs are grouped into sets of cognitive synonyms (synsets), each expressing a
+  distinct concept. It is often used for its lemmatization capabilities.
+hash: 94ab3a857dfb74c36118badd078333ebbd205aa39239eb5afeb0323d0818209a
+response:
+  An illustration of a person at a large wooden desk, meticulously sorting through
+  a diverse collection of written materials. To one side is a varied pile of
+  sources: a stack of newspapers, an open novel, a scientific journal, and a few
+  handwritten letters. The person is carefully examining one of these documents
+  before placing it into one of several neatly labeled folders, transforming the
+  chaotic pile into an organized and principled collection. The style should be
+  simple and clean, using monochromatic line art with minimal background detail,
+  keeping the focus on the deliberate human act of curating text from different
+  real-world sources.
+duration: 19328 ms
+usage_stats:
+  {
+    "candidates_token_count": 117,
+    "prompt_token_count": 10012,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 10012
+      }
+    ],
+    "thoughts_token_count": 1730,
+    "total_token_count": 11859
+  }
+...

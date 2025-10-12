@@ -1,0 +1,169 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To make the process of training an N-gram model concrete, let's walk through a
+  detailed example with a small corpus. A hands-on calculation will clarify how
+  word counts from a text are transformed into a probabilistic model of language.
+  
+  Imagine our entire corpus consists of just three sentences. We have already
+  pre-processed the text by lowercasing all words and adding special
+  start-of-sentence `<s>` and end-of-sentence `</s>` tokens.
+  
+  - `<s> the cat sat on the mat </s>`
+  - `<s> the dog sat on the rug </s>`
+  - `<s> the cat sat on the cat </s>`
+  
+  Our goal is to build a bigram model. The core task is to compute the Maximum
+  Likelihood Estimate (MLE) for every conditional probability $P(w_i | w_{i-1})$
+  that can be formed from the vocabulary in this corpus. The formula, as a
+  reminder, is:
+  
+  $P(w_i | w_{i-1}) = \frac{C(w_{i-1}, w_i)}{C(w_{i-1})}$
+  
+  This requires two sets of counts: unigram counts for the denominators and bigram
+  counts for the numerators.
+  
+  First, we calculate the unigram counts, which represent the number of times each
+  word appears. These counts will serve as the denominators in our probability
+  formula. For example, the word *the* appears as the first word in three
+  bigrams—`(the, cat)`, `(the, dog)`, and `(the, mat)` in the first sentence
+  alone. Counting across the entire corpus, we find:
+  
+  - `C(<s>)` = 3
+  - `C(the)` = 6
+  - `C(cat)` = 3
+  - `C(sat)` = 3
+  - `C(on)` = 3
+  - `C(dog)` = 1
+  - `C(mat)` = 1
+  - `C(rug)` = 1
+  
+  Next, we systematically count every sequence of two words to get our bigram
+  counts. For instance, the sequence `(<s>, the)` occurs at the start of all three
+  sentences, so its count is 3. The sequence `(the, cat)` occurs three times in
+  total (once in the first sentence, twice in the third). The first part of **Fig.
+  4.6** shows the complete matrix of these bigram counts derived from our corpus.
+  
+  With both sets of counts, we can now calculate the MLE probabilities. Let's
+  compute a few examples:
+  
+  1. What is the probability of the word *cat* following the word *the*?
+     $P(\text{cat} | \text{the}) = \frac{C(\text{the, cat})}{C(\text{the})} = \frac{3}{6} = 0.5$
+  
+  2. What is the probability of the word *sat* following the word *cat*?
+     $P(\text{sat} | \text{cat}) = \frac{C(\text{cat, sat})}{C(\text{cat})} = \frac{2}{3} \approx 0.67$
+  
+  3. What is the probability that a sentence starts with the word *the*?
+     $P(\text{the} | \text{<s>}) = \frac{C(\text{<s>, the})}{C(\text{<s>})} = \frac{3}{3} = 1.0$
+  
+  Following this procedure, we can fill out a complete probability matrix, as
+  shown in the second part of **Fig. 4.6**. This matrix *is* our trained bigram
+  model.
+  
+  We can now use this model to assign a probability to a full sentence. Let's take
+  a sentence from our training corpus, `<s> the dog sat on the rug </s>`. Its
+  probability is the product of the probabilities of its constituent bigrams:
+  
+  $P(\text{<s> the dog sat on the rug </s>}) = P(\text{the}|\text{<s>}) \times P(\text{dog}|\text{the}) \times P(\text{sat}|\text{dog}) \times P(\text{on}|\text{sat}) \times P(\text{the}|\text{on}) \times P(\text{rug}|\text{the}) \times P(\text{</s>}|\text{rug})$
+  
+  Plugging in the values from our calculated model:
+  
+  $P = 1.0 \times \frac{1}{6} \times \frac{1}{1} \times \frac{3}{3} \times \frac{3}{3} \times \frac{1}{6} \times \frac{1}{1} = \frac{1}{36} \approx 0.0278$
+  
+  The model correctly assigns a non-zero probability to this seen sentence. But
+  what happens when we encounter a new sentence that is perfectly valid English,
+  but contains word sequences not present in our training corpus? Consider the
+  sentence: `<s> the cat sat on the floor </s>`.
+  
+  To calculate its probability, we would need to compute, among others, the
+  conditional probability $P(\text{floor} | \text{the})$. Following our MLE
+  procedure:
+  
+  $P(\text{floor} | \text{the}) = \frac{C(\text{the, floor})}{C(\text{the})}$
+  
+  Because the bigram `(the, floor)` never appeared in our tiny corpus, its count
+  is 0. This means:
+  
+  $P(\text{floor} | \text{the}) = \frac{0}{6} = 0$
+  
+  The consequence is dire. Since the probability of the entire sentence is a
+  product of individual probabilities, a single zero-probability event makes the
+  probability of the whole sequence zero. The model predicts that this perfectly
+  reasonable sentence is impossible. This is the fundamental problem of *data
+  sparsity*, and it reveals the critical flaw of the simple Maximum Likelihood
+  Estimation approach. In the next sections, we will explore techniques designed
+  specifically to solve this problem.
+  
+  This fragment refers to Fig. 4.6, which is a table. Its description is as
+  follows:
+  
+  A two-part table for a step-by-step calculation. The first part is a matrix of
+  bigram counts derived from a small sample corpus. The second part is a
+  corresponding matrix showing the final Maximum Likelihood Estimation (MLE)
+  probabilities, calculated by dividing each bigram count by its corresponding
+  unigram prefix count.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: 8a1b7e31f5f7cad8736db861da130ebef1752710f803ae76a9d76bfcc801f692
+response:
+  caption:
+    Fig. 4.6: Bigram counts (top) and corresponding Maximum Likelihood Estimation
+    (MLE) probabilities (bottom) for a small corpus. Each probability in the bottom
+    table is calculated by dividing the corresponding count in the top table by the
+    sum of all counts in that row (the unigram count of the conditioning word).
+  latex:
+    \begin{tabular}{lcccccccc}
+    \multicolumn{9}{c}{\textbf{Part 1: Bigram Counts $C(w_{i-1}, w_i)$}} \\
+    \toprule
+    & \multicolumn{8}{c}{$w_i$} \\
+    \cmidrule(lr){2-9}
+    $w_{i-1}$ & \textbf{the} & \textbf{cat} & \textbf{sat} & \textbf{on} & \textbf{dog} & \textbf{mat} & \textbf{rug} & \textbf{</s>} \\
+    \midrule
+    \textbf{<s>}   & 3 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+    \textbf{the}   & 0 & 3 & 0 & 0 & 1 & 1 & 1 & 0 \\
+    \textbf{cat}   & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 1 \\
+    \textbf{sat}   & 0 & 0 & 0 & 3 & 0 & 0 & 0 & 0 \\
+    \textbf{on}    & 3 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+    \textbf{dog}   & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+    \textbf{mat}   & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+    \textbf{rug}   & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+    \bottomrule
+    \\ \\
+    \multicolumn{9}{c}{\textbf{Part 2: Bigram Probabilities $P(w_i | w_{i-1})$}} \\
+    \toprule
+    & \multicolumn{8}{c}{$w_i$} \\
+    \cmidrule(lr){2-9}
+    $w_{i-1}$ & \textbf{the} & \textbf{cat} & \textbf{sat} & \textbf{on} & \textbf{dog} & \textbf{mat} & \textbf{rug} & \textbf{</s>} \\
+    \midrule
+    \textbf{<s>}   & 1.0  & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+    \textbf{the}   & 0 & 0.5  & 0 & 0 & 0.17 & 0.17 & 0.17 & 0 \\
+    \textbf{cat}   & 0 & 0 & 0.67 & 0 & 0 & 0 & 0 & 0.33 \\
+    \textbf{sat}   & 0 & 0 & 0 & 1.0  & 0 & 0 & 0 & 0 \\
+    \textbf{on}    & 1.0  & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+    \textbf{dog}   & 0 & 0 & 1.0  & 0 & 0 & 0 & 0 & 0 \\
+    \textbf{mat}   & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1.0  \\
+    \textbf{rug}   & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1.0  \\
+    \bottomrule
+    \end{tabular}
+duration: 42237 ms
+usage_stats:
+  {
+    "candidates_token_count": 930,
+    "prompt_token_count": 1476,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1476
+      }
+    ],
+    "thoughts_token_count": 4991,
+    "total_token_count": 7397
+  }
+...

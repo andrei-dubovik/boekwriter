@@ -1,0 +1,106 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The most direct and intuitive solution to the zero-probability problem is
+  *Laplace smoothing*, also known as *add-one smoothing*. The core idea is simple:
+  we pretend we have seen every possible event one more time than we actually
+  have. This ensures that no event, seen or unseen, has a count of zero. By
+  artificially inflating the counts, we can reallocate a small portion of the
+  total probability mass to cover the events we didn't encounter in our training
+  corpus.
+  
+  Let's formalize this for our bigram model. The standard Maximum Likelihood
+  Estimation (MLE) for a bigram probability is:
+  
+  $P_{MLE}(w_i | w_{i-1}) = \frac{C(w_{i-1} w_i)}{C(w_{i-1})}$
+  
+  To apply Laplace smoothing, we simply add one to every bigram count in the
+  numerator. This means a bigram that occurred $k$ times is now treated as if it
+  occurred $k+1$ times, and an unseen bigram that occurred 0 times is now treated
+  as having a count of 1. The adjusted numerator becomes $C(w_{i-1} w_i) + 1$.
+  
+  However, we must also adjust the denominator to ensure the probabilities still
+  sum to one. Since we added one to the count of *every* possible bigram that
+  starts with the word $w_{i-1}$, we have effectively increased the total count of
+  words following $w_{i-1}$ by the total number of words in our vocabulary, $|V|$.
+  For every word $v \in V$, we added one to the count of the bigram
+  $C(w_{i-1} v)$. Therefore, the denominator, which is the total count for the
+  prefix $w_{i-1}$, must be adjusted to $C(w_{i-1}) + |V|$.
+  
+  This gives us the final formula for Laplace-smoothed bigram probability:
+  
+  $P_{Laplace}(w_i | w_{i-1}) = \frac{C(w_{i-1} w_i) + 1}{C(w_{i-1}) + |V|}$
+  
+  The practical effect of this redistribution is stark, as illustrated in **Fig.
+  4.9**. This table compares the original MLE probabilities from our earlier
+  example with the new probabilities calculated after applying Laplace smoothing.
+  Observe how bigrams that previously had a count and probability of zero, such as
+  "a fish", now have a small, non-zero probability. Conversely, the probabilities
+  of frequent, observed bigrams like "I am" are slightly reduced. This is the
+  central trade-off of smoothing: we "steal" a bit of probability mass from the
+  events we have seen and give it to the events we have not.
+  
+  While elegant in its simplicity, Laplace smoothing has a significant drawback:
+  it is a blunt instrument. In a typical language model, the vocabulary $|V|$ can
+  be very large, often tens of thousands of words. By adding one, we reallocate a
+  substantial amount of probability mass to a massive number of unseen N-grams.
+  The majority of these unseen N-grams are not just unattested in our corpus—they
+  are nonsensical combinations that are extremely unlikely to ever occur in real
+  language (e.g., "the of a"). Giving all of them equal probability mass is
+  wasteful and systematically underestimates the probabilities of the events we
+  actually did see.
+  
+  For a vocabulary of 50,000 words, a bigram model would have $50,000^2 = 2.5$
+  billion possible bigrams. Laplace smoothing treats all unseen bigrams as equally
+  plausible, which is an unrealistic assumption. This problem is exacerbated for
+  trigram and higher-order N-gram models, where the number of potential N-grams
+  ($|V|^N$) grows exponentially. Because it moves too much probability mass to the
+  "unseen" column, add-one smoothing often results in poor performance and is
+  rarely used in modern systems. However, its simplicity makes it an essential
+  pedagogical tool for understanding the fundamental goal of smoothing, paving the
+  way for more sophisticated techniques. A common variant, *add-k smoothing* (or
+  Lidstone smoothing), replaces the `1` with a small fractional value $k$ (e.g.,
+  0.01), which can mitigate the issue but doesn't fully solve it.
+  
+  This fragment refers to Fig. 4.9, which is a table. Its description is as
+  follows:
+  
+  A comparison table building on the example from section 6. Columns would show:
+  the bigram, its original MLE count, its Laplace 'add-one' adjusted count, its
+  original MLE probability (with zeros), and its final Laplace-smoothed
+  probability (all non-zero). This provides a direct contrast of the results
+  before and after smoothing.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: 5728ee89a014b234c7df793982c904e7333f4bf74474e1c1904012023cd39cb5
+response:
+  caption:
+    Fig. 4.9: A comparison of Maximum Likelihood Estimation (MLE) probabilities and
+    Laplace (add-one) smoothed probabilities for a sample of bigrams. This table
+    illustrates how Laplace smoothing redistributes probability mass from seen
+    events (like 'I am') to unseen events (like 'I fish'), eliminating zero
+    probabilities. The calculations assume the unigram counts are C(I)=10 and
+    C(a)=5, and the total vocabulary size is |V|=19.
+  latex: \begin{tabular}{lcccc} \toprule & \multicolumn{2}{c}{Counts} & \multicolumn{2}{c}{Probabilities} \\ \cmidrule(lr){2-3} \cmidrule(lr){4-5} Bigram & $C(w_{i-1} w_i)$ & Adjusted Count & $P_{MLE}$ & $P_{Laplace}$ \\ \midrule I am & 8 & 9 & $8/10 = 0.800$ & $9/19 \approx 0.474$ \\ I am not & 0 & 1 & $0/10 = 0.000$ & $1/19 \approx 0.053$ \\ \midrule a fish & 1 & 2 & $1/5 = 0.200$ & $2/14 \approx 0.143$ \\ a tree & 0 & 1 & $0/5 = 0.000$ & $1/14 \approx 0.071$ \\ \bottomrule \end{tabular}
+duration: 37370 ms
+usage_stats:
+  {
+    "candidates_token_count": 369,
+    "prompt_token_count": 1124,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1124
+      }
+    ],
+    "thoughts_token_count": 4182,
+    "total_token_count": 5675
+  }
+...

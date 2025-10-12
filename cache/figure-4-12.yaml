@@ -1,0 +1,183 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  While the theory of N-grams and perplexity can seem abstract, these models power
+  a feature millions of people use every day: predictive text on smartphone
+  keyboards. This application serves as a perfect, concrete illustration of
+  language modeling in action. The core task of a predictive keyboard is to guess
+  the next word you are likely to type, given the words you have already entered.
+  This is precisely the problem that N-gram models are designed to solve.
+  
+  Let's imagine you are typing a message. The system has access to the sequence of
+  words you have written so far, $w_1, ..., w_{n-1}$. Its goal is to present a
+  small set of highly probable next words, $w_n$. A system based on a bigram model
+  would look only at the immediately preceding word, $w_{n-1}$, and calculate the
+  probability $P(w_n | w_{n-1})$ for all words $w_n$ in its vocabulary. The words
+  with the highest conditional probability are the ones suggested to the user. The
+  system seeks to find:
+  
+  $$ \underset{w \in V}{\operatorname{argmax}} P(w | w_{n-1}) $$
+  
+  Consider the scenario depicted in Fig. 4.12, where a user has typed "I am
+  heading to the". A bigram model would use "the" as the context. It would then
+  query its stored probability distributions, which were learned from a massive
+  training corpus. Based on billions of sentences from the web, the model might
+  find that the probabilities of the words following "the" are, for instance:
+  
+  - $P(\text{store} | \text{the}) = 0.008$
+  - $P(\text{park} | \text{the}) = 0.006$
+  - $P(\text{gym} | \text{the}) = 0.005$
+  - $P(\text{airport} | \text{the}) = 0.004$
+  
+  The system would then display "store", "park", and "gym" as the three most
+  likely completions. The model is simply reflecting the statistical patterns it
+  observed during training; in its "experience," the phrase "the store" was more
+  frequent than "the park."
+  
+  A more sophisticated system might use a trigram model, which considers the last
+  two words as context. In our example, the context is "to the". The model now
+  calculates $P(w_n | \text{to the})$. The suggested words might change. For
+  example, while "store" is a common word to follow "the", the trigram "to the
+  store" might be even more common. Conversely, a word like "airport" might have a
+  much higher probability given the context "to the" than it would given only
+  "the". This demonstrates the power of using a larger N-gram window to capture
+  more specific contextual information.
+  
+  Several practical considerations are crucial for making such a system work
+  effectively.
+  
+  1. **Smoothing:** The importance of smoothing cannot be overstated. Without it,
+     any word that never appeared after "to the" in the training corpus would be
+     assigned a probability of zero and could *never* be suggested. A user trying
+     to type a perfectly valid but unseen phrase like "to the conclave" would
+     receive no useful predictions. Smoothing ensures that the model can handle
+     the creativity and variability of human language.
+  
+  2. **Backoff and Interpolation:** What happens if the trigram "heading to the"
+     has never been seen? A robust system doesn't just give up. It "backs off" to
+     a smaller context. If it has no data for the trigram, it uses the bigram
+     model ($P(w_n | \text{the})$). If that also fails, it could back off to the
+     unigram model, suggesting words based on their general frequency.[^1] This
+     ensures the system can always provide some prediction.
+  
+  3. **Efficiency:** The model must be incredibly fast. Suggestions need to appear
+     instantaneously with each keystroke. To achieve this, the N-gram counts and
+     probabilities are pre-calculated and stored in efficient data structures,
+     like hash maps or tries, allowing for near-instant lookups.
+  
+  This simple keyboard feature elegantly demonstrates the core concepts of this
+  chapter: approximating the probability of a word sequence, the trade-off between
+  context size and data sparsity, and the absolute necessity of smoothing to
+  create a useful, generalizable model.
+  
+  This fragment refers to Fig. 4.12. The figure in question is a "Illustration"
+  and its description is as follows:
+  
+  A clean illustration of a smartphone's virtual keyboard. A partial sentence is
+  typed in the text field (e.g., 'I am heading to the...'), and the predictive
+  text bar above the keyboard shows three probable next words (e.g., 'park',
+  'store', 'gym') that an N-gram model would suggest.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+  
+  [^1]: A related technique is *interpolation*, where the final probability is a
+  weighted average of the unigram, bigram, and trigram probabilities, combining
+  evidence from all N-gram levels.
+hash: e28acd94fc8fa77d7cb0dfd4d685a863760669d59ec3d6411dec244f9ad778c1
+response:
+  caption:
+    A clean illustration of a smartphone's virtual keyboard. A partial sentence is
+    typed in the text field (e.g., 'I am heading to the...'), and the predictive
+    text bar above the keyboard shows three probable next words (e.g., 'park',
+    'store', 'gym') that an N-gram model would suggest.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+      <rect x="0" y="0" width="400" height="300" fill="white"/>
+      <g>
+        <rect x="50" y="5" width="300" height="290" rx="30" fill="#2c2c2c"/>
+        <rect x="60" y="15" width="280" height="270" fill="#f8f9fa"/>
+      </g>
+      <g>
+        <text x="75" y="45" font-family="sans-serif" font-size="16px" fill="#333">I am heading to the</text>
+        <text x="230" y="45" font-family="sans-serif" font-size="16px" fill="#007aff"><animate attributeName="opacity" values="1;0" dur="1s" repeatCount="indefinite"/>|</text>
+      </g>
+      <g font-family="sans-serif" font-size="15px" text-anchor="middle">
+        <rect x="60" y="65" width="280" height="40" fill="#d1d5db"/>
+        <text x="110" y="85" fill="#007aff">park</text>
+        <text x="200" y="85" fill="#007aff">store</text>
+        <text x="290" y="85" fill="#007aff">gym</text>
+      </g>
+      <g font-family="sans-serif" font-size="15px" fill="#2c2c2c" text-anchor="middle" dominant-baseline="middle">
+        <rect x="65" y="115" width="27" height="35" rx="6" fill="white"/>
+        <text x="78.5" y="132.5">Q</text>
+        <rect x="96" y="115" width="27" height="35" rx="6" fill="white"/>
+        <text x="109.5" y="132.5">W</text>
+        <rect x="127" y="115" width="27" height="35" rx="6" fill="white"/>
+        <text x="140.5" y="132.5">E</text>
+        <rect x="158" y="115" width="27" height="35" rx="6" fill="white"/>
+        <text x="171.5" y="132.5">R</text>
+        <rect x="189" y="115" width="27" height="35" rx="6" fill="white"/>
+        <text x="202.5" y="132.5">T</text>
+        <rect x="220" y="115" width="27" height="35" rx="6" fill="white"/>
+        <text x="233.5" y="132.5">Y</text>
+        <rect x="251" y="115" width="27" height="35" rx="6" fill="white"/>
+        <text x="264.5" y="132.5">U</text>
+        <rect x="282" y="115" width="27" height="35" rx="6" fill="white"/>
+        <text x="295.5" y="132.5">I</text>
+        <rect x="313" y="115" width="27" height="35" rx="6" fill="white"/>
+        <text x="326.5" y="132.5">O</text>
+        <rect x="75" y="155" width="27" height="35" rx="6" fill="white"/>
+        <text x="88.5" y="172.5">A</text>
+        <rect x="106" y="155" width="27" height="35" rx="6" fill="white"/>
+        <text x="119.5" y="172.5">S</text>
+        <rect x="137" y="155" width="27" height="35" rx="6" fill="white"/>
+        <text x="150.5" y="172.5">D</text>
+        <rect x="168" y="155" width="27" height="35" rx="6" fill="white"/>
+        <text x="181.5" y="172.5">F</text>
+        <rect x="199" y="155" width="27" height="35" rx="6" fill="white"/>
+        <text x="212.5" y="172.5">G</text>
+        <rect x="230" y="155" width="27" height="35" rx="6" fill="white"/>
+        <text x="243.5" y="172.5">H</text>
+        <rect x="261" y="155" width="27" height="35" rx="6" fill="white"/>
+        <text x="274.5" y="172.5">J</text>
+        <rect x="292" y="155" width="27" height="35" rx="6" fill="white"/>
+        <text x="305.5" y="172.5">K</text>
+        <rect x="95" y="195" width="27" height="35" rx="6" fill="white"/>
+        <text x="108.5" y="212.5">Z</text>
+        <rect x="126" y="195" width="27" height="35" rx="6" fill="white"/>
+        <text x="139.5" y="212.5">X</text>
+        <rect x="157" y="195" width="27" height="35" rx="6" fill="white"/>
+        <text x="170.5" y="212.5">C</text>
+        <rect x="188" y="195" width="27" height="35" rx="6" fill="white"/>
+        <text x="201.5" y="212.5">V</text>
+        <rect x="219" y="195" width="27" height="35" rx="6" fill="white"/>
+        <text x="232.5" y="212.5">B</text>
+        <rect x="250" y="195" width="27" height="35" rx="6" fill="white"/>
+        <text x="263.5" y="212.5">N</text>
+        <rect x="281" y="195" width="27" height="35" rx="6" fill="white"/>
+        <text x="294.5" y="212.5">M</text>
+        <rect x="110" y="235" width="180" height="40" rx="6" fill="white"/>
+      </g>
+    </svg>
+duration: 100886 ms
+usage_stats:
+  {
+    "candidates_token_count": 1805,
+    "prompt_token_count": 1202,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1202
+      }
+    ],
+    "thoughts_token_count": 11024,
+    "total_token_count": 14031
+  }
+...

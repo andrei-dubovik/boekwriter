@@ -1,0 +1,814 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: headpiece
+prompt:
+  What follows is a text for a chapter from a book called "Introduction to
+  Computational Linguistics".
+  
+  <chapter>
+  
+  How can a machine tell the difference between a fluent, natural-sounding
+  sentence and a jumble of words? Consider the following two English sentences:
+  
+  1. *The students opened their books.*
+  2. *Books their opened students the.*
+  
+  For a human speaker, the first sentence is immediately recognizable as valid,
+  while the second is nonsensical. But what if the choice is more subtle?
+  
+  3. *The cat sat on the mat.*
+  4. *The cat sat on the sky.*
+  
+  Both are grammatically well-formed, yet we intuitively know that the first is
+  far more plausible. The core task of **language modeling** is to quantify this
+  intuition by assigning a probability to a sequence of words. A language model is
+  a statistical tool that learns the patterns of a language from a large body of
+  text and can then compute the likelihood of a given word sequence. Its
+  fundamental goal is to calculate the probability $P(W)$, where $W$ is a sequence
+  of words $(w_1, w_2, \dots, w_n)$. A good language model will assign a higher
+  probability to sentence (1) than to (2), and a higher probability to sentence
+  (3) than to (4).
+  
+  This ability to score text for its likelihood is one of the most essential
+  components in computational linguistics, powering a vast array of applications:
+  
+  - **Predictive Text:** When your smartphone keyboard suggests the next word, it
+    is using a language model to predict the most probable word to follow what you
+    have already typed.
+  - **Speech Recognition:** A speech recognizer might be unsure whether a person
+    said "recognize speech" or "wreck a nice beach." A language model can
+    determine that the former phrase is far more probable in common usage, helping
+    to disambiguate the audio signal.
+  - **Machine Translation:** When translating a sentence, a system may generate
+    multiple possible outputs. A language model helps select the most fluent and
+    natural-sounding translation.
+  
+  It is crucial to understand that a language model computes *probability*, not
+  *grammaticality*. The famous sentence "Colorless green ideas sleep furiously,"
+  coined by linguist Noam Chomsky, is perfectly grammatical. However, because the
+  sequence of words is semantically bizarre and has likely never appeared in any
+  text corpus, a language model would assign it an extremely low probability.
+  Conversely, a common but ungrammatical utterance like "Gonna go to the store"
+  might be assigned a relatively high probability if it appears frequently in the
+  training data. Language models are a reflection of what is *likely* based on
+  past observation, not what is *correct* based on formal rules. In this chapter,
+  we will learn how to build our first language models using a simple yet powerful
+  technique: N-grams.
+  
+  To formally assign a probability to a sequence of words
+  $W = (w_1, w_2, \dots, w_n)$, we turn to a fundamental tool from probability
+  theory: the *chain rule*. The chain rule allows us to decompose the joint
+  probability of a sequence of events into a product of conditional probabilities.
+  
+  Let's start with a simple two-word sequence, $(w_1, w_2)$. The joint probability
+  $P(w_1, w_2)$ is defined as:
+  
+  $P(w_1, w_2) = P(w_1)P(w_2|w_1)$
+  
+  In plain language, the probability of seeing the word $w_1$ followed by $w_2$ is
+  the probability of seeing $w_1$ at the start of a sequence, multiplied by the
+  probability of seeing $w_2$ *given* that we have just seen $w_1$.
+  
+  We can extend this logic to a sequence of any length. For a three-word sequence,
+  the rule expands as follows:
+  
+  $P(w_1, w_2, w_3) = P(w_1)P(w_2|w_1)P(w_3|w_1, w_2)$
+  
+  The general form for a sequence of $n$ words is a product of these conditional
+  probabilities. The probability of the entire sequence $W$ is given by:
+  
+  $P(w_1, \dots, w_n) = P(w_1) \times P(w_2|w_1) \times P(w_3|w_1, w_2) \times \dots \times P(w_n|w_1, \dots, w_{n-1})$
+  
+  This can be expressed more compactly using product notation:
+  
+  $P(w_1, \dots, w_n) = \prod_{k=1}^{n} P(w_k | w_1, \dots, w_{k-1})$
+  
+  This equation is the exact, unsimplified probability of a word sequence. For
+  example, the probability of the sentence "the cat sat" would be calculated as
+  $P(\text{the}) \times P(\text{cat}|\text{the}) \times P(\text{sat}|\text{the, cat})$.
+  While theoretically sound, this formulation presents a major practical problem.
+  To calculate the probability of the last word, $P(w_n|w_1, \dots, w_{n-1})$, we
+  would need to estimate the probability of that word occurring given its *entire*
+  history. For any reasonably long sentence, this specific sequence of preceding
+  words will be unique and will almost certainly never have appeared in our
+  training data. This makes it impossible to reliably estimate these
+  probabilities. To build a workable model, we will need to introduce a
+  simplifying assumption.
+  
+  Calculating the true probability of a word given its entire history is
+  practically impossible. The conditional probability term from the chain rule,
+  $P(w_i | w_1, \dots, w_{i-1})$, requires us to estimate the likelihood of a word
+  appearing after a unique, and often very long, sequence of preceding words. For
+  any reasonably sized corpus, most long sequences will have never appeared
+  before. For example, the probability of the word *exam* following the sequence
+  *The students who had been studying all night for the final computational
+  linguistics...* would be impossible to compute directly, as this specific
+  history is unlikely to exist in our training data. This extreme data sparsity
+  makes the full chain rule model intractable.
+  
+  To make the problem manageable, we introduce a crucial simplifying assumption.
+  The **Markov assumption**, named after the mathematician Andrey Markov, states
+  that the probability of the next word depends only on a fixed window of the *k*
+  most recent words, rather than the entire preceding sequence. We effectively
+  assume that the distant past is irrelevant for predicting the immediate future.
+  While this is not strictly true for human language—which contains long-distance
+  dependencies—it provides a powerful and computationally feasible approximation.
+  
+  Formally, we approximate the true conditional probability as follows:
+  
+  $P(w_i | w_1, w_2, \dots, w_{i-1}) \approx P(w_i | w_{i-k}, \dots, w_{i-1})$
+  
+  This assumption dramatically reduces the complexity of our model. Instead of
+  needing to see every possible sentence prefix to make a prediction, we only need
+  to have seen the most recent few words. **Fig. 4.3** provides a visual
+  representation of this simplification, contrasting the complex web of
+  dependencies in the full chain rule with the streamlined, local dependencies
+  used in a model based on the Markov assumption. This simplification is the
+  foundation of the N-gram model.
+  
+  The size of the conditioning window, *k*, determines the order of the Markov
+  model. This leads directly to the different types of N-gram models we will
+  explore:
+  
+  - **Unigram Model (k=0):** We assume a word's probability is independent of any
+    prior words. This is the simplest, but weakest, assumption.
+    $P(w_i | w_1, \dots, w_{i-1}) \approx P(w_i)$
+  
+  - **Bigram Model (k=1):** The probability of a word depends only on the single
+    immediately preceding word.
+    $P(w_i | w_1, \dots, w_{i-1}) \approx P(w_i | w_{i-1})$
+  
+  - **Trigram Model (k=2):** The probability of a word depends on the previous two
+    words. $P(w_i | w_1, \dots, w_{i-1}) \approx P(w_i | w_{i-2}, w_{i-1})$
+  
+  By making this trade-off—sacrificing perfect linguistic representation for
+  statistical feasibility—we can build models that are surprisingly effective at
+  capturing local word patterns and predicting likely sequences.
+  
+  The Markov assumption provides a practical way to approximate the chain rule of
+  probability. The class of models built on this simplifying assumption is known
+  as **N-gram models**, where an N-gram is simply a contiguous sequence of N
+  words. These models form a foundational technique in statistical language
+  modeling. The value of 'N' determines the size of the context window we consider
+  when predicting the next word. While theoretically N can be any positive
+  integer, in practice we most commonly encounter N=1, 2, or 3.
+  
+  The simplest case is the **unigram model** (N=1). This model makes the radical
+  assumption that each word is generated independently of all others. The
+  probability of a word depends only on its own frequency in the training corpus,
+  not on any preceding context. The approximation of the conditional probability
+  thus becomes:
+  
+  $P(w_i | w_1, \dots, w_{i-1}) \approx P(w_i)$
+  
+  Calculating the probability of an entire sentence $W = (w_1, \dots, w_k)$ under
+  a unigram model is therefore just the product of the individual probabilities of
+  its words:
+  
+  $P(W) = \prod_{i=1}^{k} P(w_i)$
+  
+  While this model discards all syntactic and semantic context, its simplicity
+  makes it a useful baseline for comparison.
+  
+  A more powerful and common model is the **bigram model** (N=2). Here, we apply
+  the first-order Markov assumption: the probability of a word depends only on the
+  single word that immediately precedes it.
+  
+  $P(w_i | w_1, \dots, w_{i-1}) \approx P(w_i | w_{i-1})$
+  
+  To properly handle the beginning and end of a sentence, we introduce special
+  tokens. We prepend a start-of-sentence token, `<s>`, and append an
+  end-of-sentence token, `</s>`. The probability of the first word is now
+  conditioned on the start token, $P(w_1 | \text{<s>})$, and the model must also
+  predict the end token, $P(\text{</s>} | w_k)$. The full probability of the
+  sentence $W$ is:
+  
+  $P(W) = P(w_1 | \text{<s>}) \times \prod_{i=2}^{k} P(w_i | w_{i-1}) \times P(\text{</s>} | w_k)$
+  
+  Extending this logic, a **trigram model** (N=3) uses a second-order Markov
+  assumption, where the probability of a word is conditioned on the two preceding
+  words.
+  
+  $P(w_i | w_1, \dots, w_{i-1}) \approx P(w_i | w_{i-2}, w_{i-1})$
+  
+  For trigram models, we need two start-of-sentence tokens, `<s> <s>`, to provide
+  the necessary two-word context for the first word of the sentence.
+  
+  The general pattern holds for any N, but bigram and trigram models represent a
+  sweet spot. They capture useful local context without becoming computationally
+  unwieldy. The table in **Fig. 4.4** provides a concrete example, breaking down a
+  simple sentence to illustrate how unigrams, bigrams, and trigrams are extracted.
+  As N increases, the model can capture longer-distance dependencies and
+  potentially become more accurate. However, this comes at a cost. The number of
+  possible N-grams grows exponentially with N, meaning we are far less likely to
+  have seen any specific long N-gram in our training data. This issue, known as
+  data sparsity, is a central challenge we will address next.
+  
+  Once we have defined the N-gram model, the central task becomes learning its
+  parameters from data. The parameters of an N-gram model are the conditional
+  probabilities themselves, such as $P(w_i | w_{i-1})$ for a bigram model. The
+  standard method for estimating these probabilities from a text corpus is called
+  **Maximum Likelihood Estimation**, or **MLE**. The intuition behind MLE is
+  simple yet powerful: the best estimate for a parameter is the one that maximizes
+  the probability of the training corpus we observed. In the context of N-grams,
+  this principle simplifies to a very direct calculation: the relative frequency.
+  We assume that the probability of a future event is best represented by its
+  frequency in the past, as recorded in our corpus.
+  
+  The general formula for the Maximum Likelihood Estimate of an N-gram probability
+  is a ratio of counts. The probability of a word $w_i$ given its preceding
+  history of $n-1$ words is the count of the full N-gram sequence divided by the
+  count of the prefix (the history).
+  
+  Let $C(w_1, \dots, w_k)$ be the function that counts the number of times the
+  sequence of words $(w_1, \dots, w_k)$ appears in the corpus. The MLE probability
+  is then:
+  
+  $P_{MLE}(w_i | w_{i-n+1}, \dots, w_{i-1}) = \frac{C(w_{i-n+1}, \dots, w_{i-1}, w_i)}{C(w_{i-n+1}, \dots, w_{i-1})}$
+  
+  This single equation is the foundation for training simple N-gram models. Let's
+  see how it applies to our specific cases:
+  
+  - **Trigram Model:** For a trigram model ($n=3$), we estimate the probability of
+    a word $w_i$ given the two preceding words, $w_{i-2}$ and $w_{i-1}$. The MLE
+    is the count of the trigram $C(w_{i-2}, w_{i-1}, w_i)$ divided by the count of
+    the bigram prefix $C(w_{i-2}, w_{i-1})$.
+    $P(w_i | w_{i-2}, w_{i-1}) = \frac{C(w_{i-2}, w_{i-1}, w_i)}{C(w_{i-2}, w_{i-1})}$
+  
+  - **Bigram Model:** For a bigram model ($n=2$), we estimate the probability of
+    $w_i$ given the single preceding word $w_{i-1}$. This is calculated as the
+    count of the word pair $C(w_{i-1}, w_i)$ divided by the count of the
+    single-word prefix $C(w_{i-1})$.
+    $P(w_i | w_{i-1}) = \frac{C(w_{i-1}, w_i)}{C(w_{i-1})}$
+  
+  - **Unigram Model:** The unigram model ($n=1$) is the simplest case. It does not
+    depend on any prior context, so the probability of a word $w_i$ is just its
+    relative frequency in the entire corpus. Here, the denominator is the total
+    number of word tokens in the corpus, which we can denote as $N$.
+    $P(w_i) = \frac{C(w_i)}{N}$
+  
+  This process of "training" an N-gram model, then, is not a complex optimization
+  procedure but rather a straightforward task of data collection. It involves
+  scanning a large corpus and counting all occurrences of relevant N-grams. For
+  instance, to build a bigram model, we would need two main data structures: one
+  to store the counts of all individual words (for the denominators) and another
+  to store the counts of all adjacent word pairs (for the numerators). Once these
+  counts are tabulated, calculating any specific conditional probability is a
+  simple matter of division. This direct, count-based approach is both
+  computationally efficient and easy to interpret, as the resulting probabilities
+  are directly tied to the evidence seen in the training data. The next section
+  will walk through a concrete example of this calculation. However, as we will
+  soon see, this direct reliance on observed counts leads to a significant problem
+  when we encounter N-grams that never appeared in our training text.
+  
+  To make the process of training an N-gram model concrete, let's walk through a
+  detailed example with a small corpus. A hands-on calculation will clarify how
+  word counts from a text are transformed into a probabilistic model of language.
+  
+  Imagine our entire corpus consists of just three sentences. We have already
+  pre-processed the text by lowercasing all words and adding special
+  start-of-sentence `<s>` and end-of-sentence `</s>` tokens.
+  
+  - `<s> the cat sat on the mat </s>`
+  - `<s> the dog sat on the rug </s>`
+  - `<s> the cat sat on the cat </s>`
+  
+  Our goal is to build a bigram model. The core task is to compute the Maximum
+  Likelihood Estimate (MLE) for every conditional probability $P(w_i | w_{i-1})$
+  that can be formed from the vocabulary in this corpus. The formula, as a
+  reminder, is:
+  
+  $P(w_i | w_{i-1}) = \frac{C(w_{i-1}, w_i)}{C(w_{i-1})}$
+  
+  This requires two sets of counts: unigram counts for the denominators and bigram
+  counts for the numerators.
+  
+  First, we calculate the unigram counts, which represent the number of times each
+  word appears. These counts will serve as the denominators in our probability
+  formula. For example, the word *the* appears as the first word in three
+  bigrams—`(the, cat)`, `(the, dog)`, and `(the, mat)` in the first sentence
+  alone. Counting across the entire corpus, we find:
+  
+  - `C(<s>)` = 3
+  - `C(the)` = 6
+  - `C(cat)` = 3
+  - `C(sat)` = 3
+  - `C(on)` = 3
+  - `C(dog)` = 1
+  - `C(mat)` = 1
+  - `C(rug)` = 1
+  
+  Next, we systematically count every sequence of two words to get our bigram
+  counts. For instance, the sequence `(<s>, the)` occurs at the start of all three
+  sentences, so its count is 3. The sequence `(the, cat)` occurs three times in
+  total (once in the first sentence, twice in the third). The first part of **Fig.
+  4.6** shows the complete matrix of these bigram counts derived from our corpus.
+  
+  With both sets of counts, we can now calculate the MLE probabilities. Let's
+  compute a few examples:
+  
+  1. What is the probability of the word *cat* following the word *the*?
+     $P(\text{cat} | \text{the}) = \frac{C(\text{the, cat})}{C(\text{the})} = \frac{3}{6} = 0.5$
+  
+  2. What is the probability of the word *sat* following the word *cat*?
+     $P(\text{sat} | \text{cat}) = \frac{C(\text{cat, sat})}{C(\text{cat})} = \frac{2}{3} \approx 0.67$
+  
+  3. What is the probability that a sentence starts with the word *the*?
+     $P(\text{the} | \text{<s>}) = \frac{C(\text{<s>, the})}{C(\text{<s>})} = \frac{3}{3} = 1.0$
+  
+  Following this procedure, we can fill out a complete probability matrix, as
+  shown in the second part of **Fig. 4.6**. This matrix *is* our trained bigram
+  model.
+  
+  We can now use this model to assign a probability to a full sentence. Let's take
+  a sentence from our training corpus, `<s> the dog sat on the rug </s>`. Its
+  probability is the product of the probabilities of its constituent bigrams:
+  
+  $P(\text{<s> the dog sat on the rug </s>}) = P(\text{the}|\text{<s>}) \times P(\text{dog}|\text{the}) \times P(\text{sat}|\text{dog}) \times P(\text{on}|\text{sat}) \times P(\text{the}|\text{on}) \times P(\text{rug}|\text{the}) \times P(\text{</s>}|\text{rug})$
+  
+  Plugging in the values from our calculated model:
+  
+  $P = 1.0 \times \frac{1}{6} \times \frac{1}{1} \times \frac{3}{3} \times \frac{3}{3} \times \frac{1}{6} \times \frac{1}{1} = \frac{1}{36} \approx 0.0278$
+  
+  The model correctly assigns a non-zero probability to this seen sentence. But
+  what happens when we encounter a new sentence that is perfectly valid English,
+  but contains word sequences not present in our training corpus? Consider the
+  sentence: `<s> the cat sat on the floor </s>`.
+  
+  To calculate its probability, we would need to compute, among others, the
+  conditional probability $P(\text{floor} | \text{the})$. Following our MLE
+  procedure:
+  
+  $P(\text{floor} | \text{the}) = \frac{C(\text{the, floor})}{C(\text{the})}$
+  
+  Because the bigram `(the, floor)` never appeared in our tiny corpus, its count
+  is 0. This means:
+  
+  $P(\text{floor} | \text{the}) = \frac{0}{6} = 0$
+  
+  The consequence is dire. Since the probability of the entire sentence is a
+  product of individual probabilities, a single zero-probability event makes the
+  probability of the whole sequence zero. The model predicts that this perfectly
+  reasonable sentence is impossible. This is the fundamental problem of *data
+  sparsity*, and it reveals the critical flaw of the simple Maximum Likelihood
+  Estimation approach. In the next sections, we will explore techniques designed
+  specifically to solve this problem.
+  
+  The Maximum Likelihood Estimation (MLE) approach is simple and intuitive, but it
+  harbors a significant flaw: it only works for N-grams that have appeared in the
+  training corpus. What happens when our model encounters a new sentence
+  containing a perfectly valid bigram, such as "sentient robots", that simply
+  wasn't present in our training text? The count for this bigram,
+  $C(\text{sentient robots})$, will be zero. Consequently, the MLE calculation
+  will yield a probability of zero. This isn't a minor edge case; it is a
+  fundamental and pervasive challenge in statistical language modeling known as
+  **data sparsity**.
+  
+  Human language is vast and creative. We constantly generate new, sensible
+  phrases and sentences. Any finite training corpus, even one containing billions
+  of words, represents only a minuscule fraction of all possible valid word
+  sequences. The number of potential N-grams explodes combinatorially as we
+  increase our vocabulary size. For a modest vocabulary of 20,000 words, there are
+  $20,000^2 = 400$ million possible bigrams and $20,000^3 = 8$ trillion possible
+  trigrams. The vast majority of these will not appear in any given corpus, no
+  matter how large. The bigram count matrix derived from our small sample corpus,
+  shown in **Fig. 4.7**, provides a stark visual illustration of this problem. The
+  matrix is overwhelmingly populated with zeros, each one representing a word
+  combination that our model was never taught.
+  
+  This leads directly to the **zero-probability problem**. The probability of a
+  word sequence is calculated by multiplying the probabilities of its constituent
+  N-grams:
+  
+  $P(w_1, w_2, \dots, w_k) = \prod_{i=1}^{k} P(w_i | w_{i-1}, \dots, w_{i-N+1})$
+  
+  If the probability of just *one* of the N-grams in this sequence is zero, the
+  probability of the entire sequence becomes zero. This is a catastrophic outcome
+  for a language model. It means the model has concluded that a potentially
+  grammatical and meaningful sentence is absolutely *impossible*. For instance, if
+  our training data included "the chef prepared the fish" but not "the chef
+  prepared the tofu", our bigram model would assign
+  $P(\text{tofu} | \text{prepared}) = 0$. As a result, the sentence "the chef
+  prepared the tofu" would be deemed impossible.
+  
+  In practical applications, this is debilitating. A speech recognition system
+  might refuse to output a correct transcription because it contains an unseen
+  bigram. A machine translation system could discard a perfectly good translation
+  for the same reason. A model that assigns zero probability to legitimate events
+  is not just inaccurate; it's brittle and fails to generalize beyond the specific
+  examples it has seen.
+  
+  Clearly, we cannot trust a model that is so easily broken by novelty. To build
+  robust language models, we must find a way to assign some small, non-zero
+  probability to unseen N-grams. This process involves taking a small amount of
+  probability mass from the N-grams we *have* seen and redistributing it to those
+  we *haven't*. This family of techniques is known as **smoothing**, and it is the
+  essential next topic we must address.
+  
+  The Maximum Likelihood Estimation approach, while intuitive, is brittle. It
+  assigns a probability of zero to any n-gram that did not appear in the training
+  corpus. As a result, a single unseen bigram in a test sentence would cause the
+  probability of the entire sentence to become zero, rendering the model useless
+  for evaluating novel text. To overcome this critical flaw, we must use a set of
+  techniques known collectively as **smoothing**, or sometimes **discounting**.
+  
+  The core idea behind all smoothing algorithms is to reallocate probability mass.
+  We take a small amount of probability from the events we *have* seen and
+  distribute it among the events we *have not* seen. Since the total probability
+  must always sum to 1, we cannot simply invent new probability for unseen
+  n-grams; we must "steal" it from the more frequent, seen n-grams. This ensures
+  that every possible n-gram is assigned a small, non-zero probability.
+  
+  This redistribution is conceptually illustrated in **Fig. 4.8**. In a standard
+  MLE model, the entire probability mass is divided exclusively among the n-grams
+  observed in the corpus. In a smoothed model, a fraction of the probability
+  assigned to each seen event is shaved off. This collected probability mass is
+  then redistributed among the vast number of unseen events, lifting their
+  probability from zero to a small positive value.
+  
+  In practice, this is achieved by adjusting the counts used in the probability
+  calculation. Instead of using the raw frequency $C(w_{i-1}w_i)$, we use a
+  discounted or adjusted count, $c^*$. For a seen n-gram, its adjusted count $c^*$
+  will be slightly less than its real count $C$. For an unseen n-gram, its
+  adjusted count will be a small positive value instead of zero. This adjustment
+  acknowledges a fundamental truth: our training corpus is just one sample of the
+  language, and the fact that an event is unseen does not make it impossible. The
+  next sections introduce several specific algorithms for calculating these
+  adjusted counts, from the simple to the more sophisticated.
+  
+  The most direct and intuitive solution to the zero-probability problem is
+  *Laplace smoothing*, also known as *add-one smoothing*. The core idea is simple:
+  we pretend we have seen every possible event one more time than we actually
+  have. This ensures that no event, seen or unseen, has a count of zero. By
+  artificially inflating the counts, we can reallocate a small portion of the
+  total probability mass to cover the events we didn't encounter in our training
+  corpus.
+  
+  Let's formalize this for our bigram model. The standard Maximum Likelihood
+  Estimation (MLE) for a bigram probability is:
+  
+  $P_{MLE}(w_i | w_{i-1}) = \frac{C(w_{i-1} w_i)}{C(w_{i-1})}$
+  
+  To apply Laplace smoothing, we simply add one to every bigram count in the
+  numerator. This means a bigram that occurred $k$ times is now treated as if it
+  occurred $k+1$ times, and an unseen bigram that occurred 0 times is now treated
+  as having a count of 1. The adjusted numerator becomes $C(w_{i-1} w_i) + 1$.
+  
+  However, we must also adjust the denominator to ensure the probabilities still
+  sum to one. Since we added one to the count of *every* possible bigram that
+  starts with the word $w_{i-1}$, we have effectively increased the total count of
+  words following $w_{i-1}$ by the total number of words in our vocabulary, $|V|$.
+  For every word $v \in V$, we added one to the count of the bigram
+  $C(w_{i-1} v)$. Therefore, the denominator, which is the total count for the
+  prefix $w_{i-1}$, must be adjusted to $C(w_{i-1}) + |V|$.
+  
+  This gives us the final formula for Laplace-smoothed bigram probability:
+  
+  $P_{Laplace}(w_i | w_{i-1}) = \frac{C(w_{i-1} w_i) + 1}{C(w_{i-1}) + |V|}$
+  
+  The practical effect of this redistribution is stark, as illustrated in **Fig.
+  4.9**. This table compares the original MLE probabilities from our earlier
+  example with the new probabilities calculated after applying Laplace smoothing.
+  Observe how bigrams that previously had a count and probability of zero, such as
+  "a fish", now have a small, non-zero probability. Conversely, the probabilities
+  of frequent, observed bigrams like "I am" are slightly reduced. This is the
+  central trade-off of smoothing: we "steal" a bit of probability mass from the
+  events we have seen and give it to the events we have not.
+  
+  While elegant in its simplicity, Laplace smoothing has a significant drawback:
+  it is a blunt instrument. In a typical language model, the vocabulary $|V|$ can
+  be very large, often tens of thousands of words. By adding one, we reallocate a
+  substantial amount of probability mass to a massive number of unseen N-grams.
+  The majority of these unseen N-grams are not just unattested in our corpus—they
+  are nonsensical combinations that are extremely unlikely to ever occur in real
+  language (e.g., "the of a"). Giving all of them equal probability mass is
+  wasteful and systematically underestimates the probabilities of the events we
+  actually did see.
+  
+  For a vocabulary of 50,000 words, a bigram model would have $50,000^2 = 2.5$
+  billion possible bigrams. Laplace smoothing treats all unseen bigrams as equally
+  plausible, which is an unrealistic assumption. This problem is exacerbated for
+  trigram and higher-order N-gram models, where the number of potential N-grams
+  ($|V|^N$) grows exponentially. Because it moves too much probability mass to the
+  "unseen" column, add-one smoothing often results in poor performance and is
+  rarely used in modern systems. However, its simplicity makes it an essential
+  pedagogical tool for understanding the fundamental goal of smoothing, paving the
+  way for more sophisticated techniques. A common variant, *add-k smoothing* (or
+  Lidstone smoothing), replaces the `1` with a small fractional value $k$ (e.g.,
+  0.01), which can mitigate the issue but doesn't fully solve it.
+  
+  While Laplace smoothing offers a simple fix for the zero-probability problem, it
+  is a blunt instrument. It reallocates probability mass equally among all unseen
+  n-grams, regardless of how likely they might be, and it does so by taking too
+  much probability away from high-frequency counts. A more sophisticated and
+  empirically grounded approach is **Good-Turing smoothing**, named after its
+  creators Alan Turing and I.J. Good.
+  
+  The core intuition behind Good-Turing is both clever and powerful: to estimate
+  the probability of things you *haven't* seen, you should look at the frequency
+  of things you've only seen *once*. Why? An n-gram that has occurred just once (a
+  singleton) is on the verge of novelty. It was, until recently, an unseen event.
+  The population of these singletons, therefore, provides our best evidence for
+  the rate at which new, previously unseen events will appear in the future.
+  
+  To formalize this, we first need to count the *frequency of frequencies*. Let
+  $N_c$ be the number of n-gram *types* that occur exactly $c$ times in the
+  corpus. For example, $N_1$ is the count of all singleton n-grams (those that
+  appeared only once), $N_2$ is the count of all n-gram types that appeared twice,
+  and so on. When we plot these values for a large corpus, we typically see a
+  long-tailed distribution, as shown in Fig. 4.10. The number of singletons
+  ($N_1$) is very large, followed by a smaller $N_2$, an even smaller $N_3$, and
+  so on.
+  
+  !\[Fig. 4.10\](description: A bar chart titled 'Frequency of Frequencies'. The
+  x-axis represents a frequency 'r' (n-grams that appeared 1 time, 2 times, etc.),
+  and the y-axis represents the number of n-gram types (Nr) that had that
+  frequency. This visualizes the long-tail distribution that Good-Turing smoothing
+  leverages to estimate the probability of unseen events.)
+  
+  Good-Turing uses this distribution to estimate the total probability mass that
+  should be reserved for all zero-count n-grams combined. The estimate is
+  remarkably simple:
+  
+  $P_{\text{unseen}} = \frac{N_1}{N}$
+  
+  Here, $N$ is the total number of n-gram tokens in the corpus. We are effectively
+  reassigning the probability mass of the singleton bucket to the zero-count
+  bucket. The logic is that the $N_1$ singletons we observed are a good proxy for
+  the number of new n-grams we would expect to find if we doubled the size of our
+  corpus.
+  
+  Of course, if we allocate this probability to unseen events, we must reduce the
+  probability of the events we have seen to ensure all probabilities still sum to
+  1\. Good-Turing does this by adjusting the count $c$ for any n-gram that appeared
+  $c > 0$ times. This adjusted count, denoted $c^*$, is used in place of the
+  original MLE count. The formula is:
+  
+  $c^* = (c+1) \frac{N_{c+1}}{N_c}$
+  
+  The new probability for an n-gram that was seen $c$ times is then
+  $P_{GT} = \frac{c^*}{N}$. The formula for $c^*$ may seem complex, but its effect
+  is intuitive. Since for most corpora $N_{c+1} < N_c$ (there are fewer bigrams
+  that appear 10 times than 9 times), the ratio $\frac{N_{c+1}}{N_c}$ will be less
+  than 1. This means the adjusted count $c^*$ will almost always be slightly less
+  than the original count $c$ ($c^* < c$), effectively discounting it. The amount
+  of the discount is not arbitrary, as in Laplace smoothing, but is determined by
+  the actual distribution of word counts in the corpus.
+  
+  A significant practical problem arises with this formula: what if we encounter
+  an $N_c$ for which there is no observed $N_{c+1}$? For example, we might have
+  n-grams that occurred 9 times ($N_9 > 0$) but none that occurred 10 times
+  ($N_{10} = 0$). This would make $c^*$ for n-grams with a count of 9 equal to
+  zero, which is clearly not right. To solve this and other issues related to
+  sparse frequency-of-frequency counts, a variation called **Simple Good-Turing**
+  is typically used in practice. It involves fitting a smooth curve to the plot of
+  $N_c$ vs. $c$, providing a reliable estimate for $N_c$ even when the observed
+  value is zero.
+  
+  In summary, Good-Turing smoothing provides a far more principled method for
+  handling unseen events than Laplace smoothing. By leveraging the distribution of
+  the corpus itself—specifically using the count of singletons as an estimate for
+  the unknown—it creates a more accurate and reliable language model.
+  
+  After building and smoothing an N-gram model, a crucial question arises: how
+  good is it? Is a trigram model with Good-Turing smoothing superior to a bigram
+  model with Laplace smoothing for a given task? To answer such questions, we need
+  a way to evaluate and compare language models. While the ultimate test is often
+  *extrinsic*—how much the model improves a real-world application like machine
+  translation—it is incredibly useful to have an *intrinsic* evaluation metric
+  that measures the quality of the model independent of any specific application.
+  The most common intrinsic metric for language models is **perplexity**.
+  
+  Intuitively, perplexity measures how "surprised" or "confused" a model is by a
+  sequence of words it has not seen during training. A good language model should
+  assign a high probability to sentences that are well-formed and likely to occur,
+  and a low probability to sentences that are nonsensical or ungrammatical. If a
+  model assigns a high probability to a test sentence, it means it was not very
+  surprised by it, which is the desired behavior. Perplexity is a formalization of
+  this concept of surprise. A lower perplexity score indicates a better language
+  model, one that is less surprised by the test data. You can think of perplexity
+  as the average "branching factor" of the language according to the model. If a
+  model has a perplexity of 50, it suggests that at each word, the model is as
+  confused as if it had to choose uniformly and independently from 50 possible
+  words.
+  
+  Formally, the perplexity of a language model on a test set
+  $W = w_1, w_2, ..., w_N$ is the inverse probability of the test set, normalized
+  by the number of words $N$. It is calculated as the N-th root of the inverse of
+  the test set's probability:
+  
+  $$
+  PP(W) = \sqrt[N]{\frac{1}{P(w_1, w_2, ..., w_N)}} = P(w_1, w_2, ..., w_N)^{-\frac{1}{N}}
+  $$
+  
+  Using the chain rule of probability, which our N-gram models approximate, we can
+  expand the joint probability $P(w_1, w_2, ..., w_N)$ into a product of
+  conditional probabilities:
+  
+  $$
+  P(w_1, w_2, ..., w_N) = \prod_{i=1}^{N} P(w_i | w_1, ..., w_{i-1})
+  $$
+  
+  Substituting this into the perplexity formula gives us:
+  
+  $$
+  PP(W) = \left( \prod_{i=1}^{N} P(w_i | w_1, ..., w_{i-1}) \right)^{-\frac{1}{N}}
+  $$
+  
+  The normalization by $N$ is crucial because it ensures that the length of the
+  test set does not unfairly penalize a model. Without it, a longer sentence would
+  almost always have a lower probability than a shorter one, simply because it is
+  a product of more fractions.
+  
+  Perplexity has a close and important relationship with another
+  information-theoretic concept: **cross-entropy**. The cross-entropy of a model
+  $M$ on a sequence $W$ is defined as:
+  
+  $$
+  H(W) = -\frac{1}{N} \log_2 P(w_1, w_2, ..., w_N)
+  $$
+  
+  By rewriting the probability term as a product of conditional probabilities, we
+  get:
+  
+  $$
+  H(W) = -\frac{1}{N} \sum_{i=1}^{N} \log_2 P(w_i | w_1, ..., w_{i-1})
+  $$
+  
+  Cross-entropy can be interpreted as the average number of bits needed to encode
+  each word in the test set, given our language model. A better model (one that is
+  less surprised) provides a more efficient compression scheme, resulting in a
+  lower cross-entropy. Looking at the formulas for perplexity and cross-entropy,
+  we can see their direct relationship:
+  
+  $$
+  PP(W) = 2^{H(W)}
+  $$
+  
+  This identity shows that minimizing perplexity is equivalent to minimizing
+  cross-entropy. A lower cross-entropy—meaning the model's probability
+  distribution is a better match for the empirical distribution of the test
+  data—will always correspond to a lower perplexity.
+  
+  When using perplexity, several practical considerations are vital:
+  
+  - **Unseen Test Data:** The test set used for evaluation must be entirely
+    separate from the training corpus. Evaluating a model on the data it was
+    trained on will result in an artificially low perplexity, as the model has
+    already memorized the sequences. The primary goal is to measure how well the
+    model *generalizes* to new, unseen data.
+  - **Tokenization Consistency:** Perplexity scores are only comparable if the
+    models being evaluated use the exact same vocabulary and tokenization scheme.
+    For example, if one model treats "don't" as a single token and another splits
+    it into "do" and "n't", their vocabularies and the total word count $N$ of the
+    test set will differ, making their perplexity scores incomparable.
+  - **Out-of-Vocabulary Words:** The handling of unknown words (words in the test
+    set but not in the training vocabulary) also significantly impacts the final
+    score. A common practice is to replace all such words with a special `<UNK>`
+    token in both training and testing, allowing the model to learn a probability
+    for encountering an unknown word.
+  
+  Perplexity is a powerful tool for quickly comparing different language models
+  (e.g., bigram vs. trigram, or different smoothing techniques) on a standardized
+  test set. A lower perplexity score generally correlates with better performance
+  on downstream tasks, making it an essential first step in the model development
+  and evaluation pipeline. However, it remains an intrinsic measure. It tells us
+  how well the model predicts text, not necessarily how useful it is for a
+  specific application. An improvement in perplexity should always be confirmed
+  with an extrinsic evaluation on the final task if possible.
+  
+  While the theory of N-grams and perplexity can seem abstract, these models power
+  a feature millions of people use every day: predictive text on smartphone
+  keyboards. This application serves as a perfect, concrete illustration of
+  language modeling in action. The core task of a predictive keyboard is to guess
+  the next word you are likely to type, given the words you have already entered.
+  This is precisely the problem that N-gram models are designed to solve.
+  
+  Let's imagine you are typing a message. The system has access to the sequence of
+  words you have written so far, $w_1, ..., w_{n-1}$. Its goal is to present a
+  small set of highly probable next words, $w_n$. A system based on a bigram model
+  would look only at the immediately preceding word, $w_{n-1}$, and calculate the
+  probability $P(w_n | w_{n-1})$ for all words $w_n$ in its vocabulary. The words
+  with the highest conditional probability are the ones suggested to the user. The
+  system seeks to find:
+  
+  $$ \underset{w \in V}{\operatorname{argmax}} P(w | w_{n-1}) $$
+  
+  Consider the scenario depicted in Fig. 4.12, where a user has typed "I am
+  heading to the". A bigram model would use "the" as the context. It would then
+  query its stored probability distributions, which were learned from a massive
+  training corpus. Based on billions of sentences from the web, the model might
+  find that the probabilities of the words following "the" are, for instance:
+  
+  - $P(\text{store} | \text{the}) = 0.008$
+  - $P(\text{park} | \text{the}) = 0.006$
+  - $P(\text{gym} | \text{the}) = 0.005$
+  - $P(\text{airport} | \text{the}) = 0.004$
+  
+  The system would then display "store", "park", and "gym" as the three most
+  likely completions. The model is simply reflecting the statistical patterns it
+  observed during training; in its "experience," the phrase "the store" was more
+  frequent than "the park."
+  
+  A more sophisticated system might use a trigram model, which considers the last
+  two words as context. In our example, the context is "to the". The model now
+  calculates $P(w_n | \text{to the})$. The suggested words might change. For
+  example, while "store" is a common word to follow "the", the trigram "to the
+  store" might be even more common. Conversely, a word like "airport" might have a
+  much higher probability given the context "to the" than it would given only
+  "the". This demonstrates the power of using a larger N-gram window to capture
+  more specific contextual information.
+  
+  Several practical considerations are crucial for making such a system work
+  effectively.
+  
+  1. **Smoothing:** The importance of smoothing cannot be overstated. Without it,
+     any word that never appeared after "to the" in the training corpus would be
+     assigned a probability of zero and could *never* be suggested. A user trying
+     to type a perfectly valid but unseen phrase like "to the conclave" would
+     receive no useful predictions. Smoothing ensures that the model can handle
+     the creativity and variability of human language.
+  
+  2. **Backoff and Interpolation:** What happens if the trigram "heading to the"
+     has never been seen? A robust system doesn't just give up. It "backs off" to
+     a smaller context. If it has no data for the trigram, it uses the bigram
+     model ($P(w_n | \text{the})$). If that also fails, it could back off to the
+     unigram model, suggesting words based on their general frequency.[^1] This
+     ensures the system can always provide some prediction.
+  
+  3. **Efficiency:** The model must be incredibly fast. Suggestions need to appear
+     instantaneously with each keystroke. To achieve this, the N-gram counts and
+     probabilities are pre-calculated and stored in efficient data structures,
+     like hash maps or tries, allowing for near-instant lookups.
+  
+  This simple keyboard feature elegantly demonstrates the core concepts of this
+  chapter: approximating the probability of a word sequence, the trade-off between
+  context size and data sparsity, and the absolute necessity of smoothing to
+  create a useful, generalizable model.
+  
+  In this chapter, we have established the fundamental principles of statistical
+  language modeling. We began with the core task of assigning a probability to a
+  sequence of words, $P(w_1, w_2, ..., w_n)$. By formalizing this with the chain
+  rule of probability and then simplifying it using the practical *Markov
+  assumption*, we arrived at the N-gram model. You have learned how to train these
+  models by calculating Maximum Likelihood Estimation (MLE) probabilities directly
+  from corpus counts and seen how simple unigram, bigram, and trigram models
+  capture local word patterns.
+  
+  A central theme of the chapter was the critical problem of *data sparsity*. The
+  fact that any finite training corpus will be missing countless valid word
+  sequences forces naive MLE models to assign a probability of zero to unseen
+  events. We addressed this by introducing smoothing, a class of techniques
+  designed to reallocate probability mass from seen to unseen N-grams. We examined
+  the intuitive but flawed Laplace (add-one) smoothing before moving to the more
+  sophisticated Good-Turing smoothing, which estimates the probability of unseen
+  events from the frequency of events seen only once. Finally, we introduced
+  *perplexity* as a standard intrinsic metric for evaluating and comparing the
+  predictive power of different language models.
+  
+  While foundational, N-gram models are limited by their fixed-context window.
+  They cannot capture long-range dependencies or complex syntactic structures that
+  span many words. This inability to model deeper linguistic phenomena is a key
+  motivation for the more advanced models we will encounter later in this book. In
+  the era of deep learning, neural networks have provided powerful new
+  architectures for language modeling that can learn from much broader contexts, a
+  topic we will return to in our final chapter.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+  
+  [^1]: A related technique is *interpolation*, where the final probability is a
+  weighted average of the unigram, bigram, and trigram probabilities, combining
+  evidence from all N-gram levels.
+hash: 9cfd7fdda787162c787b1f335c08c1414a675ce223f79665f7dfa604763ac539
+response:
+  A simple, clean illustration showing a close-up of a person's hands holding a
+  modern smartphone. The focus is on the phone's screen, where a user has typed
+  the incomplete sentence, "I am looking forward to the". Just above the on-screen
+  keyboard, three distinct word suggestions are prominently displayed,
+  representing the most likely next words to complete the phrase—for example,
+  "weekend", "meeting", and "game". The style should be minimalist, using clean
+  lines and a limited color palette to emphasize the interaction between the human
+  typist and the predictive suggestions.
+duration: 15934 ms
+usage_stats:
+  {
+    "candidates_token_count": 116,
+    "prompt_token_count": 11169,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 11169
+      }
+    ],
+    "thoughts_token_count": 1531,
+    "total_token_count": 12816
+  }
+...

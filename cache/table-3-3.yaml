@@ -1,0 +1,104 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Not all corpora are created equal. The design, content, and structure of a
+  corpus are dictated by the research questions it aims to answer or the NLP
+  application it is intended to support. This leads to several distinct types of
+  corpora, each with its own strengths and typical use cases. The most common
+  distinctions are based on the breadth of coverage (balanced vs. specialized),
+  the number of languages included (monolingual vs. parallel), and the presence of
+  linguistic metadata (raw vs. annotated).
+  
+  A *balanced corpus* aims to be a representative snapshot of a particular
+  language or language variety. To achieve this balance, its creators carefully
+  sample texts from a wide array of genres and domains—such as news reports,
+  fiction, academic articles, and transcripts of spoken conversations. The goal is
+  to mirror the proportions of these genres in the wider language, preventing any
+  single text type from dominating. This makes balanced corpora invaluable for
+  general linguistic inquiry or for training general-purpose language models that
+  are not tailored to a specific task. Classic examples include the pioneering
+  Brown Corpus for American English and the larger British National Corpus (BNC).
+  
+  In contrast, a *specialized corpus* (or *domain-specific corpus*) deliberately
+  focuses on a narrow slice of language. Instead of broad coverage, it offers deep
+  coverage of a particular subject matter, genre, or communicative setting. For
+  example, a corpus might consist solely of legal contracts, biomedical research
+  abstracts, or social media posts. This allows a model to learn the specific
+  vocabulary, jargon, and stylistic conventions of its domain, which is essential
+  for building high-performance applications like a medical information extraction
+  system or a financial sentiment analyzer.
+  
+  Another crucial type is the *parallel corpus*. This is a multilingual resource
+  that contains the same texts in two or more languages. The key feature of a
+  parallel corpus is *alignment*, where sentences or segments in one language are
+  explicitly linked to their translations in the other(s). They are the
+  cornerstone of statistical and neural machine translation, as they provide the
+  raw data from which a system can learn translational equivalences between words
+  and phrases. Prominent examples include the Europarl Corpus, which contains
+  proceedings from the European Parliament, and the Canadian Hansards, which
+  document parliamentary debates in English and French.
+  
+  The aforementioned types primarily describe the *content* of a corpus. An
+  orthogonal and critically important dimension is whether a corpus is
+  *annotated*. An annotated corpus contains not just the raw text, but also
+  explicit linguistic information added by human experts. This annotation can vary
+  in complexity:
+  
+  - **Part-of-speech (POS) tags:** Each word is labeled with its grammatical
+    category (e.g., noun, verb).
+  - **Syntactic annotation:** Sentences are parsed into tree structures
+    representing their grammatical constituency or dependency relations. A corpus
+    with such annotation is often called a *treebank*.
+  - **Semantic annotation:** Words or phrases are tagged with information about
+    their meaning, such as their role in an event (semantic role labeling).
+  
+  Annotated corpora are fundamental for supervised machine learning, as they
+  provide the "ground truth" data needed to train and evaluate models for specific
+  tasks like POS tagging or parsing. The influential Penn Treebank is a prime
+  example, containing detailed POS and syntactic annotation.
+  
+  These categories are not mutually exclusive; a corpus can be, for instance, an
+  annotated, specialized, parallel corpus. The choice of which type to use is one
+  of the most important decisions in any NLP project, as the data ultimately
+  determines the capabilities and limitations of the resulting model. Fig. 3.3
+  provides a concise summary of these major corpus types, their primary use cases,
+  and well-known examples.
+  
+  This fragment refers to Fig. 3.3, which is a table. Its description is as
+  follows:
+  
+  A table comparing four major types of corpora: balanced, specialized, parallel,
+  and annotated. Columns will include 'Corpus Type', 'Description' (a brief
+  definition), 'Primary Use Case' (e.g., general language modeling,
+  domain-specific NLP, machine translation, linguistic analysis), and 'Examples'
+  (e.g., Brown Corpus/BNC, a corpus of legal texts, Europarl, Penn Treebank).
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: 54c45855d495d15ee55b9dc42055ee78bdf36cc1579969f324d1e74728b4f0d6
+response:
+  caption:
+    Fig. 3.3: A concise summary of major corpus types, their primary use cases, and
+    well-known examples.
+  latex: \begin{tabular}{@{}l p{4.5cm} p{4.5cm} p{3cm}@{}}\toprule\textbf{Corpus Type} & \textbf{Description} & \textbf{Primary Use Case} & \textbf{Examples} \\\midrule Balanced & Aims to be a representative snapshot of a language by sampling texts from a wide array of genres and domains. & General linguistic inquiry; training general-purpose language models. & Brown Corpus, British National Corpus (BNC) \\\addlinespace Specialized & Deliberately focuses on a narrow subject matter or genre to provide deep, domain-specific coverage. & Building high-performance, domain-specific NLP applications (e.g., medical information extraction). & A corpus of legal contracts, biomedical research abstracts, or social media posts. \\\addlinespace Parallel & Contains the same texts in two or more languages, with sentences or segments explicitly aligned to their translations. & Training and evaluating statistical and neural machine translation systems. & Europarl Corpus, Canadian Hansards. \\\addlinespace Annotated & Contains raw text enriched with explicit linguistic metadata (e.g., POS tags, syntactic trees) added by human experts. & Providing \"ground truth\" data for training and evaluating supervised machine learning models. & Penn Treebank \\\bottomrule\end{tabular}
+duration: 29176 ms
+usage_stats:
+  {
+    "candidates_token_count": 320,
+    "prompt_token_count": 977,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 977
+      }
+    ],
+    "thoughts_token_count": 3388,
+    "total_token_count": 4685
+  }
+...

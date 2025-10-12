@@ -1,0 +1,95 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The Maximum Likelihood Estimation (MLE) approach is simple and intuitive, but it
+  harbors a significant flaw: it only works for N-grams that have appeared in the
+  training corpus. What happens when our model encounters a new sentence
+  containing a perfectly valid bigram, such as "sentient robots", that simply
+  wasn't present in our training text? The count for this bigram,
+  $C(\text{sentient robots})$, will be zero. Consequently, the MLE calculation
+  will yield a probability of zero. This isn't a minor edge case; it is a
+  fundamental and pervasive challenge in statistical language modeling known as
+  **data sparsity**.
+  
+  Human language is vast and creative. We constantly generate new, sensible
+  phrases and sentences. Any finite training corpus, even one containing billions
+  of words, represents only a minuscule fraction of all possible valid word
+  sequences. The number of potential N-grams explodes combinatorially as we
+  increase our vocabulary size. For a modest vocabulary of 20,000 words, there are
+  $20,000^2 = 400$ million possible bigrams and $20,000^3 = 8$ trillion possible
+  trigrams. The vast majority of these will not appear in any given corpus, no
+  matter how large. The bigram count matrix derived from our small sample corpus,
+  shown in **Fig. 4.7**, provides a stark visual illustration of this problem. The
+  matrix is overwhelmingly populated with zeros, each one representing a word
+  combination that our model was never taught.
+  
+  This leads directly to the **zero-probability problem**. The probability of a
+  word sequence is calculated by multiplying the probabilities of its constituent
+  N-grams:
+  
+  $P(w_1, w_2, \dots, w_k) = \prod_{i=1}^{k} P(w_i | w_{i-1}, \dots, w_{i-N+1})$
+  
+  If the probability of just *one* of the N-grams in this sequence is zero, the
+  probability of the entire sequence becomes zero. This is a catastrophic outcome
+  for a language model. It means the model has concluded that a potentially
+  grammatical and meaningful sentence is absolutely *impossible*. For instance, if
+  our training data included "the chef prepared the fish" but not "the chef
+  prepared the tofu", our bigram model would assign
+  $P(\text{tofu} | \text{prepared}) = 0$. As a result, the sentence "the chef
+  prepared the tofu" would be deemed impossible.
+  
+  In practical applications, this is debilitating. A speech recognition system
+  might refuse to output a correct transcription because it contains an unseen
+  bigram. A machine translation system could discard a perfectly good translation
+  for the same reason. A model that assigns zero probability to legitimate events
+  is not just inaccurate; it's brittle and fails to generalize beyond the specific
+  examples it has seen.
+  
+  Clearly, we cannot trust a model that is so easily broken by novelty. To build
+  robust language models, we must find a way to assign some small, non-zero
+  probability to unseen N-grams. This process involves taking a small amount of
+  probability mass from the N-grams we *have* seen and redistributing it to those
+  we *haven't*. This family of techniques is known as **smoothing**, and it is the
+  essential next topic we must address.
+  
+  This fragment refers to Fig. 4.7, which is a table. Its description is as
+  follows:
+  
+  A bigram count matrix built from the sample corpus. The table would be
+  intentionally sparse, with most cells containing a '0' to visually emphasize how
+  many plausible word combinations were not seen in the training data,
+  illustrating the core challenge of data sparsity and the zero-probability
+  problem.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: 656149d7611ff3bcdf197e4034bbfb8cf1acd716f953bb1b6a78420ab5af2d3a
+response:
+  caption:
+    Fig. 4.7: A sparse bigram count matrix derived from a small sample corpus. The
+    matrix is overwhelmingly populated with zeros, visually representing the data
+    sparsity problem. The model has observed bigrams from 'the chef prepared the
+    fish', but has zero counts for plausible but unseen bigrams like ('prepared',
+    'tofu') or ('sentient', 'robots').
+  latex: \begin{tabular}{@{}lccccccc@{}}\toprule & \textbf{the} & \textbf{chef} & \textbf{prepared} & \textbf{fish} & \textbf{tofu} & \textbf{sentient} & \textbf{robots} \\ \midrule \textbf{the} & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ \textbf{chef} & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ \textbf{prepared} & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\ \textbf{fish} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \textbf{tofu} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \textbf{sentient} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \textbf{robots} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \bottomrule \end{tabular}
+duration: 38160 ms
+usage_stats:
+  {
+    "candidates_token_count": 356,
+    "prompt_token_count": 877,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 877
+      }
+    ],
+    "thoughts_token_count": 4482,
+    "total_token_count": 5715
+  }
+...

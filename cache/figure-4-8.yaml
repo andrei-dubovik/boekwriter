@@ -1,0 +1,98 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The Maximum Likelihood Estimation approach, while intuitive, is brittle. It
+  assigns a probability of zero to any n-gram that did not appear in the training
+  corpus. As a result, a single unseen bigram in a test sentence would cause the
+  probability of the entire sentence to become zero, rendering the model useless
+  for evaluating novel text. To overcome this critical flaw, we must use a set of
+  techniques known collectively as **smoothing**, or sometimes **discounting**.
+  
+  The core idea behind all smoothing algorithms is to reallocate probability mass.
+  We take a small amount of probability from the events we *have* seen and
+  distribute it among the events we *have not* seen. Since the total probability
+  must always sum to 1, we cannot simply invent new probability for unseen
+  n-grams; we must "steal" it from the more frequent, seen n-grams. This ensures
+  that every possible n-gram is assigned a small, non-zero probability.
+  
+  This redistribution is conceptually illustrated in **Fig. 4.8**. In a standard
+  MLE model, the entire probability mass is divided exclusively among the n-grams
+  observed in the corpus. In a smoothed model, a fraction of the probability
+  assigned to each seen event is shaved off. This collected probability mass is
+  then redistributed among the vast number of unseen events, lifting their
+  probability from zero to a small positive value.
+  
+  In practice, this is achieved by adjusting the counts used in the probability
+  calculation. Instead of using the raw frequency $C(w_{i-1}w_i)$, we use a
+  discounted or adjusted count, $c^*$. For a seen n-gram, its adjusted count $c^*$
+  will be slightly less than its real count $C$. For an unseen n-gram, its
+  adjusted count will be a small positive value instead of zero. This adjustment
+  acknowledges a fundamental truth: our training corpus is just one sample of the
+  language, and the fact that an event is unseen does not make it impossible. The
+  next sections introduce several specific algorithms for calculating these
+  adjusted counts, from the simple to the more sophisticated.
+  
+  This fragment refers to Fig. 4.8. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A conceptual diagram showing two bars representing the total probability mass.
+  The 'MLE' bar is divided only among seen events. The 'Smoothed' bar shows that a
+  small portion of the probability from each 'seen' section has been shaved off
+  and reallocated to a new section labeled 'unseen events', intuitively explaining
+  the redistribution process.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 4067561ffbad02d0810addf3cf73253a16905fca776f65806155fb3085b6b24f
+response:
+  caption:
+    Fig. 4.8. Conceptual diagram illustrating probability redistribution in
+    smoothing. The Maximum Likelihood Estimation (MLE) bar shows probability mass
+    divided exclusively among seen events. The Smoothed bar shows a fraction of that
+    probability shaved off from the seen events and reallocated to a new block for
+    unseen events, ensuring they have a non-zero probability.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+      <style>.title { font-family: sans-serif; font-size: 16px; font-weight: bold; text-anchor: middle; } .label { font-family: sans-serif; font-size: 12px; }</style>
+      <rect width="100%" height="100%" fill="white"/>
+      <g id="mle_bar">
+        <text x="125" y="30" class="title">MLE</text>
+        <rect x="75" y="50" width="100" height="80" fill="#6baed6" stroke="black"/>
+        <rect x="75" y="130" width="100" height="60" fill="#4292c6" stroke="black"/>
+        <rect x="75" y="190" width="100" height="60" fill="#2171b5" stroke="black"/>
+        <path d="M 65,50 Q 50,150 65,250" stroke="black" fill="none" stroke-width="1.5"/>
+        <text x="45" y="150" class="label" text-anchor="end">Seen Events</text>
+      </g>
+      <g id="smoothed_bar">
+        <text x="275" y="30" class="title">Smoothed</text>
+        <rect x="225" y="50" width="100" height="72" fill="#6baed6" stroke="black"/>
+        <rect x="225" y="122" width="100" height="54" fill="#4292c6" stroke="black"/>
+        <rect x="225" y="176" width="100" height="54" fill="#2171b5" stroke="black"/>
+        <rect x="225" y="230" width="100" height="20" fill="#fc9272" stroke="black"/>
+        <path d="M 335,50 Q 350,140 335,230" stroke="black" fill="none" stroke-width="1.5"/>
+        <text x="355" y="140" class="label" text-anchor="start">Seen Events</text>
+        <path d="M 335,230 Q 350,240 335,250" stroke="black" fill="none" stroke-width="1.5"/>
+        <text x="355" y="240" class="label" text-anchor="start">Unseen Events</text>
+      </g>
+    </svg>
+duration: 51916 ms
+usage_stats:
+  {
+    "candidates_token_count": 754,
+    "prompt_token_count": 617,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 617
+      }
+    ],
+    "thoughts_token_count": 5422,
+    "total_token_count": 6793
+  }
+...

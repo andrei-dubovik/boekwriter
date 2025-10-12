@@ -1,0 +1,86 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  One of the most influential and widely used stemming algorithms is the Porter
+  Stemmer, developed by Martin Porter in 1980. It provides a simple yet effective
+  heuristic for removing common morphological and inflectional endings from
+  English words. The algorithm does not rely on a dictionary but instead applies a
+  sequence of suffix-stripping rules in a series of steps.
+  
+  The Porter Stemmer operates through five distinct phases, applied in a fixed
+  order. Each phase consists of a set of rules, such as "if the word ends in
+  `-ational`, replace it with `-ate`". For a rule to fire, the word must not only
+  match the suffix but the remaining stem must also satisfy a certain length
+  condition. This condition, known as the "measure," roughly counts the number of
+  vowel-consonant sequences in the stem. This prevents the algorithm from being
+  overly aggressive on short words; for instance, it stops *relate* from being
+  incorrectly reduced to *rel*. The key principle is that if multiple rules within
+  a step could apply, only one is chosen—typically the one with the longest
+  matching suffix.
+  
+  To make this concrete, let's consider how the algorithm would process the word
+  *normalization*. The process, which is detailed step-by-step in Fig. 3.12,
+  demonstrates the sequential nature of the rules. The word is transformed
+  iteratively as it passes through the phases. In Step 2, the rule (`-ational` →
+  `-ate`) reduces *normalization* to *normalize*. In a subsequent step, the rule
+  (`-ize` → ` `) further reduces it to *normal*. Finally, after passing through
+  all five steps, the algorithm terminates, yielding the final stemmed form
+  *normal*.
+  
+  It is crucial to remember that the Porter Stemmer is a **heuristic**. Its output
+  is not guaranteed to be a linguistically correct root (e.g., *university*
+  becomes *univers*). However, its strength lies in its speed and its ability to
+  consistently map variants like *normalize*, *normalized*, and *normalization* to
+  the same token. This consistency is often exactly what is needed for downstream
+  tasks like information retrieval, where the goal is to match query terms to
+  documents regardless of their specific inflectional form.
+  
+  This fragment refers to Fig. 3.12, which is a table. Its description is as
+  follows:
+  
+  A table demonstrating the step-by-step application of the Porter Stemmer
+  algorithm on a complex word like 'normalization'. The table will have three
+  columns: 'Step', 'Rule Applied', and 'Word Form'. It will show the word's
+  transformation through successive suffix-stripping rules (e.g., -ational ->
+  -ate, -ate -> '', -ion -> '') until it reaches its final stemmed form 'normal'.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: e87350fa6e5282f3313e8fcd425c4323c8aaa83b67cc3c19db8428791532a61f
+response:
+  caption:
+    Fig. 3.12: Step-by-step reduction of the word `normalization` using the Porter
+    Stemmer algorithm.
+  latex:
+    \begin{tabular}{lcl}
+    \toprule
+    \textbf{Step} & \textbf{Rule Applied} & \textbf{Word Form} \\
+    \midrule
+    Initial State & --- & \textit{normalization} \\
+    Step 2        & \texttt{-ational} $\rightarrow$ \texttt{-ate} & \textit{normalize} \\
+    Step 4        & \texttt{-ize} $\rightarrow \epsilon$ & \textit{normal} \\
+    \midrule
+    Final Output  & --- & \textit{normal} \\
+    \bottomrule
+    \end{tabular}
+duration: 34150 ms
+usage_stats:
+  {
+    "candidates_token_count": 173,
+    "prompt_token_count": 665,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 665
+      }
+    ],
+    "thoughts_token_count": 3873,
+    "total_token_count": 4711
+  }
+...

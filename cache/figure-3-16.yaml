@@ -1,0 +1,105 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To solidify our understanding, let's walk through the complete normalization of
+  a single sentence from raw string to a final, processed list of tokens. This
+  multi-stage pipeline, which combines the techniques we have just discussed, is a
+  standard prerequisite for most language analysis tasks. The entire process is
+  visually summarized in the flowchart shown in Fig. 3.16.
+  
+  Our starting point is the simple declarative sentence:
+  
+  `'The quickest foxes are jumping.'`
+  
+  The first step is **tokenization**. The raw string is segmented into a sequence
+  of individual tokens, carefully separating punctuation from the final word. This
+  yields the list:
+  
+  `['The', 'quickest', 'foxes', 'are', 'jumping', '.']`
+  
+  Next, we apply **case folding** to standardize the text by converting all
+  alphabetic tokens to lowercase. This step ensures that 'The' and 'the' are not
+  treated as two distinct words, resulting in:
+  
+  `['the', 'quickest', 'foxes', 'are', 'jumping', '.']`
+  
+  Finally, we perform **lemmatization**. Each token is reduced to its
+  morphological root, or lemma. A morphologically-aware lemmatizer will convert
+  the superlative adjective 'quickest' to 'quick', the plural noun 'foxes' to
+  'fox', and the inflected verb forms 'are' and 'jumping' to their base forms,
+  'be' and 'jump', respectively. The determiner and punctuation remain unchanged.
+  The final, normalized output is a list of standardized tokens:
+  
+  `['the', 'quick', 'fox', 'be', 'jump', '.']`
+  
+  This sequence, stripped of its surface-level grammatical variations, is now in a
+  canonical form suitable for subsequent quantitative analysis, such as frequency
+  counting or feature extraction for a machine learning model.
+  
+  This fragment refers to Fig. 3.16. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A pipeline diagram illustrating the complete normalization process for a single
+  sentence: 'The quickest foxes are jumping.' The diagram will show the sentence
+  passing through a series of processing boxes: '1. Original Sentence', '2.
+  Tokenization', '3. Case Folding (Lowercase)', and '4. Lemmatization'. The output
+  of each box will be shown explicitly, culminating in the final list of
+  normalized tokens: \['the', 'quick', 'fox', 'be', 'jump', '.'\].
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: e09408e0ea973859411916e3b05b23b0376a3f50eba2bf74a15e4f77e1732840
+response:
+  caption:
+    A diagram of the text normalization pipeline. The sentence 'The quickest foxes
+    are jumping.' undergoes tokenization, case folding, and lemmatization. The
+    output is shown at each stage, culminating in the final list of normalized
+    tokens.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+      <style>.bg { fill: white; } .box { fill: #e3f2fd; stroke: #1e88e5; stroke-width: 2; } .label { font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; text-anchor: middle; dominant-baseline: middle; fill: #0d47a1; } .data { font-family: 'Courier New', Courier, monospace; font-size: 19px; text-anchor: middle; dominant-baseline: middle; fill: #212121; } .desc-label { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; text-anchor: middle; dominant-baseline: middle; fill: #424242; } .arrow-line { stroke: #616161; stroke-width: 2.5; } .arrow-head { fill: #616161; }</style>
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" class="arrow-head"/>
+        </marker>
+      </defs>
+      <rect class="bg" width="100%" height="100%"/>
+      <text x="400" y="40" class="desc-label">1. Original Sentence</text>
+      <text x="400" y="70" class="data">'The quickest foxes are jumping.'</text>
+      <line x1="400" y1="90" x2="400" y2="125" class="arrow-line" marker-end="url(#arrowhead)"/>
+      <rect x="275" y="135" width="250" height="50" rx="10" class="box"/>
+      <text x="400" y="160" class="label">2. Tokenization</text>
+      <line x1="400" y1="185" x2="400" y2="210" class="arrow-line" marker-end="url(#arrowhead)"/>
+      <text x="400" y="235" class="data">['The', 'quickest', 'foxes', 'are', 'jumping', '.']</text>
+      <line x1="400" y1="255" x2="400" y2="280" class="arrow-line" marker-end="url(#arrowhead)"/>
+      <rect x="250" y="290" width="300" height="50" rx="10" class="box"/>
+      <text x="400" y="315" class="label">3. Case Folding (Lowercase)</text>
+      <line x1="400" y1="340" x2="400" y2="365" class="arrow-line" marker-end="url(#arrowhead)"/>
+      <text x="400" y="390" class="data">['the', 'quickest', 'foxes', 'are', 'jumping', '.']</text>
+      <line x1="400" y1="410" x2="400" y2="435" class="arrow-line" marker-end="url(#arrowhead)"/>
+      <rect x="275" y="445" width="250" height="50" rx="10" class="box"/>
+      <text x="400" y="470" class="label">4. Lemmatization</text>
+      <line x1="400" y1="495" x2="400" y2="520" class="arrow-line" marker-end="url(#arrowhead)"/>
+      <text x="400" y="545" class="data">['the', 'quick', 'fox', 'be', 'jump', '.']</text>
+    </svg>
+duration: 55649 ms
+usage_stats:
+  {
+    "candidates_token_count": 1028,
+    "prompt_token_count": 596,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 596
+      }
+    ],
+    "thoughts_token_count": 6566,
+    "total_token_count": 8190
+  }
+...

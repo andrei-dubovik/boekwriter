@@ -1,0 +1,251 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: chunk
+prompt:
+  You are writing a book called "Introduction to Computational Linguistics". The
+  book consists of the following chapters.
+  
+  # Chapter 1: Introduction to Computational Linguistics.
+  
+  This chapter provides a foundational overview of computational linguistics,
+  defining the field at the intersection of computer science, linguistics, and
+  artificial intelligence. We will trace its historical development, from early
+  rule-based systems to the modern data-driven era, and explore the fundamental
+  goals of enabling computers to understand, interpret, and generate human
+  language. The chapter will also highlight a diverse range of real-world
+  applications, such as machine translation, search engines, and virtual
+  assistants, setting the stage for the core concepts and techniques that will be
+  explored in the remainder of the book.
+  
+  # Chapter 2: Words, Regular Expressions, and Automata.
+  
+  Before we can process language, we must first understand its fundamental
+  building blocks and how to model them formally. This chapter introduces the
+  basics of formal language theory, starting with the concept of regular
+  languages. We will explore the power of regular expressions for pattern matching
+  in text and connect this practical tool to its theoretical underpinning in
+  finite-state automata (FSA). By understanding how these simple computational
+  models can recognize and generate patterns, readers will gain a crucial
+  foundation for more complex language processing tasks.
+  
+  # Chapter 3: Corpus Linguistics and Text Normalization.
+  
+  This chapter delves into the empirical foundation of modern computational
+  linguistics: the corpus. We explore what constitutes a linguistic corpus, how
+  they are constructed, and the importance of annotation schemas. The focus then
+  shifts to the essential pre-processing steps required to prepare raw text for
+  analysis, a process known as text normalization. Key techniques such as
+  tokenization (breaking text into words), stemming (reducing words to their root
+  form), and lemmatization (finding the dictionary form of a word) are covered in
+  detail, providing the practical skills needed to work with real-world language
+  data.
+  
+  # Chapter 4: Language Modeling with N-grams.
+  
+  How can we quantify the probability of a sequence of words? This chapter
+  introduces language modeling, a core task in computational linguistics that aims
+  to answer this question. We will focus on the classic N-gram model, a
+  statistical approach that estimates the probability of a word given the previous
+  N-1 words. The chapter covers the mechanics of training these models from a
+  corpus, the challenges of data sparsity, and essential smoothing techniques like
+  Laplace and Good-Turing smoothing that help create more robust and generalizable
+  models. Finally, we will learn how to evaluate language models using the concept
+  of perplexity.
+  
+  # Chapter 5: Part-of-Speech Tagging.
+  
+  Assigning grammatical categories like noun, verb, or adjective to each word in a
+  sentence is a fundamental step in understanding its structure and meaning. This
+  chapter explores Part-of-Speech (POS) tagging, a foundational NLP task. We will
+  journey from early rule-based systems to the more powerful and widely used
+  stochastic methods, with a deep dive into Hidden Markov Models (HMMs). The
+  chapter will explain the Viterbi algorithm for finding the most likely sequence
+  of tags, providing readers with a solid understanding of how sequence labeling
+  problems are modeled and solved computationally.
+  
+  # Chapter 6: Syntactic Parsing.
+  
+  Beyond individual words, how do we uncover the grammatical structure of a
+  sentence? This chapter tackles syntactic parsing, the process of analyzing a
+  string of words to reveal its hierarchical or relational structure. We will
+  explore two dominant paradigms: constituency parsing, which breaks sentences
+  into nested phrases using Context-Free Grammars (CFGs), and dependency parsing,
+  which models the grammatical relationships between words as a directed graph.
+  The chapter will cover key algorithms, such as CYK for constituency parsing and
+  transition-based methods for dependency parsing, equipping readers to
+  computationally model sentence syntax.
+  
+  # Chapter 7: Lexical and Compositional Semantics.
+  
+  This chapter moves from syntax to semantics—the study of meaning. We first
+  address lexical semantics, focusing on how to represent the meaning of
+  individual words. This includes traditional approaches like WordNet and modern
+  distributional methods like word embeddings (e.g., Word2Vec, GloVe), which
+  capture meaning from context. We then move to compositional semantics, exploring
+  how word meanings combine to form the meaning of phrases and sentences.
+  Techniques such as Semantic Role Labeling (SRL) will be introduced to identify
+  the roles that entities play within a sentence, providing a framework for
+  computational meaning representation.
+  
+  # Chapter 8: Discourse, Coreference, and Dialogue.
+  
+  Language understanding often requires looking beyond individual sentences to the
+  broader context of a conversation or document. This chapter introduces the
+  fields of discourse analysis and pragmatics. We will investigate how sentences
+  relate to one another to form a coherent text, exploring topics like discourse
+  coherence and structure. A key focus will be on coreference resolution—the task
+  of identifying all expressions that refer to the same entity (e.g., 'she,' 'Dr.
+  Evans,' 'the professor'). Finally, we will touch upon the fundamentals of
+  dialogue systems, examining how these principles are applied to build
+  conversational agents that can interact meaningfully with humans.
+  
+  # Chapter 9: Machine Translation.
+  
+  Machine Translation (MT) is one of the oldest and most challenging applications
+  of computational linguistics. This chapter charts the evolution of MT systems,
+  beginning with the core concepts of Statistical Machine Translation (SMT). We
+  will explore how SMT models learn translation probabilities from parallel
+  corpora using word alignment and phrase-based decoding. The second half of the
+  chapter introduces the modern paradigm of Neural Machine Translation (NMT),
+  explaining the powerful sequence-to-sequence architecture, the role of encoder-
+  decoder models, and the revolutionary attention mechanism that has enabled
+  significant breakthroughs in translation quality.
+  
+  # Chapter 10: Information Retrieval and Information Extraction.
+  
+  This chapter focuses on two critical tasks for managing and extracting value
+  from vast amounts of text: Information Retrieval (IR) and Information Extraction
+  (IE). For IR, we will explore the foundational models used by search engines,
+  including the vector space model and the TF-IDF weighting scheme, to rank
+  documents based on their relevance to a user's query. For IE, we will learn how
+  to automatically extract structured information from unstructured text. Key
+  subtasks, such as Named Entity Recognition (NER) for identifying people and
+  places, and Relation Extraction for finding the relationships between them, will
+  be covered in detail.
+  
+  # Chapter 11: Sentiment Analysis and Opinion Mining.
+  
+  Understanding the opinions, sentiments, and emotions expressed in text is a
+  major commercial and academic area of computational linguistics. This chapter
+  provides a comprehensive introduction to sentiment analysis. We will cover
+  methods for classifying a document's polarity (positive, negative, or neutral),
+  from lexicon-based approaches that rely on pre-compiled lists of sentimental
+  words to supervised machine learning models trained on labeled data. The
+  discussion will also extend to more nuanced tasks like aspect-based sentiment
+  analysis, which identifies opinions about specific features or topics within a
+  text.
+  
+  # Chapter 12: The Future: Large Language Models and Ethics.
+  
+  The final chapter brings us to the cutting edge of the field, dominated by Large
+  Language Models (LLMs). We will demystify the transformer architecture, the
+  foundation for models like BERT and GPT, and understand how self-attention
+  mechanisms enable them to process language with unprecedented contextual
+  awareness. The chapter will discuss the paradigm shift towards pre-training and
+  fine-tuning and explore the remarkable capabilities these models have unlocked.
+  Crucially, we will also engage with the significant ethical challenges posed by
+  this technology, including issues of bias, misinformation, and environmental
+  impact, concluding with a look toward future research directions.
+  
+  Consider Chapter 4 "Language Modeling with N-grams". A plan has been prepared
+  for this chapter.
+  
+  01. This section introduces the core task of language modeling, which is to
+      assign a probability to a sequence of words.
+  02. We will formally define the probability of a sequence using the chain rule
+      of probability as a foundational concept.
+  03. The text explains how the simplifying Markov assumption allows us to
+      approximate this probability by considering only a fixed window of previous
+      words.
+  04. This part defines the N-gram model, detailing the specific cases of
+      unigrams, bigrams, and trigrams.
+  05. Readers will learn how to train N-gram models by calculating Maximum
+      Likelihood Estimation (MLE) probabilities from word counts in a corpus.
+  06. A detailed, step-by-step example is provided to demonstrate the calculation
+      of bigram probabilities from a small, sample text.
+  07. The chapter highlights the critical challenge of data sparsity, which
+      results in assigning zero probability to valid but unseen word sequences.
+  08. We introduce smoothing as the general technique used to solve the
+      zero-probability problem by reallocating probability mass to unseen events.
+  09. This section covers Laplace (add-one) smoothing, explaining its mechanism
+      and discussing its limitations.
+  10. The more sophisticated Good-Turing smoothing technique is explained,
+      focusing on its intuition of using counts of things seen once to estimate
+      the probability of unseen things.
+  11. We introduce perplexity as the standard intrinsic metric for evaluating the
+      quality and predictive power of a language model.
+  12. A brief case study illustrates how N-gram language models are practically
+      applied in tasks like keyboard text prediction.
+  13. The chapter concludes with a summary of key takeaways and a look ahead to
+      more advanced modeling techniques.
+  
+  Consider point 1 of the plan. Write this part of the book. Be consise in your
+  writing, avoid an overly verbose prose. Use Markdown for paragraphs, emphasis,
+  numbered or unnumbered lists. Use LaTeX for formulas. Do not add any headers.
+  Footnotes are allowed but should be used sparingly. In total, you should write
+  between 375 and 500 words.
+hash: e9c349f76874954048211770635413f44dd04acb54494e6d22fa85ca3b1d5ea1
+response:
+  How can a machine tell the difference between a fluent, natural-sounding
+  sentence and a jumble of words? Consider the following two English sentences:
+  
+  1. *The students opened their books.*
+  2. *Books their opened students the.*
+  
+  For a human speaker, the first sentence is immediately recognizable as valid,
+  while the second is nonsensical. But what if the choice is more subtle?
+  
+  3. *The cat sat on the mat.*
+  4. *The cat sat on the sky.*
+  
+  Both are grammatically well-formed, yet we intuitively know that the first is
+  far more plausible. The core task of **language modeling** is to quantify this
+  intuition by assigning a probability to a sequence of words. A language model is
+  a statistical tool that learns the patterns of a language from a large body of
+  text and can then compute the likelihood of a given word sequence. Its
+  fundamental goal is to calculate the probability $P(W)$, where $W$ is a sequence
+  of words $(w_1, w_2, \dots, w_n)$. A good language model will assign a higher
+  probability to sentence (1) than to (2), and a higher probability to sentence
+  (3) than to (4).
+  
+  This ability to score text for its likelihood is one of the most essential
+  components in computational linguistics, powering a vast array of applications:
+  
+  - **Predictive Text:** When your smartphone keyboard suggests the next word, it
+    is using a language model to predict the most probable word to follow what you
+    have already typed.
+  - **Speech Recognition:** A speech recognizer might be unsure whether a person
+    said "recognize speech" or "wreck a nice beach." A language model can
+    determine that the former phrase is far more probable in common usage, helping
+    to disambiguate the audio signal.
+  - **Machine Translation:** When translating a sentence, a system may generate
+    multiple possible outputs. A language model helps select the most fluent and
+    natural-sounding translation.
+  
+  It is crucial to understand that a language model computes *probability*, not
+  *grammaticality*. The famous sentence "Colorless green ideas sleep furiously,"
+  coined by linguist Noam Chomsky, is perfectly grammatical. However, because the
+  sequence of words is semantically bizarre and has likely never appeared in any
+  text corpus, a language model would assign it an extremely low probability.
+  Conversely, a common but ungrammatical utterance like "Gonna go to the store"
+  might be assigned a relatively high probability if it appears frequently in the
+  training data. Language models are a reflection of what is *likely* based on
+  past observation, not what is *correct* based on formal rules. In this chapter,
+  we will learn how to build our first language models using a simple yet powerful
+  technique: N-grams.
+duration: 19459 ms
+usage_stats:
+  {
+    "candidates_token_count": 569,
+    "prompt_token_count": 2148,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 2148
+      }
+    ],
+    "thoughts_token_count": 1233,
+    "total_token_count": 3950
+  }
+...
