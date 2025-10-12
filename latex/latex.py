@@ -68,17 +68,16 @@ def render_chunk(file, chunk):
     if 'figure' in chunk:
         figure = chunk['figure']
         ref = 'fig:' + figure['number']
-        old_lbl = 'Fig. ' + figure['number']
-        new_lbl = r'Fig.~\ref{' + ref + '}'
-        caption = re.sub(f'^{old_lbl}(:|.) *', '', figure['caption'])
+        lbl = r'Fig.~\ref{' + ref + '}'
+        caption = re.sub(f'^(Fig.|Figure) {figure["number"]}(:|.) *', '', figure['caption'])
         caption = caption.replace('\n', ' ')
         caption = normalize(caption)
 
-        text = text.replace(old_lbl, new_lbl)
+        text = text.replace('Fig. ' + figure['number'], lbl)
         paras = (p for p in text.split('\n\n'))
 
         # Output all the paragrapsh before the first figure mention
-        while (par := next(paras)).find(new_lbl) == -1:
+        while (par := next(paras)).find(lbl) == -1:
             file.write(par)
             file.write('\n\n')
 
