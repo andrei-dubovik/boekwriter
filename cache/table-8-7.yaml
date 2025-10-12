@@ -1,0 +1,101 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To systematically solve the coreference problem, we must first establish a
+  precise vocabulary. The fundamental unit is the *referring expression*, which is
+  any noun phrase that points to an entity in the world. These expressions can be
+  proper nouns (e.g., *Ada Lovelace*), pronouns (e.g., *she*, *it*), or
+  descriptive noun phrases (e.g., *the first computer programmer*). Coreference
+  resolution is the task of clustering these referring expressions into sets,
+  where each set corresponds to a single real-world entity.
+  
+  The most common relationship between referring expressions is *anaphora*, where
+  an expression, called the *anaphor*, refers back to a previously introduced
+  entity, known as the *antecedent*. This backward-looking reference is the
+  backbone of textual coherence. Consider the following:
+  
+  > **The system** failed the initial test. *It* was not robust enough.
+  
+  Here, *it* is the anaphor, and its antecedent is *the system*. The relationship
+  links the two sentences together. A less frequent but structurally important
+  pattern is *cataphora*, which reverses this ordering. In cataphora, a referring
+  expression points forward to an entity that has not yet been mentioned. This is
+  often used for stylistic or dramatic effect:
+  
+  > Although *he* didn't expect it, **David** won the competition.
+  
+  In this case, the pronoun *he* is a cataphor that refers forward to *David*.
+  
+  Referring expressions themselves can be categorized, and understanding these
+  categories is crucial for building computational models. The most obvious type
+  of anaphor is a pronoun, leading to what is called *pronominal anaphora*. This
+  includes personal pronouns (*he, she, it, they*), possessive pronouns (*his,
+  her, its, their*), and reflexive pronouns (*himself, herself*).
+  
+  However, many references are not made with pronouns but with other noun phrases.
+  This is known as *nominal anaphora*. This category is diverse and includes
+  several common patterns:
+  
+  - **Repetition:** A noun phrase is simply repeated for clarity.
+  
+    > We need to analyze **the algorithm**. **The algorithm** has a high time
+    > complexity.
+  
+  - **Synonyms/Related Nouns:** An entity is referred to using a synonym, a
+    hypernym (a more general term), or a related word.
+  
+    > **The automaker** issued a recall. **The company** cited a manufacturing
+    > defect.
+  
+  - **Definite Descriptions:** An indefinite noun phrase (*a company*) introduces
+    an entity, which is later referred to by a definite noun phrase (*the
+    company*).
+  
+    > We hired **a new engineer**. **The engineer** starts on Monday.
+  
+  Each of these patterns presents a unique challenge for a computational system.
+  Linking a pronoun to its antecedent often relies on grammatical cues like gender
+  and number agreement, whereas resolving nominal anaphora may require world
+  knowledge or access to a knowledge base like WordNet. For a structured summary
+  of these key terms and their relationships, please refer to the table in Fig.
+  8.7. This vocabulary provides the formal framework needed to discuss and develop
+  algorithms for coreference resolution.
+  
+  This fragment refers to Fig. 8.7, which is a table. Its description is as
+  follows:
+  
+  A three-column table defining key coreference terminology. The columns will be
+  titled 'Term,' 'Definition,' and 'Example.' Rows will cover concepts such as
+  'Referring Expression,' 'Anaphora,' 'Cataphora,' 'Antecedent,' 'Pronominal
+  Anaphora,' and 'Nominal Anaphora.' The example column will contain a sentence
+  with the relevant parts bolded or italicized to clearly illustrate the concept.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: f05a34383fbbaf24e420e234e79f1a3785a3f0a60924c9c443d7755e4c4c9dcf
+response:
+  caption:
+    Fig. 8.7: Key terminology for coreference resolution, with definitions and
+    examples.
+  latex: \begin{tabular}{l p{5.5cm} l} \toprule \textbf{Term} & \textbf{Definition} & \textbf{Example} \\ \midrule Referring Expression & A noun phrase that points to an entity in the world. & \textit{Ada Lovelace}, \textit{she}, \textit{the programmer} \\ \addlinespace Anaphora & An expression that refers back to a previously introduced entity (the antecedent). & \textbf{The system} failed. \textit{It} was not robust. \\ \addlinespace Cataphora & An expression that refers forward to an entity that has not yet been introduced. & Although \textit{he} didn't expect it, \textbf{David} won. \\ \addlinespace Antecedent & The entity to which an anaphor refers. & \textbf{The system} failed. \textit{It} was not robust. \\ \addlinespace Pronominal Anaphora & Anaphora where the referring expression is a pronoun. & We found \textbf{the book}. \textit{It} was on the shelf. \\ \addlinespace Nominal Anaphora & Anaphora where the referring expression is a noun phrase, not a pronoun. & \textbf{The automaker} issued a recall. \textbf{The company}... \\ \bottomrule \end{tabular}
+duration: 32462 ms
+usage_stats:
+  {
+    "candidates_token_count": 325,
+    "prompt_token_count": 868,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 868
+      }
+    ],
+    "thoughts_token_count": 3908,
+    "total_token_count": 5101
+  }
+...

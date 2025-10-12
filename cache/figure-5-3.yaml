@@ -1,0 +1,118 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Part-of-speech tagging is rarely an end in itself. Rather, it functions as a
+  crucial preprocessing step for a vast range of more complex Natural Language
+  Processing tasks. By resolving the kind of lexical ambiguity we saw with the
+  word 'book', tagging provides a foundational layer of syntactic information that
+  is essential for higher-level analysis. Many NLP systems are structured as a
+  *pipeline*, where raw text is passed through a series of modules, each one
+  enriching the data for the next. As shown in Fig. 5.3, POS tagging is a
+  fundamental stage in this process, transforming a simple sequence of words into
+  an annotated stream ready for deeper interpretation.
+  
+  The most direct consumer of POS information is *syntactic parsing* (covered in
+  Chapter 6). The goal of a parser is to uncover the grammatical structure of a
+  sentence, identifying phrasal constituents like Noun Phrases (`NP`) or Verb
+  Phrases (`VP`). This task is immensely more tractable when the parser already
+  knows the grammatical category of each word. For instance, a parser can use a
+  simple rule like `DET + ADJ + NOUN → NP` only if the words in the input have
+  already been tagged as a determiner, an adjective, and a noun. Without this
+  prior information, the parser would face a combinatorial explosion of
+  possibilities.
+  
+  POS tags are also a vital feature for *Information Extraction* (IE) systems. A
+  key IE task is Named Entity Recognition (NER), which aims to find and classify
+  entities like persons, organizations, and locations. A powerful heuristic for
+  identifying named entities is to look for sequences of capitalized words that
+  have been tagged as proper nouns (`NNP`). In a sentence like "Dr. Evelyn Reed
+  joined Globex Corporation," a tagger would label "Evelyn," "Reed," "Globex," and
+  "Corporation" as proper nouns, giving the NER system a strong signal that "Dr.
+  Evelyn Reed" and "Globex Corporation" are entities of interest.
+  
+  Finally, accurate tagging benefits many other applications:
+  
+  - **Machine Translation:** The grammatical role of a word is critical for
+    correct translation. The German word *Weg* can be a noun ("the way") or an
+    adverb ("away"), and a translator must know its POS tag to choose the right
+    equivalent.
+  - **Sentiment Analysis:** Adjectives and adverbs often carry the strongest
+    sentiment, so identifying them helps a system focus on the most opinionated
+    parts of a text.
+  
+  This fragment refers to Fig. 5.3. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A flowchart representing a standard NLP pipeline. It will depict a sequence of
+  connected boxes, starting with 'Raw Text' and flowing through 'Tokenization',
+  'POS Tagging', and finally to downstream tasks like 'Syntactic Parsing' and
+  'Named Entity Recognition'. This illustrates the role of POS tagging as a
+  critical enabling step.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 541af1d10a1231777daec59003b92a0aa87684aa6659351b252619a081806532
+response:
+  caption:
+    Fig. 5.3: A standard Natural Language Processing (NLP) pipeline. Raw text is
+    processed through sequential stages like Tokenization and Part-of-Speech (POS)
+    Tagging. The resulting annotated data serves as a crucial input for more complex
+    downstream tasks such as Syntactic Parsing and Named Entity Recognition.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" font-family="sans-serif" font-size="18">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <style>.box { fill: #eef4fa; stroke: #667; stroke-width: 1.5; }.main-box { fill: #dbe8f7; stroke: #334; stroke-width: 2; }.task-box { fill: #eefaf4; stroke: #677; stroke-width: 1.5; }.box-text { text-anchor: middle; dominant-baseline: middle; fill: #111; }.flow-line { stroke: #333; stroke-width: 2; marker-end: url(#arrowhead); }</style>
+      <g transform="translate(300, 50)">
+        <rect class="box" width="200" height="60" rx="5"/>
+        <text class="box-text" x="100" y="30">Raw Text</text>
+      </g>
+      <line class="flow-line" x1="400" y1="110" x2="400" y2="150"/>
+      <g transform="translate(300, 160)">
+        <rect class="box" width="200" height="60" rx="5"/>
+        <text class="box-text" x="100" y="30">Tokenization</text>
+      </g>
+      <line class="flow-line" x1="400" y1="220" x2="400" y2="260"/>
+      <g transform="translate(300, 270)">
+        <rect class="main-box" width="200" height="60" rx="5"/>
+        <text class="box-text" x="100" y="30">POS Tagging</text>
+      </g>
+      <path d="M 400 330 V 380" stroke="#333" stroke-width="2" fill="none"/>
+      <path d="M 400 380 H 225" stroke="#333" stroke-width="2" fill="none"/>
+      <path d="M 400 380 H 575" stroke="#333" stroke-width="2" fill="none"/>
+      <line class="flow-line" x1="225" y1="380" x2="225" y2="420"/>
+      <line class="flow-line" x1="575" y1="380" x2="575" y2="420"/>
+      <g transform="translate(100, 430)">
+        <rect class="task-box" width="250" height="60" rx="5"/>
+        <text class="box-text" x="125" y="30">Syntactic Parsing</text>
+      </g>
+      <g transform="translate(450, 430)">
+        <rect class="task-box" width="250" height="60" rx="5"/>
+        <text class="box-text" x="125" y="30">Named Entity Recognition</text>
+      </g>
+    </svg>
+duration: 37663 ms
+usage_stats:
+  {
+    "candidates_token_count": 950,
+    "prompt_token_count": 705,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 705
+      }
+    ],
+    "thoughts_token_count": 4259,
+    "total_token_count": 5914
+  }
+...

@@ -1,0 +1,35 @@
+{model: str, query: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-flash-image-preview
+query: image
+prompt:
+  A simple, clean line drawing depicting the act of semantic analysis from a
+  slightly angled overhead perspective. On a plain surface rests a piece of paper
+  with a simple, clearly written sentence. A person's hands are carefully placing
+  small, distinct labels above key phrases in the sentence. One label, reading
+  'AGENT', is being positioned over the subject of the sentence, while another
+  label, perhaps 'THEME' or 'PATIENT', is already in place over the object. The
+  composition should feel focused and deliberate, highlighting the human act of
+  deconstructing a sentence to reveal its underlying structure of meaning.
+hash: 1a69dd720adba637dcd80df3ab69d021eb2bcdb1a97c2f700303484ea6428e4c
+response: image-7.png
+duration: 4729 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 127,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 127
+      }
+    ],
+    "total_token_count": 1417
+  }
+...

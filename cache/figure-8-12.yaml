@@ -1,0 +1,162 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Having explored how sentences connect to form a coherent text, we now shift our
+  focus to modeling an entire conversation. The principles of discourse are
+  central to building **dialogue systems**, also known as conversational agents or
+  chatbots. While open-domain chatbots like those in entertainment aim for general
+  conversation, many of the most practical systems are **task-oriented**. Their
+  goal is to help a user complete a specific task, such as booking a flight,
+  ordering a pizza, or finding a restaurant. Historically, these systems are built
+  using a modular pipeline architecture, where the problem is broken down into a
+  series of distinct components. As illustrated in **Fig. 8.12**, this classic
+  architecture consists of four main modules: Natural Language Understanding
+  (NLU), a Dialogue State Tracker (DST), a Dialogue Policy, and Natural Language
+  Generation (NLG).
+  
+  ______________________________________________________________________
+  
+  The first component, **Natural Language Understanding (NLU)**, serves as the
+  system's "ears." Its responsibility is to interpret the user's raw text
+  utterance and convert it into a structured, machine-readable format. This
+  process typically involves two key sub-tasks:
+  
+  - **Intent Classification:** This is the task of identifying the user's primary
+    goal or purpose. For example, in the utterance "I need to book a flight to
+    Berlin," the intent is `book_flight`. Other possible intents in a travel
+    system might include `check_booking_status` or `ask_for_weather`.
+  - **Slot Filling:** This task, which is a form of information extraction,
+    identifies and extracts the key pieces of information, or *slots*, from the
+    utterance that are necessary to fulfill the intent. In our example, `Berlin`
+    would be identified as the value for the `destination` slot.
+  
+  The output of the NLU module is a *semantic frame*, a simple data structure that
+  combines the intent and the filled slots. For the utterance "I need a flight to
+  Berlin for next Tuesday," the NLU would produce a frame like:
+  `{intent: "book_flight", destination: "Berlin", departure_date: "next Tuesday"}`.
+  This structured representation is far easier for the subsequent components of
+  the system to process than the original, ambiguous natural language text.
+  
+  The semantic frame is then passed to the **Dialogue State Tracker (DST)**, which
+  acts as the system's memory. The DST's job is to maintain the *dialogue state*
+  throughout the conversation. The state is a summary of everything that has
+  happened so far, aggregating information across multiple turns. It tracks all
+  the constraints the user has specified (e.g., destination, time, price range)
+  and what the system's last action was. For each turn, the DST takes the NLU
+  output from the current user utterance and the dialogue state from the previous
+  turn, and produces an updated state. If the user first says "I need a flight to
+  Berlin" and then, in response to a system query, says "I want to leave
+  tomorrow," the DST would ensure the final state contains both pieces of
+  information: `{destination: "Berlin", departure_date: "2023-10-27"}`.
+  
+  With an updated state from the DST, the **Dialogue Policy** ($\pi$) must decide
+  what the system should do next. The policy is the "brain" of the operation,
+  mapping the current dialogue state to a specific system action. It functions as
+  a decision-making component. For a state $s$, the policy selects an action $a$,
+  such that $\pi(s) = a$. These actions are abstract, formal representations, not
+  yet natural language. Examples of system actions include:
+  
+  - `request(origin_city)`: Ask the user for a required piece of information.
+  - `confirm(destination: "Berlin")`: Explicitly confirm a piece of information
+    with the user.
+  - `inform(flight_options)`: Provide the user with the information they
+    requested.
+  - `api_call(search_flights)`: Query an external database or API.
+  
+  Policies can range from simple, hand-crafted rules (e.g., "IF `destination` is
+  known but `origin` is not, THEN `request(origin)`") to complex statistical
+  models learned using Reinforcement Learning, where the system learns the optimal
+  action to take in any state by maximizing a reward signal, such as successful
+  task completion.
+  
+  Finally, the abstract action selected by the policy is sent to the **Natural
+  Language Generation (NLG)** module, which serves as the system's "mouth." The
+  NLG's sole task is to translate the system action into a fluent, human-readable
+  text response. For example, the action `request(origin_city)` might be converted
+  into "Where will you be departing from?" or "What city are you flying out of?".
+  The simplest NLG systems use templates with slots to fill (e.g., "OK, a flight
+  to \[destination\]. Where from?"). More sophisticated neural models can generate
+  more varied and natural-sounding responses, making the interaction feel less
+  robotic. This generated text is then presented to the user, completing one full
+  turn of the dialogue and preparing the system for the user's next utterance.
+  
+  This fragment refers to Fig. 8.12. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A block diagram illustrating the pipeline architecture of a traditional
+  task-oriented dialogue system. It will feature four main labeled boxes: Natural
+  Language Understanding (NLU), Dialogue State Tracker (DST), Dialogue Policy, and
+  Natural Language Generation (NLG). Arrows will indicate the flow of information:
+  user utterance enters NLU, which outputs a semantic frame to the DST, which
+  updates the dialogue state for the Policy, which selects a system action for the
+  NLG to convert into a textual response for the user.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 4ec95e54fdb524c6133622788cf90cdad8321f20c32f15186bdebf5b65dcf84f
+response:
+  caption:
+    Fig. 8.12: A diagram of the pipeline architecture for a traditional
+    task-oriented dialogue system. It illustrates the sequential flow of information
+    from the user's utterance through four core modules: Natural Language
+    Understanding (NLU), Dialogue State Tracker (DST), Dialogue Policy, and Natural
+    Language Generation (NLG), culminating in a system response back to the user.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+      <defs>
+        <style>.box{fill:#f0f4f8;stroke:#4a5568;stroke-width:1.5;rx:8;}.arrow{stroke:#4a5568;stroke-width:1.5;fill:none;marker-end:url(#arrowhead);}.box-text{font-family:sans-serif;font-size:14px;font-weight:bold;text-anchor:middle;}.sub-text{font-size:12px;font-weight:normal;}.flow-text{font-family:sans-serif;font-size:14px;text-anchor:middle;fill:#2d3748;}</style>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#4a5568"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <g id="module-nlu">
+        <rect x="50" y="250" width="160" height="100" class="box"/>
+        <text x="130" y="285" class="box-text">Natural Language<tspan x="130" dy="1.4em">Understanding</tspan><tspan x="130" dy="1.4em" class="sub-text">(NLU)</tspan></text>
+      </g>
+      <g id="module-dst">
+        <rect x="240" y="250" width="160" height="100" class="box"/>
+        <text x="320" y="285" class="box-text">Dialogue State<tspan x="320" dy="1.4em">Tracker</tspan><tspan x="320" dy="1.4em" class="sub-text">(DST)</tspan></text>
+      </g>
+      <g id="module-policy">
+        <rect x="430" y="250" width="160" height="100" class="box"/>
+        <text x="510" y="295" class="box-text">Dialogue Policy</text>
+      </g>
+      <g id="module-nlg">
+        <rect x="620" y="250" width="160" height="100" class="box"/>
+        <text x="700" y="285" class="box-text">Natural Language<tspan x="700" dy="1.4em">Generation</tspan><tspan x="700" dy="1.4em" class="sub-text">(NLG)</tspan></text>
+      </g>
+      <g id="flow-arrows">
+        <path d="M-20,300 L45,300" class="arrow"/>
+        <text x="-50" y="280" class="flow-text">User<tspan x="-50" dy="1.2em">Utterance</tspan></text>
+        <path d="M210,300 L235,300" class="arrow"/>
+        <text x="175" y="280" class="flow-text">Semantic<tspan x="175" dy="1.2em">Frame</tspan></text>
+        <path d="M400,300 L425,300" class="arrow"/>
+        <text x="365" y="280" class="flow-text">Dialogue<tspan x="365" dy="1.2em">State</tspan></text>
+        <path d="M590,300 L615,300" class="arrow"/>
+        <text x="555" y="280" class="flow-text">System<tspan x="555" dy="1.2em">Action</tspan></text>
+        <path d="M780,300 L820,300" class="arrow"/>
+        <text x="820" y="280" text-anchor="start" class="flow-text">System<tspan x="820" dy="1.2em">Response</tspan></text>
+      </g>
+    </svg>
+duration: 35478 ms
+usage_stats:
+  {
+    "candidates_token_count": 1137,
+    "prompt_token_count": 1349,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1349
+      }
+    ],
+    "thoughts_token_count": 3185,
+    "total_token_count": 5671
+  }
+...

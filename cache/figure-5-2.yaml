@@ -1,0 +1,98 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  At first glance, POS tagging might seem as simple as looking up each word in a
+  dictionary and assigning its category. This approach, however, quickly fails due
+  to a fundamental property of language: *lexical ambiguity*. Many words can
+  belong to more than one lexical category, and only the surrounding context can
+  resolve the uncertainty. This is the central challenge that a POS tagger must
+  overcome.
+  
+  A classic example is the word *book*. It can function as a verb, meaning 'to
+  make a reservation,' or as a noun, referring to a written work. The words in the
+  immediate vicinity provide the crucial evidence for disambiguation. Consider the
+  following sentences:
+  
+  1. *Book* that flight for me.
+  2. I need to read that *book*.
+  
+  In the first sentence, the imperative structure and the object 'flight' signal
+  that *book* is an action—a verb. In the second, the preceding verb 'read' makes
+  it clear that *book* is the object being acted upon—a noun. This contextual
+  dependency, illustrated in Fig. 5.2, is intuitive for human speakers but must be
+  computationally modeled for a machine.
+  
+  This problem is far from isolated. Common English words like *watch*, *fly*,
+  *saw*, and *duck* are also highly ambiguous. A successful POS tagger cannot
+  simply consider a word in isolation; it must develop a systematic method for
+  leveraging contextual patterns to make the correct choice. This is precisely why
+  simple dictionary lookups are insufficient and more sophisticated probabilistic
+  models are required.
+  
+  This fragment refers to Fig. 5.2. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A diagram contrasting two simple sentence structures to illustrate ambiguity.
+  One branch shows the sentence 'Book that flight,' with an arrow pointing from
+  'Book' to a 'Verb' tag. The other branch shows 'Read that book,' with an arrow
+  from 'book' to a 'Noun' tag. This visually reinforces how context determines a
+  word's grammatical role.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 3efd28d831f2fa960f25761dde0e3db68fc4f8f5ac13b3243b6164d2088b529c
+response:
+  caption:
+    Figure 5.2: A diagram illustrating lexical ambiguity. The surrounding context
+    determines the part-of-speech tag for the word 'book'. On the left, the
+    imperative structure suggests 'Book' is a verb. On the right, the preceding verb
+    'Read' indicates that 'book' is a noun.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+      <style>.sentence { font-family: 'Georgia', serif; font-size: 18px; text-anchor: middle; } .highlight { font-weight: bold; font-style: italic; } .tag-box { fill: #f8f9fa; stroke: #adb5bd; } .tag-text { font-family: 'Courier New', monospace; font-size: 16px; text-anchor: middle; dominant-baseline: central; } .arrow { stroke: #343a40; stroke-width: 1.5; marker-end: url(#arrowhead); }</style>
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#343a40"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <g id="left-branch">
+        <text x="100" y="110" class="sentence">
+          <tspan class="highlight">Book</tspan>
+          <tspan> that flight</tspan>
+        </text>
+        <line class="arrow" x1="100" y1="125" x2="100" y2="180"/>
+        <rect x="65" y="180" width="70" height="35" rx="3" class="tag-box"/>
+        <text x="100" y="197.5" class="tag-text">Verb</text>
+      </g>
+      <g id="right-branch">
+        <text x="300" y="110" class="sentence">
+          <tspan>Read that </tspan>
+          <tspan class="highlight">book</tspan>
+        </text>
+        <line class="arrow" x1="300" y1="125" x2="300" y2="180"/>
+        <rect x="265" y="180" width="70" height="35" rx="3" class="tag-box"/>
+        <text x="300" y="197.5" class="tag-text">Noun</text>
+      </g>
+    </svg>
+duration: 30158 ms
+usage_stats:
+  {
+    "candidates_token_count": 634,
+    "prompt_token_count": 506,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 506
+      }
+    ],
+    "thoughts_token_count": 3206,
+    "total_token_count": 4346
+  }
+...

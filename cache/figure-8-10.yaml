@@ -1,0 +1,154 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  While classic machine learning models for coreference resolution were a
+  significant step forward, they relied heavily on *feature engineering*. This
+  process involved manually designing hundreds of linguistic features—such as
+  number agreement, gender, semantic class, and syntactic relationships derived
+  from a parser—to help the model make its decisions. This approach was not only
+  labor-intensive and required deep linguistic expertise, but it also resulted in
+  brittle systems that performed poorly on text from new domains where the
+  hand-crafted features were less effective. A more integrated and data-driven
+  approach was needed to overcome these limitations.
+  
+  The breakthrough came with the development of *end-to-end neural network
+  models*. The term "end-to-end" signifies a paradigm shift: instead of relying on
+  a pipeline of separate, pre-processing tools (like POS taggers or parsers), a
+  single neural network learns to perform the entire task, from raw text input to
+  final coreference cluster output. This approach allows the model to learn its
+  own internal representations and features directly from the data, making it more
+  robust and adaptable.
+  
+  A typical architecture for a modern neural coreference model is shown in **Fig.
+  8.10**. The process begins by converting the input text into a sequence of rich
+  vector representations. This is done by combining pre-trained *word embeddings*
+  (as discussed in Chapter 7) with *character-level embeddings*, which help the
+  model handle unknown words. These initial vectors are then fed into a
+  bidirectional Long Short-Term Memory network (BiLSTM). The BiLSTM processes the
+  sequence both forwards and backwards, producing a context-aware representation
+  for every word that incorporates information from the entire sentence.
+  
+  From these contextualized word vectors, the model performs two interconnected
+  tasks:
+  
+  1. **Mention Detection:** The model considers every possible contiguous span of
+     text (e.g., "Dr. Evans," "the professor," "she") as a potential mention. For
+     each span, it computes a *mention score*, which represents the model's
+     confidence that the span is a valid referring expression. This is a crucial
+     step, as the model does not know beforehand which words constitute mentions.
+  2. **Antecedent Scoring:** For every span $i$ that is identified as a potential
+     mention, the model considers every preceding span $j$ as a potential
+     *antecedent*. It then computes a coreference score, $s(i, j)$, for the pair.
+     This score indicates the likelihood that mention $i$ and mention $j$ refer to
+     the same entity.
+  
+  The scoring function $s(i, j)$ is the heart of the model. It is a neural network
+  component that takes the vector representations of the two spans as input and
+  outputs a single scalar value. The span representations themselves are
+  sophisticated, often created using an *attention mechanism* over the words
+  within the span. This allows the model to focus on the most important words
+  (e.g., the head noun) when representing a mention. The full scoring function for
+  a mention $i$ can be expressed as:
+  
+  $s(i, j) = s_{\text{mention}}(i) + s_{\text{mention}}(j) + s_{\text{antecedent}}(i, j)$
+  
+  Here, $s_{\text{mention}}$ is the score for an individual span being a mention,
+  and $s_{\text{antecedent}}$ is the score for the pairwise link. The model also
+  considers the possibility that a mention is new and has no antecedent by linking
+  it to a special null antecedent, $\epsilon$. During training, the model learns
+  to assign high scores to correct antecedent links found in an annotated corpus.
+  At inference time, for each mention, the model simply chooses the preceding
+  mention (or the null antecedent) that yields the highest score. This elegant
+  integration of mention detection and linking within a single, trainable system
+  has largely replaced feature-based methods, setting the current standard for
+  coreference resolution.
+  
+  This fragment refers to Fig. 8.10. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A simplified architectural diagram of a modern end-to-end neural coreference
+  resolution model. The diagram will show the flow of information from input text
+  to final coreference clusters. Key components to be illustrated include: 1) Word
+  and character embeddings, 2) A BiLSTM to create contextual representations, 3) A
+  mention detection module that scores all possible text spans, and 4) An
+  antecedent scoring module that links each detected mention to its most likely
+  antecedent.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 5ed736ea092fe23cb2ac2b2fed8fdbf62765ccf06a4ffce12bcdf740151b248d
+response:
+  caption:
+    A simplified architectural diagram of a modern end-to-end neural coreference
+    resolution model. The diagram shows the flow of information from input text to
+    final coreference clusters. Key components illustrated include: 1) Word and
+    character embeddings, 2) A BiLSTM to create contextual representations, 3) A
+    mention detection module that scores all possible text spans, and 4) An
+    antecedent scoring module that links each detected mention to its most likely
+    antecedent.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" font-family="Arial, Helvetica, sans-serif">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+        </marker>
+      </defs>
+      <style>.box { fill: #f8f9fa; stroke: #6c757d; stroke-width: 2; rx: 8; } .label { font-size: 16px; font-weight: bold; text-anchor: middle; dominant-baseline: middle; } .sublabel { font-size: 13px; text-anchor: middle; dominant-baseline: middle; fill: #495057; } .arrow { stroke: #333; stroke-width: 2; marker-end: url(#arrowhead); }</style>
+      <g>
+        <rect x="275" y="20" width="250" height="50" class="box"/>
+        <text x="400" y="45" class="label">Input Text</text>
+      </g>
+      <line x1="400" y1="70" x2="400" y2="100" class="arrow"/>
+      <g>
+        <rect x="275" y="100" width="250" height="70" class="box"/>
+        <text x="400" y="125" class="label">Embeddings</text>
+        <text x="400" y="145" class="sublabel">(Word + Character Level)</text>
+      </g>
+      <line x1="400" y1="170" x2="400" y2="200" class="arrow"/>
+      <g>
+        <rect x="250" y="200" width="300" height="70" class="box"/>
+        <text x="400" y="225" class="label">Contextual Representations</text>
+        <text x="400" y="245" class="sublabel">(BiLSTM)</text>
+      </g>
+      <line x1="400" y1="270" x2="400" y2="300" class="arrow"/>
+      <g>
+        <rect x="150" y="300" width="500" height="190" class="box" fill="#f1f3f5"/>
+        <text x="400" y="320" class="label" font-size="14">Scoring For All Spans</text>
+        <rect x="180" y="340" width="200" height="70" class="box" fill="white"/>
+        <text x="280" y="365" class="label" font-size="14">1. Mention Detection</text>
+        <text x="280" y="385" class="sublabel">Compute Mention Score</text>
+        <rect x="420" y="340" width="200" height="70" class="box" fill="white"/>
+        <text x="520" y="365" class="label" font-size="14">2. Antecedent Scoring</text>
+        <text x="520" y="385" class="sublabel">Compute Pairwise Score</text>
+        <path d="M 280 410 C 280 430, 520 430, 520 410" stroke="#6c757d" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/>
+        <text x="400" y="440" class="label" font-size="14">Link Mentions</text>
+        <text x="400" y="460" class="sublabel">Choose antecedent with highest total score</text>
+      </g>
+      <line x1="400" y1="490" x2="400" y2="520" class="arrow"/>
+      <g>
+        <rect x="275" y="520" width="250" height="50" class="box"/>
+        <text x="400" y="545" class="label">Coreference Clusters</text>
+      </g>
+    </svg>
+duration: 62217 ms
+usage_stats:
+  {
+    "candidates_token_count": 1164,
+    "prompt_token_count": 1054,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1054
+      }
+    ],
+    "thoughts_token_count": 7201,
+    "total_token_count": 9419
+  }
+...

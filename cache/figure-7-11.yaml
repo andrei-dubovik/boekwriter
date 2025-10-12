@@ -1,0 +1,114 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  One of the most remarkable and illustrative properties of dense word embeddings
+  is their ability to capture semantic relationships as consistent vector offsets.
+  This goes beyond simply placing similar words near each other; it means the
+  geometric arrangement of words in the vector space encodes analogies. This
+  allows us to use simple vector arithmetic to perform a kind of conceptual
+  algebra.
+  
+  The classic case study that demonstrates this power is the analogy: "man is to
+  king as woman is to queen." A well-trained word embedding model learns this
+  relationship not as a rule, but as a geometric configuration. We can express
+  this analogy through vector arithmetic:
+  
+  $\vec{v}_{\text{king}} - \vec{v}_{\text{man}} + \vec{v}_{\text{woman}} \approx \vec{v}_{\text{queen}}$
+  
+  When we perform this calculation, the word whose embedding is closest (typically
+  measured by cosine similarity) to the resulting vector is, indeed, *queen*. The
+  intuition behind this is that the difference vector,
+  $\vec{v}_{\text{king}} - \vec{v}_{\text{man}}$, can be thought of as capturing
+  the abstract concept of *royalty* or *monarchy*. By adding this "royalty vector"
+  to the vector for *woman*, we effectively navigate the semantic space to the
+  location representing a female monarch. The visual representation in **Fig.
+  7.11** illustrates this process, showing how starting at the 'king' vector,
+  subtracting the 'man' vector, and then adding the 'woman' vector lands us in the
+  immediate vicinity of the 'queen' vector.
+  
+  This property is not a special case; it generalizes to many other types of
+  relationships, showcasing the rich structure learned by these models. Examples
+  include:
+  
+  - **Country-Capital:**
+    $\vec{v}_{\text{Paris}} - \vec{v}_{\text{France}} + \vec{v}_{\text{Germany}}$
+    results in a vector very close to $\vec{v}_{\text{Berlin}}$.
+  - **Verb Tense:**
+    $\vec{v}_{\text{walking}} - \vec{v}_{\text{walk}} + \vec{v}_{\text{swam}}$
+    results in a vector close to $\vec{v}_{\text{swimming}}$.
+  - **Company-Product:**
+    $\vec{v}_{\text{Microsoft}} - \vec{v}_{\text{Windows}} + \vec{v}_{\text{Google}}$
+    points towards vectors for products like *Android* or *Search*.
+  
+  These analogy-solving capabilities provided early, compelling evidence that
+  distributional models do more than just count co-occurrences. They learn a
+  high-dimensional semantic space where the directions and distances between words
+  are meaningful. This latent structure is what gives word embeddings their power
+  and makes them such a successful foundational component for more complex natural
+  language understanding tasks. The ability to capture relational meaning was a
+  significant leap beyond the capabilities of earlier sparse, knowledge-based
+  representations.
+  
+  This fragment refers to Fig. 7.11. The figure in question is a "Illustration"
+  and its description is as follows:
+  
+  A visual representation of word vector arithmetic in a 2D space. It will show
+  the vectors for 'king,' 'man,' and 'woman.' The illustration will graphically
+  perform the operation by taking the 'king' vector, subtracting the 'man' vector
+  (i.e., adding its inverse), and then adding the 'woman' vector. The resulting
+  final vector will be shown to point directly to the location of the 'queen'
+  vector.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: a9460100ebc40799658bb79360af1c495d119eb7f95d4807311e1762fc422d38
+response:
+  caption:
+    Fig. 7.11: A 2D visualization of word vector arithmetic for the analogy 'man is
+    to king as woman is to queen'. The parallel dashed arrows represent the constant
+    vector offset corresponding to the concept of 'royalty'. This geometric
+    arrangement demonstrates how the relationship v(king) - v(man) ≈ v(queen) -
+    v(woman) is captured in the vector space.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300" font-family="sans-serif" font-size="14">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrow-black" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+        <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#007bff"/>
+        </marker>
+      </defs>
+      <line x1="50" y1="150" x2="100" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrow-black)"/>
+      <line x1="50" y1="150" x2="130" y2="100" stroke="#333" stroke-width="2" marker-end="url(#arrow-black)"/>
+      <line x1="50" y1="150" x2="300" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arrow-black)"/>
+      <line x1="50" y1="150" x2="330" y2="50" stroke="#333" stroke-width="2" marker-end="url(#arrow-black)"/>
+      <text x="95" y="265" text-anchor="middle">man</text>
+      <text x="130" y="85" text-anchor="middle">woman</text>
+      <text x="310" y="215" text-anchor="middle">king</text>
+      <text x="340" y="40" text-anchor="middle">queen</text>
+      <line x1="100" y1="250" x2="300" y2="200" stroke="#007bff" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrow-blue)"/>
+      <line x1="130" y1="100" x2="330" y2="50" stroke="#007bff" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrow-blue)"/>
+    </svg>
+duration: 41592 ms
+usage_stats:
+  {
+    "candidates_token_count": 768,
+    "prompt_token_count": 831,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 831
+      }
+    ],
+    "thoughts_token_count": 4272,
+    "total_token_count": 5871
+  }
+...

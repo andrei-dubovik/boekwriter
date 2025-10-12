@@ -1,0 +1,156 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To make the CYK algorithm concrete, let's walk through the process of parsing
+  the sentence "she eats fish". We will use a simple Context-Free Grammar already
+  converted to Chomsky Normal Form. Assume our grammar contains the following
+  rules:
+  
+  - **Lexical Rules:**
+    - $PRP \rightarrow \text{'she'}$
+    - $V \rightarrow \text{'eats'}$
+    - $N \rightarrow \text{'fish'}$
+  - **Structural Rules:**
+    - $S \rightarrow NP \ VP$
+    - $NP \rightarrow PRP$
+    - $NP \rightarrow N$
+    - $VP \rightarrow V \ NP$
+  
+  Our goal is to populate a parsing chart, often called a CYK chart or well-formed
+  substring table, to determine if the start symbol `S` can generate the entire
+  sequence of words. This chart, shown in **Fig. 6.8**, is an upper-triangular
+  matrix where each cell `P[i, j]` will store the set of non-terminals that can
+  generate the substring of words from position `i` to `j`. Let our words be
+  indexed as $w_1, w_2, w_3$.
+  
+  **Step 1: Initialization (Spans of Length 1)**
+  
+  We begin by filling the diagonal of the chart, which corresponds to spans of a
+  single word. We look for all lexical rules $A \rightarrow w_k$ in our grammar.
+  
+  - **Cell `P[1, 1]` for 'she' ($w_1$):** The rule $PRP \rightarrow \text{'she'}$
+    applies. We add `PRP` to the cell. We must also consider any unit productions
+    that can be reached from `PRP`. The rule $NP \rightarrow PRP$ allows us to add
+    `NP` as well. So, `P[1, 1] = {PRP, NP}`.
+  - **Cell `P[2, 2]` for 'eats' ($w_2$):** The rule $V \rightarrow \text{'eats'}$
+    applies. There are no further unit productions from `V`. So, `P[2, 2] = {V}`.
+  - **Cell `P[3, 3]` for 'fish' ($w_3$):** The rule $N \rightarrow \text{'fish'}$
+    applies. From `N`, the rule $NP \rightarrow N$ allows us to add `NP`. So,
+    `P[3, 3] = {N, NP}`.
+  
+  After this step, the diagonal of our chart is filled, representing the possible
+  grammatical categories for each individual word.
+  
+  **Step 2: Filling the Chart (Spans of Length 2)**
+  
+  Now we move to spans of length two. For each cell `P[i, j]` where the span
+  length `j - i + 1` is two, we look for all possible split points `k`. We check
+  if any rule $A \rightarrow B \ C$ exists where $B \in P[i, k]$ and
+  $C \in P[k+1, j]$.
+  
+  - **Cell `P[1, 2]` for 'she eats' ($w_1 w_2$):** The only possible split is at
+    $k=1$. We need to find a rule $A \rightarrow B \ C$ where $B \in P[1, 1]$ and
+    $C \in P[2, 2]$.
+    - We check combinations from $P[1, 1] = \{PRP, NP\}$ and $P[2, 2] = \{V\}$.
+    - Is there a rule $A \rightarrow PRP \ V$? No.
+    - Is there a rule $A \rightarrow NP \ V$? No.
+    - Since no rules match, cell `P[1, 2]` remains empty.
+  - **Cell `P[2, 3]` for 'eats fish' ($w_2 w_3$):** The only split is at $k=2$. We
+    need a rule $A \rightarrow B \ C$ where $B \in P[2, 2] = \{V\}$ and
+    $C \in P[3, 3] = \{N, NP\}$.
+    - Is there a rule $A \rightarrow V \ N$? No.
+    - Is there a rule $A \rightarrow V \ NP$? Yes, $VP \rightarrow V \ NP$.
+    - Therefore, we add `VP` to this cell. `P[2, 3] = {VP}`.
+  
+  **Step 3: Filling the Final Cell (Spans of Length 3)**
+  
+  Finally, we compute the entry for the top-right cell, `P[1, 3]`, which covers
+  the entire sentence. The span length is three, so there are two possible split
+  points: $k=1$ and $k=2$.
+  
+  - **Split 1 ($k=1$):** Check for rules $A \rightarrow B \ C$ where
+    $B \in P[1, 1]$ and $C \in P[2, 3]$.
+    - $P[1, 1] = \{PRP, NP\}$ and $P[2, 3] = \{VP\}$.
+    - We check for rules like $A \rightarrow PRP \ VP$ (no) and
+      $A \rightarrow NP \ VP$ (yes, $S \rightarrow NP \ VP$).
+    - This split successfully finds the start symbol `S`. We add `S` to `P[1, 3]`.
+  - **Split 2 ($k=2$):** Check for rules $A \rightarrow B \ C$ where
+    $B \in P[1, 2]$ and $C \in P[3, 3]$.
+    - Since `P[1, 2]` is empty, this split cannot produce any non-terminals.
+  
+  The final content of the top cell is `P[1, 3] = {S}`. The completed chart is
+  shown in **Fig. 6.8**. Because the start symbol `S` is present in the cell
+  corresponding to the entire sentence (`P[1, 3]`), we conclude that "she eats
+  fish" is a valid sentence according to our grammar. If `S` were not found in
+  this cell, the sentence would be rejected as ungrammatical. To reconstruct the
+  actual parse tree, a practical implementation of CYK also stores backpointers in
+  each cell to remember which rule and which sub-constituents were used to add
+  each non-terminal.
+  
+  This fragment refers to Fig. 6.8. The figure in question is a "Chart" and its
+  description is as follows:
+  
+  A completed CYK parsing chart, presented as a triangular grid. The axes will
+  represent the word positions in the sentence. Each cell (i, j) in the chart will
+  be filled with the non-terminal symbols that can generate the substring of the
+  sentence from word i to word j, illustrating the dynamic programming process of
+  building up the parse from smaller to larger constituents.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 3e0fc192ea386dd719c99dd8e4cc76d20ce1e7d30c147bf47af7dfa3ef68b075
+response:
+  caption:
+    A completed CYK parsing chart for the sentence 'she eats fish'. The chart is an
+    upper-triangular matrix where cell (i, j) contains the set of non-terminals that
+    can generate the substring from word i to word j. The presence of the start
+    symbol 'S' in the top-right cell (1, 3) confirms the sentence is grammatically
+    valid according to the provided grammar.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+      <rect x="0" y="0" width="400" height="300" fill="white"/>
+      <g font-family="sans-serif" text-anchor="middle">
+        <g font-size="14" font-weight="bold">
+          <text x="95" y="35">j=1 (she)</text>
+          <text x="205" y="35">j=2 (eats)</text>
+          <text x="315" y="35">j=3 (fish)</text>
+          <text x="20" y="77.5">i=1</text>
+          <text x="130" y="132.5">i=2</text>
+          <text x="240" y="187.5">i=3</text>
+        </g>
+        <g font-size="14" dominant-baseline="middle">
+          <rect x="40" y="50" width="110" height="55" fill="#f8f8f8" stroke="#333"/>
+          <text x="95" y="77.5">{PRP, NP}</text>
+          <rect x="150" y="50" width="110" height="55" fill="#f8f8f8" stroke="#333"/>
+          <rect x="260" y="50" width="110" height="55" fill="#e6f7ff" stroke="#333"/>
+          <text x="315" y="77.5" font-weight="bold">{S}</text>
+          <rect x="150" y="105" width="110" height="55" fill="#f8f8f8" stroke="#333"/>
+          <text x="205" y="132.5">{V}</text>
+          <rect x="260" y="105" width="110" height="55" fill="#f8f8f8" stroke="#333"/>
+          <text x="315" y="132.5">{VP}</text>
+          <rect x="260" y="160" width="110" height="55" fill="#f8f8f8" stroke="#333"/>
+          <text x="315" y="187.5">{N, NP}</text>
+        </g>
+      </g>
+    </svg>
+duration: 76857 ms
+usage_stats:
+  {
+    "candidates_token_count": 689,
+    "prompt_token_count": 1642,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1642
+      }
+    ],
+    "thoughts_token_count": 9617,
+    "total_token_count": 11948
+  }
+...

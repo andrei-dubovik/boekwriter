@@ -1,0 +1,107 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Once we have formally defined a Hidden Markov Model, the next logical step is to
+  *train* it. Training an HMM simply means learning its parameters from data. For
+  a POS tagger, this data is a large, pre-tagged corpus—a collection of text where
+  each word has already been assigned its correct tag by a human annotator. We use
+  this "gold-standard" data to estimate the two sets of probabilities that define
+  our model: transition probabilities and emission probabilities. This section
+  focuses on the former.
+  
+  Transition probabilities answer the question: given that we have just seen a
+  particular tag, what is the likelihood of seeing another specific tag next?
+  Formally, this is the conditional probability of tag $t_i$ occurring given that
+  the previous tag was $t_{i-1}$, which we denote as $P(t_i | t_{i-1})$. This
+  captures the grammatical structure of a language. For instance, in English, it
+  is highly probable that a determiner (like 'the') will be followed by a noun
+  (like 'cat'), so we would expect the probability
+  $P(\text{Noun} | \text{Determiner})$ to be high. Conversely, the probability of
+  a determiner following another determiner,
+  $P(\text{Determiner} | \text{Determiner})$, would be extremely low.
+  
+  We calculate these probabilities directly from the frequencies in our annotated
+  corpus using a method called *Maximum Likelihood Estimation* (MLE). The formula
+  is straightforward and intuitive:
+  
+  $P(t_i | t_{i-1}) = \frac{C(t_{i-1}, t_i)}{C(t_{i-1})}$
+  
+  Here, $C(t_{i-1}, t_i)$ is the count of how many times the tag sequence
+  $t_{i-1}$ followed by $t_i$ appears in the corpus. The denominator,
+  $C(t_{i-1})$, is the total count of the tag $t_{i-1}$ appearing anywhere in the
+  corpus. For example, to calculate $P(\text{Noun} | \text{Determiner})$, we would
+  count every instance of a determiner followed by a noun and divide it by the
+  total count of all determiners.
+  
+  A special case arises at the beginning of a sentence, as the first word has no
+  preceding tag. To handle this, we introduce a special *start-of-sentence* tag,
+  often denoted as `<s>`. The transition probability from this special state,
+  $P(t_i | \text{<s>})$, represents the likelihood of a sentence beginning with
+  tag $t_i$. This is calculated by counting how many sentences in the corpus start
+  with tag $t_i$ and dividing by the total number of sentences.
+  
+  Once we compute these probabilities for every possible pair of tags in our
+  tagset, we can organize them into a *transition probability matrix*. As shown in
+  **Fig. 5.9**, the rows of this matrix represent the preceding tag ($t_{i-1}$)
+  and the columns represent the current tag ($t_i$). Each cell contains the
+  corresponding conditional probability. A crucial property of this matrix is that
+  the probabilities in each row must sum to 1, since some tag must always follow
+  the preceding one.
+  
+  $\sum_{t_i \in T} P(t_i | t_{i-1}) = 1$
+  
+  This matrix forms one of the core components of our HMM, encoding the learned
+  grammatical patterns of the language. The second component, the emission
+  probabilities, will tell us which words are likely for each tag.
+  
+  This fragment refers to Fig. 5.9, which is a table. Its description is as
+  follows:
+  
+  A transition probability matrix. The rows and columns will be labeled with a
+  subset of POS tags (e.g., Determiner, Noun, Verb). Each cell will contain the
+  conditional probability of transitioning from the row's tag to the column's tag,
+  providing a concrete example of the model's parameters for tag sequences.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: 8b7400406cd5b2af801daa691360420c5c209657306d0c632f5fce241cf1a63b
+response:
+  caption:
+    Fig. 5.9: A simplified example of a transition probability matrix. Each cell
+    shows the probability of the current tag ($t_i$) occurring, given the previous
+    tag ($t_{i-1}$). The special tag \\texttt{<s>} marks the start of a sentence and
+    \\texttt{</s>} marks the end. Note that each row's probabilities sum to 1.
+  latex:
+    \begin{tabular}{lcccc}
+    \toprule
+    & \multicolumn{4}{c}{\textbf{Current Tag ($t_i$)}} \\
+    \cmidrule(l){2-5}
+    \textbf{Previous Tag ($t_{i-1}$)} & \textbf{Determiner} & \textbf{Noun} & \textbf{Verb} & \textbf{\texttt{</s>}} \\
+    \midrule
+    \texttt{<s>} & 0.60 & 0.30 & 0.10 & 0.00 \\
+    Determiner & 0.05 & 0.90 & 0.05 & 0.00 \\
+    Noun & 0.05 & 0.15 & 0.50 & 0.30 \\
+    Verb & 0.40 & 0.30 & 0.10 & 0.20 \\
+    \bottomrule
+    \end{tabular}
+duration: 22666 ms
+usage_stats:
+  {
+    "candidates_token_count": 315,
+    "prompt_token_count": 942,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 942
+      }
+    ],
+    "thoughts_token_count": 2654,
+    "total_token_count": 3911
+  }
+...

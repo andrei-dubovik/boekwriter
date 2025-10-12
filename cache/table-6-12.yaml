@@ -1,0 +1,155 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To understand how a transition-based parser operates, let's walk through a
+  concrete example. We will parse the simple sentence "He ate fish." Our parser
+  uses three data structures: a *stack*, which holds words that are currently
+  being processed; a *buffer*, which holds the remaining words of the sentence;
+  and a list of *arcs*, which will store the final dependency relations we
+  construct.
+  
+  The parser begins in an initial configuration. The stack contains a special
+  `[ROOT]` symbol, which acts as a placeholder for the ultimate root of the
+  sentence. The buffer contains all the words of the sentence in order. The set of
+  generated arcs is empty.
+  
+  *Initial State:*
+  
+  - **Stack:** `[ROOT]`
+  - **Buffer:** `[He, ate, fish]`
+  - **Arcs:** `{}`
+  
+  The parser's job is to sequentially apply one of three actions—`SHIFT`,
+  `LEFT-ARC`, or `RIGHT-ARC`—until it reaches a terminal state, which is defined
+  as having an empty buffer and a stack containing only the `[ROOT]` element. At
+  each step, a model known as an *oracle* decides which action is correct based on
+  the current configuration. For this walkthrough, we will act as the oracle,
+  making decisions that lead to a grammatically correct parse. The entire process
+  is traced step-by-step in Fig. 6.12.
+  
+  **Step 1:** The stack contains `[ROOT]` and the buffer starts with `He`. We
+  cannot yet establish a relationship between `ROOT` and `He`, as we haven't seen
+  the main verb of the sentence. Therefore, we must move a word from the buffer to
+  the stack for further consideration. The only valid action is `SHIFT`.
+  
+  - **Stack:** `[ROOT, He]`
+  - **Buffer:** `[ate, fish]`
+  - **Action:** `SHIFT`
+  - **Arcs:** `{}`
+  
+  **Step 2:** The top two items on the stack are `ROOT` and `He`. We still cannot
+  relate them. The main verb, `ate`, is still in the buffer. So, we `SHIFT` again.
+  
+  - **Stack:** `[ROOT, He, ate]`
+  - **Buffer:** `[fish]`
+  - **Action:** `SHIFT`
+  - **Arcs:** `{}`
+  
+  **Step 3:** Now, the stack is `[ROOT, He, ate]`. We can examine the top two
+  words: `He` and `ate`. A dependency exists between them: `ate` is the head of
+  `He` (the verb is the head of its subject). The arc is thus `ate -> He`. Since
+  the head (`ate`) is to the right of the dependent (`He`) on the stack, this
+  calls for a `LEFT-ARC` action. We will label this arc with the relation *nsubj*
+  (nominal subject). This action adds the arc `(ate, nsubj, He)` to our set and
+  removes the dependent, `He`, from the stack.
+  
+  - **Stack:** `[ROOT, ate]`
+  - **Buffer:** `[fish]`
+  - **Action:** `LEFT-ARC(nsubj)`
+  - **Arcs:** `{(ate, nsubj, He)}`
+  
+  **Step 4:** The stack is now `[ROOT, ate]` and the buffer still contains `fish`.
+  We cannot create a dependency between `ate` and `fish` because `fish` is not yet
+  on the stack. The only possible action is to `SHIFT`.
+  
+  - **Stack:** `[ROOT, ate, fish]`
+  - **Buffer:** `[]`
+  - **Action:** `SHIFT`
+  - **Arcs:** `{(ate, nsubj, He)}`
+  
+  **Step 5:** The buffer is now empty. We must process the remaining items on the
+  stack. The top two words are `ate` and `fish`. Here, `ate` is the head of `fish`
+  (the verb is the head of its direct object). The arc is `ate -> fish`. Because
+  the head (`ate`) is to the left of the dependent (`fish`), this is a `RIGHT-ARC`
+  action. We label it with the relation *dobj* (direct object). This action adds
+  the arc `(ate, dobj, fish)` to our set and removes the dependent, `fish`, from
+  the stack.
+  
+  - **Stack:** `[ROOT, ate]`
+  - **Buffer:** `[]`
+  - **Action:** `RIGHT-ARC(dobj)`
+  - **Arcs:** `{(ate, nsubj, He), (ate, dobj, fish)}`
+  
+  **Step 6:** We are nearly finished. The buffer is empty and the stack contains
+  `[ROOT, ate]`. The final dependency connects the special `ROOT` symbol to the
+  main predicate of the sentence, which is `ate`. The arc is `ROOT -> ate`. Since
+  the head (`ROOT`) is to the left of the dependent (`ate`), this is another
+  `RIGHT-ARC` action. This final arc establishes `ate` as the head of the entire
+  sentence.
+  
+  - **Stack:** `[ROOT]`
+  - **Buffer:** `[]`
+  - **Action:** `RIGHT-ARC(root)`
+  - **Arcs:** `{(ate, nsubj, He), (ate, dobj, fish), (ROOT, root, ate)}`
+  
+  The parser has now reached its terminal state: the buffer is empty and the stack
+  contains only `[ROOT]`. The set of arcs generated represents the final
+  dependency graph for the sentence "He ate fish."
+  
+  A crucial question remains: how does the parser *decide* which action to take at
+  each step? In our example, we used our own linguistic knowledge. A real
+  transition-based parser uses a machine learning classifier as its oracle. This
+  classifier is trained on a large treebank—a corpus of sentences that have been
+  manually annotated with their correct dependency structures. For each
+  configuration in the training data, the oracle learns the correct historical
+  action.
+  
+  During parsing, the oracle makes a prediction based on features of the current
+  configuration. These features might include the top words on the stack, the
+  first words in the buffer, their part-of-speech tags, and any existing
+  dependency arcs. Based on these features, the classifier predicts the most
+  likely action (`SHIFT`, `LEFT-ARC`, or `RIGHT-ARC`) to take next. The power of
+  this approach lies in its ability to learn complex grammatical patterns from
+  data, rather than relying on hand-crafted rules. This data-driven method makes
+  transition-based parsers both highly accurate and computationally efficient, as
+  they build the syntactic structure in a single linear pass over the sentence.
+  
+  This fragment refers to Fig. 6.12, which is a table. Its description is as
+  follows:
+  
+  A step-by-step trace of a transition-based parser's operation. The table will
+  have columns for 'Step', 'Stack', 'Buffer', 'Action Taken', and 'Generated
+  Arcs'. Each row will show the configuration of the parser at a single step as it
+  processes a sentence, making the sequence of SHIFT, LEFT-ARC, and RIGHT-ARC
+  decisions clear.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: acdf7a74478fc92d9cbf4e1a92ad8b29437c4520eb42de13f83ca3784a85d195
+response:
+  caption:
+    Fig. 6.12: A step-by-step trace of a transition-based parser operating on the
+    sentence 'He ate fish.' The table shows the state of the stack, buffer, and
+    generated dependency arcs after each action.
+  latex: \begin{tabular}{cllll}\toprule\textbf{Step} & \textbf{Stack} & \textbf{Buffer} & \textbf{Action Taken} & \textbf{Generated Arcs} \\\midrule0 & [ROOT] & [He, ate, fish] & --- & \{\} \\1 & [ROOT, He] & [ate, fish] & \textsc{shift} & \{\} \\2 & [ROOT, He, ate] & [fish] & \textsc{shift} & \{\} \\3 & [ROOT, ate] & [fish] & \textsc{left-arc}(\textit{nsubj}) & \{(ate, \textit{nsubj}, He)\} \\4 & [ROOT, ate, fish] & [] & \textsc{shift} & \{(ate, \textit{nsubj}, He)\} \\5 & [ROOT, ate] & [] & \textsc{right-arc}(\textit{dobj}) & \{(ate, \textit{nsubj}, He), (ate, \textit{dobj}, fish)\} \\6 & [ROOT] & [] & \textsc{right-arc}(\textit{root}) & \{(ate, \textit{nsubj}, He), (ate, \textit{dobj}, fish), (ROOT, \textit{root}, ate)\} \\\bottomrule\end{tabular}
+duration: 36259 ms
+usage_stats:
+  {
+    "candidates_token_count": 366,
+    "prompt_token_count": 1621,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1621
+      }
+    ],
+    "thoughts_token_count": 4457,
+    "total_token_count": 6444
+  }
+...

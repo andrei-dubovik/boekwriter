@@ -1,0 +1,158 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To apply a Hidden Markov Model to Part-of-Speech tagging, we must frame the task
+  in terms of the model's core components: hidden states, observations, and the
+  probabilities that connect them. The mapping is direct and intuitive. Given a
+  sentence, the words are what we can *see*, while the grammatical tags are the
+  *hidden* structure we wish to uncover.
+  
+  Formally, we define the components of the HMM as follows:
+  
+  - **Observations ($O$)**: The sequence of words in the sentence,
+    $w_1, w_2, \dots, w_n$. For the sentence "Book that flight," the observation
+    sequence is `('Book', 'that', 'flight')`. These are the evident, observable
+    outputs of our model.
+  
+  - **Hidden States ($Q$)**: The sequence of Part-of-Speech tags,
+    $t_1, t_2, \dots, t_n$, corresponding to each word. The goal of the tagging
+    process is to find the most probable sequence of these states. For our
+    example, a plausible hidden state sequence is `(Verb, Determiner, Noun)`. The
+    set of all possible states is the complete tagset we are using (e.g., the 36
+    main tags of the Penn Treebank).
+  
+  With the states and observations defined, the HMM is characterized by two key
+  sets of probabilities, which are learned from an annotated corpus during a
+  training phase.
+  
+  First, we have the **transition probabilities**. These answer the question:
+  given that we are in a certain state (tag), what is the probability of moving to
+  another state (tag)? This is the probability of a tag $t_i$ given the previous
+  tag $t_{i-1}$, denoted as $P(t_i | t_{i-1})$. For instance, English grammar
+  dictates that a determiner is very likely to be followed by a noun. Therefore,
+  the transition probability $P(\text{Noun} | \text{Determiner})$ will be high.
+  Conversely, the probability of a determiner following another determiner,
+  $P(\text{Determiner} | \text{Determiner})$, will be extremely low. These
+  probabilities effectively encode syntactic knowledge of the language.
+  
+  Second, we have the **emission probabilities**. These answer the question: given
+  that we are in a particular hidden state (tag), what is the probability of
+  observing a specific word? This is the probability of a word $w_i$ given its tag
+  $t_i$, denoted as $P(w_i | t_i)$. Emission probabilities capture lexical
+  knowledge. For example, the probability of seeing the word "book" given the tag
+  Noun, $P(\text{'book'} | \text{Noun})$, will be significantly higher than the
+  probability of seeing "book" given the tag Adverb,
+  $P(\text{'book'} | \text{Adverb})$. This is how the model handles lexical
+  ambiguity; while "book" can be both a Noun and a Verb, one is typically more
+  probable than the other, and the model learns these likelihoods from the corpus.
+  
+  The conceptual model, illustrated in Fig. 5.8, shows this generative process.
+  The HMM starts in an initial state, transitions to a hidden tag (e.g., `Verb`),
+  and then emits an observable word (e.g., "Book"). It then transitions to the
+  next tag (`Determiner`), emits the next word ("that"), and so on. Our task,
+  however, is the inverse of generation. We are given the sequence of
+  observations—the words—and our goal is to find the single most likely sequence
+  of hidden states—the tags—that could have produced them. This decoding problem
+  is precisely what the Viterbi algorithm, which we will discuss next, is designed
+  to solve.
+  
+  This fragment refers to Fig. 5.8. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A state diagram illustrating how an HMM is applied to POS tagging. Circles will
+  represent hidden states (e.g., 'Determiner', 'Noun', 'Verb'), with connecting
+  arrows labeled with transition probabilities. From each state, an arrow will
+  point to an observable word (e.g., 'the', 'book', 'is'), labeled with an
+  emission probability. This provides a conceptual model of the system.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 0125dff3bb30d108d58c977be110f0f29f6e6e0fa1522e68dc82632bbbe3c363
+response:
+  caption:
+    A diagram of a Hidden Markov Model (HMM) for Part-of-Speech (POS) tagging. The
+    hidden states (Verb, Determiner, Noun) are shown in circles, and they generate
+    observable words ('Book', 'that', 'flight'), shown in rectangles. The solid
+    arrows between states represent transition probabilities (the likelihood of one
+    tag following another), while the dashed arrows from states to words represent
+    emission probabilities (the likelihood of a tag generating a specific word).
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+      </defs>
+      <g id="states" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">
+        <g id="state-verb">
+          <circle cx="150" cy="250" r="55" fill="#e3f2fd" stroke="#1e88e5" stroke-width="2"/>
+          <text x="150" y="250" dominant-baseline="middle">Verb</text>
+        </g>
+        <g id="state-det">
+          <circle cx="400" cy="250" r="55" fill="#e3f2fd" stroke="#1e88e5" stroke-width="2"/>
+          <text x="400" y="250" dominant-baseline="middle">Determiner</text>
+        </g>
+        <g id="state-noun">
+          <circle cx="650" cy="250" r="55" fill="#e3f2fd" stroke="#1e88e5" stroke-width="2"/>
+          <text x="650" y="250" dominant-baseline="middle">Noun</text>
+        </g>
+      </g>
+      <g id="observations" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">
+        <g id="obs-book">
+          <rect x="110" y="480" width="80" height="40" rx="5" fill="#fffde7" stroke="#fbc02d" stroke-width="2"/>
+          <text x="150" y="500" dominant-baseline="middle">'Book'</text>
+        </g>
+        <g id="obs-that">
+          <rect x="350" y="480" width="100" height="40" rx="5" fill="#fffde7" stroke="#fbc02d" stroke-width="2"/>
+          <text x="400" y="500" dominant-baseline="middle">'that'</text>
+        </g>
+        <g id="obs-flight">
+          <rect x="600" y="480" width="100" height="40" rx="5" fill="#fffde7" stroke="#fbc02d" stroke-width="2"/>
+          <text x="650" y="500" dominant-baseline="middle">'flight'</text>
+        </g>
+      </g>
+      <g fill="none" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)">
+        <path d="M 50,250 L 95,250"/>
+        <path d="M 205,250 C 275,200 325,200 345,250"/>
+        <path d="M 455,250 C 525,200 575,200 595,250"/>
+        <path d="M 380,195 a 45,45 0 1,1 40,0"/>
+      </g>
+      <g font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#212121">
+        <text x="70" y="240">Start</text>
+        <text x="275" y="195">P(Determiner | Verb)</text>
+        <text x="525" y="195">P(Noun | Determiner)</text>
+        <text x="400" y="140">P(Determiner | Determiner)</text>
+      </g>
+      <g fill="none" stroke="#555" stroke-width="1.5" marker-end="url(#arrowhead)" stroke-dasharray="4 4">
+        <path d="M 150,305 L 150,480"/>
+        <path d="M 400,305 L 400,480"/>
+        <path d="M 650,305 L 650,480"/>
+      </g>
+      <g font-family="Arial, sans-serif" font-size="14" text-anchor="start" fill="#424242">
+        <text x="160" y="390">P('Book' | Verb)</text>
+        <text x="410" y="390">P('that' | Determiner)</text>
+        <text x="660" y="390">P('flight' | Noun)</text>
+      </g>
+    </svg>
+duration: 77803 ms
+usage_stats:
+  {
+    "candidates_token_count": 1316,
+    "prompt_token_count": 1023,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1023
+      }
+    ],
+    "thoughts_token_count": 8929,
+    "total_token_count": 11268
+  }
+...

@@ -1,0 +1,710 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: headpiece
+prompt:
+  What follows is a text for a chapter from a book called "Introduction to
+  Computational Linguistics".
+  
+  <chapter>
+  
+  Thus far, our journey has focused primarily on the sentence as the fundamental
+  unit of analysis. We have learned to model its internal structure through
+  parsing and represent its meaning through compositional semantics. These are
+  powerful tools, but they operate under a significant limitation: human language
+  rarely consists of isolated, self-contained sentences. We communicate through
+  extended narratives, interactive dialogues, and structured documents where each
+  sentence is part of a larger, interconnected whole. To build systems that truly
+  comprehend language, we must move beyond the sentence boundary and analyze the
+  web of connections that link utterances together.
+  
+  Consider the challenges posed by a simple text snippet: *“Maria trained for
+  months. Her dedication was inspiring. In the end, she won it.”* Analyzing the
+  final sentence alone, a syntactic parser can identify its structure, and a
+  semantic model might understand the concept of "winning." Yet, fundamental
+  questions remain unanswered:
+  
+  - Who is *she*? (Maria)
+  - What is *it* that she won? (Presumably, a competition mentioned earlier)
+  - How does this sentence logically follow from the previous ones? (It is the
+    culmination of her training and dedication)
+  
+  Answering these questions is impossible without considering the broader context,
+  or *discourse*. The meaning is not just *in* the sentences, but *between* them.
+  This chapter is dedicated to the computational modeling of this larger context.
+  We will explore the principles that make a text a coherent whole, tackle the
+  task of *coreference resolution* to link pronouns like "she" to their
+  antecedents, and investigate the structure of *dialogue*. By understanding these
+  mechanisms, we can build applications that don't just process sentences, but
+  comprehend stories and conversations.
+  
+  To truly understand language, we must look beyond the boundaries of individual
+  sentences. The meaning of an utterance is rarely self-contained; it is deeply
+  shaped by the surrounding text and the context in which it is used. Two
+  linguistic fields are dedicated to studying this phenomenon: *pragmatics* and
+  *discourse analysis*.
+  
+  *Pragmatics* is the study of how context influences the interpretation of
+  meaning. It focuses on the gap between what is literally said (*locution*) and
+  what is actually meant (*illocution*). Consider the statement, "It's cold in
+  here." While the literal meaning is a simple observation about the temperature,
+  the pragmatic meaning might be an indirect request to close a window or turn up
+  the heat. Pragmatics deals with this kind of *implicature*, where a speaker's
+  intention must be inferred. For a computer, this is a profound challenge. It
+  requires modeling the speaker's goals, the listener's beliefs, and a vast
+  repository of shared world knowledge—information that is almost never present in
+  the text itself.
+  
+  *Discourse analysis*, on the other hand, is concerned with the structure of
+  language beyond the sentence. It examines how sentences are linked together to
+  form coherent and meaningful texts, whether they are conversations, articles, or
+  stories. While syntax, which we explored in Chapter 6, provides the rules for
+  well-formed sentences, discourse analysis provides the principles for
+  well-formed texts. It seeks to answer questions such as:
+  
+  - How do sentences connect to one another to create a logical flow?
+  - What makes a paragraph a unified whole, rather than a random list of
+    sentences?
+  - How are topics introduced, developed, and shifted over the course of a text?
+  
+  For instance, in the sequence "Maria arrived late. She had missed the bus," we
+  effortlessly infer a causal relationship. Discourse analysis aims to formalize
+  these implicit connections that bind a text together.
+  
+  While distinct, the two fields are closely related and often overlap. Pragmatics
+  often examines the inferential work needed in specific conversational turns,
+  whereas discourse analysis tends to focus on the larger structural properties of
+  a complete text. Both are indispensable for building systems that can comprehend
+  narratives, summarize documents, or engage in meaningful dialogue, as they
+  provide the theoretical tools to model meaning in context.
+  
+  Consider the following two sequences of sentences:
+  
+  *Sequence A:* The cat sat on the mat. It was a fluffy Persian. It began to purr
+  loudly. *Sequence B:* The cat sat on the mat. The sky is blue. Jupiter is the
+  largest planet in our solar system.
+  
+  Both sequences are composed of grammatically correct English sentences. Yet, you
+  intuitively recognize *Sequence A* as a proper text and *Sequence B* as a random
+  list. The crucial property that *Sequence A* possesses and *Sequence B* lacks is
+  **discourse coherence**. Coherence is the quality that makes a sequence of
+  sentences a unified, meaningful whole. It is the underlying logical and semantic
+  connectedness that allows us to interpret a text as a single unit of
+  communication, whether it's a story, an argument, or a set of instructions.
+  Without coherence, we have only a jumble of disconnected propositions.
+  
+  It is useful to distinguish coherence from a related concept, *cohesion*.
+  Cohesion refers to the explicit linguistic devices—the "glue"—that create
+  surface-level links between sentences. These include:
+  
+  - **Pronouns:** Using "it" to refer back to "the cat."
+  - **Conjunctions:** Words like "and," "but," and "so" that signal relationships.
+  - **Lexical repetition:** Repeating key words or using synonyms.
+  
+  *Sequence A* uses cohesion (the pronoun "it"). However, a text can be coherent
+  with minimal cohesive markers. For example: "The power went out. The room was
+  plunged into darkness." No explicit conjunction links these sentences, but the
+  causal relationship is immediately clear to a human reader, making the text
+  coherent. Cohesion, therefore, is one tool for achieving coherence, but
+  coherence itself is a deeper property of meaning and logical flow. It relies on
+  our real-world knowledge, our expectations about how events unfold, and our
+  ability to infer relationships that are not explicitly stated.
+  
+  From a computational perspective, understanding and generating coherent text is
+  a fundamental challenge. For language understanding tasks like question
+  answering or text summarization, a model must grasp the implicit relationships
+  between sentences to build a complete representation of the text's meaning. For
+  language generation tasks, such as creating summaries or chatbot responses, the
+  system must produce not just grammatically correct sentences, but sentences that
+  follow one another in a logical and natural way. Simply stringing together
+  high-probability sentences often leads to the kind of nonsensical output seen in
+  *Sequence B*. To build systems that can truly process language, we need ways to
+  model the structure of coherent discourse, moving beyond individual sentences to
+  the relationships that bind them together.
+  
+  To explain how texts achieve coherence, researchers have developed formal
+  frameworks to model their internal structure. One of the most influential is
+  **Rhetorical Structure Theory (RST)**, developed by William Mann and Sandra
+  Thompson. RST is not just a theory of discourse; it provides a detailed
+  analytical method for describing the relations between different parts of a
+  text. The core premise of RST is that a coherent text can be described by a
+  hierarchical tree structure, where every part of the text serves a specific
+  rhetorical purpose in relation to another part.
+  
+  RST analysis begins by breaking a text down into its minimal, non-overlapping
+  spans, called *Elementary Discourse Units* (EDUs). An EDU typically corresponds
+  to a single clause. These EDUs form the leaves of the RST tree. The magic
+  happens in how these leaves are connected. Adjacent spans of text—either
+  individual EDUs or larger, previously combined spans—are linked by **rhetorical
+  relations**. These relations describe the functional connection between them.
+  There are dozens of defined relations, each capturing a specific type of
+  connection. Some common examples include:
+  
+  - **Elaboration**: One span provides more detail, a definition, or an example
+    related to the other.
+  - **Cause / Result**: One span describes a situation that caused the situation
+    in the other.
+  - **Evidence**: One span provides information intended to increase the reader's
+    belief in the other.
+  - **Contrast**: The two spans present information that is seen as being in
+    contrast.
+  - **Justification**: One span provides a reason for an action or belief
+    presented in the other.
+  - **Background**: One span provides context or background information for the
+    other.
+  
+  A crucial aspect of RST is the asymmetry of most relations. Each relation
+  connects a *nucleus* and a *satellite*. The **nucleus** is the more central and
+  essential part of the text, while the **satellite** is supplementary, providing
+  supporting information. A simple test is to imagine deleting one of the spans;
+  if the text can still function without the satellite, but not without the
+  nucleus, the distinction is clear. For instance, in an *Evidence* relation, the
+  claim being made is the nucleus, and the information supporting it is the
+  satellite. While most relations are monosatellite, some, like *Contrast* or
+  *Sequence*, are multi-nuclear, connecting two or more spans of equal importance.
+  
+  These components combine recursively to form a complete tree structure that
+  spans the entire text. This process is illustrated in **Fig. 8.4**. At the
+  bottom of the diagram, we see the individual EDUs extracted from the paragraph.
+  Moving up the tree, pairs of spans are joined by a rhetorical relation. For
+  example, one EDU might act as the satellite in an *Elaboration* relation,
+  providing more detail for its neighboring nucleus. This newly formed, larger
+  span then acts as a single unit—perhaps as a nucleus in a *Cause* relation with
+  another span. This continues until the entire text is unified under a single
+  root node, representing the primary rhetorical purpose of the whole passage.
+  
+  A text is considered coherent under RST if such a comprehensive tree can be
+  constructed. The tree itself is an explicit model of the text’s coherence,
+  demonstrating precisely how each clause contributes to the overall message. The
+  automatic creation of these trees, known as RST parsing, is a complex but
+  valuable computational task. Models that can identify these deep rhetorical
+  structures can perform more sophisticated text understanding, enabling
+  applications like automated text summarization (by prioritizing the extraction
+  of key nuclei), more coherent text generation, and advanced argumentation
+  mining.
+  
+  To make the abstract concept of coherence concrete, let's contrast two short
+  texts. Consider the following paragraph:
+  
+  *Maria woke up feeling anxious. The final exam was only a few hours away. She
+  had studied for weeks, but the material on syntactic parsing was particularly
+  difficult. Taking a deep breath, she decided to review her notes on the CYK
+  algorithm one last time.*
+  
+  This text is *coherent*. Each sentence logically follows from the one before it,
+  creating a unified narrative. The first sentence establishes the main entity
+  (*Maria*) and her emotional state (*anxious*). The following sentences provide
+  the *cause* for this state (the exam), an *elaboration* on the cause (the
+  difficult material), and a resulting *action* (reviewing her notes). The
+  sentences are linked by a consistent topic, causal relationships, and the flow
+  of time. They work together to build a single, understandable situation.
+  
+  Now, consider this second text, composed of individually sound sentences:
+  
+  *Maria woke up feeling anxious. The capital of Peru is Lima. Most modern cars
+  use internal combustion engines. Taking a deep breath, she decided to review her
+  notes on the CYK algorithm one last time.*
+  
+  This text is *incoherent*. While each sentence is grammatically correct, there
+  is no logical connection or shared context linking them. The mention of Peru's
+  capital and car engines is entirely unrelated to Maria's anxiety or her study
+  plans. The final sentence abruptly returns to the topic of the first, but the
+  intervening sentences have broken any narrative or logical thread. There are no
+  clear discourse relations—no cause, elaboration, or logical progression—between
+  consecutive sentences. This example highlights that coherence is not a property
+  of individual sentences but an emergent quality of the entire text, arising from
+  the meaningful relationships that bind its parts into a whole. Without these
+  relationships, we are left with a random collection of facts, not a text.
+  
+  While coherence frameworks like RST explain how sentences relate logically,
+  another crucial element of a connected text is its ability to consistently refer
+  to the same entities—people, places, and things—as the narrative unfolds. This
+  brings us to the task of **coreference resolution**: the process of identifying
+  all linguistic expressions in a text that refer to the same real-world entity.
+  These expressions can take many forms, from proper names and definite
+  descriptions to pronouns.
+  
+  Consider the following short passage:
+  
+  > Dr. Anya Sharma, a renowned physicist, published her latest findings. The lead
+  > researcher from the institute explained that the discovery could change the
+  > field. Friends noted that she had worked on the project for years.
+  
+  In this text, a human reader effortlessly understands that multiple phrases
+  refer to the same person. The goal of coreference resolution is to make this
+  same connection computationally explicit. The expressions involved are:
+  
+  - *Dr. Anya Sharma* (a proper name)
+  - *a renowned physicist* (a description)
+  - *her* (a possessive pronoun)
+  - *The lead researcher* (another description)
+  - *she* (a personal pronoun)
+  
+  All these phrases are *coreferent*—they refer to the same entity. A set of
+  coreferent expressions is called a **coreference chain** or an *entity cluster*.
+  The computational challenge is to design an algorithm that can take a text and
+  automatically group these referring expressions into their correct chains.
+  
+  Solving this task is fundamental for any application that requires deep language
+  understanding. For a question-answering system to correctly answer "What did the
+  lead researcher publish?", it must first establish that "the lead researcher" is
+  the same entity as "Dr. Anya Sharma". Similarly, for information extraction,
+  grouping these mentions allows a system to aggregate all known facts about a
+  single, unique individual. Without coreference resolution, a text is just a
+  collection of disconnected statements; with it, a rich and interconnected model
+  of the entities and events within the text begins to emerge.
+  
+  To systematically solve the coreference problem, we must first establish a
+  precise vocabulary. The fundamental unit is the *referring expression*, which is
+  any noun phrase that points to an entity in the world. These expressions can be
+  proper nouns (e.g., *Ada Lovelace*), pronouns (e.g., *she*, *it*), or
+  descriptive noun phrases (e.g., *the first computer programmer*). Coreference
+  resolution is the task of clustering these referring expressions into sets,
+  where each set corresponds to a single real-world entity.
+  
+  The most common relationship between referring expressions is *anaphora*, where
+  an expression, called the *anaphor*, refers back to a previously introduced
+  entity, known as the *antecedent*. This backward-looking reference is the
+  backbone of textual coherence. Consider the following:
+  
+  > **The system** failed the initial test. *It* was not robust enough.
+  
+  Here, *it* is the anaphor, and its antecedent is *the system*. The relationship
+  links the two sentences together. A less frequent but structurally important
+  pattern is *cataphora*, which reverses this ordering. In cataphora, a referring
+  expression points forward to an entity that has not yet been mentioned. This is
+  often used for stylistic or dramatic effect:
+  
+  > Although *he* didn't expect it, **David** won the competition.
+  
+  In this case, the pronoun *he* is a cataphor that refers forward to *David*.
+  
+  Referring expressions themselves can be categorized, and understanding these
+  categories is crucial for building computational models. The most obvious type
+  of anaphor is a pronoun, leading to what is called *pronominal anaphora*. This
+  includes personal pronouns (*he, she, it, they*), possessive pronouns (*his,
+  her, its, their*), and reflexive pronouns (*himself, herself*).
+  
+  However, many references are not made with pronouns but with other noun phrases.
+  This is known as *nominal anaphora*. This category is diverse and includes
+  several common patterns:
+  
+  - **Repetition:** A noun phrase is simply repeated for clarity.
+  
+    > We need to analyze **the algorithm**. **The algorithm** has a high time
+    > complexity.
+  
+  - **Synonyms/Related Nouns:** An entity is referred to using a synonym, a
+    hypernym (a more general term), or a related word.
+  
+    > **The automaker** issued a recall. **The company** cited a manufacturing
+    > defect.
+  
+  - **Definite Descriptions:** An indefinite noun phrase (*a company*) introduces
+    an entity, which is later referred to by a definite noun phrase (*the
+    company*).
+  
+    > We hired **a new engineer**. **The engineer** starts on Monday.
+  
+  Each of these patterns presents a unique challenge for a computational system.
+  Linking a pronoun to its antecedent often relies on grammatical cues like gender
+  and number agreement, whereas resolving nominal anaphora may require world
+  knowledge or access to a knowledge base like WordNet. For a structured summary
+  of these key terms and their relationships, please refer to the table in Fig.
+  8.7. This vocabulary provides the formal framework needed to discuss and develop
+  algorithms for coreference resolution.
+  
+  To make the abstract task of coreference resolution concrete, let's walk through
+  a brief narrative case study. The goal is to identify all atextual
+  "mentions"—the referring expressions—and group them into sets, or *chains*,
+  where each set corresponds to a single real-world entity. This process is
+  fundamental for any system that needs to track participants and objects through
+  a text.
+  
+  Consider the following short paragraph:
+  
+  > Dr. Elara Aris, a renowned astrophysicist, announced a groundbreaking
+  > discovery. *She* confirmed the existence of an exoplanet with a breathable
+  > atmosphere, a finding made possible by *the James Webb Space Telescope*. *Her*
+  > work has electrified the scientific community. The powerful instrument had
+  > been observing the star system for months before *it* yielded the crucial
+  > data. The discovery itself is so significant that *it* will likely redefine
+  > the search for extraterrestrial life.
+  
+  Even in this simple text, there are multiple entities and numerous expressions
+  referring to them. A successful coreference resolution system must untangle
+  these references to build a coherent model of the text's meaning. As visualized
+  in **Fig. 8.8**, we can trace three distinct coreference chains within this
+  narrative.
+  
+  - **Entity 1: The Scientist.** The first entity is introduced with the proper
+    name *Dr. Elara Aris*. This mention establishes the entity. Subsequent
+    expressions that co-refer with this entity include:
+  
+    - *a renowned astrophysicist*: An appositive phrase that provides additional
+      information about the same person.
+    - *She*: An anaphoric pronoun whose antecedent is clearly *Dr. Elara Aris*.
+    - *Her*: A possessive pronoun that also refers back to Dr. Aris. All four of
+      these expressions form a single chain referring to one individual.
+  
+  - **Entity 2: The Telescope.** The second entity is introduced as *the James
+    Webb Space Telescope*. Later mentions include:
+  
+    - *The powerful instrument*: A definite noun phrase that describes the
+      telescope. Resolving this requires world knowledge or contextual cues to
+      know that a space telescope is a type of instrument.
+    - *it*: The first instance of the pronoun "it" in the text. Its antecedent is
+      *The powerful instrument*, and by extension, the telescope itself.
+  
+  - **Entity 3: The Discovery.** The third entity is introduced with the
+    indefinite noun phrase *a groundbreaking discovery*. Other mentions are:
+  
+    - *a finding*: Another noun phrase that acts as a synonym for the discovery.
+    - *The discovery itself*: A repetition that reinforces the reference.
+    - *it*: The second instance of "it" in the text, referring to the significance
+      of the discovery.
+  
+  This example highlights the complexity of the task. Pronoun resolution,
+  especially for ambiguous pronouns like *it*, is a significant challenge. A
+  system must correctly determine whether *it* refers to the telescope, the
+  discovery, or even the star system. Furthermore, connecting *Dr. Elara Aris* to
+  *a renowned astrophysicist* requires recognizing that the latter is a
+  description of the former, a task that often relies on syntactic cues and
+  semantic knowledge. Having established this goal of identifying chains, we now
+  turn to the computational models designed to solve this problem automatically.
+  
+  With a grasp of the coreference task, we turn to its computational
+  implementation. Before the rise of deep learning, the dominant approach was to
+  frame coreference resolution as a supervised machine learning problem, relying
+  heavily on carefully engineered linguistic features. The most common framework
+  for this was the *mention-pair model*. This model works by considering every
+  possible pair of mentions $(m_i, m_j)$ in a text, where the candidate antecedent
+  $m_i$ precedes the anaphor $m_j$. For each pair, a binary classifier is trained
+  to decide: are these two mentions coreferent?
+  
+  To make this decision, the classifier cannot see the raw text directly. Instead,
+  we must extract a set of descriptive properties—*features*—that capture the
+  relationship between the two mentions. This process, known as feature
+  engineering, was the art of classic coreference resolution. The system's
+  performance depended entirely on the quality and comprehensiveness of these
+  features, which typically included:
+  
+  - **Lexical Features:** These capture surface-level string properties.
+  
+    - *String Match:* A binary feature indicating if the strings of $m_i$ and
+      $m_j$ are identical (e.g., "Apple" and "Apple").
+    - *Head Noun Match:* Do the head nouns of the two mentions match? (e.g., "the
+      tall *man*" and "the *man* in the hat").
+    - *Substring Match:* Is one mention a substring of the other? (e.g., "Dr.
+      Evans" and "Evans").
+  
+  - **Grammatical Features:** These leverage syntactic information, often derived
+    from a parse tree.
+  
+    - *Mention Type:* Are the mentions proper nouns, common nouns, or pronouns? A
+      pronoun is very likely to have an antecedent.
+    - *Number/Gender Agreement:* Do the mentions agree in number (singular/plural)
+      and gender (masculine/feminine/neuter)? "The company" and "she" are an
+      unlikely match.
+    - *Syntactic Constraints:* Does the syntactic relationship between the
+      mentions obey grammatical rules like Binding Theory? For instance, in "Dr.
+      Smith saw *him*," the pronoun *him* cannot refer to Dr. Smith, whereas in
+      "Dr. Smith saw *himself*," it must.
+  
+  - **Semantic Features:** These features aim to capture meaning compatibility.
+  
+    - *Semantic Class:* Do both mentions belong to the same named entity class
+      (e.g., PERSON, ORGANIZATION)? "Google" and "he" would be a poor semantic
+      match.
+    - *WordNet Similarity:* How closely related are the head words in a semantic
+      lexicon like WordNet? This helps link synonyms or related concepts.
+  
+  - **Positional Features:**
+  
+    - *Sentence Distance:* How many sentences separate the two mentions?
+      Coreference is much more likely between mentions that are close to each
+      other.
+  
+  A classifier, such as a decision tree or logistic regression model, is trained
+  on an annotated corpus where true coreference links are marked. It learns to
+  weigh these diverse features to predict the probability that any given pair of
+  mentions is coreferent.
+  
+  Finally, since the model only makes pairwise decisions, a separate clustering
+  step is needed to form the final coreference chains. A common method is to apply
+  transitive closure: if the model predicts that (A, B) is a coreferent pair and
+  (B, C) is also a coreferent pair, then A, B, and C are all grouped into a single
+  entity cluster. This feature-driven approach was powerful but brittle; it
+  depended on a complex pipeline of other NLP tools (parsers, NER taggers) and an
+  immense, time-consuming effort in feature design.
+  
+  While classic machine learning models for coreference resolution were a
+  significant step forward, they relied heavily on *feature engineering*. This
+  process involved manually designing hundreds of linguistic features—such as
+  number agreement, gender, semantic class, and syntactic relationships derived
+  from a parser—to help the model make its decisions. This approach was not only
+  labor-intensive and required deep linguistic expertise, but it also resulted in
+  brittle systems that performed poorly on text from new domains where the
+  hand-crafted features were less effective. A more integrated and data-driven
+  approach was needed to overcome these limitations.
+  
+  The breakthrough came with the development of *end-to-end neural network
+  models*. The term "end-to-end" signifies a paradigm shift: instead of relying on
+  a pipeline of separate, pre-processing tools (like POS taggers or parsers), a
+  single neural network learns to perform the entire task, from raw text input to
+  final coreference cluster output. This approach allows the model to learn its
+  own internal representations and features directly from the data, making it more
+  robust and adaptable.
+  
+  A typical architecture for a modern neural coreference model is shown in **Fig.
+  8.10**. The process begins by converting the input text into a sequence of rich
+  vector representations. This is done by combining pre-trained *word embeddings*
+  (as discussed in Chapter 7) with *character-level embeddings*, which help the
+  model handle unknown words. These initial vectors are then fed into a
+  bidirectional Long Short-Term Memory network (BiLSTM). The BiLSTM processes the
+  sequence both forwards and backwards, producing a context-aware representation
+  for every word that incorporates information from the entire sentence.
+  
+  From these contextualized word vectors, the model performs two interconnected
+  tasks:
+  
+  1. **Mention Detection:** The model considers every possible contiguous span of
+     text (e.g., "Dr. Evans," "the professor," "she") as a potential mention. For
+     each span, it computes a *mention score*, which represents the model's
+     confidence that the span is a valid referring expression. This is a crucial
+     step, as the model does not know beforehand which words constitute mentions.
+  2. **Antecedent Scoring:** For every span $i$ that is identified as a potential
+     mention, the model considers every preceding span $j$ as a potential
+     *antecedent*. It then computes a coreference score, $s(i, j)$, for the pair.
+     This score indicates the likelihood that mention $i$ and mention $j$ refer to
+     the same entity.
+  
+  The scoring function $s(i, j)$ is the heart of the model. It is a neural network
+  component that takes the vector representations of the two spans as input and
+  outputs a single scalar value. The span representations themselves are
+  sophisticated, often created using an *attention mechanism* over the words
+  within the span. This allows the model to focus on the most important words
+  (e.g., the head noun) when representing a mention. The full scoring function for
+  a mention $i$ can be expressed as:
+  
+  $s(i, j) = s_{\text{mention}}(i) + s_{\text{mention}}(j) + s_{\text{antecedent}}(i, j)$
+  
+  Here, $s_{\text{mention}}$ is the score for an individual span being a mention,
+  and $s_{\text{antecedent}}$ is the score for the pairwise link. The model also
+  considers the possibility that a mention is new and has no antecedent by linking
+  it to a special null antecedent, $\epsilon$. During training, the model learns
+  to assign high scores to correct antecedent links found in an annotated corpus.
+  At inference time, for each mention, the model simply chooses the preceding
+  mention (or the null antecedent) that yields the highest score. This elegant
+  integration of mention detection and linking within a single, trainable system
+  has largely replaced feature-based methods, setting the current standard for
+  coreference resolution.
+  
+  Having explored how meaning is built across sentences in static text, we now
+  shift our focus to a more dynamic and interactive form of discourse: *dialogue*.
+  The principles of coherence and coreference are arguably even more critical
+  here, as a computer must understand and participate in a back-and-forth
+  conversation with a human user. The systems designed for this purpose are known
+  as **dialogue systems** or **conversational agents**. You interact with them
+  daily in the form of virtual assistants like Siri and Alexa, customer service
+  chatbots, and voice-controlled smart home devices.
+  
+  Broadly, we can distinguish between two major types of conversational agents:
+  
+  - **Task-Oriented Systems:** These agents are engineered to help a user complete
+    a specific goal within a well-defined domain. Examples include booking a
+    flight, ordering a pizza, or finding a local restaurant. Their dialogue is
+    structured, purposeful, and aimed at efficiently collecting the information
+    needed to perform an action.
+  - **Open-Domain Chatbots:** In contrast, these systems, often called "chit-chat"
+    bots, aim to engage in general, unconstrained conversation. Their primary goal
+    is not task completion but rather social engagement, providing companionship,
+    or simply mimicking human-like interaction for entertainment.
+  
+  While open-domain systems pose fascinating and complex research challenges, the
+  foundational principles of dialogue modeling are best illustrated through the
+  modular architecture of task-oriented systems. They provide a clear framework
+  for applying core computational linguistics concepts to a dynamic setting. In
+  the following sections, we will dissect the typical components of such a system
+  to understand precisely how it interprets user requests, manages the
+  conversation's state, decides what to do next, and generates a coherent
+  response.
+  
+  Having explored how sentences connect to form a coherent text, we now shift our
+  focus to modeling an entire conversation. The principles of discourse are
+  central to building **dialogue systems**, also known as conversational agents or
+  chatbots. While open-domain chatbots like those in entertainment aim for general
+  conversation, many of the most practical systems are **task-oriented**. Their
+  goal is to help a user complete a specific task, such as booking a flight,
+  ordering a pizza, or finding a restaurant. Historically, these systems are built
+  using a modular pipeline architecture, where the problem is broken down into a
+  series of distinct components. As illustrated in **Fig. 8.12**, this classic
+  architecture consists of four main modules: Natural Language Understanding
+  (NLU), a Dialogue State Tracker (DST), a Dialogue Policy, and Natural Language
+  Generation (NLG).
+  
+  ______________________________________________________________________
+  
+  The first component, **Natural Language Understanding (NLU)**, serves as the
+  system's "ears." Its responsibility is to interpret the user's raw text
+  utterance and convert it into a structured, machine-readable format. This
+  process typically involves two key sub-tasks:
+  
+  - **Intent Classification:** This is the task of identifying the user's primary
+    goal or purpose. For example, in the utterance "I need to book a flight to
+    Berlin," the intent is `book_flight`. Other possible intents in a travel
+    system might include `check_booking_status` or `ask_for_weather`.
+  - **Slot Filling:** This task, which is a form of information extraction,
+    identifies and extracts the key pieces of information, or *slots*, from the
+    utterance that are necessary to fulfill the intent. In our example, `Berlin`
+    would be identified as the value for the `destination` slot.
+  
+  The output of the NLU module is a *semantic frame*, a simple data structure that
+  combines the intent and the filled slots. For the utterance "I need a flight to
+  Berlin for next Tuesday," the NLU would produce a frame like:
+  `{intent: "book_flight", destination: "Berlin", departure_date: "next Tuesday"}`.
+  This structured representation is far easier for the subsequent components of
+  the system to process than the original, ambiguous natural language text.
+  
+  The semantic frame is then passed to the **Dialogue State Tracker (DST)**, which
+  acts as the system's memory. The DST's job is to maintain the *dialogue state*
+  throughout the conversation. The state is a summary of everything that has
+  happened so far, aggregating information across multiple turns. It tracks all
+  the constraints the user has specified (e.g., destination, time, price range)
+  and what the system's last action was. For each turn, the DST takes the NLU
+  output from the current user utterance and the dialogue state from the previous
+  turn, and produces an updated state. If the user first says "I need a flight to
+  Berlin" and then, in response to a system query, says "I want to leave
+  tomorrow," the DST would ensure the final state contains both pieces of
+  information: `{destination: "Berlin", departure_date: "2023-10-27"}`.
+  
+  With an updated state from the DST, the **Dialogue Policy** ($\pi$) must decide
+  what the system should do next. The policy is the "brain" of the operation,
+  mapping the current dialogue state to a specific system action. It functions as
+  a decision-making component. For a state $s$, the policy selects an action $a$,
+  such that $\pi(s) = a$. These actions are abstract, formal representations, not
+  yet natural language. Examples of system actions include:
+  
+  - `request(origin_city)`: Ask the user for a required piece of information.
+  - `confirm(destination: "Berlin")`: Explicitly confirm a piece of information
+    with the user.
+  - `inform(flight_options)`: Provide the user with the information they
+    requested.
+  - `api_call(search_flights)`: Query an external database or API.
+  
+  Policies can range from simple, hand-crafted rules (e.g., "IF `destination` is
+  known but `origin` is not, THEN `request(origin)`") to complex statistical
+  models learned using Reinforcement Learning, where the system learns the optimal
+  action to take in any state by maximizing a reward signal, such as successful
+  task completion.
+  
+  Finally, the abstract action selected by the policy is sent to the **Natural
+  Language Generation (NLG)** module, which serves as the system's "mouth." The
+  NLG's sole task is to translate the system action into a fluent, human-readable
+  text response. For example, the action `request(origin_city)` might be converted
+  into "Where will you be departing from?" or "What city are you flying out of?".
+  The simplest NLG systems use templates with slots to fill (e.g., "OK, a flight
+  to \[destination\]. Where from?"). More sophisticated neural models can generate
+  more varied and natural-sounding responses, making the interaction feel less
+  robotic. This generated text is then presented to the user, completing one full
+  turn of the dialogue and preparing the system for the user's next utterance.
+  
+  To make these components concrete, let's trace a simplified interaction with a
+  task-oriented dialogue system designed to book flights. The system's goal is to
+  fill a set of required *slots* (e.g., origin, destination, date) to complete the
+  task. The entire flow of this conversation, showing how information is processed
+  at each turn, is detailed in **Fig. 8.13**.
+  
+  Imagine the user begins with the following utterance:
+  
+  - _User: "I want to book a flight to Berlin next Tuesday."_
+  
+  The system's pipeline springs into action. First, the **NLU** module processes
+  this utterance to extract the user's *intent* and any relevant information. It
+  identifies the intent as `book_flight` and fills two slots:
+  `destination: Berlin` and `date: 2024-10-29` (assuming the system can resolve
+  "next Tuesday" to a specific date).
+  
+  Next, this structured information is passed to the **Dialogue State Tracker
+  (DST)**. The DST maintains the system's belief about the conversation's state.
+  It receives the NLU output and updates its internal record, which now indicates
+  that the destination and date are known. Crucially, the DST is also aware of the
+  required slots for a `book_flight` intent and recognizes that a key piece of
+  information, the `origin` city, is still missing.
+  
+  The updated dialogue state is then fed to the **Dialogue Policy**. This
+  component acts as the system's brain, deciding what to do next. Seeing that the
+  `origin` slot is empty, the policy's strategy is to request this missing
+  information. It selects an abstract system action, such as `request(origin)`.
+  
+  Finally, this abstract action is sent to the **NLG** module. The NLG's job is to
+  translate the system's intent into a cooperative, human-readable sentence. For
+  the `request(origin)` action, it might generate:
+  
+  - _System: "Certainly. Where will you be departing from?"_
+  
+  The user's subsequent response ("I'm flying from San Francisco") would initiate
+  the same cycle again. The NLU would extract `origin: San Francisco`, the DST
+  would update the state to reflect that all necessary slots are now filled, and
+  the Policy would decide on a new action, like `confirm_and_search`. This
+  turn-by-turn interaction, as visualized in **Fig. 8.13**, demonstrates the
+  pipeline's deterministic flow. Each component has a specialized role: NLU
+  interprets, the DST remembers, the Policy decides, and NLG communicates, working
+  in concert to achieve a specific goal.
+  
+  To conclude, the three pillars of this chapter—discourse analysis, coreference
+  resolution, and dialogue modeling—are not isolated fields but are fundamentally
+  interconnected. Understanding language requires moving beyond the analysis of
+  single sentences. Discourse analysis provides the theoretical framework for
+  understanding how multiple sentences combine to form a *coherent* and
+  *structured* text, explaining the logical and rhetorical links between
+  utterances.
+  
+  Within this broader structure, coreference resolution serves as a critical
+  enabling task. It provides the mechanism for tracking entities—people, places,
+  and concepts—as they are mentioned and re-mentioned throughout a text or
+  conversation. Without it, a system cannot connect "the scientist" to a later
+  mention of "she."
+  
+  Ultimately, both of these concepts are prerequisites for building effective
+  dialogue systems. A conversational agent relies on an implicit understanding of
+  discourse structure to generate relevant responses and uses coreference
+  resolution to maintain context across turns. As visually summarized in Fig.
+  8.14, these foundational components are what elevate a system from a simple
+  command-processor to a truly conversational partner.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: c6188b5648d439b1936919b8caae27713f163eff86321322dfd5def75acab5d5
+response:
+  Create a simple, clean-lined illustration of a large corkboard. Pinned to the
+  board are various pieces of information: a few photographs of different people,
+  several small handwritten notes, and excerpts of typed text. The central focus
+  is the network of colored yarn or string stretched taut between the pins,
+  connecting these disparate items. One prominent thread, for example, connects a
+  photo of a person to a handwritten note, and then connects that note to a
+  specific word like "she" or "him" that has been circled within one of the text
+  excerpts. The overall impression should be of someone piecing together a story
+  or an identity by linking scattered clues, emphasizing the web of connections
+  over the details of the individual items.
+duration: 17547 ms
+usage_stats:
+  {
+    "candidates_token_count": 144,
+    "prompt_token_count": 8636,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 8636
+      }
+    ],
+    "thoughts_token_count": 1625,
+    "total_token_count": 10405
+  }
+...

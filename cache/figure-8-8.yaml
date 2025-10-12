@@ -1,0 +1,156 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To make the abstract task of coreference resolution concrete, let's walk through
+  a brief narrative case study. The goal is to identify all atextual
+  "mentions"—the referring expressions—and group them into sets, or *chains*,
+  where each set corresponds to a single real-world entity. This process is
+  fundamental for any system that needs to track participants and objects through
+  a text.
+  
+  Consider the following short paragraph:
+  
+  > Dr. Elara Aris, a renowned astrophysicist, announced a groundbreaking
+  > discovery. *She* confirmed the existence of an exoplanet with a breathable
+  > atmosphere, a finding made possible by *the James Webb Space Telescope*. *Her*
+  > work has electrified the scientific community. The powerful instrument had
+  > been observing the star system for months before *it* yielded the crucial
+  > data. The discovery itself is so significant that *it* will likely redefine
+  > the search for extraterrestrial life.
+  
+  Even in this simple text, there are multiple entities and numerous expressions
+  referring to them. A successful coreference resolution system must untangle
+  these references to build a coherent model of the text's meaning. As visualized
+  in **Fig. 8.8**, we can trace three distinct coreference chains within this
+  narrative.
+  
+  - **Entity 1: The Scientist.** The first entity is introduced with the proper
+    name *Dr. Elara Aris*. This mention establishes the entity. Subsequent
+    expressions that co-refer with this entity include:
+  
+    - *a renowned astrophysicist*: An appositive phrase that provides additional
+      information about the same person.
+    - *She*: An anaphoric pronoun whose antecedent is clearly *Dr. Elara Aris*.
+    - *Her*: A possessive pronoun that also refers back to Dr. Aris. All four of
+      these expressions form a single chain referring to one individual.
+  
+  - **Entity 2: The Telescope.** The second entity is introduced as *the James
+    Webb Space Telescope*. Later mentions include:
+  
+    - *The powerful instrument*: A definite noun phrase that describes the
+      telescope. Resolving this requires world knowledge or contextual cues to
+      know that a space telescope is a type of instrument.
+    - *it*: The first instance of the pronoun "it" in the text. Its antecedent is
+      *The powerful instrument*, and by extension, the telescope itself.
+  
+  - **Entity 3: The Discovery.** The third entity is introduced with the
+    indefinite noun phrase *a groundbreaking discovery*. Other mentions are:
+  
+    - *a finding*: Another noun phrase that acts as a synonym for the discovery.
+    - *The discovery itself*: A repetition that reinforces the reference.
+    - *it*: The second instance of "it" in the text, referring to the significance
+      of the discovery.
+  
+  This example highlights the complexity of the task. Pronoun resolution,
+  especially for ambiguous pronouns like *it*, is a significant challenge. A
+  system must correctly determine whether *it* refers to the telescope, the
+  discovery, or even the star system. Furthermore, connecting *Dr. Elara Aris* to
+  *a renowned astrophysicist* requires recognizing that the latter is a
+  description of the former, a task that often relies on syntactic cues and
+  semantic knowledge. Having established this goal of identifying chains, we now
+  turn to the computational models designed to solve this problem automatically.
+  
+  This fragment refers to Fig. 8.8. The figure in question is a "Illustration" and
+  its description is as follows:
+  
+  A visual representation of coreference chains within a short narrative
+  paragraph. The paragraph will contain multiple entities. Each entity's mentions
+  (e.g., 'Dr. Aris,' 'the scientist,' 'she,' 'her') will be highlighted in a
+  unique, consistent color. Subscripts could also be used (e.g., 'she_1', 'the
+  scientist_1') to explicitly link all expressions belonging to the same chain,
+  making the connections unambiguous.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 228a61eef59ab2b71152403cd3e8459ada6cd7d1ababa08b193e40c018beb9d1
+response:
+  caption:
+    Fig. 8.8: An illustration of coreference resolution within a narrative
+    paragraph. Mentions belonging to the same entity are highlighted in a consistent
+    color, revealing three distinct coreference chains: the scientist (blue), the
+    telescope (green), and the discovery (orange).
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+      <rect width="100%" height="100%" fill="white"/>
+      <text font-family="sans-serif" font-size="20" fill="black">
+        <tspan x="50" y="100">
+          <tspan font-weight="bold" fill="#4A90E2">Dr. Elara Aris</tspan>
+          <tspan>, </tspan>
+          <tspan font-weight="bold" fill="#4A90E2">a renowned astrophysicist</tspan>
+          <tspan>, announced </tspan>
+          <tspan font-weight="bold" fill="#F5A623">a groundbreaking</tspan>
+        </tspan>
+        <tspan x="50" y="130">
+          <tspan font-weight="bold" fill="#F5A623">discovery</tspan>
+          <tspan>. </tspan>
+          <tspan font-weight="bold" fill="#4A90E2">She</tspan>
+          <tspan> confirmed the existence of an exoplanet with a breathable</tspan>
+        </tspan>
+        <tspan x="50" y="160">
+          <tspan>atmosphere, </tspan>
+          <tspan font-weight="bold" fill="#F5A623">a finding</tspan>
+          <tspan> made possible by </tspan>
+          <tspan font-weight="bold" fill="#50E3C2">the James Webb Space Telescope</tspan>
+          <tspan>.</tspan>
+        </tspan>
+        <tspan x="50" y="190">
+          <tspan font-weight="bold" fill="#4A90E2">Her</tspan>
+          <tspan> work has electrified the scientific community. </tspan>
+          <tspan font-weight="bold" fill="#50E3C2">The powerful instrument</tspan>
+        </tspan>
+        <tspan x="50" y="220">
+          <tspan>had been observing the star system for months before </tspan>
+          <tspan font-weight="bold" fill="#50E3C2">it</tspan>
+          <tspan> yielded the crucial</tspan>
+        </tspan>
+        <tspan x="50" y="250">
+          <tspan>data. </tspan>
+          <tspan font-weight="bold" fill="#F5A623">The discovery itself</tspan>
+          <tspan> is so significant that </tspan>
+          <tspan font-weight="bold" fill="#F5A623">it</tspan>
+          <tspan> will likely redefine</tspan>
+        </tspan>
+        <tspan x="50" y="280">
+          <tspan>the search for extraterrestrial life.</tspan>
+        </tspan>
+      </text>
+      <g transform="translate(0, 120)">
+        <rect x="50" y="350" width="20" height="20" fill="#4A90E2" rx="3"/>
+        <text x="80" y="366" font-family="sans-serif" font-size="18">Entity 1: The Scientist</text>
+        <rect x="50" y="380" width="20" height="20" fill="#50E3C2" rx="3"/>
+        <text x="80" y="396" font-family="sans-serif" font-size="18">Entity 2: The Telescope</text>
+        <rect x="50" y="410" width="20" height="20" fill="#F5A623" rx="3"/>
+        <text x="80" y="426" font-family="sans-serif" font-size="18">Entity 3: The Discovery</text>
+      </g>
+    </svg>
+duration: 64698 ms
+usage_stats:
+  {
+    "candidates_token_count": 957,
+    "prompt_token_count": 925,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 925
+      }
+    ],
+    "thoughts_token_count": 7747,
+    "total_token_count": 9629
+  }
+...

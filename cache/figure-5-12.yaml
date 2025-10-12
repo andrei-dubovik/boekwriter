@@ -1,0 +1,226 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To make the Viterbi algorithm concrete, let's walk through the process with a
+  simple sentence: "Book that flight". Our goal is to find the most probable
+  sequence of Part-of-Speech tags. For this example, we will use a highly
+  simplified tagset consisting of only three tags: Noun (N), Verb (V), and
+  Determiner (DET). We will also assume we have already trained an HMM on a
+  corpus, yielding the following transition and emission probabilities.
+  
+  **Transition Probabilities $P(tag_i | tag_{i-1})$**
+  
+  This table shows the probability of a tag given the preceding tag. `<s>`
+  represents the start of a sentence.
+  
+  | | N | V | DET |
+  | :--- | :--- | :--- | :--- |
+  | **`<s>`** | 0.3 | 0.7 | 0.0 |
+  | **N** | 0.2 | 0.7 | 0.1 |
+  | **V** | 0.3 | 0.2 | 0.5 |
+  | **DET** | 0.8 | 0.2 | 0.0 |
+  
+  **Emission Probabilities $P(word | tag)$**
+  
+  This table shows the probability of observing a word, given a specific tag.
+  
+  | | Book | that | flight |
+  | :--- | :--- | :--- | :--- |
+  | **N** | 0.4 | 0.0 | 0.8 |
+  | **V** | 0.6 | 0.1 | 0.1 |
+  | **DET** | 0.0 | 0.9 | 0.0 |
+  
+  The Viterbi algorithm proceeds by constructing a probability matrix, often
+  visualized as a trellis (see Fig. 5.12). Let $v_t(j)$ be the highest probability
+  of a tag sequence ending at time step $t$ with tag $j$. We will also store
+  backpointers, $b_t(j)$, which tell us which previous tag led to this highest
+  probability.
+  
+  ### Initialization Step (t=1, word="Book")
+  
+  For the first word, the Viterbi probability is the product of the start
+  transition probability and the emission probability.
+  
+  - **For tag N:** $v_1(N) = P(\text{"Book"} | N) \times P(N | \text{<s>})$
+    $v_1(N) = 0.4 \times 0.3 = 0.12$
+  
+  - **For tag V:** $v_1(V) = P(\text{"Book"} | V) \times P(V | \text{<s>})$
+    $v_1(V) = 0.6 \times 0.7 = 0.42$
+  
+  At this point, the most likely tag for "Book" in isolation is Verb (0.42 >
+  0.12), but we must consider the entire sequence. These values form the first
+  column of our Viterbi trellis, as depicted in Fig. 5.12.
+  
+  ### Recursive Step (t=2, word="that")
+  
+  Now we move to the second word, "that". For each possible tag of "that", we
+  calculate the probability by considering all possible paths from the previous
+  step. The general formula is:
+  $v_t(j) = P(w_t | tag_j) \times \max_{i=1..N} [ v_{t-1}(i) \times P(tag_j | tag_i) ]$
+  
+  In our simplified example, "that" can only be a Determiner (DET) as its emission
+  probability for other tags is zero.
+  
+  - **For tag DET:** We need to find the most probable path leading to DET from
+    the previous tags (N or V).
+  
+    - Path from N: $v_1(N) \times P(DET | N) = 0.12 \times 0.1 = 0.012$
+    - Path from V: $v_1(V) \times P(DET | V) = 0.42 \times 0.5 = 0.210$
+  
+    The maximum of these two values is 0.210, which came from the previous tag
+    being V. We now multiply this by the emission probability of "that" given DET.
+  
+    $v_2(DET) = P(\text{"that"} | DET) \times 0.210$
+    $v_2(DET) = 0.9 \times 0.210 = 0.189$
+  
+    We also store the backpointer: $b_2(DET) = V$. This means the most likely path
+    to "that" being a DET comes from "Book" being a V. In Fig. 5.12, this is shown
+    as an arrow pointing from the V cell at t=1 to the DET cell at t=2.
+  
+  ### Recursive Step (t=3, word="flight")
+  
+  We repeat the process for the final word, "flight". In our tables, "flight" can
+  be a Noun or a Verb.
+  
+  - **For tag N:** The only possible preceding tag is DET (from step t=2).
+  
+    - Path from DET: $v_2(DET) \times P(N | DET) = 0.189 \times 0.8 = 0.1512$
+  
+    The maximum is trivially 0.1512. Now we include the emission probability.
+  
+    $v_3(N) = P(\text{"flight"} | N) \times 0.1512$
+    $v_3(N) = 0.8 \times 0.1512 = 0.12096$
+  
+    The backpointer is $b_3(N) = DET$.
+  
+  - **For tag V:**
+  
+    - Path from DET: $v_2(DET) \times P(V | DET) = 0.189 \times 0.2 = 0.0378$
+  
+    The maximum is 0.0378.
+  
+    $v_3(V) = P(\text{"flight"} | V) \times 0.0378$
+    $v_3(V) = 0.1 \times 0.0378 = 0.00378$
+  
+    The backpointer is $b_3(V) = DET$.
+  
+  The final column of our trellis now contains the probabilities
+  $v_3(N) = 0.12096$ and $v_3(V) = 0.00378$.
+  
+  ### Termination and Path Retrieval
+  
+  The final step is to identify the highest probability in the last column and
+  trace the backpointers to the beginning of the sentence.
+  
+  1. **Identify the best final tag:** The highest probability in the final column
+     is $v_3(N) = 0.12096$. Therefore, the most likely tag for the last word,
+     "flight", is **N**.
+  
+  2. **Trace back:** We now follow the backpointers from this final state.
+  
+     - The backpointer for "flight"/N is $b_3(N) = DET$. So, the tag for "that" is
+       **DET**.
+     - The backpointer for "that"/DET is $b_2(DET) = V$. So, the tag for "Book" is
+       **V**.
+  
+  By reversing the sequence we traced, we get our final answer: **V - DET - N**.
+  
+  The probability of this entire sequence is the final value we calculated:
+  0.12096. This step-by-step process of filling the trellis from left to right,
+  storing only the maximum probability and a backpointer at each cell, is the
+  essence of the Viterbi algorithm. It uses dynamic programming to efficiently
+  find the optimal path without needing to score all possible tag sequences, which
+  would be computationally intractable for any real sentence. The trellis in Fig.
+  5.12 provides a clear visual map of this computation, with the final traced path
+  representing the single most likely grammatical structure for the sentence
+  according to our model.
+  
+  This fragment refers to Fig. 5.12. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A Viterbi trellis diagram for a short sample sentence. The horizontal axis
+  represents the sequence of words, and the vertical axis represents the possible
+  states (tags). Each cell in the grid will show the calculated probability for
+  that tag at that position, with backpointers indicating the most likely path,
+  visually demonstrating the decoding process.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 9b2e537f6d1aa074a16b2b4b43985c2aab29f90d0aab45adc142ff6d3992f48e
+response:
+  caption:
+    A Viterbi trellis diagram for a short sample sentence. The horizontal axis
+    represents the sequence of words, and the vertical axis represents the possible
+    states (tags). Each cell in the grid shows the calculated probability for that
+    tag at that position, with backpointers indicating the most likely path,
+    visually demonstrating the decoding process.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" font-family="sans-serif" font-size="16">
+      <style>.word-label{font-size: 20px; font-weight: bold; text-anchor: middle;}.tag-label{font-size: 18px; font-weight: bold; text-anchor: middle;}.prob-label{font-size: 14px; text-anchor: middle; fill: #333;}.node{fill: #fff; stroke: #333; stroke-width: 2;}.arrow{stroke: #666; stroke-width: 1.5; marker-end: url(#arrowhead);}.discarded-arrow{stroke: #bbb; stroke-width: 1.5; stroke-dasharray: 4 4; marker-end: url(#arrowhead-discarded);}.highlight-node{fill: #e0f3ff; stroke: #007bff; stroke-width: 3;}.highlight-arrow{stroke: #007bff; stroke-width: 3; marker-end: url(#arrowhead-highlight);}</style>
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#666"/>
+        </marker>
+        <marker id="arrowhead-discarded" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#bbb"/>
+        </marker>
+        <marker id="arrowhead-highlight" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#007bff"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="#fff"/>
+      <g id="word-labels">
+        <text x="275" y="50" class="word-label">Book (t=1)</text>
+        <text x="475" y="50" class="word-label">that (t=2)</text>
+        <text x="675" y="50" class="word-label">flight (t=3)</text>
+      </g>
+      <g id="tag-labels">
+        <text x="50" y="150" class="tag-label">N</text>
+        <text x="50" y="300" class="tag-label">V</text>
+        <text x="50" y="450" class="tag-label">DET</text>
+      </g>
+      <g id="start-state">
+        <text x="125" y="305" class="tag-label">&lt;s&gt;</text>
+      </g>
+      <g id="arrows">
+        <line x1="145" y1="300" x2="245" y2="150" class="arrow"/>
+        <line x1="145" y1="300" x2="245" y2="300" class="highlight-arrow"/>
+        <line x1="295" y1="150" x2="445" y2="450" class="discarded-arrow"/>
+        <line x1="295" y1="300" x2="445" y2="450" class="highlight-arrow"/>
+        <line x1="495" y1="450" x2="645" y2="150" class="highlight-arrow"/>
+        <line x1="495" y1="450" x2="645" y2="300" class="arrow"/>
+      </g>
+      <g id="nodes">
+        <circle cx="275" cy="150" r="20" class="node"/>
+        <text x="275" y="185" class="prob-label">0.12</text>
+        <circle cx="275" cy="300" r="20" class="highlight-node"/>
+        <text x="275" y="335" class="prob-label">0.42</text>
+        <circle cx="475" cy="450" r="20" class="highlight-node"/>
+        <text x="475" y="485" class="prob-label">0.189</text>
+        <circle cx="675" cy="150" r="20" class="highlight-node"/>
+        <text x="675" y="185" class="prob-label">0.1210</text>
+        <circle cx="675" cy="300" r="20" class="node"/>
+        <text x="675" y="335" class="prob-label">0.0038</text>
+      </g>
+    </svg>
+duration: 35574 ms
+usage_stats:
+  {
+    "candidates_token_count": 1321,
+    "prompt_token_count": 2005,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 2005
+      }
+    ],
+    "thoughts_token_count": 3119,
+    "total_token_count": 6445
+  }
+...

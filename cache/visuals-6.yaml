@@ -1,0 +1,129 @@
+{model: str, query: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: visuals
+prompt:
+  You are writing a chapter titled "Syntactic Parsing" in a book called
+  "Introduction to Computational Linguistics". The plan for the chapter is a
+  follows.
+  
+  01. We begin by defining syntactic parsing as the crucial task of analyzing a
+      sentence to reveal its underlying grammatical structure.
+  02. This section introduces the two dominant paradigms for representing this
+      structure: constituency parsing, which focuses on phrases, and dependency
+      parsing, which focuses on word-to-word relationships.
+  03. We first explore constituency parsing, which models sentence structure by
+      breaking it down into hierarchical, nested phrases called constituents.
+  04. The formal mechanism for generating these structures, the Context-Free
+      Grammar (CFG), is explained with its core components of terminals,
+      non-terminals, and production rules.
+  05. An example will demonstrate how a simple CFG can generate a phrase structure
+      tree for the sentence 'The cat sat on the mat'.
+  06. We then discuss the significant challenge of structural ambiguity, where a
+      single sentence can have multiple valid parse trees.
+  07. The chapter details the dynamic programming approach of the
+      Cocke-Younger-Kasami (CYK) algorithm for efficiently parsing sentences with
+      a CFG in Chomsky Normal Form.
+  08. A step-by-step case study will walk through the creation of a CYK parsing
+      chart to find the correct structure for a sample sentence.
+  09. Next, we shift focus to dependency parsing, which represents grammatical
+      structure through directed, typed arcs between individual words acting as
+      heads and dependents.
+  10. An example will illustrate a dependency graph, showing how words are linked
+      with specific grammatical roles like nominal subject (nsubj) or direct
+      object (dobj).
+  11. This section introduces transition-based parsing, an efficient method that
+      builds a dependency graph by making a sequence of decisions or 'actions' to
+      connect words.
+  12. A case study demonstrates how a simple transition-based parser uses a stack,
+      a buffer, and actions like SHIFT, LEFT-ARC, and RIGHT-ARC to process a
+      sentence.
+  13. We will conclude by summarizing the key parsing techniques and briefly
+      looking ahead to the powerful neural models that currently define the state
+      of the art.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 9 aids. Explain the chosen aids in detail. Only list the items where an aid
+  has been chosen.
+hash: 43f3cfa9b630997222915d619e04f0e7d68cd1ee69f13c12995966a1cecda27e
+response:
+- number: 2
+  aid: Diagram
+  description:
+    A side-by-side comparison diagram showing the same sentence, e.g., 'The old dog
+    chased the cat', analyzed using both constituency and dependency parsing. The
+    left side will show the hierarchical phrase structure tree (constituency), and
+    the right side will show the dependency graph with directed, labeled arcs
+    between words.
+- number: 4
+  aid: Table
+  description:
+    A table clearly defining the components of a simple Context-Free Grammar. The
+    table will have three sections: one listing the Non-Terminal symbols (e.g., S,
+    NP, VP), one for Terminal symbols (e.g., 'the', 'cat', 'sat'), and a main
+    section listing the Production Rules (e.g., S -> NP VP, NP -> Det N).
+- number: 5
+  aid: Diagram
+  description:
+    A classic phrase structure tree diagram for the sentence 'The cat sat on the
+    mat'. The diagram will show the sentence at the bottom (terminals) and trace the
+    hierarchical structure upwards through non-terminal nodes like NP, VP, and PP,
+    culminating in the root S node, visually demonstrating the application of the
+    CFG rules.
+- number: 6
+  aid: Diagram
+  description:
+    A diagram presenting two different, yet valid, phrase structure trees for the
+    ambiguous sentence 'I saw a man with a telescope'. One tree will show the
+    prepositional phrase 'with a telescope' modifying the noun 'man' (the man has
+    the telescope), and the other will show it modifying the verb 'saw' (I used the
+    telescope to see).
+- number: 8
+  aid: Chart
+  description:
+    A completed CYK parsing chart, presented as a triangular grid. The axes will
+    represent the word positions in the sentence. Each cell (i, j) in the chart will
+    be filled with the non-terminal symbols that can generate the substring of the
+    sentence from word i to word j, illustrating the dynamic programming process of
+    building up the parse from smaller to larger constituents.
+- number: 10
+  aid: Diagram
+  description:
+    A dependency graph for a sample sentence like 'She ate a green apple'. The
+    diagram will show the words of the sentence with directed arrows (arcs) between
+    them. Each arc will be labeled with its grammatical relation type (e.g., an arc
+    from 'ate' to 'She' labeled 'nsubj', an arc from 'ate' to 'apple' labeled
+    'dobj', and an arc from 'apple' to 'green' labeled 'amod').
+- number: 12
+  aid: Table
+  description:
+    A step-by-step trace of a transition-based parser's operation. The table will
+    have columns for 'Step', 'Stack', 'Buffer', 'Action Taken', and 'Generated
+    Arcs'. Each row will show the configuration of the parser at a single step as it
+    processes a sentence, making the sequence of SHIFT, LEFT-ARC, and RIGHT-ARC
+    decisions clear.
+duration: 22001 ms
+usage_stats:
+  {
+    "candidates_token_count": 731,
+    "prompt_token_count": 598,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 598
+      }
+    ],
+    "thoughts_token_count": 2110,
+    "total_token_count": 3439
+  }
+...

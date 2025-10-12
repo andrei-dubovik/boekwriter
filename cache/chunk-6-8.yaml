@@ -1,0 +1,306 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: chunk
+prompt:
+  You are writing a book called "Introduction to Computational Linguistics". The
+  book consists of the following chapters.
+  
+  # Chapter 1: Introduction to Computational Linguistics.
+  
+  This chapter provides a foundational overview of computational linguistics,
+  defining the field at the intersection of computer science, linguistics, and
+  artificial intelligence. We will trace its historical development, from early
+  rule-based systems to the modern data-driven era, and explore the fundamental
+  goals of enabling computers to understand, interpret, and generate human
+  language. The chapter will also highlight a diverse range of real-world
+  applications, such as machine translation, search engines, and virtual
+  assistants, setting the stage for the core concepts and techniques that will be
+  explored in the remainder of the book.
+  
+  # Chapter 2: Words, Regular Expressions, and Automata.
+  
+  Before we can process language, we must first understand its fundamental
+  building blocks and how to model them formally. This chapter introduces the
+  basics of formal language theory, starting with the concept of regular
+  languages. We will explore the power of regular expressions for pattern matching
+  in text and connect this practical tool to its theoretical underpinning in
+  finite-state automata (FSA). By understanding how these simple computational
+  models can recognize and generate patterns, readers will gain a crucial
+  foundation for more complex language processing tasks.
+  
+  # Chapter 3: Corpus Linguistics and Text Normalization.
+  
+  This chapter delves into the empirical foundation of modern computational
+  linguistics: the corpus. We explore what constitutes a linguistic corpus, how
+  they are constructed, and the importance of annotation schemas. The focus then
+  shifts to the essential pre-processing steps required to prepare raw text for
+  analysis, a process known as text normalization. Key techniques such as
+  tokenization (breaking text into words), stemming (reducing words to their root
+  form), and lemmatization (finding the dictionary form of a word) are covered in
+  detail, providing the practical skills needed to work with real-world language
+  data.
+  
+  # Chapter 4: Language Modeling with N-grams.
+  
+  How can we quantify the probability of a sequence of words? This chapter
+  introduces language modeling, a core task in computational linguistics that aims
+  to answer this question. We will focus on the classic N-gram model, a
+  statistical approach that estimates the probability of a word given the previous
+  N-1 words. The chapter covers the mechanics of training these models from a
+  corpus, the challenges of data sparsity, and essential smoothing techniques like
+  Laplace and Good-Turing smoothing that help create more robust and generalizable
+  models. Finally, we will learn how to evaluate language models using the concept
+  of perplexity.
+  
+  # Chapter 5: Part-of-Speech Tagging.
+  
+  Assigning grammatical categories like noun, verb, or adjective to each word in a
+  sentence is a fundamental step in understanding its structure and meaning. This
+  chapter explores Part-of-Speech (POS) tagging, a foundational NLP task. We will
+  journey from early rule-based systems to the more powerful and widely used
+  stochastic methods, with a deep dive into Hidden Markov Models (HMMs). The
+  chapter will explain the Viterbi algorithm for finding the most likely sequence
+  of tags, providing readers with a solid understanding of how sequence labeling
+  problems are modeled and solved computationally.
+  
+  # Chapter 6: Syntactic Parsing.
+  
+  Beyond individual words, how do we uncover the grammatical structure of a
+  sentence? This chapter tackles syntactic parsing, the process of analyzing a
+  string of words to reveal its hierarchical or relational structure. We will
+  explore two dominant paradigms: constituency parsing, which breaks sentences
+  into nested phrases using Context-Free Grammars (CFGs), and dependency parsing,
+  which models the grammatical relationships between words as a directed graph.
+  The chapter will cover key algorithms, such as CYK for constituency parsing and
+  transition-based methods for dependency parsing, equipping readers to
+  computationally model sentence syntax.
+  
+  # Chapter 7: Lexical and Compositional Semantics.
+  
+  This chapter moves from syntax to semantics—the study of meaning. We first
+  address lexical semantics, focusing on how to represent the meaning of
+  individual words. This includes traditional approaches like WordNet and modern
+  distributional methods like word embeddings (e.g., Word2Vec, GloVe), which
+  capture meaning from context. We then move to compositional semantics, exploring
+  how word meanings combine to form the meaning of phrases and sentences.
+  Techniques such as Semantic Role Labeling (SRL) will be introduced to identify
+  the roles that entities play within a sentence, providing a framework for
+  computational meaning representation.
+  
+  # Chapter 8: Discourse, Coreference, and Dialogue.
+  
+  Language understanding often requires looking beyond individual sentences to the
+  broader context of a conversation or document. This chapter introduces the
+  fields of discourse analysis and pragmatics. We will investigate how sentences
+  relate to one another to form a coherent text, exploring topics like discourse
+  coherence and structure. A key focus will be on coreference resolution—the task
+  of identifying all expressions that refer to the same entity (e.g., 'she,' 'Dr.
+  Evans,' 'the professor'). Finally, we will touch upon the fundamentals of
+  dialogue systems, examining how these principles are applied to build
+  conversational agents that can interact meaningfully with humans.
+  
+  # Chapter 9: Machine Translation.
+  
+  Machine Translation (MT) is one of the oldest and most challenging applications
+  of computational linguistics. This chapter charts the evolution of MT systems,
+  beginning with the core concepts of Statistical Machine Translation (SMT). We
+  will explore how SMT models learn translation probabilities from parallel
+  corpora using word alignment and phrase-based decoding. The second half of the
+  chapter introduces the modern paradigm of Neural Machine Translation (NMT),
+  explaining the powerful sequence-to-sequence architecture, the role of encoder-
+  decoder models, and the revolutionary attention mechanism that has enabled
+  significant breakthroughs in translation quality.
+  
+  # Chapter 10: Information Retrieval and Information Extraction.
+  
+  This chapter focuses on two critical tasks for managing and extracting value
+  from vast amounts of text: Information Retrieval (IR) and Information Extraction
+  (IE). For IR, we will explore the foundational models used by search engines,
+  including the vector space model and the TF-IDF weighting scheme, to rank
+  documents based on their relevance to a user's query. For IE, we will learn how
+  to automatically extract structured information from unstructured text. Key
+  subtasks, such as Named Entity Recognition (NER) for identifying people and
+  places, and Relation Extraction for finding the relationships between them, will
+  be covered in detail.
+  
+  # Chapter 11: Sentiment Analysis and Opinion Mining.
+  
+  Understanding the opinions, sentiments, and emotions expressed in text is a
+  major commercial and academic area of computational linguistics. This chapter
+  provides a comprehensive introduction to sentiment analysis. We will cover
+  methods for classifying a document's polarity (positive, negative, or neutral),
+  from lexicon-based approaches that rely on pre-compiled lists of sentimental
+  words to supervised machine learning models trained on labeled data. The
+  discussion will also extend to more nuanced tasks like aspect-based sentiment
+  analysis, which identifies opinions about specific features or topics within a
+  text.
+  
+  # Chapter 12: The Future: Large Language Models and Ethics.
+  
+  The final chapter brings us to the cutting edge of the field, dominated by Large
+  Language Models (LLMs). We will demystify the transformer architecture, the
+  foundation for models like BERT and GPT, and understand how self-attention
+  mechanisms enable them to process language with unprecedented contextual
+  awareness. The chapter will discuss the paradigm shift towards pre-training and
+  fine-tuning and explore the remarkable capabilities these models have unlocked.
+  Crucially, we will also engage with the significant ethical challenges posed by
+  this technology, including issues of bias, misinformation, and environmental
+  impact, concluding with a look toward future research directions.
+  
+  Consider Chapter 6 "Syntactic Parsing". A plan has been prepared for this
+  chapter.
+  
+  01. We begin by defining syntactic parsing as the crucial task of analyzing a
+      sentence to reveal its underlying grammatical structure.
+  02. This section introduces the two dominant paradigms for representing this
+      structure: constituency parsing, which focuses on phrases, and dependency
+      parsing, which focuses on word-to-word relationships.
+  03. We first explore constituency parsing, which models sentence structure by
+      breaking it down into hierarchical, nested phrases called constituents.
+  04. The formal mechanism for generating these structures, the Context-Free
+      Grammar (CFG), is explained with its core components of terminals,
+      non-terminals, and production rules.
+  05. An example will demonstrate how a simple CFG can generate a phrase structure
+      tree for the sentence 'The cat sat on the mat'.
+  06. We then discuss the significant challenge of structural ambiguity, where a
+      single sentence can have multiple valid parse trees.
+  07. The chapter details the dynamic programming approach of the
+      Cocke-Younger-Kasami (CYK) algorithm for efficiently parsing sentences with
+      a CFG in Chomsky Normal Form.
+  08. A step-by-step case study will walk through the creation of a CYK parsing
+      chart to find the correct structure for a sample sentence.
+  09. Next, we shift focus to dependency parsing, which represents grammatical
+      structure through directed, typed arcs between individual words acting as
+      heads and dependents.
+  10. An example will illustrate a dependency graph, showing how words are linked
+      with specific grammatical roles like nominal subject (nsubj) or direct
+      object (dobj).
+  11. This section introduces transition-based parsing, an efficient method that
+      builds a dependency graph by making a sequence of decisions or 'actions' to
+      connect words.
+  12. A case study demonstrates how a simple transition-based parser uses a stack,
+      a buffer, and actions like SHIFT, LEFT-ARC, and RIGHT-ARC to process a
+      sentence.
+  13. We will conclude by summarizing the key parsing techniques and briefly
+      looking ahead to the powerful neural models that currently define the state
+      of the art.
+  
+  Consider point 8 of the plan. Write this part of the book. Be consise in your
+  writing, avoid an overly verbose prose. Use Markdown for paragraphs, emphasis,
+  numbered or unnumbered lists. Use LaTeX for formulas. Do not add any headers.
+  Footnotes are allowed but should be used sparingly. In total, you should write
+  between 600 and 800 words.
+  
+  This section of the book will feature a Chart. Its description is as follows.
+  
+  A completed CYK parsing chart, presented as a triangular grid. The axes will
+  represent the word positions in the sentence. Each cell (i, j) in the chart will
+  be filled with the non-terminal symbols that can generate the substring of the
+  sentence from word i to word j, illustrating the dynamic programming process of
+  building up the parse from smaller to larger constituents.
+  
+  This visual aid will be drafted separately, but you can already refer to it as
+  Fig. 6.8 in the text.
+hash: 6be651f18ee17f37fb043a457483177f3dacbaae874a0eacf1030d8b35ff366c
+response:
+  To make the CYK algorithm concrete, let's walk through the process of parsing
+  the sentence "she eats fish". We will use a simple Context-Free Grammar already
+  converted to Chomsky Normal Form. Assume our grammar contains the following
+  rules:
+  
+  - **Lexical Rules:**
+    - $PRP \rightarrow \text{'she'}$
+    - $V \rightarrow \text{'eats'}$
+    - $N \rightarrow \text{'fish'}$
+  - **Structural Rules:**
+    - $S \rightarrow NP \ VP$
+    - $NP \rightarrow PRP$
+    - $NP \rightarrow N$
+    - $VP \rightarrow V \ NP$
+  
+  Our goal is to populate a parsing chart, often called a CYK chart or well-formed
+  substring table, to determine if the start symbol `S` can generate the entire
+  sequence of words. This chart, shown in **Fig. 6.8**, is an upper-triangular
+  matrix where each cell `P[i, j]` will store the set of non-terminals that can
+  generate the substring of words from position `i` to `j`. Let our words be
+  indexed as $w_1, w_2, w_3$.
+  
+  **Step 1: Initialization (Spans of Length 1)**
+  
+  We begin by filling the diagonal of the chart, which corresponds to spans of a
+  single word. We look for all lexical rules $A \rightarrow w_k$ in our grammar.
+  
+  - **Cell `P[1, 1]` for 'she' ($w_1$):** The rule $PRP \rightarrow \text{'she'}$
+    applies. We add `PRP` to the cell. We must also consider any unit productions
+    that can be reached from `PRP`. The rule $NP \rightarrow PRP$ allows us to add
+    `NP` as well. So, `P[1, 1] = {PRP, NP}`.
+  - **Cell `P[2, 2]` for 'eats' ($w_2$):** The rule $V \rightarrow \text{'eats'}$
+    applies. There are no further unit productions from `V`. So, `P[2, 2] = {V}`.
+  - **Cell `P[3, 3]` for 'fish' ($w_3$):** The rule $N \rightarrow \text{'fish'}$
+    applies. From `N`, the rule $NP \rightarrow N$ allows us to add `NP`. So,
+    `P[3, 3] = {N, NP}`.
+  
+  After this step, the diagonal of our chart is filled, representing the possible
+  grammatical categories for each individual word.
+  
+  **Step 2: Filling the Chart (Spans of Length 2)**
+  
+  Now we move to spans of length two. For each cell `P[i, j]` where the span
+  length `j - i + 1` is two, we look for all possible split points `k`. We check
+  if any rule $A \rightarrow B \ C$ exists where $B \in P[i, k]$ and
+  $C \in P[k+1, j]$.
+  
+  - **Cell `P[1, 2]` for 'she eats' ($w_1 w_2$):** The only possible split is at
+    $k=1$. We need to find a rule $A \rightarrow B \ C$ where $B \in P[1, 1]$ and
+    $C \in P[2, 2]$.
+    - We check combinations from $P[1, 1] = \{PRP, NP\}$ and $P[2, 2] = \{V\}$.
+    - Is there a rule $A \rightarrow PRP \ V$? No.
+    - Is there a rule $A \rightarrow NP \ V$? No.
+    - Since no rules match, cell `P[1, 2]` remains empty.
+  - **Cell `P[2, 3]` for 'eats fish' ($w_2 w_3$):** The only split is at $k=2$. We
+    need a rule $A \rightarrow B \ C$ where $B \in P[2, 2] = \{V\}$ and
+    $C \in P[3, 3] = \{N, NP\}$.
+    - Is there a rule $A \rightarrow V \ N$? No.
+    - Is there a rule $A \rightarrow V \ NP$? Yes, $VP \rightarrow V \ NP$.
+    - Therefore, we add `VP` to this cell. `P[2, 3] = {VP}`.
+  
+  **Step 3: Filling the Final Cell (Spans of Length 3)**
+  
+  Finally, we compute the entry for the top-right cell, `P[1, 3]`, which covers
+  the entire sentence. The span length is three, so there are two possible split
+  points: $k=1$ and $k=2$.
+  
+  - **Split 1 ($k=1$):** Check for rules $A \rightarrow B \ C$ where
+    $B \in P[1, 1]$ and $C \in P[2, 3]$.
+    - $P[1, 1] = \{PRP, NP\}$ and $P[2, 3] = \{VP\}$.
+    - We check for rules like $A \rightarrow PRP \ VP$ (no) and
+      $A \rightarrow NP \ VP$ (yes, $S \rightarrow NP \ VP$).
+    - This split successfully finds the start symbol `S`. We add `S` to `P[1, 3]`.
+  - **Split 2 ($k=2$):** Check for rules $A \rightarrow B \ C$ where
+    $B \in P[1, 2]$ and $C \in P[3, 3]$.
+    - Since `P[1, 2]` is empty, this split cannot produce any non-terminals.
+  
+  The final content of the top cell is `P[1, 3] = {S}`. The completed chart is
+  shown in **Fig. 6.8**. Because the start symbol `S` is present in the cell
+  corresponding to the entire sentence (`P[1, 3]`), we conclude that "she eats
+  fish" is a valid sentence according to our grammar. If `S` were not found in
+  this cell, the sentence would be rejected as ungrammatical. To reconstruct the
+  actual parse tree, a practical implementation of CYK also stores backpointers in
+  each cell to remember which rule and which sub-constituents were used to add
+  each non-terminal.
+duration: 27259 ms
+usage_stats:
+  {
+    "candidates_token_count": 1440,
+    "prompt_token_count": 2355,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 2355
+      }
+    ],
+    "thoughts_token_count": 1872,
+    "total_token_count": 5667
+  }
+...

@@ -1,0 +1,164 @@
+{model: str, query: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: visuals
+prompt:
+  You are writing a chapter titled "Lexical and Compositional Semantics" in a book
+  called "Introduction to Computational Linguistics". The plan for the chapter is
+  a follows.
+  
+  01. We begin by defining semantics as the study of meaning in language,
+      distinguishing it from the study of structure (syntax), and outlining the
+      chapter's focus.
+  02. The chapter's central theme is then introduced by contrasting lexical
+      semantics, the meaning of individual words, with compositional semantics,
+      how those meanings combine to form phrasal and sentential meaning.
+  03. Our exploration of lexical semantics starts with traditional,
+      knowledge-based approaches by explaining how lexical resources like WordNet
+      represent word meaning through networks of semantic relationships.
+  04. We will detail the structure of WordNet, including its core concepts of
+      synonym sets (synsets) and key relations like hyponymy (is-a), hypernymy
+      (is-a-type-of), and meronymy (part-of).
+  05. An example will demonstrate how to computationally traverse the WordNet
+      graph to find hypernyms for the word 'car' and understand its semantic
+      neighborhood.
+  06. Next, we pivot to modern data-driven methods by introducing the
+      distributional hypothesis, the foundational idea that a word’s meaning is
+      determined by the contexts in which it appears.
+  07. This principle is formalized through vector space models, where each word is
+      represented as a high-dimensional vector based on its co-occurrence with
+      neighboring words in a large corpus.
+  08. We then dive into the specifics of modern word embeddings, explaining the
+      intuition behind learning dense, low-dimensional vector representations that
+      capture rich semantic properties.
+  09. The chapter provides a detailed walkthrough of the Word2Vec model,
+      explaining the mechanics and trade-offs of both its Continuous Bag-of-Words
+      (CBOW) and Skip-gram architectures.
+  10. We will also cover the GloVe model, contrasting its approach of learning
+      vectors from global co-occurrence statistics with Word2Vec's local context
+      window method.
+  11. A classic case study will illustrate the remarkable power of word embeddings
+      by showing how vector arithmetic like 'king' - 'man' + 'woman' results in a
+      vector very close to 'queen'.
+  12. Moving to compositional semantics, we introduce Frege's principle of
+      compositionality, which posits that a complex expression's meaning is
+      determined by the meanings of its parts and their combination rules.
+  13. Simple compositional techniques are then presented, such as representing a
+      phrase's meaning by taking the element-wise average or sum of its
+      constituent word vectors, along with a discussion of their limitations.
+  14. The chapter then introduces the more sophisticated task of Semantic Role
+      Labeling (SRL), which uncovers the predicate-argument structure of a
+      sentence to answer 'who did what to whom'.
+  15. We will define key semantic roles using resources like PropBank and
+      FrameNet, illustrating concepts like Agent, Patient, and Instrument with
+      clear sentence examples and annotations.
+  16. A case study demonstrates how an SRL system can extract structured
+      information from news articles, enabling a more advanced question-answering
+      capability for a specific event.
+  17. Finally, the chapter concludes by summarizing the shift from knowledge-based
+      to distributional semantics and emphasizing how robust meaning
+      representation is crucial for the advanced NLP tasks discussed later.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 9 aids. Explain the chosen aids in detail. Only list the items where an aid
+  has been chosen.
+hash: cb210c90b6fef0a058b00d5a0f55380c42cfeebea28943a006f28a96e44e4bba
+response:
+- number: 2
+  aid: Diagram
+  description:
+    A two-panel diagram contrasting lexical and compositional semantics. The left
+    panel, labeled 'Lexical Semantics,' will show individual words ('dog,' 'barks')
+    pointing to their conceptual meanings. The right panel, 'Compositional
+    Semantics,' will show how these individual meanings combine within a sentence
+    structure ('The dog barks') to produce a complete sentence meaning.
+- number: 4
+  aid: Diagram
+  description:
+    A network diagram illustrating the structure of WordNet. The diagram will show
+    several synonym sets (synsets) like {car, auto, automobile}, {truck}, and {motor
+    vehicle} as nodes. Labeled, directed edges will connect these nodes to represent
+    semantic relations, with arrows clearly indicating hypernymy ('car' is-a 'motor
+    vehicle') and meronymy ('car' has-part 'wheel').
+- number: 5
+  aid: Diagram
+  description:
+    A hierarchical graph diagram demonstrating the traversal of WordNet's hypernym
+    hierarchy. Starting with the synset for 'car' at the bottom, arrows will point
+    upwards through a chain of increasingly general concepts: 'motor vehicle',
+    'wheeled vehicle', 'vehicle', 'conveyance', 'instrumentality', and finally
+    'entity'.
+- number: 6
+  aid: Illustration
+  description:
+    An illustration visually representing the distributional hypothesis. It will
+    show a central target word, 'bass,' surrounded by two different contextual
+    clouds of words. One cloud will contain words like 'fishing,' 'river,' 'lure,'
+    indicating the fish meaning, while the other will contain words like 'music,'
+    'guitar,' 'treble,' indicating the instrument meaning.
+- number: 7
+  aid: Diagram
+  description:
+    A diagram of a simplified 2D vector space model. It will plot several
+    semantically related words as vectors (arrows from the origin) or points. Words
+    like 'king', 'queen', 'man', and 'woman' will be positioned such that the
+    spatial relationships between them are meaningful (e.g., the vector from 'man'
+    to 'woman' is similar to the one from 'king' to 'queen').
+- number: 9
+  aid: Diagram
+  description:
+    A side-by-side comparison of the Word2Vec architectures. The left side will
+    depict the Continuous Bag-of-Words (CBOW) model, showing multiple context word
+    vectors as input to a neural network that predicts a single target word vector.
+    The right side will show the Skip-gram model, with a single target word vector
+    as input predicting multiple context word vectors.
+- number: 11
+  aid: Illustration
+  description:
+    A visual representation of word vector arithmetic in a 2D space. It will show
+    the vectors for 'king,' 'man,' and 'woman.' The illustration will graphically
+    perform the operation by taking the 'king' vector, subtracting the 'man' vector
+    (i.e., adding its inverse), and then adding the 'woman' vector. The resulting
+    final vector will be shown to point directly to the location of the 'queen'
+    vector.
+- number: 13
+  aid: Diagram
+  description:
+    A diagram illustrating simple compositional semantics using a sentence parse
+    tree for 'The cat sat'. At the leaves of the tree are the vectors for 'The',
+    'cat', and 'sat'. The diagram will show how the vectors for 'The' and 'cat' are
+    combined (e.g., via element-wise averaging) to create a vector for the noun
+    phrase 'The cat', which is then combined with the verb's vector to create a
+    final sentence vector at the root.
+- number: 15
+  aid: Table
+  description:
+    A three-column table defining key semantic roles from PropBank and FrameNet. The
+    columns will be 'Role' (e.g., Agent, Patient, Instrument), 'Description' (e.g.,
+    'The entity performing the action'), and 'Annotated Example' (e.g., '\[The
+    chef\]AGENT cooked \[the meal\]PATIENT \[with a new pan\]INSTRUMENT.').
+duration: 29151 ms
+usage_stats:
+  {
+    "candidates_token_count": 985,
+    "prompt_token_count": 867,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 867
+      }
+    ],
+    "thoughts_token_count": 2187,
+    "total_token_count": 4039
+  }
+...

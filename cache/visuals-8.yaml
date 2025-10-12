@@ -1,0 +1,139 @@
+{model: str, query: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: visuals
+prompt:
+  You are writing a chapter titled "Discourse, Coreference, and Dialogue" in a
+  book called "Introduction to Computational Linguistics". The plan for the
+  chapter is a follows.
+  
+  01. This chapter begins by explaining why understanding context beyond a single
+      sentence is critical for true language comprehension.
+  02. We will first define the fields of discourse analysis and pragmatics, which
+      study how context shapes meaning.
+  03. The concept of discourse coherence is introduced to explain what makes a
+      sequence of sentences a unified and meaningful text rather than a random
+      collection.
+  04. We will explore theoretical frameworks for coherence, such as Rhetorical
+      Structure Theory (RST), which models relations between text spans.
+  05. A practical example will contrast a coherent paragraph with an incoherent
+      one to solidify the reader's understanding.
+  06. The chapter then introduces coreference resolution, the task of identifying
+      all expressions in a text that refer to the same real-world entity.
+  07. We will clarify key terminology by defining and providing examples of
+      anaphora, cataphora, and different types of referring expressions.
+  08. A case study will walk through a short narrative, highlighting the
+      coreference chains that link entities like 'Dr. Evans,' 'she,' and 'the
+      professor.'
+  09. The discussion then covers classic machine learning models for coreference
+      resolution that rely on hand-crafted linguistic features.
+  10. We will then present modern end-to-end neural network approaches that have
+      significantly advanced the state-of-the-art in this task.
+  11. Next, the chapter shifts focus to the fundamentals of dialogue systems and
+      conversational agents.
+  12. We break down the architecture of a classic task-oriented dialogue system
+      into its core components, including NLU, state tracking, policy, and NLG.
+  13. An illustrative example of a simple dialogue for booking a flight will
+      demonstrate how these components interact in practice.
+  14. The chapter concludes by summarizing how discourse structure, coreference,
+      and dialogue modeling are interconnected and essential for building
+      sophisticated NLP applications.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 7 aids. Explain the chosen aids in detail. Only list the items where an aid
+  has been chosen.
+hash: 417956eeed038c01298e2cc319d105fdea9c26a17bbf4ef24a3e91ec0fe05be2
+response:
+- number: 4
+  aid: Diagram
+  description:
+    A tree diagram illustrating the Rhetorical Structure Theory (RST) analysis of a
+    short, multi-sentence paragraph. The diagram will show terminal nodes (leaves)
+    as elementary discourse units (clauses) and non-terminal nodes representing the
+    rhetorical relations (e.g., Elaboration, Contrast, Cause) that connect them.
+    Each relation will connect a 'nucleus' (the more central part of the text) and a
+    'satellite' (the part that modifies the nucleus), clearly labeling which is
+    which.
+- number: 7
+  aid: Table
+  description:
+    A three-column table defining key coreference terminology. The columns will be
+    titled 'Term,' 'Definition,' and 'Example.' Rows will cover concepts such as
+    'Referring Expression,' 'Anaphora,' 'Cataphora,' 'Antecedent,' 'Pronominal
+    Anaphora,' and 'Nominal Anaphora.' The example column will contain a sentence
+    with the relevant parts bolded or italicized to clearly illustrate the concept.
+- number: 8
+  aid: Illustration
+  description:
+    A visual representation of coreference chains within a short narrative
+    paragraph. The paragraph will contain multiple entities. Each entity's mentions
+    (e.g., 'Dr. Aris,' 'the scientist,' 'she,' 'her') will be highlighted in a
+    unique, consistent color. Subscripts could also be used (e.g., 'she_1', 'the
+    scientist_1') to explicitly link all expressions belonging to the same chain,
+    making the connections unambiguous.
+- number: 10
+  aid: Diagram
+  description:
+    A simplified architectural diagram of a modern end-to-end neural coreference
+    resolution model. The diagram will show the flow of information from input text
+    to final coreference clusters. Key components to be illustrated include: 1) Word
+    and character embeddings, 2) A BiLSTM to create contextual representations, 3) A
+    mention detection module that scores all possible text spans, and 4) An
+    antecedent scoring module that links each detected mention to its most likely
+    antecedent.
+- number: 12
+  aid: Diagram
+  description:
+    A block diagram illustrating the pipeline architecture of a traditional
+    task-oriented dialogue system. It will feature four main labeled boxes: Natural
+    Language Understanding (NLU), Dialogue State Tracker (DST), Dialogue Policy, and
+    Natural Language Generation (NLG). Arrows will indicate the flow of information:
+    user utterance enters NLU, which outputs a semantic frame to the DST, which
+    updates the dialogue state for the Policy, which selects a system action for the
+    NLG to convert into a textual response for the user.
+- number: 13
+  aid: Table
+  description:
+    A multi-column table that traces a sample flight-booking dialogue over several
+    turns. The columns will correspond to the dialogue system components: 'Speaker'
+    (User/System), 'Utterance,' 'NLU (Intent & Slots),' 'Dialogue State (Updated
+    Slots),' 'Policy (System Action),' and 'NLG (System Response).' Each row will
+    represent a single turn, demonstrating step-by-step how the system processes
+    user input, updates its belief state, decides on an action, and generates a
+    response.
+- number: 14
+  aid: Diagram
+  description:
+    A conceptual diagram summarizing the relationships between the chapter's three
+    core topics. Three main nodes will be labeled 'Discourse Analysis,' 'Coreference
+    Resolution,' and 'Dialogue Systems.' An arrow from Discourse Analysis will point
+    to Coreference Resolution, labeled 'is a key sub-task of.' Arrows from both
+    Discourse Analysis and Coreference Resolution will point to Dialogue Systems,
+    labeled with phrases like 'provides structure' and 'enables tracking,' to
+    illustrate how the first two concepts are foundational for building coherent and
+    context-aware conversational agents.
+duration: 34147 ms
+usage_stats:
+  {
+    "candidates_token_count": 889,
+    "prompt_token_count": 560,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 560
+      }
+    ],
+    "thoughts_token_count": 2929,
+    "total_token_count": 4378
+  }
+...

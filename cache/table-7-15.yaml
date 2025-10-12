@@ -1,0 +1,126 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To formalize the predicate-argument structure identified by Semantic Role
+  Labeling, we require a standardized inventory of roles. A system cannot simply
+  invent labels like 'doer' or 'thing being done' on the fly; it needs a
+  consistent lexicon to describe the part each constituent plays in the event. Two
+  major resources, PropBank and FrameNet, provide comprehensive frameworks for
+  defining and annotating these roles, albeit with different philosophical
+  approaches. **Fig. 7.15** provides a summary of several fundamental roles common
+  to these frameworks, offering a quick reference for the concepts discussed here.
+  
+  ______________________________________________________________________
+  
+  The Proposition Bank, or PropBank, takes a verb-centric approach. It develops a
+  specific set of roles for each individual verb, meaning the definition of a role
+  is tied to the verb that introduces it. However, PropBank maintains consistency
+  by defining general, numbered "arguments" whose semantic meaning is broadly
+  similar across verbs. The core roles are:
+  
+  - **Arg0:** Typically the Agent or 'doer' of the action. This corresponds to the
+    *Proto-Agent*, the entity that instigates or controls the event.
+  - **Arg1:** Typically the Patient or 'theme' of the action. This corresponds to
+    the *Proto-Patient*, the entity that is affected by the event or undergoes a
+    change of state.
+  - **Arg2, Arg3, ...:** These higher-numbered arguments represent other essential
+    participants whose meanings are highly specific to the verb. For the verb
+    *give*, Arg2 would be the recipient. For *move*, it might be the destination.
+  
+  Consider the verb *to eat*:
+  
+  > \[The students\]**Arg0** ate \[the pizza\]**Arg1** \[in the
+  > cafeteria\]**ArgM-LOC**.
+  
+  Here, *the students* are the eaters (Arg0) and *the pizza* is the thing eaten
+  (Arg1). PropBank also includes a set of general-purpose modifier arguments,
+  prefixed with **ArgM**, that capture circumstantial information not essential to
+  the core verb meaning. Common modifiers include **ArgM-LOC** for location,
+  **ArgM-TMP** for time, **ArgM-MNR** for manner, and **ArgM-DIR** for direction.
+  These modifiers can be attached to nearly any verb's argument structure.
+  
+  An alternative, more semantically-driven resource is FrameNet. Instead of
+  focusing on individual verbs, FrameNet is organized around **semantic frames**,
+  which are schematic representations of situations or events (e.g., a commercial
+  transaction, a journey, a conflict). Each frame defines a set of **Frame
+  Elements (FEs)**, which are the semantic roles specific to that conceptual
+  scenario. A key insight of FrameNet is that multiple verbs, nouns, or adjectives
+  can evoke the same frame.
+  
+  For example, the `COMMERCE_BUY` frame describes a situation involving a
+  commercial transaction. Its core Frame Elements include the `Buyer`, the
+  `Seller`, the `Goods`, and the `Money`. This single frame can be evoked by
+  various words:
+  
+  1. \[The customer\]**Buyer** **bought** \[a new laptop\]**Goods** from \[the
+     store\]**Seller**.
+  2. \[The store\]**Seller** **sold** \[a new laptop\]**Goods** to \[the
+     customer\]**Buyer**.
+  3. The **price** of \[the new laptop\]**Goods** was \[\$1200\]**Money**.
+  
+  Notice how FrameNet captures the same underlying semantic event even when the
+  syntactic structure and triggering words change dramatically. In the first two
+  sentences, the `Buyer` and `Seller` switch between being the subject and an
+  object of a prepositional phrase, but their semantic roles within the
+  transaction frame remain constant. This abstraction from syntax to a deeper
+  semantic level is FrameNet's primary strength.
+  
+  In practice, PropBank's verb-centric, generalized roles provide broader coverage
+  and are often simpler to annotate, making it a highly practical resource for
+  building robust SRL systems. FrameNet offers a more fine-grained and
+  semantically nuanced representation, which can be more powerful for deep
+  understanding tasks, but its complexity means it may not cover as wide a range
+  of linguistic phenomena. By converting a sentence from a linear string of words
+  into a structured representation like this—a predicate with its labeled
+  arguments—we equip a machine to begin reasoning about the events described in
+  the text, a crucial step towards true language understanding.
+  
+  This fragment refers to Fig. 7.15, which is a table. Its description is as
+  follows:
+  
+  A three-column table defining key semantic roles from PropBank and FrameNet. The
+  columns will be 'Role' (e.g., Agent, Patient, Instrument), 'Description' (e.g.,
+  'The entity performing the action'), and 'Annotated Example' (e.g., '\[The
+  chef\]AGENT cooked \[the meal\]PATIENT \[with a new pan\]INSTRUMENT.').
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: 5b1530ff223067f49515b7168503e64ae5ddba2f9d8e72a4b4ba2641b3fb0074
+response:
+  caption:
+    Fig. 7.15: A summary of fundamental semantic roles common to frameworks like
+    PropBank and FrameNet, with descriptions and examples.
+  latex:
+    \begin{tabular}{lp{5.5cm}l}\toprule
+    \textbf{Role} & \textbf{Description} & \textbf{Annotated Example} \\
+    \midrule
+    Agent & The entity that willfully instigates or performs the action. & \textit{[The chef]}$_{\text{AGENT}}$\textit{ cooked the meal.} \\
+    Patient / Theme & The entity affected by the action or that undergoes a change of state. & \textit{The chef cooked [the meal]}$_{\text{PATIENT}}$\textit{.} \\
+    Instrument & The means or tool used to perform the action. & \textit{He sliced bread [with a knife]}$_{\text{INSTRUMENT}}$\textit{.} \\
+    Recipient & The entity that receives something as a result of the action. & \textit{She gave the book to [her friend]}$_{\text{RECIPIENT}}$\textit{.} \\
+    Location & The spatial setting where the action occurs. & \textit{They met [in the park]}$_{\text{LOCATION}}$\textit{.} \\
+    Source & The origin or starting point of a motion or transfer. & \textit{He walked [from the library]}$_{\text{SOURCE}}$\textit{.} \\
+    Goal & The endpoint or destination of a motion or transfer. & \textit{He walked to [the station]}$_{\text{GOAL}}$\textit{.} \\
+    \bottomrule
+    \end{tabular}
+duration: 24126 ms
+usage_stats:
+  {
+    "candidates_token_count": 365,
+    "prompt_token_count": 1148,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1148
+      }
+    ],
+    "thoughts_token_count": 2771,
+    "total_token_count": 4284
+  }
+...

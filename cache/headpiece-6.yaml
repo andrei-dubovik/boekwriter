@@ -1,0 +1,903 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: headpiece
+prompt:
+  What follows is a text for a chapter from a book called "Introduction to
+  Computational Linguistics".
+  
+  <chapter>
+  
+  Having learned to assign a part-of-speech tag to each word, we now move from a
+  linear sequence of tags to a deeper, more structured understanding of a
+  sentence. While knowing that a sentence contains a noun followed by a verb and
+  another noun is useful, it doesn't fully capture the relationships between them.
+  It doesn't tell us *who* is doing *what* to *whom*. This is the domain of
+  **syntactic parsing**, the process of analyzing a string of words to reveal its
+  underlying grammatical structure according to a formal grammar. The goal is not
+  merely to verify if a sentence is grammatically correct, but to produce a formal
+  representation—typically a tree—that makes its syntactic relationships explicit.
+  
+  This structural analysis is crucial for resolving ambiguity and enabling true
+  language understanding. Consider the classic sentence: "I saw the man with the
+  telescope." This sentence has two distinct interpretations. Did I use a
+  telescope to see the man? Or did I see a man who was holding a telescope? A
+  simple sequence of POS tags is identical for both meanings. Syntactic parsing,
+  however, forces us to commit to a specific structure that resolves this
+  ambiguity. In the first interpretation, the phrase "with the telescope" modifies
+  the verb "saw," describing the instrument of seeing. In the second, it modifies
+  "the man," describing an attribute of the man. The ability to computationally
+  produce the distinct structural representations for these two meanings is a core
+  goal of parsing.
+  
+  Uncovering this structure is a foundational step for nearly all complex
+  downstream NLP tasks. For a machine translation system to correctly translate a
+  sentence, it must first understand the relationships between its components. For
+  an information extraction system to identify that a company acquired another, it
+  must parse the sentence to identify the subject, verb, and object. Similarly, a
+  question-answering system must parse both the question and the potential answer
+  text to find a structural match. By transforming a flat string of text into a
+  hierarchical or relational structure, syntactic parsing provides the scaffolding
+  upon which meaning can be built. In this chapter, we will explore the dominant
+  computational formalisms and algorithms developed to achieve this.
+  
+  Once we accept the goal of revealing a sentence's grammatical structure, a
+  fundamental question arises: what should that structure look like? In
+  computational linguistics, two dominant paradigms have emerged to answer this
+  question, each offering a different philosophical perspective on what
+  constitutes syntax. These are *constituency parsing* and *dependency parsing*.
+  
+  Constituency parsing, also known as phrase-structure parsing, is built on the
+  idea that sentences are composed of nested components called *constituents* or
+  *phrases*. According to this view, words group together to form larger units,
+  which in turn group together to form even larger ones, culminating in the
+  complete sentence. The primary output of a constituency parser is a hierarchical
+  tree that explicitly shows this grouping. For instance, the words 'the', 'old',
+  and 'dog' combine to form a Noun Phrase (NP), and 'chased the cat' forms a Verb
+  Phrase (VP). The NP and VP then combine to form the full sentence (S). This
+  approach focuses on identifying the boundaries of these phrasal units and
+  arranging them in a hierarchical structure.
+  
+  Dependency parsing, in contrast, models syntax as a set of relationships between
+  individual words. The structure is not a hierarchy of phrases but a graph of
+  dependencies. In this framework, every word in the sentence, except for one (the
+  root, typically the main verb), is a *dependent* of another word, which is its
+  *head*. These directed links, or *arcs*, are labeled with the specific
+  grammatical function they represent, such as `nsubj` for a nominal subject or
+  `dobj` for a direct object. This approach forgoes phrasal nodes entirely and
+  instead focuses on representing how words modify or depend on each other,
+  revealing the functional architecture of the sentence.
+  
+  The fundamental difference between these two formalisms is starkly illustrated
+  in **Fig. 6.2**.
+  
+  ______________________________________________________________________
+  
+  **\[DIAGRAM: Fig. 6.2\]**
+  
+  *A side-by-side comparison diagram showing the same sentence, e.g., 'The old dog
+  chased the cat', analyzed using both constituency and dependency parsing. The
+  left side will show the hierarchical phrase structure tree (constituency), and
+  the right side will show the dependency graph with directed, labeled arcs
+  between words.*
+  
+  ______________________________________________________________________
+  
+  As the figure shows, the constituency tree for 'The old dog chased the cat'
+  contains non-terminal nodes like `NP` and `VP` that are not words from the
+  original sentence. It tells us that 'The old dog' is a single, cohesive unit.
+  The dependency graph, on the other hand, consists only of the words themselves,
+  connected by labeled arcs. It explicitly shows that 'dog' is the subject of
+  'chased' and 'cat' is its object, while 'old' directly modifies 'dog'. In
+  essence, constituency parsing asks, "What components make up this sentence?",
+  while dependency parsing asks, "Which words depend on which other words, and
+  how?". The remainder of this chapter will explore the formalisms and algorithms
+  behind each of these powerful paradigms.
+  
+  We first explore constituency parsing, an approach rooted in the idea that
+  sentences are not flat strings of words but have an underlying hierarchical
+  structure. The fundamental goal of this paradigm is to identify and organize
+  groups of words that function as a single grammatical unit. These units are
+  called **constituents** or **phrases**.
+  
+  Consider the sentence, "The little dog barked loudly". Intuitively, we
+  understand that "the little dog" acts as a single block; it is the subject of
+  the sentence. This group of words is a constituent. Similarly, "barked loudly"
+  functions as another block describing the action. This is also a constituent.
+  Constituency parsing is the task of systematically breaking the sentence down
+  into these nested blocks.
+  
+  How do we formally identify a constituent? Linguists use several diagnostic
+  tests to provide evidence for these groupings.
+  
+  - **Substitution:** A sequence of words is likely a constituent if it can be
+    replaced by a single word, often a pronoun or pro-form, without making the
+    sentence ungrammatical. In our example, "The little dog barked loudly", we can
+    replace "The little dog" with "It" to get "It barked loudly". This successful
+    substitution strongly suggests "The little dog" is a valid constituent.
+  - **Movement:** Constituents can often be moved to different positions within a
+    sentence. For example, using a construction known as a cleft sentence, we can
+    transform "The cat sat *on the mat*" into "It was *on the mat* that the cat
+    sat." The fact that the entire phrase "on the mat" can be moved as a single,
+    coherent unit is evidence of its status as a constituent.
+  
+  These constituents are not just arbitrary clusters; they belong to specific
+  grammatical categories. For example, "the little dog" is a **Noun Phrase (NP)**
+  because its most important word, or *head*, is a noun ("dog"). Likewise, "barked
+  loudly" is a **Verb Phrase (VP)**, and "on the mat" is a **Prepositional Phrase
+  (PP)**. The entire sentence itself is considered the top-level constituent,
+  typically labeled **S**.
+  
+  The central insight of this approach is that these phrases are nested within
+  each other to form the complete sentence. An NP and a VP might combine to form a
+  sentence (S). A VP might contain within it another NP (as in "saw *the big
+  cat*") or a PP (as in "sat *on the mat*"). This creates a recursive,
+  hierarchical structure. The output of a constituency parser is a
+  **phrase-structure tree** (or simply a *parse tree*) that visually represents
+  this hierarchy. In this tree, the words of the sentence appear as the leaves (or
+  *terminal nodes*) at the bottom. The labels for the constituent phrases (NP, VP,
+  PP, etc.) are the internal *non-terminal nodes*. The very top node, the root of
+  the tree, is the S node representing the entire sentence.
+  
+  This tree-based representation makes a sentence's internal grammar explicit. But
+  how do we know which combinations of words and phrases are valid? How can a
+  computer systematically build such a tree from a string of words? To answer
+  these questions, we need a formal mechanism for defining the rules of sentence
+  structure. This mechanism is the **Context-Free Grammar**, which we will explore
+  next.
+  
+  To computationally model the hierarchical structure of constituency, we need a
+  formal mechanism that can define the set of all valid structures in a language.
+  The most common tool for this is the **Context-Free Grammar (CFG)**, a formalism
+  with deep roots in both linguistics, through the work of Noam Chomsky, and in
+  computer science, where it is used to define the syntax of programming
+  languages. A CFG provides a finite set of rules that can generate an infinite
+  set of grammatical sentences, capturing the productive and recursive nature of
+  human language.
+  
+  Formally, a Context-Free Grammar $G$ is a 4-tuple:
+  
+  $G = (N, \Sigma, R, S)$
+  
+  Let's break down each of these four components.
+  
+  1. **$N$**: A finite set of **non-terminal symbols**. These are the variables of
+     our grammar, representing syntactic categories or phrases. They are
+     "non-terminal" because they can be broken down further into other symbols.
+     Think of them as the labels for the internal nodes in a parse tree—symbols
+     like *Noun Phrase* (NP), *Verb Phrase* (VP), or *Prepositional Phrase* (PP).
+     By convention, non-terminals are represented with uppercase letters or
+     abbreviations.
+  
+  2. **$\Sigma$**: A finite set of **terminal symbols**, sometimes called the
+     *alphabet* or the *lexicon*. These are the actual words of the language that
+     will appear in our sentences, such as 'cat', 'sees', or 'with'. They are
+     "terminal" because they cannot be rewritten into other symbols; they
+     represent the end points of the generation process and correspond to the
+     leaves of a parse tree. The set of non-terminals and terminals must be
+     disjoint, meaning no symbol can be both: $N \cap \Sigma = \emptyset$.
+  
+  3. **$R$**: A finite set of **production rules**. These rules are the heart of
+     the grammar, specifying how non-terminals can be rewritten. Each rule is of
+     the form $A \rightarrow \beta$, where $A$ is a single non-terminal from the
+     set $N$, and $\beta$ is a sequence of one or more symbols from the combined
+     set of non-terminals and terminals $(N \cup \Sigma)^*$.[^1] The arrow
+     $\rightarrow$ can be read as "can be rewritten as," "consists of," or "can be
+     expanded to." For instance, the rule `S -> NP VP` states that a sentence `S`
+     can consist of a Noun Phrase `NP` followed by a Verb Phrase `VP`. It is
+     common to use the pipe symbol `|` as a convenient shorthand to group rules
+     with the same left-hand side. For example, `NP -> Det N | N` is equivalent to
+     the two separate rules:
+  
+     - `NP -> Det N`
+     - `NP -> N`
+  
+     Production rules can be broadly categorized into two types. *Syntactic rules*
+     specify how phrase types are composed of other phrases (e.g., `VP -> V NP`),
+     while *lexical rules* (or *lexicon rules*) connect the syntactic categories
+     to the terminal words (e.g., `N -> 'cat'`).
+  
+  4. **$S$**: A designated **start symbol**, which must be a member of the
+     non-terminal set $N$. The start symbol is the entry point for the grammar,
+     representing the highest-level category from which all valid sentences in the
+     language defined by the grammar can be generated. For natural language
+     grammars, this is almost always the symbol for *sentence*, typically denoted
+     as `S`.
+  
+  Let's make this concrete with the grammar we will use to parse our upcoming
+  example sentence. The components of this simple grammar are laid out in **Fig.
+  6.4**.
+  
+  According to **Fig. 6.4**, our set of non-terminals is
+  $N = \{\text{S, NP, VP, PP, Det, N, V, P}\}$. Our terminals are the words
+  themselves: $\Sigma = \{\text{'the', 'cat', 'sat', 'on', 'mat'}\}$. The start
+  symbol is `S`. The production rules in the table define the valid sentence
+  structures. For example:
+  
+  - `S -> NP VP` is the fundamental rule for an English sentence.
+  - `VP -> V PP` defines a Verb Phrase that consists of a Verb followed by a
+    Prepositional Phrase.
+  - `NP -> Det N` defines a Noun Phrase as a Determiner followed by a Noun.
+  - `PP -> P NP` defines a Prepositional Phrase as a Preposition followed by a
+    Noun Phrase.
+  
+  Notice the recursive potential here. A `VP` can contain a `PP`, which in turn
+  contains an `NP`. This ability for rules to call upon other rules, including
+  themselves (either directly or indirectly), is what gives CFGs the power to
+  generate the complex, nested structures characteristic of human language. The
+  process of using these rules to generate a string of terminals from the start
+  symbol is called a **derivation**. A derivation starts with `S` and repeatedly
+  applies rules from $R$, replacing a non-terminal with the right-hand side of one
+  of its rules, until only terminal symbols remain. The set of all terminal
+  strings that can be derived from the start symbol constitutes the *language*
+  generated by the grammar.
+  
+  To see how a CFG generates a sentence structure, let's parse the classic
+  example: 'The cat sat on the mat'. We first need a grammar—a set of production
+  rules—that can account for the structure of this specific sentence. Consider the
+  following simple grammar, which we will call G1:
+  
+  - `S → NP VP` (A sentence is a Noun Phrase followed by a Verb Phrase)
+  - `NP → Det N` (A Noun Phrase is a Determiner followed by a Noun)
+  - `VP → V PP` (A Verb Phrase is a Verb followed by a Prepositional Phrase)
+  - `PP → P NP` (A Prepositional Phrase is a Preposition followed by a Noun
+    Phrase)
+  - `Det → 'the'`
+  - `N → 'cat' | 'mat'`
+  - `V → 'sat'`
+  - `P → 'on'`
+  
+  The first four are *phrasal rules* that define how non-terminals can be
+  rewritten into other non-terminals. The last four are *lexical rules* which
+  ground the grammar by connecting non-terminal symbols (parts of speech) to the
+  actual words, or *terminals*, in our language.
+  
+  Using these rules, we can generate the sentence from the start symbol `S`
+  through a sequence of substitutions called a **derivation**. In a *left-most
+  derivation*, we always expand the left-most non-terminal at each step:
+  
+  01. `S`
+  02. `⇒ NP VP` (by applying the rule `S → NP VP`)
+  03. `⇒ Det N VP` (by applying `NP → Det N` to the left-most non-terminal, `NP`)
+  04. `⇒ 'The' N VP`
+  05. `⇒ 'The' 'cat' VP`
+  06. `⇒ 'The' 'cat' V PP`
+  07. `⇒ 'The' 'cat' 'sat' PP`
+  08. `⇒ 'The' 'cat' 'sat' P NP`
+  09. `⇒ 'The' 'cat' 'sat' 'on' NP`
+  10. `⇒ 'The' 'cat' 'sat' 'on' Det N`
+  11. `⇒ 'The' 'cat' 'sat' 'on' 'the' N`
+  12. `⇒ 'The' 'cat' 'sat' 'on' 'the' 'mat'`
+  
+  This derivation confirms that the sentence is grammatical according to G1. More
+  importantly, this process directly maps to a hierarchical structure. Each time a
+  rule like `A → B C` is applied, we establish that `B` and `C` are the immediate
+  constituents of `A`. The entire derivation can be visualized as a **phrase
+  structure tree**, or parse tree, as shown in **Fig. 6.5**.
+  
+  The tree in **Fig. 6.5** provides an explicit, visual representation of the
+  sentence's syntax. The root of the tree is the start symbol `S`. The internal
+  nodes are the non-terminals (NP, VP, PP), and the leaves are the terminals—the
+  words of the sentence. The diagram clearly shows that 'The cat' forms a Noun
+  Phrase (the subject), while 'sat on the mat' forms a complete Verb Phrase (the
+  predicate). Within that VP, the tree reveals further nested structure: 'on the
+  mat' is its own constituent, a Prepositional Phrase. This ability to capture the
+  nested, hierarchical grouping of words is the fundamental power of constituency
+  grammars.
+  
+  While a Context-Free Grammar provides a formal and powerful mechanism for
+  describing sentence structure, it also immediately brings a crucial challenge of
+  natural language to the forefront: ambiguity. In many cases, a single sentence
+  can be assigned more than one valid parse tree according to the rules of a given
+  grammar. This phenomenon is known as *structural ambiguity* or *syntactic
+  ambiguity*, and it is one of the most significant problems that a computational
+  parser must address. Unlike lexical ambiguity, where a word has multiple
+  meanings (e.g., 'bank' can be a financial institution or a river's edge),
+  structural ambiguity arises from different ways of combining constituents.
+  
+  A classic illustration of this problem is the sentence "I saw a man with a
+  telescope." This sentence has at least two distinct interpretations, and each
+  corresponds to a different syntactic structure.
+  
+  - **Interpretation 1:** The man I saw was holding a telescope.
+  - **Interpretation 2:** I used a telescope as an instrument to see the man.
+  
+  These two meanings are not a result of any word having multiple definitions;
+  they are a direct consequence of how the prepositional phrase (PP) *'with a
+  telescope'* attaches to the rest of the sentence. In the first interpretation,
+  the PP modifies the noun phrase (NP) *'a man'*. The phrase 'a man with a
+  telescope' acts as a single, large NP, which is the direct object of the verb
+  'saw'. This is often called *low attachment* because the PP attaches to a
+  constituent low in the parse tree. In the second interpretation, the PP modifies
+  the verb phrase (VP) *'saw a man'*. Here, the PP describes how the seeing action
+  was performed. This is known as *high attachment*, as the PP attaches to the
+  main VP, higher up in the tree. As illustrated in **Fig. 6.6**, these two
+  interpretations correspond to two distinct and equally valid parse trees that
+  can be generated by a plausible English grammar.
+  
+  This problem, known as *PP-attachment ambiguity*, is just one of several types
+  of structural ambiguity that are pervasive in language. Other common forms
+  include:
+  
+  - **Coordination Ambiguity:** This occurs with conjunctions like 'and'. For
+    example, in the phrase 'young men and women', does 'young' modify only 'men',
+    resulting in the structure `[young men] and [women]`, or does it modify the
+    entire coordinated phrase, giving `young [men and women]`? The correct
+    interpretation depends entirely on context.
+  - **Noun Compound Ambiguity:** The structure of noun compounds can be ambiguous.
+    The phrase 'student feedback system' could mean a system for providing
+    feedback to students `student [feedback system]` or a system that processes
+    feedback from students `[student feedback] system`.
+  
+  The existence of structural ambiguity has profound implications. First, and most
+  importantly, it means that syntax and semantics are deeply intertwined; a
+  different parse tree leads directly to a different meaning. Any system aiming
+  for genuine language understanding must have a strategy for
+  *disambiguation*—choosing the most plausible structure among the many
+  possibilities. Second, the number of potential parse trees for a sentence can
+  grow exponentially with its length, a problem known as combinatorial explosion.
+  A single, moderately complex sentence can have hundreds or even thousands of
+  valid parses. This makes parsing a significant computational challenge.
+  Consequently, a parser must not only be able to find valid structures according
+  to a grammar but must also do so efficiently and have a principled way to select
+  the most likely parse, a topic that motivates the algorithms and probabilistic
+  models we will explore next.
+  
+  While a Context-Free Grammar provides the formal rules for generating a
+  language, it doesn't specify *how* to find a valid parse for a given sentence. A
+  naive approach might try to recursively expand every possible rule from the
+  start symbol, a method that would quickly fail. Given the high degree of
+  ambiguity in natural language, a brute-force search through all possible
+  derivations would face a combinatorial explosion, rendering it computationally
+  intractable for all but the most trivial sentences. To overcome this, we need a
+  more systematic and efficient method. The solution lies in *dynamic
+  programming*, an algorithmic paradigm that solves a complex problem by breaking
+  it down into a collection of simpler subproblems, solving each subproblem just
+  once, and storing their solutions to avoid redundant computation.
+  
+  The Cocke-Younger-Kasami (CYK) algorithm is a classic example of dynamic
+  programming applied to parsing. It systematically fills a table, often called a
+  *chart*, with the set of non-terminals that can generate every possible
+  substring of the input sentence. By building up solutions for progressively
+  longer substrings from the solutions for shorter substrings it has already
+  found, CYK can efficiently determine if a sentence can be generated by a given
+  grammar.
+  
+  However, the standard CYK algorithm comes with a crucial prerequisite: the
+  Context-Free Grammar must be converted into **Chomsky Normal Form (CNF)**. A
+  grammar is in CNF if all of its production rules take one of two simple forms:
+  
+  1. $A \rightarrow B C$ (A non-terminal rewrites to exactly two non-terminals)
+  2. $A \rightarrow a$ (A non-terminal rewrites to a single terminal)
+  
+  This strict binary-branching structure is the key that makes the CYK algorithm's
+  dynamic programming approach work. The first rule type ensures that any
+  constituent spanning multiple words is always formed by combining exactly two
+  smaller, adjacent constituents. The second rule type, known as a lexical rule,
+  grounds the parse by connecting the non-terminal symbols of the grammar to the
+  actual words (terminals) in the sentence. While this may seem like a significant
+  constraint, it has been proven that any context-free grammar can be converted
+  into an equivalent one in CNF, meaning the algorithm loses no generative power.
+  
+  The CYK algorithm operates on an $n \times n$ upper-triangular chart, let's call
+  it $P$, where $n$ is the number of words in the sentence. A cell $P[i, j]$ in
+  this chart (where $1 \le i \le j \le n$) will store the set of all non-terminals
+  that can derive the substring of words from position $i$ to position $j$. The
+  algorithm proceeds bottom-up in two main stages:
+  
+  - **Initialization (Spans of length 1):** First, we fill the diagonal of the
+    chart. For each word $w_i$ in the sentence (from $i=1$ to $n$), we look at all
+    rules of the form $A \rightarrow w_i$ in our CNF grammar. For every such rule
+    found, we add the non-terminal $A$ to the chart cell $P[i, i]$. After this
+    step, the diagonal contains all possible phrasal categories for each
+    individual word.
+  
+  - **Main Loop (Spans of length > 1):** Next, the algorithm iteratively fills the
+    rest of the chart, moving from shorter spans to longer ones. It iterates over
+    the span length, `len`, from 2 up to $n$. For each length, it iterates over
+    all possible starting positions, `i`, for a span of that length. The ending
+    position `j` is simply `i + len - 1`. To fill the cell $P[i, j]$, the
+    algorithm must consider every possible way to split the substring $w_i...w_j$
+    into two smaller, contiguous substrings. Let's call the split point `k`, where
+    `k` ranges from `i` to `j-1`. For each split, we have two sub-spans:
+    $w_i...w_k$ and $w_{k+1}...w_j$. The algorithm then consults the chart cells
+    that have already been filled for these smaller spans, namely $P[i, k]$ and
+    $P[k+1, j]$. If it finds any rule $A \rightarrow B C$ in the grammar such that
+    non-terminal $B \in P[i, k]$ and non-terminal $C \in P[k+1, j]$, it adds
+    non-terminal $A$ to the cell $P[i, j]$.
+  
+  This process continues until the entire upper-triangular chart is filled. The
+  final step is to check the top-rightmost cell, $P[1, n]$, which corresponds to
+  the span of the entire sentence. If the grammar's start symbol (e.g., $S$) is
+  present in $P[1, n]$, the sentence is recognized as being grammatically valid
+  according to the grammar. If $S$ is not in this cell, the sentence cannot be
+  generated by the grammar and the parse fails.
+  
+  The time complexity of the CYK algorithm is $O(n^3 \cdot |G|)$, where $n$ is the
+  length of the sentence and $|G|$ is the size of the grammar. The $n^3$ factor
+  comes from the three nested loops: one for the span length, one for the start
+  position, and one for the split point. This cubic complexity is a vast
+  improvement over the exponential complexity of naive search methods, making
+  parsing feasible for reasonably long sentences. While the basic algorithm is a
+  *recognizer*—it only tells you *if* a sentence is valid—it can be easily
+  extended to become a full *parser*. To do this, whenever a non-terminal is added
+  to a cell, we store back-pointers indicating which rule and which sub-cells were
+  used to derive it. After the chart is filled, we can trace these pointers back
+  from the start symbol in the top cell to reconstruct all possible valid parse
+  trees.
+  
+  To make the CYK algorithm concrete, let's walk through the process of parsing
+  the sentence "she eats fish". We will use a simple Context-Free Grammar already
+  converted to Chomsky Normal Form. Assume our grammar contains the following
+  rules:
+  
+  - **Lexical Rules:**
+    - $PRP \rightarrow \text{'she'}$
+    - $V \rightarrow \text{'eats'}$
+    - $N \rightarrow \text{'fish'}$
+  - **Structural Rules:**
+    - $S \rightarrow NP \ VP$
+    - $NP \rightarrow PRP$
+    - $NP \rightarrow N$
+    - $VP \rightarrow V \ NP$
+  
+  Our goal is to populate a parsing chart, often called a CYK chart or well-formed
+  substring table, to determine if the start symbol `S` can generate the entire
+  sequence of words. This chart, shown in **Fig. 6.8**, is an upper-triangular
+  matrix where each cell `P[i, j]` will store the set of non-terminals that can
+  generate the substring of words from position `i` to `j`. Let our words be
+  indexed as $w_1, w_2, w_3$.
+  
+  **Step 1: Initialization (Spans of Length 1)**
+  
+  We begin by filling the diagonal of the chart, which corresponds to spans of a
+  single word. We look for all lexical rules $A \rightarrow w_k$ in our grammar.
+  
+  - **Cell `P[1, 1]` for 'she' ($w_1$):** The rule $PRP \rightarrow \text{'she'}$
+    applies. We add `PRP` to the cell. We must also consider any unit productions
+    that can be reached from `PRP`. The rule $NP \rightarrow PRP$ allows us to add
+    `NP` as well. So, `P[1, 1] = {PRP, NP}`.
+  - **Cell `P[2, 2]` for 'eats' ($w_2$):** The rule $V \rightarrow \text{'eats'}$
+    applies. There are no further unit productions from `V`. So, `P[2, 2] = {V}`.
+  - **Cell `P[3, 3]` for 'fish' ($w_3$):** The rule $N \rightarrow \text{'fish'}$
+    applies. From `N`, the rule $NP \rightarrow N$ allows us to add `NP`. So,
+    `P[3, 3] = {N, NP}`.
+  
+  After this step, the diagonal of our chart is filled, representing the possible
+  grammatical categories for each individual word.
+  
+  **Step 2: Filling the Chart (Spans of Length 2)**
+  
+  Now we move to spans of length two. For each cell `P[i, j]` where the span
+  length `j - i + 1` is two, we look for all possible split points `k`. We check
+  if any rule $A \rightarrow B \ C$ exists where $B \in P[i, k]$ and
+  $C \in P[k+1, j]$.
+  
+  - **Cell `P[1, 2]` for 'she eats' ($w_1 w_2$):** The only possible split is at
+    $k=1$. We need to find a rule $A \rightarrow B \ C$ where $B \in P[1, 1]$ and
+    $C \in P[2, 2]$.
+    - We check combinations from $P[1, 1] = \{PRP, NP\}$ and $P[2, 2] = \{V\}$.
+    - Is there a rule $A \rightarrow PRP \ V$? No.
+    - Is there a rule $A \rightarrow NP \ V$? No.
+    - Since no rules match, cell `P[1, 2]` remains empty.
+  - **Cell `P[2, 3]` for 'eats fish' ($w_2 w_3$):** The only split is at $k=2$. We
+    need a rule $A \rightarrow B \ C$ where $B \in P[2, 2] = \{V\}$ and
+    $C \in P[3, 3] = \{N, NP\}$.
+    - Is there a rule $A \rightarrow V \ N$? No.
+    - Is there a rule $A \rightarrow V \ NP$? Yes, $VP \rightarrow V \ NP$.
+    - Therefore, we add `VP` to this cell. `P[2, 3] = {VP}`.
+  
+  **Step 3: Filling the Final Cell (Spans of Length 3)**
+  
+  Finally, we compute the entry for the top-right cell, `P[1, 3]`, which covers
+  the entire sentence. The span length is three, so there are two possible split
+  points: $k=1$ and $k=2$.
+  
+  - **Split 1 ($k=1$):** Check for rules $A \rightarrow B \ C$ where
+    $B \in P[1, 1]$ and $C \in P[2, 3]$.
+    - $P[1, 1] = \{PRP, NP\}$ and $P[2, 3] = \{VP\}$.
+    - We check for rules like $A \rightarrow PRP \ VP$ (no) and
+      $A \rightarrow NP \ VP$ (yes, $S \rightarrow NP \ VP$).
+    - This split successfully finds the start symbol `S`. We add `S` to `P[1, 3]`.
+  - **Split 2 ($k=2$):** Check for rules $A \rightarrow B \ C$ where
+    $B \in P[1, 2]$ and $C \in P[3, 3]$.
+    - Since `P[1, 2]` is empty, this split cannot produce any non-terminals.
+  
+  The final content of the top cell is `P[1, 3] = {S}`. The completed chart is
+  shown in **Fig. 6.8**. Because the start symbol `S` is present in the cell
+  corresponding to the entire sentence (`P[1, 3]`), we conclude that "she eats
+  fish" is a valid sentence according to our grammar. If `S` were not found in
+  this cell, the sentence would be rejected as ungrammatical. To reconstruct the
+  actual parse tree, a practical implementation of CYK also stores backpointers in
+  each cell to remember which rule and which sub-constituents were used to add
+  each non-terminal.
+  
+  Having established how constituency grammars model sentence structure through
+  hierarchical phrases, we now shift our focus to an alternative and equally
+  influential paradigm: *dependency parsing*. Rather than focusing on nested
+  constituents, dependency parsing represents grammatical structure by identifying
+  the relationships between individual words. The core idea is that for any
+  sentence, the syntactic structure consists of a set of directed, binary, and
+  asymmetrical links between words.
+  
+  In this framework, every relationship connects a *head* (also called a governor)
+  to a *dependent* (or modifier). The head is the word that is grammatically
+  dominant, while the dependent is the word that modifies or is an argument of the
+  head. For example, in the phrase "big dogs", the noun *dogs* is the head, and
+  the adjective *big* is its dependent, as *big* modifies *dogs*. These directed
+  links, called *dependencies*, are typically labeled to specify the exact nature
+  of their grammatical function. These labels come from a standardized set, such
+  as the Universal Dependencies (UD) tagset, which includes common functions like
+  `nsubj` (nominal subject), `obj` (direct object), `amod` (adjectival modifier),
+  and `det` (determiner).
+  
+  The complete dependency structure for a sentence is represented as a *dependency
+  tree* (or, more formally, a directed acyclic graph). To ensure that every word
+  is connected and the structure forms a single tree, a special pseudo-word, often
+  labeled `ROOT`, is introduced. The `ROOT` node acts as the head of the main
+  predicate of the sentence, which is usually the main verb. A well-formed
+  dependency tree for a sentence with *n* words must satisfy three key
+  constraints:
+  
+  1. The `ROOT` node has no incoming arcs (it has no head).
+  2. Every other word has exactly one incoming arc (it has exactly one head).
+  3. The graph is acyclic.
+  
+  Together, these constraints ensure that the resulting structure is a tree where
+  every word in the sentence is ultimately a dependent of the `ROOT` node. This
+  approach provides a lexicalized representation of grammar, as the structure is
+  built directly between the words themselves, without the need for intermediate
+  phrasal nodes like NP or VP.
+  
+  Let's return to our familiar example, "The cat sat on the mat," to see how a
+  dependency parser would analyze it. The resulting dependency tree would consist
+  of the following set of labeled arcs, represented here as
+  `(head, label, dependent)` triples:
+  
+  - `(ROOT, root, sat)`: *sat* is the root of the sentence.
+  - `(sat, nsubj, cat)`: *cat* is the nominal subject of *sat*.
+  - `(cat, det, The)`: *The* is the determiner for *cat*.
+  - `(sat, prep, on)`: *on* is a prepositional modifier of *sat*.
+  - `(on, pobj, mat)`: *mat* is the object of the preposition *on*.
+  - `(mat, det, the)`: *the* is the determiner for *mat*.
+  
+  Notice how this structure differs from a constituency parse. There are no nodes
+  for "the cat" (NP) or "on the mat" (PP). Instead, the relationships are direct:
+  *The* modifies *cat*, and *cat* is the subject of *sat*. This direct,
+  word-to-word representation can be particularly advantageous for languages with
+  more flexible word order, where constituents may not be contiguous. Furthermore,
+  the dependency labels often map more directly to the semantic roles that words
+  play, making the output of a dependency parser a valuable input for downstream
+  tasks like information extraction and question answering.
+  
+  The output of a dependency parser is a *dependency graph* (or dependency tree),
+  a structure that represents the grammatical relationships within a sentence.
+  Unlike a constituency tree that groups words into phrases, a dependency graph
+  consists of directed, labeled arcs connecting individual words. In this graph,
+  words are the *nodes*, and the grammatical relationships are the *arcs*. Each
+  arc connects a *head* (the word that governs the relationship) to a *dependent*
+  (the word that modifies or is an argument of the head). By convention, the arrow
+  points from the head to the dependent.
+  
+  To make this concrete, let's analyze the sentence "She ate a green apple." The
+  dependency parse for this sentence is illustrated in Fig. 6.10. The structure is
+  rooted in the main verb of the sentence, *ate*. A special pseudo-node, `ROOT`,
+  is typically used to mark the head of the entire sentence, with an arc pointing
+  to this main verb. From *ate*, arcs extend to its arguments and modifiers.
+  
+  ______________________________________________________________________
+  
+  **Fig. 6.10** A dependency graph for the sentence "She ate a green apple".
+  
+  ______________________________________________________________________
+  
+  In the graph, we can observe the following key relationships:
+  
+  - An arc from `ate` to `She` is labeled `nsubj`, indicating that "She" is the
+    *nominal subject* of the verb "ate". This tells us who performed the action.
+  - An arc from `ate` to `apple` is labeled `dobj`, identifying "apple" as the
+    *direct object*. This tells us what was acted upon.
+  - The noun `apple` is itself a head. An arc from `apple` to `green` is labeled
+    `amod` (*adjectival modifier*), showing that "green" describes the apple.
+  - Similarly, an arc from `apple` to `a` is labeled `det` (*determiner*),
+    specifying the article associated with the noun.
+  
+  This representation explicitly captures the functional relationships between
+  words. The triplet `nsubj(ate, She)` and `dobj(ate, apple)` directly encodes the
+  core predicate-argument structure: *who did what*. This is a significant
+  advantage of dependency grammar, as it often makes extracting semantic
+  information more straightforward than navigating a complex phrase structure
+  tree. The labels for these grammatical relations typically come from a
+  standardized set, such as the one defined by the Universal Dependencies (UD)
+  project, which aims to create consistent annotation schemes across different
+  languages. This standardization is crucial for building robust, multilingual
+  parsing tools. The entire structure forms a directed, acyclic graph where each
+  word (except the root) has exactly one head, ensuring a coherent grammatical
+  analysis.
+  
+  While graph-based methods attempt to find the highest-scoring dependency tree
+  from all possible trees for a sentence, an alternative and highly efficient
+  approach is **transition-based parsing**. Instead of scoring entire trees, a
+  transition-based parser processes a sentence word by word, making a sequence of
+  locally optimal decisions to build the final dependency graph. This method is
+  often conceptualized as a state machine. It starts in an initial configuration,
+  and at each step, it applies a *transition* (or *action*) to move to a new
+  configuration, gradually constructing the dependency arcs. The process
+  terminates when the sentence is fully processed and a complete tree has been
+  formed.
+  
+  At the heart of a transition-based parser is its configuration, which typically
+  consists of three components:
+  
+  - A **stack** ($\sigma$), which holds words that are currently being processed.
+  - A **buffer** ($\beta$), which holds the sequence of words from the sentence
+    that have not yet been processed.
+  - A set of dependency **arcs** ($A$), which is initially empty and is
+    incrementally built by the parser.
+  
+  The parser is initialized in a standard starting configuration. The stack
+  contains a special `ROOT` token, representing the root of the dependency tree.
+  The buffer contains all the words of the sentence in their original order. The
+  set of arcs is empty. The goal of the parser is to reach a terminal
+  configuration where the buffer is empty and the stack contains only the `ROOT`
+  token.
+  
+  The parser moves from one configuration to another by applying one of a small
+  set of defined actions. The most common system, known as an *arc-standard*
+  parser, uses three primary actions:
+  
+  1. **SHIFT**: This action removes the first word from the buffer and pushes it
+     onto the top of the stack. This is the primary way words are brought into
+     consideration for forming dependency relationships. It is used when no
+     dependency can yet be formed involving the word at the front of the buffer
+     and the word on top of the stack.
+  
+  2. **LEFT-ARC** ($L_y$): This action asserts a head-dependent relationship. Let
+     the word on top of the stack be $w_j$ and the second word from the top be
+     $w_i$. The LEFT-ARC action creates a dependency arc $w_j \rightarrow w_i$,
+     with the label $y$. This means $w_j$ is the head and $w_i$ is the dependent.
+     After adding the arc to the set $A$, the dependent ($w_i$, the second word)
+     is popped from the stack. This action is typically chosen when $w_i$ has
+     found its head and will not be the head for any other words remaining on the
+     stack or in the buffer.
+  
+  3. **RIGHT-ARC** ($R_y$): This action also asserts a head-dependent
+     relationship. As before, let the word on top of the stack be $w_j$ and the
+     second word from the top be $w_i$. The RIGHT-ARC action creates a dependency
+     arc $w_i \rightarrow w_j$, with the label $y$. Here, $w_i$ is the head and
+     $w_j$ is the dependent. After the arc is added to $A$, the dependent ($w_j$,
+     the top word) is popped from the stack. This action is used when the word on
+     top of the stack has found its head and has already been assigned all of its
+     own dependents.
+  
+  The critical question, of course, is how the parser decides which action to take
+  at each step. This decision is made by a component called an **oracle**. In
+  modern transition-based parsers, this oracle is a supervised machine learning
+  classifier. At each step in the parsing process, a feature vector is extracted
+  from the parser's current configuration. These features might include the
+  part-of-speech tags and word forms of the top few words on the stack, the first
+  few words in the buffer, and information about previously constructed dependency
+  arcs.
+  
+  The classifier, which has been trained on a large *treebank* (a corpus of
+  sentences annotated with correct dependency trees), takes this feature vector as
+  input and predicts the most likely valid action (SHIFT, LEFT-ARC, or RIGHT-ARC)
+  for that specific configuration. The parser then executes this predicted action
+  and moves to the next state. This process repeats until a terminal state is
+  reached.
+  
+  The primary advantage of this approach is its efficiency. Since the parser makes
+  a single pass through the sentence, making a constant number of decisions for
+  each word, its computational complexity is linear in the length of the sentence,
+  or $O(n)$. This makes transition-based parsers very fast and suitable for
+  large-scale applications. However, their greedy nature—making locally optimal
+  decisions without the ability to backtrack—means that an early mistake can lead
+  to a cascade of subsequent errors, a problem known as error propagation. Despite
+  this, the combination of speed and high accuracy from powerful machine learning
+  oracles has made transition-based parsing a dominant and influential paradigm in
+  the field. To make these abstract components and actions concrete, the next
+  section will walk through a step-by-step example, illustrating how these pieces
+  work together to parse a simple sentence.
+  
+  To understand how a transition-based parser operates, let's walk through a
+  concrete example. We will parse the simple sentence "He ate fish." Our parser
+  uses three data structures: a *stack*, which holds words that are currently
+  being processed; a *buffer*, which holds the remaining words of the sentence;
+  and a list of *arcs*, which will store the final dependency relations we
+  construct.
+  
+  The parser begins in an initial configuration. The stack contains a special
+  `[ROOT]` symbol, which acts as a placeholder for the ultimate root of the
+  sentence. The buffer contains all the words of the sentence in order. The set of
+  generated arcs is empty.
+  
+  *Initial State:*
+  
+  - **Stack:** `[ROOT]`
+  - **Buffer:** `[He, ate, fish]`
+  - **Arcs:** `{}`
+  
+  The parser's job is to sequentially apply one of three actions—`SHIFT`,
+  `LEFT-ARC`, or `RIGHT-ARC`—until it reaches a terminal state, which is defined
+  as having an empty buffer and a stack containing only the `[ROOT]` element. At
+  each step, a model known as an *oracle* decides which action is correct based on
+  the current configuration. For this walkthrough, we will act as the oracle,
+  making decisions that lead to a grammatically correct parse. The entire process
+  is traced step-by-step in Fig. 6.12.
+  
+  **Step 1:** The stack contains `[ROOT]` and the buffer starts with `He`. We
+  cannot yet establish a relationship between `ROOT` and `He`, as we haven't seen
+  the main verb of the sentence. Therefore, we must move a word from the buffer to
+  the stack for further consideration. The only valid action is `SHIFT`.
+  
+  - **Stack:** `[ROOT, He]`
+  - **Buffer:** `[ate, fish]`
+  - **Action:** `SHIFT`
+  - **Arcs:** `{}`
+  
+  **Step 2:** The top two items on the stack are `ROOT` and `He`. We still cannot
+  relate them. The main verb, `ate`, is still in the buffer. So, we `SHIFT` again.
+  
+  - **Stack:** `[ROOT, He, ate]`
+  - **Buffer:** `[fish]`
+  - **Action:** `SHIFT`
+  - **Arcs:** `{}`
+  
+  **Step 3:** Now, the stack is `[ROOT, He, ate]`. We can examine the top two
+  words: `He` and `ate`. A dependency exists between them: `ate` is the head of
+  `He` (the verb is the head of its subject). The arc is thus `ate -> He`. Since
+  the head (`ate`) is to the right of the dependent (`He`) on the stack, this
+  calls for a `LEFT-ARC` action. We will label this arc with the relation *nsubj*
+  (nominal subject). This action adds the arc `(ate, nsubj, He)` to our set and
+  removes the dependent, `He`, from the stack.
+  
+  - **Stack:** `[ROOT, ate]`
+  - **Buffer:** `[fish]`
+  - **Action:** `LEFT-ARC(nsubj)`
+  - **Arcs:** `{(ate, nsubj, He)}`
+  
+  **Step 4:** The stack is now `[ROOT, ate]` and the buffer still contains `fish`.
+  We cannot create a dependency between `ate` and `fish` because `fish` is not yet
+  on the stack. The only possible action is to `SHIFT`.
+  
+  - **Stack:** `[ROOT, ate, fish]`
+  - **Buffer:** `[]`
+  - **Action:** `SHIFT`
+  - **Arcs:** `{(ate, nsubj, He)}`
+  
+  **Step 5:** The buffer is now empty. We must process the remaining items on the
+  stack. The top two words are `ate` and `fish`. Here, `ate` is the head of `fish`
+  (the verb is the head of its direct object). The arc is `ate -> fish`. Because
+  the head (`ate`) is to the left of the dependent (`fish`), this is a `RIGHT-ARC`
+  action. We label it with the relation *dobj* (direct object). This action adds
+  the arc `(ate, dobj, fish)` to our set and removes the dependent, `fish`, from
+  the stack.
+  
+  - **Stack:** `[ROOT, ate]`
+  - **Buffer:** `[]`
+  - **Action:** `RIGHT-ARC(dobj)`
+  - **Arcs:** `{(ate, nsubj, He), (ate, dobj, fish)}`
+  
+  **Step 6:** We are nearly finished. The buffer is empty and the stack contains
+  `[ROOT, ate]`. The final dependency connects the special `ROOT` symbol to the
+  main predicate of the sentence, which is `ate`. The arc is `ROOT -> ate`. Since
+  the head (`ROOT`) is to the left of the dependent (`ate`), this is another
+  `RIGHT-ARC` action. This final arc establishes `ate` as the head of the entire
+  sentence.
+  
+  - **Stack:** `[ROOT]`
+  - **Buffer:** `[]`
+  - **Action:** `RIGHT-ARC(root)`
+  - **Arcs:** `{(ate, nsubj, He), (ate, dobj, fish), (ROOT, root, ate)}`
+  
+  The parser has now reached its terminal state: the buffer is empty and the stack
+  contains only `[ROOT]`. The set of arcs generated represents the final
+  dependency graph for the sentence "He ate fish."
+  
+  A crucial question remains: how does the parser *decide* which action to take at
+  each step? In our example, we used our own linguistic knowledge. A real
+  transition-based parser uses a machine learning classifier as its oracle. This
+  classifier is trained on a large treebank—a corpus of sentences that have been
+  manually annotated with their correct dependency structures. For each
+  configuration in the training data, the oracle learns the correct historical
+  action.
+  
+  During parsing, the oracle makes a prediction based on features of the current
+  configuration. These features might include the top words on the stack, the
+  first words in the buffer, their part-of-speech tags, and any existing
+  dependency arcs. Based on these features, the classifier predicts the most
+  likely action (`SHIFT`, `LEFT-ARC`, or `RIGHT-ARC`) to take next. The power of
+  this approach lies in its ability to learn complex grammatical patterns from
+  data, rather than relying on hand-crafted rules. This data-driven method makes
+  transition-based parsers both highly accurate and computationally efficient, as
+  they build the syntactic structure in a single linear pass over the sentence.
+  
+  In this chapter, we have journeyed through the foundational principles of
+  syntactic parsing, the task of uncovering the grammatical structure of a
+  sentence. We explored two primary paradigms for representing this structure. The
+  first, *constituency parsing*, views sentences as a hierarchy of nested phrases,
+  or constituents, formally described by Context-Free Grammars. This approach
+  excels at identifying the phrasal units that group together, such as noun
+  phrases and verb phrases. The second, *dependency parsing*, models grammatical
+  relationships directly as a directed graph of dependencies between words,
+  linking heads to their dependents with specific functional labels like `nsubj`
+  (nominal subject). This representation is often more useful for downstream tasks
+  that need to know "who did what to whom."
+  
+  To operationalize these ideas, we examined classic algorithms that form the
+  bedrock of parsing theory. For constituency, we detailed the
+  Cocke-Younger-Kasami (CYK) algorithm, a dynamic programming method that
+  systematically and exhaustively finds all possible parses for a sentence
+  according to a Chomsky Normal Form grammar. For dependency parsing, we
+  investigated transition-based systems, which offer a highly efficient,
+  linear-time approach by processing a sentence from left to right, making a
+  series of local decisions to build a dependency graph using a stack and a
+  buffer. These methods provide a crucial conceptual framework for thinking about
+  syntactic structure computationally.
+  
+  While these classic techniques are fundamental, the state of the art in
+  syntactic parsing has decisively shifted towards models based on neural
+  networks. The primary advantage of neural parsers lies in their ability to
+  overcome the feature engineering and data sparsity problems that plagued earlier
+  statistical models. Instead of relying on hand-crafted, sparse, symbolic
+  features (e.g., "the current word is *cat*" and "the previous tag was *DET*"),
+  neural parsers learn dense vector representations—or *embeddings*—for words,
+  part-of-speech tags, and other contextual cues. These dense vectors capture rich
+  semantic and syntactic similarities, allowing the model to generalize far more
+  effectively from the training data.
+  
+  In a modern neural transition-based parser, for instance, the decision of which
+  action to take (`SHIFT`, `LEFT-ARC`, etc.) is made by a small neural network.
+  This network takes as input the vector embeddings of the words on top of the
+  stack and in the front of the buffer, and then outputs a probability
+  distribution over the possible actions. This approach replaces brittle feature
+  templates with a powerful, learned decision-making function. A different family
+  of neural models, known as graph-based parsers, calculates a score for every
+  possible dependency arc between all words in the sentence and then finds the
+  highest-scoring tree structure.
+  
+  More recently, large-scale architectures like the Transformer, which we will
+  explore in detail in Chapter 12, have further revolutionized the field. By using
+  mechanisms like self-attention, these models can capture complex, long-distance
+  syntactic dependencies with unprecedented accuracy. The fundamental concepts of
+  constituency and dependency remain as vital as ever, but the computational
+  engine used to uncover these structures is now overwhelmingly powered by the
+  deep learning techniques that define modern computational linguistics.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+  
+  [^1]: The asterisk notation $(N \cup \Sigma)^*$ means "a sequence of zero or more
+  symbols" from the given set. For most practical parsing grammars, rule
+  right-hand sides have at least one symbol.
+hash: c881b2cc1f1ec7cedc2bafc58643933eac60458c9eec21096d71d588ffcec51c
+response:
+  Please create an illustration of a person standing before a large chalkboard, in
+  the process of diagramming a sentence. Their hand, holding a piece of chalk, has
+  just drawn a line that separates the subject of the sentence from the predicate.
+  Above the words, a network of horizontal and diagonal lines is taking shape,
+  grouping words into nested components and revealing a hidden, hierarchical
+  structure within the simple string of text. The style should be clean and
+  minimalist, focusing on the clarity of the lines and the intellectual act of
+  uncovering grammatical form, rather than on the detailed features of the person.
+duration: 15678 ms
+usage_stats:
+  {
+    "candidates_token_count": 115,
+    "prompt_token_count": 12356,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 12356
+      }
+    ],
+    "thoughts_token_count": 1442,
+    "total_token_count": 13913
+  }
+...

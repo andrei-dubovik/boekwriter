@@ -1,0 +1,741 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: headpiece
+prompt:
+  What follows is a text for a chapter from a book called "Introduction to
+  Computational Linguistics".
+  
+  <chapter>
+  
+  Part-of-Speech (POS) tagging is the process of assigning a grammatical category
+  to each word in a text. It is one of the most fundamental tasks in computational
+  linguistics, acting as a foundational layer of analysis for many higher-level
+  applications. The categories, or *tags*, correspond to the familiar parts of
+  speech: nouns, verbs, adjectives, adverbs, prepositions, conjunctions, and more.
+  For example, in the sentence "The quick brown fox jumps over the lazy dog," a
+  POS tagger would analyze the sequence of words and label "quick" as an
+  adjective, "jumps" as a verb, and "dog" as a noun. This process adds a layer of
+  shallow syntactic annotation to raw text, making it more amenable to further
+  computational analysis.
+  
+  Formally, the task is to map an input sentence, represented as a sequence of
+  tokens $W = w_1, w_2, \dots, w_n$, to a corresponding sequence of tags
+  $T = t_1, t_2, \dots, t_n$. Each tag $t_i$ is drawn from a predefined inventory
+  of tags, known as a *tagset*. This transforms a simple string of text into a
+  sequence of annotated tokens, enriching the data with valuable structural
+  information. This is a classic example of a *sequence labeling* problem, where
+  the goal is to assign a categorical label to each member of a sequence, often
+  taking into account the properties of both the individual item and its neighbors
+  to make a decision.
+  
+  The primary challenge that makes POS tagging a non-trivial computational problem
+  is *lexical ambiguity*. A single word form can belong to multiple POS categories
+  depending on its context. The task is not a simple dictionary lookup; rather, it
+  requires an algorithm that can use the surrounding words to correctly
+  disambiguate the word's role. Resolving this ambiguity is the central problem
+  that modern tagging methods are designed to solve.
+  
+  At first glance, POS tagging might seem as simple as looking up each word in a
+  dictionary and assigning its category. This approach, however, quickly fails due
+  to a fundamental property of language: *lexical ambiguity*. Many words can
+  belong to more than one lexical category, and only the surrounding context can
+  resolve the uncertainty. This is the central challenge that a POS tagger must
+  overcome.
+  
+  A classic example is the word *book*. It can function as a verb, meaning 'to
+  make a reservation,' or as a noun, referring to a written work. The words in the
+  immediate vicinity provide the crucial evidence for disambiguation. Consider the
+  following sentences:
+  
+  1. *Book* that flight for me.
+  2. I need to read that *book*.
+  
+  In the first sentence, the imperative structure and the object 'flight' signal
+  that *book* is an action—a verb. In the second, the preceding verb 'read' makes
+  it clear that *book* is the object being acted upon—a noun. This contextual
+  dependency, illustrated in Fig. 5.2, is intuitive for human speakers but must be
+  computationally modeled for a machine.
+  
+  This problem is far from isolated. Common English words like *watch*, *fly*,
+  *saw*, and *duck* are also highly ambiguous. A successful POS tagger cannot
+  simply consider a word in isolation; it must develop a systematic method for
+  leveraging contextual patterns to make the correct choice. This is precisely why
+  simple dictionary lookups are insufficient and more sophisticated probabilistic
+  models are required.
+  
+  Part-of-speech tagging is rarely an end in itself. Rather, it functions as a
+  crucial preprocessing step for a vast range of more complex Natural Language
+  Processing tasks. By resolving the kind of lexical ambiguity we saw with the
+  word 'book', tagging provides a foundational layer of syntactic information that
+  is essential for higher-level analysis. Many NLP systems are structured as a
+  *pipeline*, where raw text is passed through a series of modules, each one
+  enriching the data for the next. As shown in Fig. 5.3, POS tagging is a
+  fundamental stage in this process, transforming a simple sequence of words into
+  an annotated stream ready for deeper interpretation.
+  
+  The most direct consumer of POS information is *syntactic parsing* (covered in
+  Chapter 6). The goal of a parser is to uncover the grammatical structure of a
+  sentence, identifying phrasal constituents like Noun Phrases (`NP`) or Verb
+  Phrases (`VP`). This task is immensely more tractable when the parser already
+  knows the grammatical category of each word. For instance, a parser can use a
+  simple rule like `DET + ADJ + NOUN → NP` only if the words in the input have
+  already been tagged as a determiner, an adjective, and a noun. Without this
+  prior information, the parser would face a combinatorial explosion of
+  possibilities.
+  
+  POS tags are also a vital feature for *Information Extraction* (IE) systems. A
+  key IE task is Named Entity Recognition (NER), which aims to find and classify
+  entities like persons, organizations, and locations. A powerful heuristic for
+  identifying named entities is to look for sequences of capitalized words that
+  have been tagged as proper nouns (`NNP`). In a sentence like "Dr. Evelyn Reed
+  joined Globex Corporation," a tagger would label "Evelyn," "Reed," "Globex," and
+  "Corporation" as proper nouns, giving the NER system a strong signal that "Dr.
+  Evelyn Reed" and "Globex Corporation" are entities of interest.
+  
+  Finally, accurate tagging benefits many other applications:
+  
+  - **Machine Translation:** The grammatical role of a word is critical for
+    correct translation. The German word *Weg* can be a noun ("the way") or an
+    adverb ("away"), and a translator must know its POS tag to choose the right
+    equivalent.
+  - **Sentiment Analysis:** Adjectives and adverbs often carry the strongest
+    sentiment, so identifying them helps a system focus on the most opinionated
+    parts of a text.
+  
+  To perform Part-of-Speech tagging consistently, we need a standardized set of
+  labels. Such a collection of tags is known as a *tagset* or an *annotation
+  schema*. While dozens of tagsets have been developed over the years, each with
+  varying levels of granularity, a few have become de facto standards within the
+  computational linguistics community, ensuring that models and corpora from
+  different research groups are comparable. Having a shared tagset is crucial for
+  evaluating and replicating work in the field.
+  
+  For English, the most influential and widely used schema is the **Penn Treebank
+  (PTB) tagset**. It was developed in the early 1990s as part of the Penn Treebank
+  Project at the University of Pennsylvania, which involved annotating a large
+  corpus of Wall Street Journal articles with both part-of-speech and syntactic
+  structure information. Its widespread adoption has made it the baseline for
+  countless NLP systems and research papers, and familiarity with it is essential
+  for any practitioner.
+  
+  The PTB tagset uses short, mnemonic labels to represent grammatical categories.
+  For instance, `NN` represents a singular common noun, `JJ` an adjective, and
+  `VB` a verb in its base form. The tags also capture important morphological
+  distinctions. A plural noun is tagged `NNS` (the 'S' signifies plural), while a
+  third-person singular present tense verb like "walks" is tagged `VBZ` (the 'Z'
+  is mnemonic for the "-s" ending). A selection of the most common tags from this
+  schema, along with their descriptions and examples, is provided in **Fig. 5.4**.
+  This table serves as a crucial reference for understanding the output of many
+  standard POS taggers.
+  
+  The core PTB tagset consists of 36 distinct part-of-speech tags, plus additional
+  tags for punctuation and symbols. This number represents a deliberate trade-off.
+  A smaller set of tags might be too coarse, grouping words with different
+  grammatical behaviors (e.g., lumping all verb forms together). Conversely, a
+  much larger tagset, while linguistically richer, would increase the difficulty
+  of manual annotation and create data sparsity issues for statistical models, as
+  many tags would appear too infrequently in the training corpus. The Penn
+  Treebank tagset strikes a practical balance that has proven effective for a wide
+  range of computational tasks.
+  
+  Before the dominance of statistical methods, the first successful attempts at
+  Part-of-Speech tagging were *rule-based systems*. These approaches sought to
+  directly encode linguistic knowledge into a computer program through a
+  combination of two primary components: a comprehensive dictionary and a set of
+  handcrafted disambiguation rules. The core logic was intuitive and mirrored how
+  a human linguist might approach the task.
+  
+  The process typically occurred in two stages. First, the system would consult a
+  large lexicon that mapped each known word to its possible set of POS tags. For a
+  word like "book," the dictionary would return both `NN` (noun) and `VB` (verb).
+  For an unambiguous word like "and," it would simply return `CC` (coordinating
+  conjunction). This initial step would leave many words in a sentence with
+  multiple potential tags.
+  
+  The second, more critical stage involved applying a set of disambiguation rules
+  to prune the incorrect tags. These rules were manually written by linguists to
+  capture patterns of English grammar. For instance, a simple but effective rule
+  might be:
+  
+  *If an ambiguous word follows a determiner (like `the`, `a`), it is most likely
+  a noun.*
+  
+  This rule would correctly tag "book" as a noun in the phrase "the book." Another
+  rule could state:
+  
+  *If an ambiguous word follows a modal verb (like `will`, `can`, `must`), it is
+  most likely a verb.*
+  
+  This would correctly tag "book" as a verb in "we will book a flight." More
+  sophisticated rules would handle morphology to guess the tags of unknown words.
+  For example, a word ending in `-ing` is likely a gerund or present participle
+  (`VBG`), a word ending in `-ly` is likely an adverb (`RB`), and a capitalized
+  word not at the beginning of a sentence is likely a proper noun (`NNP`). One of
+  the most famous early systems, the Brill tagger, even learned these kinds of
+  contextual rules automatically from a corpus in a process called
+  transformation-based learning.
+  
+  While rule-based systems could achieve high accuracy, they suffered from
+  significant drawbacks. Creating and maintaining the large set of rules required
+  immense effort from expert linguists and was extremely time-consuming. These
+  systems were also *brittle*; rules developed for one domain, like news articles,
+  would often perform poorly on another, like poetry. Most importantly, the entire
+  rule set had to be re-developed from scratch for each new language. These
+  challenges of cost, scalability, and portability created a strong incentive for
+  the field to develop more robust, data-driven methods, which led directly to the
+  stochastic approaches we will explore next.
+  
+  While rule-based taggers can achieve reasonable accuracy, they are brittle and
+  laborious to create. A single new rule can have unintended consequences, and the
+  entire system must be handcrafted by linguistic experts. To overcome these
+  limitations, the field shifted towards a more robust and scalable paradigm:
+  **stochastic tagging**. Instead of relying on hand-written rules, stochastic
+  approaches use probability and statistics to determine the most likely tag for a
+  word in its given context.
+  
+  The core idea is to leverage a large, pre-annotated corpus as a source of
+  statistical evidence. By analyzing the frequencies of words and tags in this
+  training data, a stochastic model can *learn* the likelihood of different tag
+  assignments. This data-driven approach is a hallmark of modern computational
+  linguistics, allowing models to automatically capture complex linguistic
+  patterns without explicit instruction. The task is no longer to define what is
+  grammatically *possible*, but rather to calculate what is statistically
+  *probable*.
+  
+  Stochastic taggers typically rely on two fundamental pieces of information
+  derived from the corpus:
+  
+  1. **Lexical Probability (Emission Probability):** The likelihood of a word
+     appearing with a particular tag. For example, we can calculate the
+     probability of seeing the word `book` given the tag is a noun, `NN`. This is
+     represented as $P(\text{book} | \text{NN})$.
+  
+  2. **Contextual Probability (Transition Probability):** The likelihood of a tag
+     following another tag. For instance, we can calculate the probability that a
+     noun (`NN`) follows a determiner (`DT`), such as in the phrase "the book".
+     This is represented as $P(\text{NN} | \text{DT})$.
+  
+  The central challenge of POS tagging is to combine these probabilities to find
+  the best possible tag sequence for an entire sentence. We don't just want the
+  most likely tag for each word in isolation; we want the sequence of tags
+  $T = t_1, t_2, \dots, t_n$ that is most probable for the sequence of words
+  $W = w_1, w_2, \dots, w_n$. Formally, the goal is to find the sequence $\hat{T}$
+  that maximizes the probability $P(T|W)$. To accomplish this, we need a formal
+  model that can elegantly integrate lexical and contextual probabilities to
+  search for this optimal path. The Hidden Markov Model, which we turn to next,
+  provides exactly such a framework.
+  
+  To formalize the stochastic approach to tagging, we introduce one of the most
+  important statistical tools for modeling sequential data: the **Hidden Markov
+  Model (HMM)**. An HMM is a probabilistic model designed to explain or generate a
+  sequence of observable events that depend on a sequence of underlying,
+  unobservable (or *hidden*) states. This structure makes it perfectly suited for
+  tasks where we can see the output (like words in a sentence) but need to infer
+  the process that generated it (like the sequence of part-of-speech tags).
+  
+  Imagine you are in a windowless room and want to guess the weather outside. You
+  cannot see the weather directly, making it a hidden state (e.g., *Rainy* or
+  *Sunny*). However, each day a colleague enters the room, and you can observe
+  whether or not they are carrying an umbrella. This is your observable event. You
+  notice that your colleague is more likely to carry an umbrella on a rainy day
+  than on a sunny day. Furthermore, you know that a rainy day is more likely to be
+  followed by another rainy day than by a sunny day. An HMM provides a
+  mathematical framework to combine these pieces of information to infer the most
+  likely sequence of weather patterns (the hidden states) given the sequence of
+  umbrella observations.
+  
+  Formally, a Hidden Markov Model is defined by the following five components:
+  
+  - **A set of N hidden states, $Q = \{q_1, q_2, \ldots, q_N\}$** In our analogy,
+    this would be the set of possible weather conditions, such as
+    $Q = \{\text{Rainy, Sunny}\}$.
+  
+  - **A set of M possible observations, $O = \{o_1, o_2, \ldots, o_M\}$** These
+    are the observable outputs. In the analogy, this would be
+    $O = \{\text{Umbrella, No Umbrella}\}$.
+  
+  - **A state transition probability distribution, $A$** This is a matrix
+    $A = \{a_{ij}\}$ representing the probability of moving from state $q_i$ to
+    state $q_j$. The core "Markov" property is embedded here: the probability of
+    the next state depends *only* on the current state.
+    \$$
+    a_{ij} = P(q_t = j \mid q_{t-1} = i)
+    $\$
+  
+  - **An observation emission probability distribution, $B$** This is a matrix
+    $B = \{b_j(k)\}$ representing the probability of seeing observation $o_k$ when
+    the model is in hidden state $q_j$. This connects the hidden states to the
+    observable data. \$$
+    b_j(k) = P(o_t = k \mid q_t = j)
+    $\$
+  
+  - **An initial state probability distribution, $\pi$** This is a vector
+    $\pi = \{\pi_i\}$ that specifies the probability of the model starting in
+    state $q_i$ at the beginning of a sequence. \$$
+    \pi_i = P(q_1 = i)
+    $\$
+  
+  For an HMM to be computationally tractable, it relies on two fundamental
+  simplifying assumptions. First is the **Markov Assumption**: the probability of
+  a particular state depends only on the previous state. This means
+  $P(q_t \mid q_{t-1}, q_{t-2}, \ldots, q_1) = P(q_t \mid q_{t-1})$. While this
+  ignores longer-range dependencies, it dramatically simplifies the model. Second
+  is the **Output Independence Assumption**: the probability of an observation
+  depends only on the state that produced it, not on any other states or previous
+  observations. Thus,
+  $P(o_t \mid q_t, q_{t-1}, \ldots, q_1, o_{t-1}, \ldots, o_1) = P(o_t \mid q_t)$.
+  Together, these assumptions allow us to efficiently model complex sequential
+  phenomena, making HMMs a cornerstone of classic computational linguistics.
+  
+  To apply a Hidden Markov Model to Part-of-Speech tagging, we must frame the task
+  in terms of the model's core components: hidden states, observations, and the
+  probabilities that connect them. The mapping is direct and intuitive. Given a
+  sentence, the words are what we can *see*, while the grammatical tags are the
+  *hidden* structure we wish to uncover.
+  
+  Formally, we define the components of the HMM as follows:
+  
+  - **Observations ($O$)**: The sequence of words in the sentence,
+    $w_1, w_2, \dots, w_n$. For the sentence "Book that flight," the observation
+    sequence is `('Book', 'that', 'flight')`. These are the evident, observable
+    outputs of our model.
+  
+  - **Hidden States ($Q$)**: The sequence of Part-of-Speech tags,
+    $t_1, t_2, \dots, t_n$, corresponding to each word. The goal of the tagging
+    process is to find the most probable sequence of these states. For our
+    example, a plausible hidden state sequence is `(Verb, Determiner, Noun)`. The
+    set of all possible states is the complete tagset we are using (e.g., the 36
+    main tags of the Penn Treebank).
+  
+  With the states and observations defined, the HMM is characterized by two key
+  sets of probabilities, which are learned from an annotated corpus during a
+  training phase.
+  
+  First, we have the **transition probabilities**. These answer the question:
+  given that we are in a certain state (tag), what is the probability of moving to
+  another state (tag)? This is the probability of a tag $t_i$ given the previous
+  tag $t_{i-1}$, denoted as $P(t_i | t_{i-1})$. For instance, English grammar
+  dictates that a determiner is very likely to be followed by a noun. Therefore,
+  the transition probability $P(\text{Noun} | \text{Determiner})$ will be high.
+  Conversely, the probability of a determiner following another determiner,
+  $P(\text{Determiner} | \text{Determiner})$, will be extremely low. These
+  probabilities effectively encode syntactic knowledge of the language.
+  
+  Second, we have the **emission probabilities**. These answer the question: given
+  that we are in a particular hidden state (tag), what is the probability of
+  observing a specific word? This is the probability of a word $w_i$ given its tag
+  $t_i$, denoted as $P(w_i | t_i)$. Emission probabilities capture lexical
+  knowledge. For example, the probability of seeing the word "book" given the tag
+  Noun, $P(\text{'book'} | \text{Noun})$, will be significantly higher than the
+  probability of seeing "book" given the tag Adverb,
+  $P(\text{'book'} | \text{Adverb})$. This is how the model handles lexical
+  ambiguity; while "book" can be both a Noun and a Verb, one is typically more
+  probable than the other, and the model learns these likelihoods from the corpus.
+  
+  The conceptual model, illustrated in Fig. 5.8, shows this generative process.
+  The HMM starts in an initial state, transitions to a hidden tag (e.g., `Verb`),
+  and then emits an observable word (e.g., "Book"). It then transitions to the
+  next tag (`Determiner`), emits the next word ("that"), and so on. Our task,
+  however, is the inverse of generation. We are given the sequence of
+  observations—the words—and our goal is to find the single most likely sequence
+  of hidden states—the tags—that could have produced them. This decoding problem
+  is precisely what the Viterbi algorithm, which we will discuss next, is designed
+  to solve.
+  
+  Once we have formally defined a Hidden Markov Model, the next logical step is to
+  *train* it. Training an HMM simply means learning its parameters from data. For
+  a POS tagger, this data is a large, pre-tagged corpus—a collection of text where
+  each word has already been assigned its correct tag by a human annotator. We use
+  this "gold-standard" data to estimate the two sets of probabilities that define
+  our model: transition probabilities and emission probabilities. This section
+  focuses on the former.
+  
+  Transition probabilities answer the question: given that we have just seen a
+  particular tag, what is the likelihood of seeing another specific tag next?
+  Formally, this is the conditional probability of tag $t_i$ occurring given that
+  the previous tag was $t_{i-1}$, which we denote as $P(t_i | t_{i-1})$. This
+  captures the grammatical structure of a language. For instance, in English, it
+  is highly probable that a determiner (like 'the') will be followed by a noun
+  (like 'cat'), so we would expect the probability
+  $P(\text{Noun} | \text{Determiner})$ to be high. Conversely, the probability of
+  a determiner following another determiner,
+  $P(\text{Determiner} | \text{Determiner})$, would be extremely low.
+  
+  We calculate these probabilities directly from the frequencies in our annotated
+  corpus using a method called *Maximum Likelihood Estimation* (MLE). The formula
+  is straightforward and intuitive:
+  
+  $P(t_i | t_{i-1}) = \frac{C(t_{i-1}, t_i)}{C(t_{i-1})}$
+  
+  Here, $C(t_{i-1}, t_i)$ is the count of how many times the tag sequence
+  $t_{i-1}$ followed by $t_i$ appears in the corpus. The denominator,
+  $C(t_{i-1})$, is the total count of the tag $t_{i-1}$ appearing anywhere in the
+  corpus. For example, to calculate $P(\text{Noun} | \text{Determiner})$, we would
+  count every instance of a determiner followed by a noun and divide it by the
+  total count of all determiners.
+  
+  A special case arises at the beginning of a sentence, as the first word has no
+  preceding tag. To handle this, we introduce a special *start-of-sentence* tag,
+  often denoted as `<s>`. The transition probability from this special state,
+  $P(t_i | \text{<s>})$, represents the likelihood of a sentence beginning with
+  tag $t_i$. This is calculated by counting how many sentences in the corpus start
+  with tag $t_i$ and dividing by the total number of sentences.
+  
+  Once we compute these probabilities for every possible pair of tags in our
+  tagset, we can organize them into a *transition probability matrix*. As shown in
+  **Fig. 5.9**, the rows of this matrix represent the preceding tag ($t_{i-1}$)
+  and the columns represent the current tag ($t_i$). Each cell contains the
+  corresponding conditional probability. A crucial property of this matrix is that
+  the probabilities in each row must sum to 1, since some tag must always follow
+  the preceding one.
+  
+  $\sum_{t_i \in T} P(t_i | t_{i-1}) = 1$
+  
+  This matrix forms one of the core components of our HMM, encoding the learned
+  grammatical patterns of the language. The second component, the emission
+  probabilities, will tell us which words are likely for each tag.
+  
+  While transition probabilities model the relationship *between tags*, emission
+  probabilities model the link between a *tag* and a *word*. They answer the
+  question: given that we are in a particular hidden state (a POS tag), what is
+  the likelihood of observing a specific word? Formally, this is the conditional
+  probability of a word $w$ given a tag $t$, denoted as $P(w|t)$. These
+  probabilities are also known as lexical likelihoods.
+  
+  Like transition probabilities, emission probabilities are estimated directly
+  from a large, tag-annotated corpus using Maximum Likelihood Estimation (MLE).
+  The calculation is a straightforward counting exercise. To find the probability
+  of a word $w$ being generated by a tag $t$, we count how many times the word $w$
+  appeared with the tag $t$ in the corpus and divide it by the total count of the
+  tag $t$.
+  
+  The formula is as follows:
+  
+  $P(w_i | t_i) = \frac{\text{Count}(t_i, w_i)}{\text{Count}(t_i)}$
+  
+  Here:
+  
+  - $\text{Count}(t_i, w_i)$ is the number of times the word $w_i$ is tagged with
+    $t_i$ in the corpus.
+  - $\text{Count}(t_i)$ is the total number of times the tag $t_i$ appears in the
+    corpus.
+  
+  For example, let's calculate the emission probability for the word 'book' given
+  the tag Noun (`NN`). Suppose our training corpus contains 50,000 instances of
+  the `NN` tag. We find that the word 'book' is tagged as a noun 75 times. The
+  emission probability would be:
+  
+  $P(\text{'book'} | \text{NN}) = \frac{\text{Count}(\text{NN}, \text{'book'})}{\text{Count}(\text{NN})} = \frac{75}{50,000} = 0.0015$
+  
+  Now, suppose the tag Verb (`VB`) appears 30,000 times, and the word 'book' is
+  tagged as a verb ('to book a flight') only 12 times. The probability is:
+  
+  $P(\text{'book'} | \text{VB}) = \frac{\text{Count}(\text{VB}, \text{'book'})}{\text{Count}(\text{VB})} = \frac{12}{30,000} = 0.0004$
+  
+  These probabilities quantify the lexical ambiguity we discussed earlier. The
+  word 'book' *can* be a verb, but it is far more likely to be a noun. This
+  information is crucial for the HMM when it needs to decide between competing tag
+  sequences. We can pre-calculate these probabilities for every word-tag pair in
+  our training vocabulary and store them in a large emission probability matrix. A
+  small sample of such a matrix is shown in **Fig. 5.10**.
+  
+  A significant challenge arises with words that appear in our test data but were
+  never seen during training. These are often called *out-of-vocabulary* (OOV)
+  words. Using the formula above, any unseen word would have a count of zero,
+  resulting in an emission probability of $P(w_{OOV} | t) = 0$ for all tags $t$.
+  This is problematic because it makes any sentence containing that word
+  impossible to parse. A standard technique to handle this is to replace all rare
+  words (e.g., those appearing only once) in the training data with a special
+  "unknown word" token, `<UNK>`. We then calculate emission probabilities for
+  `<UNK>` just like any other word. When an OOV word is encountered during
+  tagging, we assign it the pre-computed probabilities for `<UNK>`, providing a
+  non-zero chance for the model to proceed.
+  
+  Once our Hidden Markov Model is trained—meaning we have calculated all the
+  necessary transition and emission probabilities from our corpus—we face the
+  central task of *decoding*. Given a new sentence, which is a sequence of
+  observations (words), how do we find the single most likely sequence of hidden
+  states (POS tags) that produced it?
+  
+  A simple but flawed approach would be to assign each word the tag that is most
+  probable for it in isolation. This greedy method, however, fails to consider the
+  context. A word might be slightly more likely to be a noun than a verb in
+  general, but if it follows a modal verb like "will," the probability of it being
+  a verb is much higher. The optimal tag sequence must account for the *entire*
+  sequence, balancing both the emission probabilities ($P(word|tag)$) and the
+  transition probabilities ($P(tag_i|tag_{i-1})$). Exhaustively calculating the
+  probability of every possible tag sequence is computationally intractable, as
+  the number of sequences grows exponentially with the length of the sentence.
+  
+  The solution to this problem is the **Viterbi algorithm**, an efficient dynamic
+  programming approach that guarantees finding the optimal tag sequence without
+  this exponential overhead. Dynamic programming works by breaking a complex
+  problem into a series of simpler, overlapping subproblems and storing the
+  solutions to these subproblems to avoid re-computation. In the context of POS
+  tagging, the Viterbi algorithm moves from the first word to the last, and at
+  each step, it calculates the most probable path *to that point*.
+  
+  Imagine building a grid, or *trellis*, where the columns represent the words in
+  the sentence and the rows represent all possible POS tags. The Viterbi algorithm
+  fills this trellis one column at a time. For each cell in the grid—representing
+  a specific tag for a specific word—the algorithm calculates the probability of
+  the most likely tag sequence that ends in that very cell. It does this by
+  considering all possible tags for the *previous* word, extending each of those
+  paths to the current cell, and keeping only the path with the highest total
+  probability.
+  
+  Formally, we define $v_t(j)$ as the probability of the most probable tag
+  sequence for the first $t$ words of the sentence that ends with tag $j$. This
+  value can be calculated recursively. To find the value for the cell at word $t$
+  and tag $j$, we look at all the values calculated for the previous word, $t-1$.
+  For each previous tag $i$, we calculate a candidate probability by multiplying
+  three values: the stored Viterbi probability of the previous cell
+  ($v_{t-1}(i)$), the transition probability from tag $i$ to tag $j$, and the
+  emission probability of the current word ($word_t$) given tag $j$. The new
+  Viterbi probability, $v_t(j)$, is the maximum of these candidate probabilities.
+  
+  The core recursive step is defined as:
+  $v_t(j) = \max_{i=1}^{N} \left[ v_{t-1}(i) \cdot P(tag_j | tag_i) \cdot P(word_t | tag_j) \right]$
+  
+  While calculating this maximum probability, the algorithm must also store a
+  *backpointer* for each cell, indicating which of the previous tags ($i$) led to
+  this maximum value. This is crucial for reconstructing the final path.
+  
+  The entire process unfolds in three stages:
+  
+  1. **Initialization:** For the first word in the sentence, the Viterbi
+     probability for each tag is simply the initial or start-state probability of
+     that tag multiplied by the emission probability of the first word given that
+     tag.
+  2. **Recursion:** For each subsequent word from $t=2$ to the end of the
+     sentence, and for each possible tag $j$, compute $v_t(j)$ using the formula
+     above and store a backpointer to the previous tag that yielded the maximum
+     value.
+  3. **Termination and Path Retrieval:** After processing the final word, the
+     algorithm identifies the tag with the highest overall Viterbi probability.
+     This tag is the final state in the most likely sequence. From there, it
+     follows the chain of backpointers backward through the trellis to the
+     beginning of the sentence, thereby recovering the complete, optimal sequence
+     of POS tags.
+  
+  To make the Viterbi algorithm concrete, let's walk through the process with a
+  simple sentence: "Book that flight". Our goal is to find the most probable
+  sequence of Part-of-Speech tags. For this example, we will use a highly
+  simplified tagset consisting of only three tags: Noun (N), Verb (V), and
+  Determiner (DET). We will also assume we have already trained an HMM on a
+  corpus, yielding the following transition and emission probabilities.
+  
+  **Transition Probabilities $P(tag_i | tag_{i-1})$**
+  
+  This table shows the probability of a tag given the preceding tag. `<s>`
+  represents the start of a sentence.
+  
+  | | N | V | DET |
+  | :--- | :--- | :--- | :--- |
+  | **`<s>`** | 0.3 | 0.7 | 0.0 |
+  | **N** | 0.2 | 0.7 | 0.1 |
+  | **V** | 0.3 | 0.2 | 0.5 |
+  | **DET** | 0.8 | 0.2 | 0.0 |
+  
+  **Emission Probabilities $P(word | tag)$**
+  
+  This table shows the probability of observing a word, given a specific tag.
+  
+  | | Book | that | flight |
+  | :--- | :--- | :--- | :--- |
+  | **N** | 0.4 | 0.0 | 0.8 |
+  | **V** | 0.6 | 0.1 | 0.1 |
+  | **DET** | 0.0 | 0.9 | 0.0 |
+  
+  The Viterbi algorithm proceeds by constructing a probability matrix, often
+  visualized as a trellis (see Fig. 5.12). Let $v_t(j)$ be the highest probability
+  of a tag sequence ending at time step $t$ with tag $j$. We will also store
+  backpointers, $b_t(j)$, which tell us which previous tag led to this highest
+  probability.
+  
+  ### Initialization Step (t=1, word="Book")
+  
+  For the first word, the Viterbi probability is the product of the start
+  transition probability and the emission probability.
+  
+  - **For tag N:** $v_1(N) = P(\text{"Book"} | N) \times P(N | \text{<s>})$
+    $v_1(N) = 0.4 \times 0.3 = 0.12$
+  
+  - **For tag V:** $v_1(V) = P(\text{"Book"} | V) \times P(V | \text{<s>})$
+    $v_1(V) = 0.6 \times 0.7 = 0.42$
+  
+  At this point, the most likely tag for "Book" in isolation is Verb (0.42 >
+  0.12), but we must consider the entire sequence. These values form the first
+  column of our Viterbi trellis, as depicted in Fig. 5.12.
+  
+  ### Recursive Step (t=2, word="that")
+  
+  Now we move to the second word, "that". For each possible tag of "that", we
+  calculate the probability by considering all possible paths from the previous
+  step. The general formula is:
+  $v_t(j) = P(w_t | tag_j) \times \max_{i=1..N} [ v_{t-1}(i) \times P(tag_j | tag_i) ]$
+  
+  In our simplified example, "that" can only be a Determiner (DET) as its emission
+  probability for other tags is zero.
+  
+  - **For tag DET:** We need to find the most probable path leading to DET from
+    the previous tags (N or V).
+  
+    - Path from N: $v_1(N) \times P(DET | N) = 0.12 \times 0.1 = 0.012$
+    - Path from V: $v_1(V) \times P(DET | V) = 0.42 \times 0.5 = 0.210$
+  
+    The maximum of these two values is 0.210, which came from the previous tag
+    being V. We now multiply this by the emission probability of "that" given DET.
+  
+    $v_2(DET) = P(\text{"that"} | DET) \times 0.210$
+    $v_2(DET) = 0.9 \times 0.210 = 0.189$
+  
+    We also store the backpointer: $b_2(DET) = V$. This means the most likely path
+    to "that" being a DET comes from "Book" being a V. In Fig. 5.12, this is shown
+    as an arrow pointing from the V cell at t=1 to the DET cell at t=2.
+  
+  ### Recursive Step (t=3, word="flight")
+  
+  We repeat the process for the final word, "flight". In our tables, "flight" can
+  be a Noun or a Verb.
+  
+  - **For tag N:** The only possible preceding tag is DET (from step t=2).
+  
+    - Path from DET: $v_2(DET) \times P(N | DET) = 0.189 \times 0.8 = 0.1512$
+  
+    The maximum is trivially 0.1512. Now we include the emission probability.
+  
+    $v_3(N) = P(\text{"flight"} | N) \times 0.1512$
+    $v_3(N) = 0.8 \times 0.1512 = 0.12096$
+  
+    The backpointer is $b_3(N) = DET$.
+  
+  - **For tag V:**
+  
+    - Path from DET: $v_2(DET) \times P(V | DET) = 0.189 \times 0.2 = 0.0378$
+  
+    The maximum is 0.0378.
+  
+    $v_3(V) = P(\text{"flight"} | V) \times 0.0378$
+    $v_3(V) = 0.1 \times 0.0378 = 0.00378$
+  
+    The backpointer is $b_3(V) = DET$.
+  
+  The final column of our trellis now contains the probabilities
+  $v_3(N) = 0.12096$ and $v_3(V) = 0.00378$.
+  
+  ### Termination and Path Retrieval
+  
+  The final step is to identify the highest probability in the last column and
+  trace the backpointers to the beginning of the sentence.
+  
+  1. **Identify the best final tag:** The highest probability in the final column
+     is $v_3(N) = 0.12096$. Therefore, the most likely tag for the last word,
+     "flight", is **N**.
+  
+  2. **Trace back:** We now follow the backpointers from this final state.
+  
+     - The backpointer for "flight"/N is $b_3(N) = DET$. So, the tag for "that" is
+       **DET**.
+     - The backpointer for "that"/DET is $b_2(DET) = V$. So, the tag for "Book" is
+       **V**.
+  
+  By reversing the sequence we traced, we get our final answer: **V - DET - N**.
+  
+  The probability of this entire sequence is the final value we calculated:
+  0.12096. This step-by-step process of filling the trellis from left to right,
+  storing only the maximum probability and a backpointer at each cell, is the
+  essence of the Viterbi algorithm. It uses dynamic programming to efficiently
+  find the optimal path without needing to score all possible tag sequences, which
+  would be computationally intractable for any real sentence. The trellis in Fig.
+  5.12 provides a clear visual map of this computation, with the final traced path
+  representing the single most likely grammatical structure for the sentence
+  according to our model.
+  
+  After training a Part-of-Speech tagger, we must measure its performance to
+  understand its effectiveness. The standard procedure involves evaluating the
+  tagger's output against a *gold-standard* test set—a corpus of text that has
+  been manually annotated by expert linguists and was held out from the training
+  data. These human-assigned tags are considered the correct answers, or ground
+  truth.
+  
+  The primary metric used for this evaluation is *accuracy*, which is the
+  percentage of words that the tagger assigns the correct tag to when compared
+  against the gold standard. The calculation is simple and intuitive:
+  
+  $Accuracy = \frac{\text{Number of correctly tagged words}}{\text{Total number of words}}$
+  
+  For instance, if a test set contains 10,000 words and the tagger correctly
+  labels 9,750 of them, its accuracy is 97.5%. For a well-resourced language like
+  English, state-of-the-art POS taggers routinely achieve accuracy scores in the
+  97–98% range.
+  
+  While impressive, this single accuracy figure can be slightly misleading. Many
+  words in a language have only one common POS tag, making them easy to classify.
+  A more insightful evaluation, therefore, also measures performance on specific
+  subsets of the data. One of the most important secondary metrics is the accuracy
+  on *unknown words* (also called out-of-vocabulary words)—those that were not
+  present in the training corpus. A tagger’s ability to correctly label these
+  words is a critical test of its generalization power, as it cannot rely on
+  learned emission probabilities and must infer the correct tag purely from the
+  sequence context provided by the transition probabilities.
+  
+  This chapter has introduced Part-of-Speech tagging, a cornerstone task in
+  computational linguistics that resolves lexical ambiguity by assigning
+  grammatical categories to words. We traced the evolution from early rule-based
+  systems to the dominant stochastic methods, which leverage annotated corpora to
+  learn probabilistic models.
+  
+  At the heart of our discussion was the *Hidden Markov Model (HMM)*, a powerful
+  framework for sequence labeling. The HMM models POS tagging by combining two
+  essential probabilities learned from data:
+  
+  - **Transition Probabilities:** The likelihood of a tag sequence,
+    $P(t_i|t_{i-1})$.
+  - **Emission Probabilities:** The likelihood of a word given a tag,
+    $P(w_i|t_i)$.
+  
+  We demonstrated that finding the optimal tag sequence is not a trivial task. The
+  solution lies in the *Viterbi algorithm*, an elegant and efficient dynamic
+  programming method for decoding the most probable sequence of hidden states.
+  This combination of HMMs for modeling and Viterbi for decoding provides a robust
+  template for solving a wide range of sequence-based problems you will encounter
+  later in this book.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: fc48fe9b47c69a116956367e16a32c50290c3c23a681ebc5c4131119ae82db6e
+response:
+  A clean, minimalist illustration of a person at a long workbench, carefully
+  organizing a collection of small, tangible objects. The objects are simple
+  wooden blocks, each with a single word etched onto its surface (e.g., 'book',
+  'watch', 'quick', 'over'). The person is in the process of pasting a small,
+  handwritten label onto each block. Several stacks of pre-written labels are
+  visible on the bench, with the top labels clearly reading 'NOUN', 'VERB',
+  'ADJECTIVE', and so on. The focus of the image is on the person's hands—one
+  holding a block with an ambiguous word like 'watch', the other hovering with a
+  'NOUN' label, capturing a moment of thoughtful decision-making before the final
+  classification. The style should be simple line art with a limited, muted color
+  palette, emphasizing the quiet, methodical act of sorting and categorizing.
+duration: 16602 ms
+usage_stats:
+  {
+    "candidates_token_count": 183,
+    "prompt_token_count": 9809,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 9809
+      }
+    ],
+    "thoughts_token_count": 1472,
+    "total_token_count": 11464
+  }
+...

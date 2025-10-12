@@ -1,0 +1,129 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Having established a method for representing individual word meanings as
+  vectors, we now turn to the challenge of compositional semantics. How do we
+  combine these word vectors to create meaningful representations for multi-word
+  expressions like phrases and sentences? Frege's principle suggests we need rules
+  for combining the meanings of the parts. The most direct computational approach
+  is to apply simple vector arithmetic.
+  
+  Two common baseline methods for composing a sequence of word vectors
+  $\vec{v}_{w_1}, \vec{v}_{w_2}, \dots, \vec{v}_{w_n}$ into a single phrase vector
+  $\vec{v}_{\text{phrase}}$ are element-wise addition and averaging.
+  
+  - **Vector Sum:** The phrase vector is the sum of its constituent word vectors.
+    \$$
+    \vec{v}_{\text{phrase}} = \sum_{i=1}^{n} \vec{v}_{w_i}
+    $\$
+  - **Vector Average:** The phrase vector is the average of its constituent word
+    vectors.
+    \$$
+    \vec{v}_{\text{phrase}} = \frac{1}{n} \sum_{i=1}^{n} \vec{v}_{w_i}
+    $\$
+  
+  These methods are intuitive and computationally inexpensive. For example, as
+  illustrated in **Fig. 7.13**, we could compute a vector for the noun phrase "The
+  cat" by averaging the vectors for *The* and *cat*. This new phrase vector could
+  then be combined, perhaps again through averaging, with the vector for *sat* to
+  produce a single vector representing the entire sentence. This technique
+  effectively creates a "bag of vectors," where the final representation is an
+  amalgamation of all word meanings in the phrase, disregarding their structural
+  relationships.
+  
+  Despite their simplicity, these additive and averaging methods have severe
+  limitations. Most critically, they are *insensitive to word order*. Because
+  vector addition is commutative, the phrase "the student taught the professor"
+  would yield the exact same vector representation as "the professor taught the
+  student," even though their meanings are entirely different. The compositional
+  operation fails to capture the crucial syntactic structure that assigns the
+  roles of teacher and learner. Similarly, the sentence "The cat is not on the
+  mat" would likely produce a vector very similar to "The cat is on the mat," as
+  the vector for *not* is simply averaged in with the others, failing to properly
+  negate the proposition. These simple operations cannot adequately model the
+  complex semantic impact of syntax, function words, and logical operators. While
+  useful for tasks where word order is less critical (like document
+  classification), they are insufficient for capturing the nuanced meaning
+  required for true sentence understanding, motivating the need for more
+  structured approaches.
+  
+  This fragment refers to Fig. 7.13. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A diagram illustrating simple compositional semantics using a sentence parse
+  tree for 'The cat sat'. At the leaves of the tree are the vectors for 'The',
+  'cat', and 'sat'. The diagram will show how the vectors for 'The' and 'cat' are
+  combined (e.g., via element-wise averaging) to create a vector for the noun
+  phrase 'The cat', which is then combined with the verb's vector to create a
+  final sentence vector at the root.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 52e4095a47dd24d134ceaa7a6980ee62809633dd31bfc3fdb1d6164a64e20ec8
+response:
+  caption:
+    Fig. 7.13: A diagram of compositional semantics using vector averaging. The
+    vectors for 'The' and 'cat' are averaged to form a noun phrase (NP) vector. This
+    is subsequently averaged with the vector for 'sat' to create a single vector for
+    the entire sentence (S).
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+      <defs>
+        <style>.label{font-family:sans-serif;font-size:14px;text-anchor:middle}.word{font-family:sans-serif;font-size:16px;font-style:italic;text-anchor:middle}.op{font-family:monospace;font-size:12px;fill:#555;text-anchor:middle}.line{stroke:#333;stroke-width:1.5}.vector-box{fill:#f0f8ff;stroke:#88c0d0;stroke-width:1}.vector-partition{stroke:#d8e8f0;stroke-width:.5}</style>
+        <g id="vector-symbol">
+          <rect x="-35" y="-12.5" width="70" height="25" rx="2" class="vector-box"/>
+          <path d="M-25-12.5v25M-15-12.5v25M-5-12.5v25M5-12.5v25M15-12.5v25M25-12.5v25" class="vector-partition"/>
+        </g>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <line class="line" x1="75" y1="217.5" x2="125" y2="152.5"/>
+      <line class="line" x1="175" y1="217.5" x2="125" y2="152.5"/>
+      <line class="line" x1="125" y1="127.5" x2="225" y2="72.5"/>
+      <line class="line" x1="325" y1="217.5" x2="225" y2="72.5"/>
+      <g transform="translate(75, 230)">
+        <use href="#vector-symbol"/>
+        <text class="label" y="-20">v_The</text>
+        <text class="word" y="25">The</text>
+      </g>
+      <g transform="translate(175, 230)">
+        <use href="#vector-symbol"/>
+        <text class="label" y="-20">v_cat</text>
+        <text class="word" y="25">cat</text>
+      </g>
+      <g transform="translate(325, 230)">
+        <use href="#vector-symbol"/>
+        <text class="label" y="-20">v_sat</text>
+        <text class="word" y="25">sat</text>
+      </g>
+      <g transform="translate(125, 140)">
+        <use href="#vector-symbol"/>
+        <text class="label" y="-20">NP: 'The cat'</text>
+      </g>
+      <text class="op" x="125" y="180">(average)</text>
+      <g transform="translate(225, 60)">
+        <use href="#vector-symbol"/>
+        <text class="label" y="-20">S: 'The cat sat'</text>
+      </g>
+      <text class="op" x="225" y="110">(average)</text>
+    </svg>
+duration: 50795 ms
+usage_stats:
+  {
+    "candidates_token_count": 866,
+    "prompt_token_count": 788,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 788
+      }
+    ],
+    "thoughts_token_count": 5541,
+    "total_token_count": 7195
+  }
+...

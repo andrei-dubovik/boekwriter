@@ -1,0 +1,129 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  While powerful, knowledge-based resources like WordNet have inherent
+  limitations. They are expensive and time-consuming to create, may not cover all
+  words or specialized domains, and struggle to adapt to the ever-evolving nature
+  of language. To overcome these challenges, modern computational linguistics has
+  largely shifted to data-driven methods for capturing meaning, all of which are
+  built upon a foundational principle known as the **distributional hypothesis**.
+  
+  The core idea is captured perfectly by the linguist J.R. Firth's famous dictum:
+  "You shall know a word by the company it keeps."[^1] This hypothesis posits that
+  the meaning of a word is not an intrinsic property but is defined by the
+  contexts in which it typically appears. Words that occur in similar contexts are
+  assumed to have similar meanings. For example, consider the words *cat* and
+  *dog*. Both frequently appear alongside words like *pet*, *food*, *walk*,
+  *play*, and *vet*. This shared contextual environment suggests they occupy a
+  similar semantic space—in this case, the category of common household pets. We
+  don't need a manually curated dictionary to tell us they are related; the
+  pattern of their usage in a large body of text reveals this relationship
+  automatically.
+  
+  This principle is particularly powerful for handling polysemy, where a single
+  word has multiple meanings. The surrounding words, or the *distribution*,
+  provide the necessary clues to disambiguate the intended sense. As illustrated
+  in Fig. 7.6, the word *bass* can refer to a type of fish or a musical
+  instrument. If *bass* appears in a sentence with words like *fishing*, *river*,
+  *lure*, and *caught*, its context clearly points to the aquatic meaning.
+  Conversely, if it co-occurs with *music*, *guitar*, *treble*, and *band*, its
+  meaning as a low-frequency instrument is activated. The context doesn't just
+  suggest the meaning; in the distributional view, it *constitutes* the meaning.
+  
+  The profound implication of this hypothesis is that we can transform the
+  abstract concept of meaning into something computationally tractable. If a
+  word's meaning is the set of all its contexts, we can represent that meaning by
+  aggregating those contexts statistically. This insight paves the way for
+  representing words as numerical vectors, where each dimension corresponds to
+  some aspect of their contextual environment. Instead of relying on a predefined
+  graph of semantic relations, we can *learn* these relationships directly from
+  raw, unstructured text, forming the basis for the vector space models we will
+  explore next.
+  
+  This fragment refers to Fig. 7.6. The figure in question is a "Illustration" and
+  its description is as follows:
+  
+  An illustration visually representing the distributional hypothesis. It will
+  show a central target word, 'bass,' surrounded by two different contextual
+  clouds of words. One cloud will contain words like 'fishing,' 'river,' 'lure,'
+  indicating the fish meaning, while the other will contain words like 'music,'
+  'guitar,' 'treble,' indicating the instrument meaning.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+  
+  [^1]: Firth, J. R. (1957). *A synopsis of linguistic theory, 1930-1955*.
+hash: fd92685c9ffa9095701f3de3b7ffe00b63c446681eaf26fd9886b98ee6100f05
+response:
+  caption:
+    An illustration of the distributional hypothesis using the polysemous word
+    'bass'. The central word is surrounded by two distinct clouds of contextual
+    words. One cloud, containing words like 'fishing', 'river', 'lure', and
+    'caught', indicates its meaning as a type of fish. The other cloud, with words
+    like 'music', 'guitar', 'treble', and 'band', points to its meaning as a musical
+    instrument.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300" font-family="sans-serif">
+      <rect width="100%" height="100%" fill="white"/>
+      <g text-anchor="middle" dominant-baseline="middle">
+        <g transform="translate(80, 80)">
+          <ellipse cx="0" cy="0" rx="40" ry="20" fill="#eaf4f4" stroke="#a4c3b2"/>
+          <text font-size="16" fill="#6b9080">fishing</text>
+        </g>
+        <g transform="translate(60, 160)">
+          <ellipse cx="0" cy="0" rx="35" ry="20" fill="#eaf4f4" stroke="#a4c3b2"/>
+          <text font-size="16" fill="#6b9080">river</text>
+        </g>
+        <g transform="translate(100, 230)">
+          <ellipse cx="0" cy="0" rx="30" ry="20" fill="#eaf4f4" stroke="#a4c3b2"/>
+          <text font-size="16" fill="#6b9080">lure</text>
+        </g>
+        <g transform="translate(140, 45)">
+          <ellipse cx="0" cy="0" rx="40" ry="20" fill="#eaf4f4" stroke="#a4c3b2"/>
+          <text font-size="16" fill="#6b9080">caught</text>
+        </g>
+      </g>
+      <g text-anchor="middle" dominant-baseline="middle">
+        <g transform="translate(320, 80)">
+          <ellipse cx="0" cy="0" rx="38" ry="20" fill="#fcefe9" stroke="#f2b6a0"/>
+          <text font-size="16" fill="#e56b6f">music</text>
+        </g>
+        <g transform="translate(340, 160)">
+          <ellipse cx="0" cy="0" rx="38" ry="20" fill="#fcefe9" stroke="#f2b6a0"/>
+          <text font-size="16" fill="#e56b6f">guitar</text>
+        </g>
+        <g transform="translate(300, 230)">
+          <ellipse cx="0" cy="0" rx="38" ry="20" fill="#fcefe9" stroke="#f2b6a0"/>
+          <text font-size="16" fill="#e56b6f">treble</text>
+        </g>
+        <g transform="translate(260, 45)">
+          <ellipse cx="0" cy="0" rx="35" ry="20" fill="#fcefe9" stroke="#f2b6a0"/>
+          <text font-size="16" fill="#e56b6f">band</text>
+        </g>
+      </g>
+      <g transform="translate(200, 150)" text-anchor="middle" dominant-baseline="middle">
+        <ellipse cx="0" cy="0" rx="45" ry="35" fill="#f5f3f4" stroke="#b1a7a6"/>
+        <text font-size="32" font-weight="bold" fill="#161a1d">bass</text>
+      </g>
+    </svg>
+duration: 39315 ms
+usage_stats:
+  {
+    "candidates_token_count": 924,
+    "prompt_token_count": 759,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 759
+      }
+    ],
+    "thoughts_token_count": 3916,
+    "total_token_count": 5599
+  }
+...

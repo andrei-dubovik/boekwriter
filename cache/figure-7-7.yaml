@@ -1,0 +1,105 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  This principle is formalized through **vector space models (VSM)**, a paradigm
+  where words are represented as points or vectors in a high-dimensional geometric
+  space. The fundamental idea is that a word’s meaning can be captured by a vector
+  that summarizes its distribution across different contexts. The relationships
+  between words, such as similarity or analogy, can then be modeled as geometric
+  relationships between their corresponding vectors.
+  
+  The most straightforward way to build such a model is by constructing a
+  **term-context co-occurrence matrix**. In this matrix, each row represents a
+  target word from our vocabulary, and each column represents a context word. A
+  "context" is typically defined as a fixed-size window of words surrounding the
+  target word. A cell at the intersection of a target word *w* and a context word
+  *c* contains a count of how many times *c* appeared within the context window of
+  *w* across a large corpus.
+  
+  Each row of this matrix is, therefore, a vector for a target word. For a
+  vocabulary of 50,000 words, the vector for the word *'cat'* would have 50,000
+  dimensions, with each dimension corresponding to a potential context word like
+  *'meow'*, *'pet'*, or *'kitchen'*. These raw count vectors are typically very
+  sparse, as most words do not co-occur with most other words.
+  
+  Once we have these vectors, the core insight of the distributional
+  hypothesis—that words appearing in similar contexts have similar meanings—can be
+  measured computationally. We can quantify the similarity between two word
+  vectors, $\mathbf{A}$ and $\mathbf{B}$, using a distance metric. The most common
+  is **cosine similarity**, which measures the cosine of the angle between two
+  vectors:
+  
+  $ \cos(\theta) = \frac{\mathbf{A} \cdot \mathbf{B}}{\|\mathbf{A}\| \|\mathbf{B}\|} = \frac{\sum_{i=1}^{n} A_i B_i}{\sqrt{\sum_{i=1}^{n} A_i^2} \sqrt{\sum_{i=1}^{n} B_i^2}} $
+  
+  A cosine value near 1 indicates the vectors point in a very similar direction,
+  implying high semantic similarity, while a value near 0 indicates orthogonality,
+  or dissimilarity. This allows us to find the closest words to *'dog'* by simply
+  calculating its cosine similarity to all other vectors in the space. As shown in
+  the simplified two-dimensional projection in Fig. 7.7, this spatial arrangement
+  can capture remarkably nuanced relationships. Notice how the vector from *'man'*
+  to *'woman'* is very similar to the vector from *'king'* to *'queen'*,
+  preserving the concept of gender as a direction in the space.
+  
+  This fragment refers to Fig. 7.7. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A diagram of a simplified 2D vector space model. It will plot several
+  semantically related words as vectors (arrows from the origin) or points. Words
+  like 'king', 'queen', 'man', and 'woman' will be positioned such that the
+  spatial relationships between them are meaningful (e.g., the vector from 'man'
+  to 'woman' is similar to the one from 'king' to 'queen').
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: cb3db188897da1f804f690cc730433061b3048c5765b9918907868deaa2ddf57
+response:
+  caption:
+    A simplified 2D vector space model illustrating semantic relationships. Words
+    like 'king', 'queen', 'man', and 'woman' are plotted as points. The diagram
+    shows that the vector relationship (direction and distance) between 'man' and
+    'woman' is nearly identical to the one between 'king' and 'queen', capturing the
+    abstract concept of gender as a spatial offset.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#007bff"/>
+        </marker>
+      </defs>
+      <g transform="translate(200, 150) scale(1, -1)" font-family="sans-serif" font-size="14">
+        <line x1="-180" y1="0" x2="180" y2="0" stroke="#cccccc" stroke-width="1" stroke-dasharray="4 2"/>
+        <line x1="0" y1="-130" x2="0" y2="130" stroke="#cccccc" stroke-width="1" stroke-dasharray="4 2"/>
+        <line x1="80" y1="-30" x2="60" y2="30" stroke="#007bff" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+        <line x1="50" y1="20" x2="30" y2="80" stroke="#007bff" stroke-width="2.5" marker-end="url(#arrowhead)"/>
+        <circle cx="80" cy="-30" r="3.5" fill="black"/>
+        <text x="80" y="38" transform="scale(1, -1)" text-anchor="middle" fill="black">king</text>
+        <circle cx="60" cy="30" r="3.5" fill="black"/>
+        <text x="60" y="-38" transform="scale(1, -1)" text-anchor="middle" fill="black">queen</text>
+        <circle cx="50" cy="20" r="3.5" fill="black"/>
+        <text x="50" y="-28" transform="scale(1, -1)" text-anchor="middle" fill="black">man</text>
+        <circle cx="30" cy="80" r="3.5" fill="black"/>
+        <text x="30" y="-88" transform="scale(1, -1)" text-anchor="middle" fill="black">woman</text>
+      </g>
+    </svg>
+duration: 30717 ms
+usage_stats:
+  {
+    "candidates_token_count": 714,
+    "prompt_token_count": 796,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 796
+      }
+    ],
+    "thoughts_token_count": 3201,
+    "total_token_count": 4711
+  }
+...

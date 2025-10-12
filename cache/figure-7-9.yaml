@@ -1,0 +1,171 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The Word2Vec model, introduced by Mikolov et al. at Google in 2013, provided a
+  highly efficient and scalable framework for learning such embeddings. Its key
+  innovation was to reframe the learning problem. Instead of directly counting
+  co-occurrences, Word2Vec trains a simple neural network on a proxy task:
+  predicting a word from its neighbors. The goal is not the task itself, but the
+  learned weights of the network's hidden layer. These weights, once training is
+  complete, become the dense vector representations for each word in the
+  vocabulary. Word2Vec proposes two distinct architectures for this proxy task:
+  the Continuous Bag-of-Words (CBOW) and Skip-gram.
+  
+  The first architecture, Continuous Bag-of-Words (CBOW), works by predicting a
+  target (center) word from its surrounding context words. For the sentence "the
+  quick brown fox jumps", if "fox" is our target word and we use a context window
+  of two, the context words would be "quick", "brown", "jumps", and "over" (if the
+  next word was "over"). As shown on the left side of Fig. 7.9, the CBOW model
+  takes the embedding vectors for these context words, averages them to create a
+  single context vector, and then uses this vector to predict the target word,
+  "fox". The term "bag-of-words" signifies that the order of the context words is
+  disregarded; their influence is combined through averaging. During training, the
+  model's prediction is compared to the actual target word. The resulting error is
+  then backpropagated to adjust the embedding vectors of the context words,
+  nudging them to be better predictors of that specific target.
+  
+  The Skip-gram model, depicted on the right of Fig. 7.9, reverses this logic.
+  Instead of predicting the center from the context, it uses a single input word
+  to predict its surrounding context words. Given the input word "fox", the model
+  attempts to predict "quick", "brown", "jumps", and "over". For each word in the
+  training corpus, the Skip-gram model creates multiple training examples: the
+  input word is paired with each of its context words. This means that for a
+  single instance of "fox", the model learns to predict its neighbors, effectively
+  generating more training data from the same amount of text compared to CBOW.
+  This makes Skip-gram slower to train but allows it to capture the semantics of
+  the input word more precisely, often resulting in higher-quality embeddings,
+  especially for infrequent words.
+  
+  A naive implementation of either architecture would be computationally
+  prohibitive. The final layer of the network must produce a probability
+  distribution over the entire vocabulary, which can contain hundreds of thousands
+  of words. Calculating the softmax function over this large vector is a major
+  bottleneck. To make training feasible, Word2Vec introduces two key
+  optimizations:
+  
+  - **Hierarchical Softmax:** This technique replaces the flat softmax layer with
+    a binary tree structure, typically a Huffman tree built from word frequencies.
+    Predicting a word becomes a sequence of binary decisions navigating the tree
+    from the root to the target word's leaf node. This reduces the computational
+    complexity from being proportional to the vocabulary size, `$O(|V|)$`, to
+    being proportional to the logarithm of the vocabulary size, `$O(\log_2|V|)`.
+  
+  - **Negative Sampling:** This is the more common and often more effective
+    approach. Instead of updating weights for the entire vocabulary, the model
+    updates only a small sample. For a given training instance (e.g., target:
+    `fox`, context: `jumps`), the model is trained to increase the probability of
+    this "positive" pair. Concurrently, it randomly selects a few "negative"
+    samples—words that do not appear in the context (e.g., `car`, `ocean`,
+    `music`). The model is then trained to decrease the probability of these
+    negative pairs. This transforms a complex multi-class classification problem
+    into a much simpler set of binary classification tasks, dramatically speeding
+    up training.[^1]
+  
+  In practice, a choice must be made between the two architectures. CBOW is faster
+  and tends to perform better for frequent words, as the averaging of context
+  vectors acts as a form of regularization. Skip-gram, while slower, excels at
+  learning representations for rare words and is generally considered to produce
+  more robust and higher-quality embeddings overall, making it a popular choice
+  for many applications. Through these architectures and optimizations, Word2Vec
+  provided the first truly practical method for training high-quality, dense word
+  embeddings on massive text corpora.
+  
+  This fragment refers to Fig. 7.9. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A side-by-side comparison of the Word2Vec architectures. The left side will
+  depict the Continuous Bag-of-Words (CBOW) model, showing multiple context word
+  vectors as input to a neural network that predicts a single target word vector.
+  The right side will show the Skip-gram model, with a single target word vector
+  as input predicting multiple context word vectors.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+  
+  [^1]: The technique is a simplified variant of Noise Contrastive Estimation (NCE),
+  which aims to train a model to differentiate true data from noise.
+hash: 5ca08ac64f9b78ef25105b992bfb69072b7dc4b92254dd63ec71ce24166137d2
+response:
+  caption:
+    A side-by-side comparison of the Word2Vec architectures. On the left, the
+    Continuous Bag-of-Words (CBOW) model predicts a central target word from its
+    surrounding context words. On the right, the Skip-gram model does the reverse,
+    using a single input word to predict its context.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" font-family="sans-serif">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="black"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <g id="cbow">
+        <text x="200" y="50" font-size="24" text-anchor="middle" font-weight="bold">CBOW</text>
+        <text x="200" y="80" font-size="16" text-anchor="middle" fill="#555">Predicts target from context</text>
+        <text x="200" y="140" font-size="16" text-anchor="middle">Target Word</text>
+        <rect x="150" y="160" width="100" height="40" fill="#d1e7dd" stroke="#555" rx="5"/>
+        <text x="200" y="180" font-size="16" text-anchor="middle" dominant-baseline="central">w(t)</text>
+        <line x1="200" y1="250" x2="200" y2="200" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <rect x="125" y="250" width="150" height="50" fill="#fff3cd" stroke="#555" rx="5"/>
+        <text x="200" y="275" font-size="16" text-anchor="middle" dominant-baseline="central">Projection</text>
+        <text x="200" y="320" font-size="14" text-anchor="middle" fill="#666" font-style="italic">(Averaged Context)</text>
+        <line x1="65" y1="440" x2="180" y2="300" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="145" y1="440" x2="190" y2="300" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="255" y1="440" x2="210" y2="300" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="335" y1="440" x2="220" y2="300" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <text x="200" y="530" font-size="16" text-anchor="middle">Context Words</text>
+        <rect x="25" y="440" width="80" height="40" fill="#d1e7dd" stroke="#555" rx="5"/>
+        <text x="65" y="460" font-size="16" text-anchor="middle" dominant-baseline="central">w(t-2)</text>
+        <rect x="105" y="440" width="80" height="40" fill="#d1e7dd" stroke="#555" rx="5"/>
+        <text x="145" y="460" font-size="16" text-anchor="middle" dominant-baseline="central">w(t-1)</text>
+        <rect x="215" y="440" width="80" height="40" fill="#d1e7dd" stroke="#555" rx="5"/>
+        <text x="255" y="460" font-size="16" text-anchor="middle" dominant-baseline="central">w(t+1)</text>
+        <rect x="295" y="440" width="80" height="40" fill="#d1e7dd" stroke="#555" rx="5"/>
+        <text x="335" y="460" font-size="16" text-anchor="middle" dominant-baseline="central">w(t+2)</text>
+      </g>
+      <line x1="400" y1="30" x2="400" y2="570" stroke="#ccc" stroke-dasharray="6,4"/>
+      <g id="skipgram">
+        <text x="600" y="50" font-size="24" text-anchor="middle" font-weight="bold">Skip-gram</text>
+        <text x="600" y="80" font-size="16" text-anchor="middle" fill="#555">Predicts context from target</text>
+        <text x="600" y="140" font-size="16" text-anchor="middle">Context Words</text>
+        <rect x="425" y="160" width="80" height="40" fill="#d1e7dd" stroke="#555" rx="5"/>
+        <text x="465" y="180" font-size="16" text-anchor="middle" dominant-baseline="central">w(t-2)</text>
+        <rect x="505" y="160" width="80" height="40" fill="#d1e7dd" stroke="#555" rx="5"/>
+        <text x="545" y="180" font-size="16" text-anchor="middle" dominant-baseline="central">w(t-1)</text>
+        <rect x="615" y="160" width="80" height="40" fill="#d1e7dd" stroke="#555" rx="5"/>
+        <text x="655" y="180" font-size="16" text-anchor="middle" dominant-baseline="central">w(t+1)</text>
+        <rect x="695" y="160" width="80" height="40" fill="#d1e7dd" stroke="#555" rx="5"/>
+        <text x="735" y="180" font-size="16" text-anchor="middle" dominant-baseline="central">w(t+2)</text>
+        <line x1="580" y1="250" x2="465" y2="200" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="590" y1="250" x2="545" y2="200" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="610" y1="250" x2="655" y2="200" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="620" y1="250" x2="735" y2="200" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <rect x="525" y="250" width="150" height="50" fill="#fff3cd" stroke="#555" rx="5"/>
+        <text x="600" y="275" font-size="16" text-anchor="middle" dominant-baseline="central">Projection</text>
+        <line x1="600" y1="440" x2="600" y2="300" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <rect x="550" y="440" width="100" height="40" fill="#d1e7dd" stroke="#555" rx="5"/>
+        <text x="600" y="460" font-size="16" text-anchor="middle" dominant-baseline="central">w(t)</text>
+        <text x="600" y="500" font-size="16" text-anchor="middle">Input Word</text>
+      </g>
+    </svg>
+duration: 62931 ms
+usage_stats:
+  {
+    "candidates_token_count": 2069,
+    "prompt_token_count": 1220,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1220
+      }
+    ],
+    "thoughts_token_count": 6596,
+    "total_token_count": 9885
+  }
+...

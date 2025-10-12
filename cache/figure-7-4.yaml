@@ -1,0 +1,150 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To understand how a resource like WordNet represents meaning, we must look
+  beyond individual words and focus on its fundamental building blocks and the
+  relationships between them. At its core, WordNet is not a dictionary of words
+  but a network of concepts. Its structure is built upon two key elements:
+  *synsets* and the *semantic relations* that link them.
+  
+  The primary unit in WordNet is the **synonym set**, or *synset*. A synset is a
+  group of words or short phrases that are treated as semantically equivalent in a
+  particular context; they all represent the same underlying concept. For example,
+  the words {car, auto, automobile, machine, motorcar} can be grouped into a
+  single synset that represents the concept of a four-wheeled passenger vehicle.
+  Each synset is more than just a list of words; it also contains:
+  
+  - A specific **part-of-speech** (noun, verb, adjective, or adverb). The word
+    *back*, for instance, belongs to different synsets depending on whether it's
+    used as a noun (the rear part of the body), an adverb (in the reverse
+    direction), or a verb (to support).
+  - A **gloss**, which is a brief, dictionary-style definition of the concept. For
+    our car synset, the gloss might be "a motor vehicle with four wheels; usually
+    propelled by an internal combustion engine."
+  - Example sentences that illustrate the usage of the synset's members.
+  
+  The real power of WordNet, however, emerges from the rich network of connections
+  between these synsets. These connections are not arbitrary; they represent
+  well-defined semantic relations that allow a machine to navigate the landscape
+  of meaning. The most important of these relations are:
+  
+  - **Hypernymy and Hyponymy:** This is the foundational "is-a" relationship that
+    organizes most nouns and verbs into a large, hierarchical structure. A concept
+    *Y* is a **hypernym** of a concept *X* if *X* is a type of *Y*. Conversely,
+    *X* is a **hyponym** of *Y*. For example, the synset {motor vehicle} is a
+    hypernym of {car, auto, ...}, because a car *is a type of* motor vehicle. This
+    relationship is transitive: since a {sedan} is a hyponym of {car, auto, ...},
+    it is also, by extension, a hyponym of {motor vehicle}. Traversing these links
+    allows a program to generalize (by moving up to hypernyms) or specialize (by
+    moving down to hyponyms).
+  
+  - **Meronymy and Holonymy:** This relationship captures the "part-of" or "has-a"
+    connection between concepts. A concept *X* is a **meronym** of *Y* if *X* is a
+    part of *Y*. Conversely, *Y* is the **holonym** of *X*. For instance, the
+    synset {wheel} is a meronym of {car, auto, ...}, because a wheel is a part of
+    a car. Unlike the "is-a" hierarchy, this relation describes composition rather
+    than classification. WordNet further divides this into different kinds of
+    part-whole relations, such as `part_of` ({engine} is a part of a {car}),
+    `member_of` ({player} is a member of a {team}), and `substance_of` ({wood} is
+    the substance of a {table}).
+  
+  As illustrated in **Fig. 7.4**, these relationships form a complex, directed
+  graph. The synset {car, auto, automobile} appears as a node in this network. A
+  directed edge labeled `is-a` points from this node to its hypernym, {motor
+  vehicle}, signifying its place in the classification hierarchy. Simultaneously,
+  other edges, such as one labeled `has-part`, connect it to its meronyms, like
+  the synset {wheel}. By following these labeled edges, a computational system can
+  infer that a car is a vehicle and that it has wheels, all without understanding
+  the raw text of the definitions.
+  
+  WordNet also encodes other relations tailored to specific parts of speech. For
+  adjectives, a key relation is **antonymy**, which links synsets with opposite
+  meanings (e.g., {good} is an antonym of {bad}). For verbs, a crucial relation is
+  **entailment**, where one verb logically implies another (e.g., the act of
+  {snoring} entails the state of {sleeping}). This carefully engineered structure,
+  developed over many years at Princeton University, provides a formal,
+  machine-readable model of the human lexicon that has been an invaluable resource
+  for countless computational linguistics tasks.[^1]
+  
+  This fragment refers to Fig. 7.4. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A network diagram illustrating the structure of WordNet. The diagram will show
+  several synonym sets (synsets) like {car, auto, automobile}, {truck}, and {motor
+  vehicle} as nodes. Labeled, directed edges will connect these nodes to represent
+  semantic relations, with arrows clearly indicating hypernymy ('car' is-a 'motor
+  vehicle') and meronymy ('car' has-part 'wheel').
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+  
+  [^1]: Miller, G. A. (1995). WordNet: A Lexical Database for English. *Communications
+  of the ACM, 38*(11), 39–41.
+hash: 21d4904407f2befa21dbeeed37a592c290132545dc9de420c3aa0c8d0b6e29e9
+response:
+  caption:
+    A network diagram illustrating semantic relations in WordNet, as described in
+    Fig. 7.4. Nodes represent synsets, such as {car, auto, automobile} and its
+    hypernym {motor vehicle}. Directed edges show the 'is-a' (hypernymy) relation
+    from a concept to its more general type and the 'has-part' (meronymy) relation
+    from a whole to its component, such as {wheel}.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+      </defs>
+      <rect width="400" height="300" fill="white"/>
+      <g font-family="sans-serif" font-size="12px" text-anchor="middle">
+        <g id="node-motor-vehicle">
+          <rect x="140" y="25" width="120" height="40" rx="5" fill="#f0f0f0" stroke="#333"/>
+          <text x="200" y="49">{motor vehicle}</text>
+        </g>
+        <g id="node-car">
+          <rect x="45" y="125" width="150" height="40" rx="5" fill="#f0f0f0" stroke="#333"/>
+          <text x="120" y="149">{car, auto, automobile}</text>
+        </g>
+        <g id="node-truck">
+          <rect x="230" y="125" width="100" height="40" rx="5" fill="#f0f0f0" stroke="#333"/>
+          <text x="280" y="149">{truck}</text>
+        </g>
+        <g id="node-wheel">
+          <rect x="80" y="225" width="80" height="40" rx="5" fill="#f0f0f0" stroke="#333"/>
+          <text x="120" y="249">{wheel}</text>
+        </g>
+        <g stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)">
+          <line x1="120" y1="125" x2="200" y2="65"/>
+          <line x1="280" y1="125" x2="200" y2="65"/>
+          <line x1="120" y1="165" x2="120" y2="225"/>
+        </g>
+        <g font-size="11px" font-style="italic" fill="#0055aa">
+          <text x="150" y="89">is-a</text>
+          <text x="250" y="89">is-a</text>
+        </g>
+        <g font-size="11px" font-style="italic" fill="#008855">
+          <text x="125" y="195" text-anchor="start">has-part</text>
+        </g>
+      </g>
+    </svg>
+duration: 40513 ms
+usage_stats:
+  {
+    "candidates_token_count": 814,
+    "prompt_token_count": 1280,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1280
+      }
+    ],
+    "thoughts_token_count": 4242,
+    "total_token_count": 6336
+  }
+...

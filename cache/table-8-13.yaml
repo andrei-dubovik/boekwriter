@@ -1,0 +1,113 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To make these components concrete, let's trace a simplified interaction with a
+  task-oriented dialogue system designed to book flights. The system's goal is to
+  fill a set of required *slots* (e.g., origin, destination, date) to complete the
+  task. The entire flow of this conversation, showing how information is processed
+  at each turn, is detailed in **Fig. 8.13**.
+  
+  Imagine the user begins with the following utterance:
+  
+  - _User: "I want to book a flight to Berlin next Tuesday."_
+  
+  The system's pipeline springs into action. First, the **NLU** module processes
+  this utterance to extract the user's *intent* and any relevant information. It
+  identifies the intent as `book_flight` and fills two slots:
+  `destination: Berlin` and `date: 2024-10-29` (assuming the system can resolve
+  "next Tuesday" to a specific date).
+  
+  Next, this structured information is passed to the **Dialogue State Tracker
+  (DST)**. The DST maintains the system's belief about the conversation's state.
+  It receives the NLU output and updates its internal record, which now indicates
+  that the destination and date are known. Crucially, the DST is also aware of the
+  required slots for a `book_flight` intent and recognizes that a key piece of
+  information, the `origin` city, is still missing.
+  
+  The updated dialogue state is then fed to the **Dialogue Policy**. This
+  component acts as the system's brain, deciding what to do next. Seeing that the
+  `origin` slot is empty, the policy's strategy is to request this missing
+  information. It selects an abstract system action, such as `request(origin)`.
+  
+  Finally, this abstract action is sent to the **NLG** module. The NLG's job is to
+  translate the system's intent into a cooperative, human-readable sentence. For
+  the `request(origin)` action, it might generate:
+  
+  - _System: "Certainly. Where will you be departing from?"_
+  
+  The user's subsequent response ("I'm flying from San Francisco") would initiate
+  the same cycle again. The NLU would extract `origin: San Francisco`, the DST
+  would update the state to reflect that all necessary slots are now filled, and
+  the Policy would decide on a new action, like `confirm_and_search`. This
+  turn-by-turn interaction, as visualized in **Fig. 8.13**, demonstrates the
+  pipeline's deterministic flow. Each component has a specialized role: NLU
+  interprets, the DST remembers, the Policy decides, and NLG communicates, working
+  in concert to achieve a specific goal.
+  
+  This fragment refers to Fig. 8.13, which is a table. Its description is as
+  follows:
+  
+  A multi-column table that traces a sample flight-booking dialogue over several
+  turns. The columns will correspond to the dialogue system components: 'Speaker'
+  (User/System), 'Utterance,' 'NLU (Intent & Slots),' 'Dialogue State (Updated
+  Slots),' 'Policy (System Action),' and 'NLG (System Response).' Each row will
+  represent a single turn, demonstrating step-by-step how the system processes
+  user input, updates its belief state, decides on an action, and generates a
+  response.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: c678f8f55e348e09be396de2993fc573418def113642fc2eb581d3a45144d0f1
+response:
+  caption:
+    Fig. 8.13: Trace of a simplified flight-booking dialogue. The table shows how
+    user input is processed through the NLU, DST, and Policy components to generate
+    a system response over two turns.
+  latex:
+    \begin{tabular}{@{}l p{4cm} p{3.5cm} p{4.2cm} p{2.5cm} p{3.5cm}@{}}
+    \toprule
+    \textbf{Speaker} & \textbf{Utterance} & \textbf{NLU (Intent \& Slots)} & \textbf{Dialogue State (Updated Slots)} & \textbf{Policy (System Action)} & \textbf{NLG (System Response)} \\ 
+    \midrule
+    User & ``I want to book a flight to Berlin next Tuesday.'' & --- & --- & --- & --- \\ 
+    \addlinespace
+    System & --- & 
+    \textit{intent}: \texttt{book\_flight} \newline 
+    \textit{slots}: \{\textit{destination}: \texttt{Berlin}, \textit{date}: \texttt{2024-10-29}\} & 
+    \{\textit{destination}: \texttt{Berlin}, \newline
+    \phantom{\{}\textit{date}: \texttt{2024-10-29}, \newline
+    \phantom{\{}\textit{origin}: \texttt{null}\} & 
+    \texttt{request(origin)} & 
+    ``Certainly. Where will you be departing from?'' \\ 
+    \midrule
+    User & ``I'm flying from San Francisco.'' & --- & --- & --- & --- \\ 
+    \addlinespace
+    System & --- & 
+    \textit{slots}: \{\textit{origin}: \texttt{San Francisco}\} & 
+    \{\textit{destination}: \texttt{Berlin}, \newline
+    \phantom{\{}\textit{date}: \texttt{2024-10-29}, \newline
+    \phantom{\{}\textit{origin}: \texttt{San Francisco}\} & 
+    \texttt{confirm\_and\_search} & 
+    ``Got it. A flight from San Francisco to Berlin for October 29th. Shall I search?'' \\ 
+    \bottomrule
+    \end{tabular}
+duration: 48495 ms
+usage_stats:
+  {
+    "candidates_token_count": 523,
+    "prompt_token_count": 782,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 782
+      }
+    ],
+    "thoughts_token_count": 5361,
+    "total_token_count": 6666
+  }
+...

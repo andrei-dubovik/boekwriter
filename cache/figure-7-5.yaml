@@ -1,0 +1,126 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The true power of WordNet's structure is realized when we traverse its graph
+  computationally. By programmatically following the pointers that define
+  relations like hyponymy and meronymy, we can explore a word's semantic
+  neighborhood, quantify relationships between concepts, and leverage this
+  knowledge for downstream tasks. A common and intuitive example is to trace the
+  hypernym ('is-a') hierarchy for a given word.
+  
+  Let's illustrate this by finding the generalization path for the word *car*. We
+  begin by looking up the word in WordNet to find its corresponding synonym sets.
+  The most frequent sense of 'car' is represented by the synset `car.n.01`, which
+  has the gloss: "a motor vehicle with four wheels; usually propelled by an
+  internal combustion engine". This synset serves as our starting node in the
+  graph.
+  
+  From `car.n.01`, we can iteratively follow the hypernym pointers to ascend the
+  'is-a' hierarchy, moving to a more general concept at each step. The direct
+  hypernym of `car.n.01` is `motor_vehicle.n.01`. Following this chain upward
+  reveals a path of increasing abstraction, as depicted in **Fig. 7.5**. The full
+  traversal from the specific concept of a car to the most general physical
+  concept looks like this:
+  
+  - `car.n.01` ⟶ `motor_vehicle.n.01`
+  - ⟶ `wheeled_vehicle.n.01`
+  - ⟶ `vehicle.n.01`
+  - ⟶ `conveyance.n.03`
+  - ⟶ `instrumentality.n.03`
+  - ⟶ `artifact.n.01`
+  - ⟶ `whole.n.02`
+  - ⟶ `object.n.01`
+  - ⟶ `physical_entity.n.01`
+  - ⟶ `entity.n.01`
+  
+  This ability to navigate the semantic hierarchy is invaluable. For instance, we
+  can compute a measure of semantic similarity between words by finding their
+  lowest common ancestor in the hypernym tree. A 'car' and a 'truck' are
+  semantically close because their common ancestor, `motor_vehicle`, is very
+  specific. This type of reasoning is fundamental for tasks like textual
+  entailment and query expansion, where understanding these hierarchical
+  relationships allows a system to infer meaning beyond literal word matching.
+  
+  This fragment refers to Fig. 7.5. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A hierarchical graph diagram demonstrating the traversal of WordNet's hypernym
+  hierarchy. Starting with the synset for 'car' at the bottom, arrows will point
+  upwards through a chain of increasingly general concepts: 'motor vehicle',
+  'wheeled vehicle', 'vehicle', 'conveyance', 'instrumentality', and finally
+  'entity'.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: b34a5bda3c1aef5b65c8560dc8fdfeb82349b8c7035944498772188716a599b6
+response:
+  caption:
+    Fig. 7.5: A hierarchical graph demonstrating the traversal of WordNet's hypernym
+    hierarchy for 'car'. Arrows point upwards, showing the 'is-a' relationship
+    through a chain of increasingly general concepts, from 'car' at the bottom to
+    'entity' at the top.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+      </defs>
+      <style>.node-box { fill: #f0f0f0; stroke: #333; stroke-width: 1.5; }.node-text { font-family: sans-serif; font-size: 14px; text-anchor: middle; dominant-baseline: middle; fill: #000; }.connector { stroke: #333; stroke-width: 1.5; marker-end: url(#arrowhead); }</style>
+      <g>
+        <rect x="130" y="20" width="140" height="25" rx="3" class="node-box"/>
+        <text x="200" y="32.5" class="node-text">entity</text>
+      </g>
+      <g>
+        <rect x="130" y="60" width="140" height="25" rx="3" class="node-box"/>
+        <text x="200" y="72.5" class="node-text">instrumentality</text>
+      </g>
+      <g>
+        <rect x="130" y="100" width="140" height="25" rx="3" class="node-box"/>
+        <text x="200" y="112.5" class="node-text">conveyance</text>
+      </g>
+      <g>
+        <rect x="130" y="140" width="140" height="25" rx="3" class="node-box"/>
+        <text x="200" y="152.5" class="node-text">vehicle</text>
+      </g>
+      <g>
+        <rect x="130" y="180" width="140" height="25" rx="3" class="node-box"/>
+        <text x="200" y="192.5" class="node-text">wheeled vehicle</text>
+      </g>
+      <g>
+        <rect x="130" y="220" width="140" height="25" rx="3" class="node-box"/>
+        <text x="200" y="232.5" class="node-text">motor vehicle</text>
+      </g>
+      <g>
+        <rect x="130" y="260" width="140" height="25" rx="3" class="node-box"/>
+        <text x="200" y="272.5" class="node-text">car</text>
+      </g>
+      <line x1="200" y1="260" x2="200" y2="245" class="connector"/>
+      <line x1="200" y1="220" x2="200" y2="205" class="connector"/>
+      <line x1="200" y1="180" x2="200" y2="165" class="connector"/>
+      <line x1="200" y1="140" x2="200" y2="125" class="connector"/>
+      <line x1="200" y1="100" x2="200" y2="85" class="connector"/>
+      <line x1="200" y1="60" x2="200" y2="45" class="connector"/>
+    </svg>
+duration: 46637 ms
+usage_stats:
+  {
+    "candidates_token_count": 982,
+    "prompt_token_count": 701,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 701
+      }
+    ],
+    "thoughts_token_count": 5300,
+    "total_token_count": 6983
+  }
+...

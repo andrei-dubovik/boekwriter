@@ -1,0 +1,134 @@
+{model: str, query: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: visuals
+prompt:
+  You are writing a chapter titled "Part-of-Speech Tagging" in a book called
+  "Introduction to Computational Linguistics". The plan for the chapter is a
+  follows.
+  
+  01. We will begin by defining Part-of-Speech (POS) tagging as the fundamental
+      task of assigning a grammatical category, such as noun or verb, to each word
+      in a text.
+  02. An introductory example will be used to demonstrate lexical ambiguity,
+      showing how a word like 'book' can function as either a noun or a verb
+      depending on its context.
+  03. This section explains why POS tagging is a critical preprocessing step for
+      more complex NLP tasks like syntactic parsing, named entity recognition, and
+      machine translation.
+  04. We will provide an overview of common English annotation schemas, such as
+      the widely used Penn Treebank tagset, to familiarize readers with the
+      standard categories.
+  05. The chapter will first explore early rule-based tagging systems, which
+      relied on handcrafted linguistic rules and dictionaries to assign tags to
+      words.
+  06. Next, we introduce the dominant modern approach of stochastic tagging, which
+      uses probability and machine learning models trained on large annotated
+      corpora.
+  07. This section provides a deep dive into Hidden Markov Models (HMMs), formally
+      defining them as a statistical tool for modeling sequential data with hidden
+      states.
+  08. We will detail how HMMs are applied to POS tagging by framing tags as the
+      hidden states and words as the observable emissions.
+  09. The process of training an HMM is explained, focusing on how to calculate
+      transition probabilities (the likelihood of one tag following another) from
+      a corpus.
+  10. Complementing this, we will cover how to calculate emission probabilities,
+      which represent the likelihood of a word being associated with a specific
+      tag.
+  11. The Viterbi algorithm is then introduced as the efficient dynamic
+      programming solution for decoding the most probable sequence of POS tags for
+      a given sentence.
+  12. A detailed case study will walk through the Viterbi algorithm step-by-step,
+      showing the computation of the probability matrix for a sample sentence.
+  13. We will discuss how the performance of a POS tagger is evaluated, primarily
+      through accuracy metrics calculated against a gold-standard annotated test
+      set.
+  14. The chapter concludes with a summary of the key concepts, reinforcing the
+      importance of HMMs and the Viterbi algorithm in solving sequence labeling
+      problems.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 7 aids. Explain the chosen aids in detail. Only list the items where an aid
+  has been chosen.
+hash: 1fa5d338b82a47b91dee05852776ab2c358a47a4768de7607805c7cf546fe338
+response:
+- number: 2
+  aid: Diagram
+  description:
+    A diagram contrasting two simple sentence structures to illustrate ambiguity.
+    One branch shows the sentence 'Book that flight,' with an arrow pointing from
+    'Book' to a 'Verb' tag. The other branch shows 'Read that book,' with an arrow
+    from 'book' to a 'Noun' tag. This visually reinforces how context determines a
+    word's grammatical role.
+- number: 3
+  aid: Diagram
+  description:
+    A flowchart representing a standard NLP pipeline. It will depict a sequence of
+    connected boxes, starting with 'Raw Text' and flowing through 'Tokenization',
+    'POS Tagging', and finally to downstream tasks like 'Syntactic Parsing' and
+    'Named Entity Recognition'. This illustrates the role of POS tagging as a
+    critical enabling step.
+- number: 4
+  aid: Table
+  description:
+    A table presenting a selection of the most common tags from the Penn Treebank
+    tagset. It will contain three columns: 'Tag' (e.g., NNP, VBZ, JJ), 'Description'
+    (e.g., Proper noun, singular; Verb, 3rd person singular present; Adjective), and
+    'Example' (e.g., 'London', 'is', 'big'). This provides a clear and accessible
+    reference for readers.
+- number: 8
+  aid: Diagram
+  description:
+    A state diagram illustrating how an HMM is applied to POS tagging. Circles will
+    represent hidden states (e.g., 'Determiner', 'Noun', 'Verb'), with connecting
+    arrows labeled with transition probabilities. From each state, an arrow will
+    point to an observable word (e.g., 'the', 'book', 'is'), labeled with an
+    emission probability. This provides a conceptual model of the system.
+- number: 9
+  aid: Table
+  description:
+    A transition probability matrix. The rows and columns will be labeled with a
+    subset of POS tags (e.g., Determiner, Noun, Verb). Each cell will contain the
+    conditional probability of transitioning from the row's tag to the column's tag,
+    providing a concrete example of the model's parameters for tag sequences.
+- number: 10
+  aid: Table
+  description:
+    An emission probability table. The rows will list POS tags (e.g., Noun, Verb),
+    and the columns will list a few vocabulary words (e.g., 'book', 'flight',
+    'walk'). Each cell will contain the probability of a tag emitting a specific
+    word, illustrating how the HMM links hidden tags to observable words.
+- number: 12
+  aid: Diagram
+  description:
+    A Viterbi trellis diagram for a short sample sentence. The horizontal axis
+    represents the sequence of words, and the vertical axis represents the possible
+    states (tags). Each cell in the grid will show the calculated probability for
+    that tag at that position, with backpointers indicating the most likely path,
+    visually demonstrating the decoding process.
+duration: 30759 ms
+usage_stats:
+  {
+    "candidates_token_count": 715,
+    "prompt_token_count": 648,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 648
+      }
+    ],
+    "thoughts_token_count": 2595,
+    "total_token_count": 3958
+  }
+...

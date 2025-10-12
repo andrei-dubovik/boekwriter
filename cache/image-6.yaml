@@ -1,0 +1,35 @@
+{model: str, query: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-flash-image-preview
+query: image
+prompt:
+  Please create an illustration of a person standing before a large chalkboard, in
+  the process of diagramming a sentence. Their hand, holding a piece of chalk, has
+  just drawn a line that separates the subject of the sentence from the predicate.
+  Above the words, a network of horizontal and diagonal lines is taking shape,
+  grouping words into nested components and revealing a hidden, hierarchical
+  structure within the simple string of text. The style should be clean and
+  minimalist, focusing on the clarity of the lines and the intellectual act of
+  uncovering grammatical form, rather than on the detailed features of the person.
+hash: d66f93b00c9d332bfd9a202f549679d9b7437ec46f921a5f4a3201f3cac0b55d
+response: image-6.png
+duration: 5274 ms
+usage_stats:
+  {
+    "candidates_token_count": 1299,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 126,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 126
+      }
+    ],
+    "total_token_count": 1425
+  }
+...

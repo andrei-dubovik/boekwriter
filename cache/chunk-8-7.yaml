@@ -1,0 +1,277 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: chunk
+prompt:
+  You are writing a book called "Introduction to Computational Linguistics". The
+  book consists of the following chapters.
+  
+  # Chapter 1: Introduction to Computational Linguistics.
+  
+  This chapter provides a foundational overview of computational linguistics,
+  defining the field at the intersection of computer science, linguistics, and
+  artificial intelligence. We will trace its historical development, from early
+  rule-based systems to the modern data-driven era, and explore the fundamental
+  goals of enabling computers to understand, interpret, and generate human
+  language. The chapter will also highlight a diverse range of real-world
+  applications, such as machine translation, search engines, and virtual
+  assistants, setting the stage for the core concepts and techniques that will be
+  explored in the remainder of the book.
+  
+  # Chapter 2: Words, Regular Expressions, and Automata.
+  
+  Before we can process language, we must first understand its fundamental
+  building blocks and how to model them formally. This chapter introduces the
+  basics of formal language theory, starting with the concept of regular
+  languages. We will explore the power of regular expressions for pattern matching
+  in text and connect this practical tool to its theoretical underpinning in
+  finite-state automata (FSA). By understanding how these simple computational
+  models can recognize and generate patterns, readers will gain a crucial
+  foundation for more complex language processing tasks.
+  
+  # Chapter 3: Corpus Linguistics and Text Normalization.
+  
+  This chapter delves into the empirical foundation of modern computational
+  linguistics: the corpus. We explore what constitutes a linguistic corpus, how
+  they are constructed, and the importance of annotation schemas. The focus then
+  shifts to the essential pre-processing steps required to prepare raw text for
+  analysis, a process known as text normalization. Key techniques such as
+  tokenization (breaking text into words), stemming (reducing words to their root
+  form), and lemmatization (finding the dictionary form of a word) are covered in
+  detail, providing the practical skills needed to work with real-world language
+  data.
+  
+  # Chapter 4: Language Modeling with N-grams.
+  
+  How can we quantify the probability of a sequence of words? This chapter
+  introduces language modeling, a core task in computational linguistics that aims
+  to answer this question. We will focus on the classic N-gram model, a
+  statistical approach that estimates the probability of a word given the previous
+  N-1 words. The chapter covers the mechanics of training these models from a
+  corpus, the challenges of data sparsity, and essential smoothing techniques like
+  Laplace and Good-Turing smoothing that help create more robust and generalizable
+  models. Finally, we will learn how to evaluate language models using the concept
+  of perplexity.
+  
+  # Chapter 5: Part-of-Speech Tagging.
+  
+  Assigning grammatical categories like noun, verb, or adjective to each word in a
+  sentence is a fundamental step in understanding its structure and meaning. This
+  chapter explores Part-of-Speech (POS) tagging, a foundational NLP task. We will
+  journey from early rule-based systems to the more powerful and widely used
+  stochastic methods, with a deep dive into Hidden Markov Models (HMMs). The
+  chapter will explain the Viterbi algorithm for finding the most likely sequence
+  of tags, providing readers with a solid understanding of how sequence labeling
+  problems are modeled and solved computationally.
+  
+  # Chapter 6: Syntactic Parsing.
+  
+  Beyond individual words, how do we uncover the grammatical structure of a
+  sentence? This chapter tackles syntactic parsing, the process of analyzing a
+  string of words to reveal its hierarchical or relational structure. We will
+  explore two dominant paradigms: constituency parsing, which breaks sentences
+  into nested phrases using Context-Free Grammars (CFGs), and dependency parsing,
+  which models the grammatical relationships between words as a directed graph.
+  The chapter will cover key algorithms, such as CYK for constituency parsing and
+  transition-based methods for dependency parsing, equipping readers to
+  computationally model sentence syntax.
+  
+  # Chapter 7: Lexical and Compositional Semantics.
+  
+  This chapter moves from syntax to semantics—the study of meaning. We first
+  address lexical semantics, focusing on how to represent the meaning of
+  individual words. This includes traditional approaches like WordNet and modern
+  distributional methods like word embeddings (e.g., Word2Vec, GloVe), which
+  capture meaning from context. We then move to compositional semantics, exploring
+  how word meanings combine to form the meaning of phrases and sentences.
+  Techniques such as Semantic Role Labeling (SRL) will be introduced to identify
+  the roles that entities play within a sentence, providing a framework for
+  computational meaning representation.
+  
+  # Chapter 8: Discourse, Coreference, and Dialogue.
+  
+  Language understanding often requires looking beyond individual sentences to the
+  broader context of a conversation or document. This chapter introduces the
+  fields of discourse analysis and pragmatics. We will investigate how sentences
+  relate to one another to form a coherent text, exploring topics like discourse
+  coherence and structure. A key focus will be on coreference resolution—the task
+  of identifying all expressions that refer to the same entity (e.g., 'she,' 'Dr.
+  Evans,' 'the professor'). Finally, we will touch upon the fundamentals of
+  dialogue systems, examining how these principles are applied to build
+  conversational agents that can interact meaningfully with humans.
+  
+  # Chapter 9: Machine Translation.
+  
+  Machine Translation (MT) is one of the oldest and most challenging applications
+  of computational linguistics. This chapter charts the evolution of MT systems,
+  beginning with the core concepts of Statistical Machine Translation (SMT). We
+  will explore how SMT models learn translation probabilities from parallel
+  corpora using word alignment and phrase-based decoding. The second half of the
+  chapter introduces the modern paradigm of Neural Machine Translation (NMT),
+  explaining the powerful sequence-to-sequence architecture, the role of encoder-
+  decoder models, and the revolutionary attention mechanism that has enabled
+  significant breakthroughs in translation quality.
+  
+  # Chapter 10: Information Retrieval and Information Extraction.
+  
+  This chapter focuses on two critical tasks for managing and extracting value
+  from vast amounts of text: Information Retrieval (IR) and Information Extraction
+  (IE). For IR, we will explore the foundational models used by search engines,
+  including the vector space model and the TF-IDF weighting scheme, to rank
+  documents based on their relevance to a user's query. For IE, we will learn how
+  to automatically extract structured information from unstructured text. Key
+  subtasks, such as Named Entity Recognition (NER) for identifying people and
+  places, and Relation Extraction for finding the relationships between them, will
+  be covered in detail.
+  
+  # Chapter 11: Sentiment Analysis and Opinion Mining.
+  
+  Understanding the opinions, sentiments, and emotions expressed in text is a
+  major commercial and academic area of computational linguistics. This chapter
+  provides a comprehensive introduction to sentiment analysis. We will cover
+  methods for classifying a document's polarity (positive, negative, or neutral),
+  from lexicon-based approaches that rely on pre-compiled lists of sentimental
+  words to supervised machine learning models trained on labeled data. The
+  discussion will also extend to more nuanced tasks like aspect-based sentiment
+  analysis, which identifies opinions about specific features or topics within a
+  text.
+  
+  # Chapter 12: The Future: Large Language Models and Ethics.
+  
+  The final chapter brings us to the cutting edge of the field, dominated by Large
+  Language Models (LLMs). We will demystify the transformer architecture, the
+  foundation for models like BERT and GPT, and understand how self-attention
+  mechanisms enable them to process language with unprecedented contextual
+  awareness. The chapter will discuss the paradigm shift towards pre-training and
+  fine-tuning and explore the remarkable capabilities these models have unlocked.
+  Crucially, we will also engage with the significant ethical challenges posed by
+  this technology, including issues of bias, misinformation, and environmental
+  impact, concluding with a look toward future research directions.
+  
+  Consider Chapter 8 "Discourse, Coreference, and Dialogue". A plan has been
+  prepared for this chapter.
+  
+  01. This chapter begins by explaining why understanding context beyond a single
+      sentence is critical for true language comprehension.
+  02. We will first define the fields of discourse analysis and pragmatics, which
+      study how context shapes meaning.
+  03. The concept of discourse coherence is introduced to explain what makes a
+      sequence of sentences a unified and meaningful text rather than a random
+      collection.
+  04. We will explore theoretical frameworks for coherence, such as Rhetorical
+      Structure Theory (RST), which models relations between text spans.
+  05. A practical example will contrast a coherent paragraph with an incoherent
+      one to solidify the reader's understanding.
+  06. The chapter then introduces coreference resolution, the task of identifying
+      all expressions in a text that refer to the same real-world entity.
+  07. We will clarify key terminology by defining and providing examples of
+      anaphora, cataphora, and different types of referring expressions.
+  08. A case study will walk through a short narrative, highlighting the
+      coreference chains that link entities like 'Dr. Evans,' 'she,' and 'the
+      professor.'
+  09. The discussion then covers classic machine learning models for coreference
+      resolution that rely on hand-crafted linguistic features.
+  10. We will then present modern end-to-end neural network approaches that have
+      significantly advanced the state-of-the-art in this task.
+  11. Next, the chapter shifts focus to the fundamentals of dialogue systems and
+      conversational agents.
+  12. We break down the architecture of a classic task-oriented dialogue system
+      into its core components, including NLU, state tracking, policy, and NLG.
+  13. An illustrative example of a simple dialogue for booking a flight will
+      demonstrate how these components interact in practice.
+  14. The chapter concludes by summarizing how discourse structure, coreference,
+      and dialogue modeling are interconnected and essential for building
+      sophisticated NLP applications.
+  
+  Consider point 7 of the plan. Write this part of the book. Be consise in your
+  writing, avoid an overly verbose prose. Use Markdown for paragraphs, emphasis,
+  numbered or unnumbered lists. Use LaTeX for formulas. Do not add any headers.
+  Footnotes are allowed but should be used sparingly. In total, you should write
+  between 450 and 600 words.
+  
+  This section of the book will feature a Table. Its description is as follows.
+  
+  A three-column table defining key coreference terminology. The columns will be
+  titled 'Term,' 'Definition,' and 'Example.' Rows will cover concepts such as
+  'Referring Expression,' 'Anaphora,' 'Cataphora,' 'Antecedent,' 'Pronominal
+  Anaphora,' and 'Nominal Anaphora.' The example column will contain a sentence
+  with the relevant parts bolded or italicized to clearly illustrate the concept.
+  
+  This visual aid will be drafted separately, but you can already refer to it as
+  Fig. 8.7 in the text.
+hash: b6bea3205018223cda032f95c2aaa960fd55700a246a4364608c2c8f130bda56
+response:
+  To systematically solve the coreference problem, we must first establish a
+  precise vocabulary. The fundamental unit is the *referring expression*, which is
+  any noun phrase that points to an entity in the world. These expressions can be
+  proper nouns (e.g., *Ada Lovelace*), pronouns (e.g., *she*, *it*), or
+  descriptive noun phrases (e.g., *the first computer programmer*). Coreference
+  resolution is the task of clustering these referring expressions into sets,
+  where each set corresponds to a single real-world entity.
+  
+  The most common relationship between referring expressions is *anaphora*, where
+  an expression, called the *anaphor*, refers back to a previously introduced
+  entity, known as the *antecedent*. This backward-looking reference is the
+  backbone of textual coherence. Consider the following:
+  
+  > **The system** failed the initial test. *It* was not robust enough.
+  
+  Here, *it* is the anaphor, and its antecedent is *the system*. The relationship
+  links the two sentences together. A less frequent but structurally important
+  pattern is *cataphora*, which reverses this ordering. In cataphora, a referring
+  expression points forward to an entity that has not yet been mentioned. This is
+  often used for stylistic or dramatic effect:
+  
+  > Although *he* didn't expect it, **David** won the competition.
+  
+  In this case, the pronoun *he* is a cataphor that refers forward to *David*.
+  
+  Referring expressions themselves can be categorized, and understanding these
+  categories is crucial for building computational models. The most obvious type
+  of anaphor is a pronoun, leading to what is called *pronominal anaphora*. This
+  includes personal pronouns (*he, she, it, they*), possessive pronouns (*his,
+  her, its, their*), and reflexive pronouns (*himself, herself*).
+  
+  However, many references are not made with pronouns but with other noun phrases.
+  This is known as *nominal anaphora*. This category is diverse and includes
+  several common patterns:
+  
+  - **Repetition:** A noun phrase is simply repeated for clarity.
+  
+    > We need to analyze **the algorithm**. **The algorithm** has a high time
+    > complexity.
+  
+  - **Synonyms/Related Nouns:** An entity is referred to using a synonym, a
+    hypernym (a more general term), or a related word.
+  
+    > **The automaker** issued a recall. **The company** cited a manufacturing
+    > defect.
+  
+  - **Definite Descriptions:** An indefinite noun phrase (*a company*) introduces
+    an entity, which is later referred to by a definite noun phrase (*the
+    company*).
+  
+    > We hired **a new engineer**. **The engineer** starts on Monday.
+  
+  Each of these patterns presents a unique challenge for a computational system.
+  Linking a pronoun to its antecedent often relies on grammatical cues like gender
+  and number agreement, whereas resolving nominal anaphora may require world
+  knowledge or access to a knowledge base like WordNet. For a structured summary
+  of these key terms and their relationships, please refer to the table in Fig.
+  8.7. This vocabulary provides the formal framework needed to discuss and develop
+  algorithms for coreference resolution.
+duration: 23439 ms
+usage_stats:
+  {
+    "candidates_token_count": 653,
+    "prompt_token_count": 2331,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 2331
+      }
+    ],
+    "thoughts_token_count": 1710,
+    "total_token_count": 4694
+  }
+...

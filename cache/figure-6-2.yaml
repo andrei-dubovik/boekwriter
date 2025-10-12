@@ -1,0 +1,174 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Once we accept the goal of revealing a sentence's grammatical structure, a
+  fundamental question arises: what should that structure look like? In
+  computational linguistics, two dominant paradigms have emerged to answer this
+  question, each offering a different philosophical perspective on what
+  constitutes syntax. These are *constituency parsing* and *dependency parsing*.
+  
+  Constituency parsing, also known as phrase-structure parsing, is built on the
+  idea that sentences are composed of nested components called *constituents* or
+  *phrases*. According to this view, words group together to form larger units,
+  which in turn group together to form even larger ones, culminating in the
+  complete sentence. The primary output of a constituency parser is a hierarchical
+  tree that explicitly shows this grouping. For instance, the words 'the', 'old',
+  and 'dog' combine to form a Noun Phrase (NP), and 'chased the cat' forms a Verb
+  Phrase (VP). The NP and VP then combine to form the full sentence (S). This
+  approach focuses on identifying the boundaries of these phrasal units and
+  arranging them in a hierarchical structure.
+  
+  Dependency parsing, in contrast, models syntax as a set of relationships between
+  individual words. The structure is not a hierarchy of phrases but a graph of
+  dependencies. In this framework, every word in the sentence, except for one (the
+  root, typically the main verb), is a *dependent* of another word, which is its
+  *head*. These directed links, or *arcs*, are labeled with the specific
+  grammatical function they represent, such as `nsubj` for a nominal subject or
+  `dobj` for a direct object. This approach forgoes phrasal nodes entirely and
+  instead focuses on representing how words modify or depend on each other,
+  revealing the functional architecture of the sentence.
+  
+  The fundamental difference between these two formalisms is starkly illustrated
+  in **Fig. 6.2**.
+  
+  ______________________________________________________________________
+  
+  **\[DIAGRAM: Fig. 6.2\]**
+  
+  *A side-by-side comparison diagram showing the same sentence, e.g., 'The old dog
+  chased the cat', analyzed using both constituency and dependency parsing. The
+  left side will show the hierarchical phrase structure tree (constituency), and
+  the right side will show the dependency graph with directed, labeled arcs
+  between words.*
+  
+  ______________________________________________________________________
+  
+  As the figure shows, the constituency tree for 'The old dog chased the cat'
+  contains non-terminal nodes like `NP` and `VP` that are not words from the
+  original sentence. It tells us that 'The old dog' is a single, cohesive unit.
+  The dependency graph, on the other hand, consists only of the words themselves,
+  connected by labeled arcs. It explicitly shows that 'dog' is the subject of
+  'chased' and 'cat' is its object, while 'old' directly modifies 'dog'. In
+  essence, constituency parsing asks, "What components make up this sentence?",
+  while dependency parsing asks, "Which words depend on which other words, and
+  how?". The remainder of this chapter will explore the formalisms and algorithms
+  behind each of these powerful paradigms.
+  
+  This fragment refers to Fig. 6.2. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A side-by-side comparison diagram showing the same sentence, e.g., 'The old dog
+  chased the cat', analyzed using both constituency and dependency parsing. The
+  left side will show the hierarchical phrase structure tree (constituency), and
+  the right side will show the dependency graph with directed, labeled arcs
+  between words.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 1e6621a57c3aef36989a63558e375e90d0f5b82dfa055c441189ac1ea8df433a
+response:
+  caption:
+    Fig. 6.2: A side-by-side comparison of Constituency Parsing and Dependency
+    Parsing for the sentence 'The old dog chased the cat'. The left side shows the
+    hierarchical phrase structure, grouping words into constituents like Noun
+    Phrases (NP) and Verb Phrases (VP). The right side shows the dependency graph,
+    where directed, labeled arcs represent the grammatical relationships (e.g.,
+    subject, object) between individual words.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" font-family="sans-serif" font-size="16px">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <g id="constituency-parse" text-anchor="middle">
+        <text x="200" y="50" font-size="20px" font-weight="bold">Constituency Parsing</text>
+        <g id="words-constituency">
+          <text x="60" y="500">The</text>
+          <text x="120" y="500">old</text>
+          <text x="180" y="500">dog</text>
+          <text x="260" y="500">chased</text>
+          <text x="340" y="500">the</text>
+          <text x="400" y="500">cat</text>
+        </g>
+        <g id="tree-structure" fill="none" stroke="#333" stroke-width="1.5">
+          <g id="pos-tags" font-size="14px" stroke="none" fill="#333">
+            <text x="60" y="450">DT</text>
+            <line x1="60" y1="455" x2="60" y2="485"/>
+            <text x="120" y="450">JJ</text>
+            <line x1="120" y1="455" x2="120" y2="485"/>
+            <text x="180" y="450">NN</text>
+            <line x1="180" y1="455" x2="180" y2="485"/>
+            <text x="260" y="450">VBD</text>
+            <line x1="260" y1="455" x2="260" y2="485"/>
+            <text x="340" y="450">DT</text>
+            <line x1="340" y1="455" x2="340" y2="485"/>
+            <text x="400" y="450">NN</text>
+            <line x1="400" y1="455" x2="400" y2="485"/>
+          </g>
+          <g id="phrases" font-size="16px" stroke="none" fill="#333">
+            <text x="120" y="350">NP</text>
+            <line x1="120" y1="355" x2="60" y2="435"/>
+            <line x1="120" y1="355" x2="120" y2="435"/>
+            <line x1="120" y1="355" x2="180" y2="435"/>
+            <text x="370" y="350">NP</text>
+            <line x1="370" y1="355" x2="340" y2="435"/>
+            <line x1="370" y1="355" x2="400" y2="435"/>
+            <text x="315" y="250">VP</text>
+            <line x1="315" y1="255" x2="260" y2="435"/>
+            <line x1="315" y1="255" x2="370" y2="335"/>
+            <text x="217.5" y="150">S</text>
+            <line x1="217.5" y1="155" x2="120" y2="335"/>
+            <line x1="217.5" y1="155" x2="315" y2="235"/>
+          </g>
+        </g>
+      </g>
+      <line x1="425" y1="40" x2="425" y2="560" stroke="#ccc" stroke-width="1"/>
+      <g id="dependency-parse" text-anchor="middle">
+        <text x="600" y="50" font-size="20px" font-weight="bold">Dependency Parsing</text>
+        <g id="words-dependency">
+          <text x="460" y="400">The</text>
+          <text x="520" y="400">old</text>
+          <text x="580" y="400">dog</text>
+          <text x="660" y="400">chased</text>
+          <text x="740" y="400">the</text>
+          <text x="800" y="400">cat</text>
+        </g>
+        <g id="dep-arrows" fill="none" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)">
+          <path d="M 465,385 C 490,345 575,345 575,385"/>
+          <text x="520" y="340" font-size="14px" fill="#333" stroke="none">det</text>
+          <path d="M 525,385 C 540,360 575,360 575,385"/>
+          <text x="550" y="355" font-size="14px" fill="#333" stroke="none">amod</text>
+          <path d="M 585,385 C 605,325 655,325 655,385"/>
+          <text x="620" y="320" font-size="14px" fill="#333" stroke="none">nsubj</text>
+          <path d="M 745,385 C 760,360 795,360 795,385"/>
+          <text x="770" y="355" font-size="14px" fill="#333" stroke="none">det</text>
+          <path d="M 800,385 C 770,305 665,305 665,385"/>
+          <text x="732.5" y="300" font-size="14px" fill="#333" stroke="none">dobj</text>
+          <path d="M 660,250 L 660,385" stroke-dasharray="4"/>
+          <text x="660" y="235" font-size="14px" fill="#333" stroke="none">ROOT</text>
+        </g>
+      </g>
+    </svg>
+duration: 34130 ms
+usage_stats:
+  {
+    "candidates_token_count": 1816,
+    "prompt_token_count": 845,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 845
+      }
+    ],
+    "thoughts_token_count": 2751,
+    "total_token_count": 5412
+  }
+...

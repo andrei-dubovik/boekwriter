@@ -1,0 +1,130 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To computationally model the hierarchical structure of constituency, we need a
+  formal mechanism that can define the set of all valid structures in a language.
+  The most common tool for this is the **Context-Free Grammar (CFG)**, a formalism
+  with deep roots in both linguistics, through the work of Noam Chomsky, and in
+  computer science, where it is used to define the syntax of programming
+  languages. A CFG provides a finite set of rules that can generate an infinite
+  set of grammatical sentences, capturing the productive and recursive nature of
+  human language.
+  
+  Formally, a Context-Free Grammar $G$ is a 4-tuple:
+  
+  $G = (N, \Sigma, R, S)$
+  
+  Let's break down each of these four components.
+  
+  1. **$N$**: A finite set of **non-terminal symbols**. These are the variables of
+     our grammar, representing syntactic categories or phrases. They are
+     "non-terminal" because they can be broken down further into other symbols.
+     Think of them as the labels for the internal nodes in a parse tree—symbols
+     like *Noun Phrase* (NP), *Verb Phrase* (VP), or *Prepositional Phrase* (PP).
+     By convention, non-terminals are represented with uppercase letters or
+     abbreviations.
+  
+  2. **$\Sigma$**: A finite set of **terminal symbols**, sometimes called the
+     *alphabet* or the *lexicon*. These are the actual words of the language that
+     will appear in our sentences, such as 'cat', 'sees', or 'with'. They are
+     "terminal" because they cannot be rewritten into other symbols; they
+     represent the end points of the generation process and correspond to the
+     leaves of a parse tree. The set of non-terminals and terminals must be
+     disjoint, meaning no symbol can be both: $N \cap \Sigma = \emptyset$.
+  
+  3. **$R$**: A finite set of **production rules**. These rules are the heart of
+     the grammar, specifying how non-terminals can be rewritten. Each rule is of
+     the form $A \rightarrow \beta$, where $A$ is a single non-terminal from the
+     set $N$, and $\beta$ is a sequence of one or more symbols from the combined
+     set of non-terminals and terminals $(N \cup \Sigma)^*$.[^1] The arrow
+     $\rightarrow$ can be read as "can be rewritten as," "consists of," or "can be
+     expanded to." For instance, the rule `S -> NP VP` states that a sentence `S`
+     can consist of a Noun Phrase `NP` followed by a Verb Phrase `VP`. It is
+     common to use the pipe symbol `|` as a convenient shorthand to group rules
+     with the same left-hand side. For example, `NP -> Det N | N` is equivalent to
+     the two separate rules:
+  
+     - `NP -> Det N`
+     - `NP -> N`
+  
+     Production rules can be broadly categorized into two types. *Syntactic rules*
+     specify how phrase types are composed of other phrases (e.g., `VP -> V NP`),
+     while *lexical rules* (or *lexicon rules*) connect the syntactic categories
+     to the terminal words (e.g., `N -> 'cat'`).
+  
+  4. **$S$**: A designated **start symbol**, which must be a member of the
+     non-terminal set $N$. The start symbol is the entry point for the grammar,
+     representing the highest-level category from which all valid sentences in the
+     language defined by the grammar can be generated. For natural language
+     grammars, this is almost always the symbol for *sentence*, typically denoted
+     as `S`.
+  
+  Let's make this concrete with the grammar we will use to parse our upcoming
+  example sentence. The components of this simple grammar are laid out in **Fig.
+  6.4**.
+  
+  According to **Fig. 6.4**, our set of non-terminals is
+  $N = \{\text{S, NP, VP, PP, Det, N, V, P}\}$. Our terminals are the words
+  themselves: $\Sigma = \{\text{'the', 'cat', 'sat', 'on', 'mat'}\}$. The start
+  symbol is `S`. The production rules in the table define the valid sentence
+  structures. For example:
+  
+  - `S -> NP VP` is the fundamental rule for an English sentence.
+  - `VP -> V PP` defines a Verb Phrase that consists of a Verb followed by a
+    Prepositional Phrase.
+  - `NP -> Det N` defines a Noun Phrase as a Determiner followed by a Noun.
+  - `PP -> P NP` defines a Prepositional Phrase as a Preposition followed by a
+    Noun Phrase.
+  
+  Notice the recursive potential here. A `VP` can contain a `PP`, which in turn
+  contains an `NP`. This ability for rules to call upon other rules, including
+  themselves (either directly or indirectly), is what gives CFGs the power to
+  generate the complex, nested structures characteristic of human language. The
+  process of using these rules to generate a string of terminals from the start
+  symbol is called a **derivation**. A derivation starts with `S` and repeatedly
+  applies rules from $R$, replacing a non-terminal with the right-hand side of one
+  of its rules, until only terminal symbols remain. The set of all terminal
+  strings that can be derived from the start symbol constitutes the *language*
+  generated by the grammar.
+  
+  This fragment refers to Fig. 6.4, which is a table. Its description is as
+  follows:
+  
+  A table clearly defining the components of a simple Context-Free Grammar. The
+  table will have three sections: one listing the Non-Terminal symbols (e.g., S,
+  NP, VP), one for Terminal symbols (e.g., 'the', 'cat', 'sat'), and a main
+  section listing the Production Rules (e.g., S -> NP VP, NP -> Det N).
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+  
+  [^1]: The asterisk notation $(N \cup \Sigma)^*$ means "a sequence of zero or more
+  symbols" from the given set. For most practical parsing grammars, rule
+  right-hand sides have at least one symbol.
+hash: 9ac729d9110938644c9754d3664523bbd24e8d7872faa5f3a8b7bb0fc18c4fa5
+response:
+  caption:
+    Fig. 6.4: The components of a simple Context-Free Grammar (CFG) based on the
+    text.
+  latex: \begin{tabular}{ll}\toprule\textbf{Component} & \textbf{Definition} \\\midrule Non-terminals ($N$) & $\{ S, NP, VP, PP, Det, N, V, P \}$ \\ Terminals ($\Sigma$) & $\{ \text{'the', 'cat', 'sat', 'on', 'mat'} \}$ \\ Start Symbol & $S$ \\\midrule Production Rules ($R$) & $S \rightarrow NP \ VP$ \\ & $VP \rightarrow V \ PP$ \\ & $PP \rightarrow P \ NP$ \\ & $NP \rightarrow Det \ N$ \\ & $Det \rightarrow \text{'the'}$ \\ & $N \rightarrow \text{'cat'} \ | \ \text{'mat'}$ \\ & $V \rightarrow \text{'sat'}$ \\ & $P \rightarrow \text{'on'}$ \\\bottomrule\end{tabular}
+duration: 26458 ms
+usage_stats:
+  {
+    "candidates_token_count": 241,
+    "prompt_token_count": 1430,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1430
+      }
+    ],
+    "thoughts_token_count": 3091,
+    "total_token_count": 4762
+  }
+...

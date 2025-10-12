@@ -1,0 +1,852 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: headpiece
+prompt:
+  What follows is a text for a chapter from a book called "Introduction to
+  Computational Linguistics".
+  
+  <chapter>
+  
+  Our journey so far has equipped us with tools to analyze the structure of
+  language. We can identify parts of speech and map the grammatical architecture
+  of a sentence through parsing. Yet, structure is only half the story. A computer
+  that can parse "The rover is exploring Martian geology" but cannot infer that a
+  machine is on another planet has not truly *understood* the text. This deeper
+  level of comprehension is the domain of **semantics**, the study of meaning in
+  language. Semantics moves beyond the *form* of language to investigate its
+  *content* and communicative intent. It is the bridge between linguistic
+  expressions and the concepts, objects, and situations they represent in the
+  world.
+  
+  The distinction between syntax and semantics is fundamental. In Chapter 6, we
+  focused on *syntax*, the set of rules that tells us *how* words can be legally
+  combined to form grammatically valid sentences. Semantics, in contrast, is
+  concerned with what those combinations *mean*. The classic sentence "Colorless
+  green ideas sleep furiously" serves as a perfect illustration. It adheres
+  flawlessly to the rules of English grammar—it has a subject, verb, and adverb in
+  the right places—making it syntactically impeccable. However, it is semantically
+  incoherent because the meanings of its constituent words clash. 'Ideas' cannot
+  be 'green,' and they certainly cannot 'sleep furiously.' This stark contrast
+  demonstrates that a computational model must go beyond parsing grammatical trees
+  to grapple with the logic, truth, and real-world reference embedded in language.
+  
+  In this chapter, we will dissect the problem of meaning into two core
+  components. We begin with **lexical semantics**, which focuses on the meaning of
+  individual words, or *lexemes*. How can we represent the meaning of words like
+  'rover', 'planet', or 'explore' in a way a computer can process? We will explore
+  both classic, knowledge-based approaches and modern, data-driven methods that
+  learn word meanings from vast text corpora. Subsequently, we will tackle
+  **compositional semantics**, which examines how these individual word meanings
+  combine systematically to create the meaning of phrases and sentences.
+  Understanding the meaning of 'rover' and 'explore' is one thing; understanding
+  'the rover explores' as a complete proposition is another. This part of our
+  exploration will introduce foundational principles and computational techniques
+  for building meaning from the ground up, laying the groundwork for advanced
+  applications like question answering and information extraction.
+  
+  To computationally model meaning, we must divide the problem into two
+  interconnected challenges, which form the central theme of this chapter. The
+  first is *lexical semantics*, which concerns the meaning of individual words or
+  *lexemes*. This is the task of representing what words like *algorithm*,
+  *analyze*, or *data* signify in isolation. It involves understanding
+  relationships between words (e.g., that a *poodle* is a type of *dog*) and
+  resolving ambiguity (e.g., distinguishing the river *bank* from the financial
+  *bank*). Our initial focus will be on methods that capture these individual word
+  meanings, treating them as the fundamental building blocks for any larger
+  semantic analysis.
+  
+  The second, more complex challenge is *compositional semantics*. This area
+  explores how the meanings of these building blocks combine, guided by syntax, to
+  form the meanings of phrases and sentences. Knowing the definitions of "the,"
+  "model," "predicts," and "outcome" is essential but insufficient. We must also
+  have a computational mechanism to assemble them to understand the proposition
+  conveyed by "The model predicts the outcome," and to recognize that it means
+  something different from "The outcome predicts the model." The principle that
+  the meaning of a complex expression is a function of the meanings of its parts
+  and the rules used to combine them is the cornerstone of compositional
+  semantics.
+  
+  This fundamental division is visualized in **Fig. 7.2**. On one side, we have
+  lexical semantics, mapping individual words to their core concepts. On the
+  other, compositional semantics takes these concepts and, guided by the
+  sentence's grammatical structure, assembles them into a coherent representation
+  of the full sentence's meaning. This chapter follows this natural progression:
+  we will first master techniques for representing word meaning before turning to
+  the methods used to combine them.
+  
+  Our exploration of lexical semantics begins with the traditional approach: if we
+  want a computer to know what a word means, we can try to explicitly provide that
+  knowledge. This strategy relies on creating large, structured knowledge bases,
+  often called *lexical resources*, which are meticulously handcrafted by
+  linguists and lexicographers. These resources aim to capture the complex network
+  of meanings that constitute a human lexicon, encoding definitions and, more
+  importantly, the relationships between words.
+  
+  The most influential and widely used resource of this kind is **WordNet**[^1], a
+  large lexical database of English developed at Princeton University. WordNet is
+  far more than a simple digital dictionary. While a dictionary is typically
+  organized alphabetically, WordNet is organized conceptually. It attempts to
+  model how humans store and relate lexical knowledge. Instead of treating words
+  as isolated entries, it groups them into sets of synonyms and connects them
+  through a rich network of semantic relationships.
+  
+  The fundamental idea is that a word's meaning is not defined in a vacuum but by
+  its connections to other words. For example, knowing that a *poodle* is a type
+  of *dog*, which is a type of *canine*, which is a type of *mammal*, provides a
+  deep, structured understanding that a simple definition alone cannot. WordNet
+  represents this knowledge as a large graph, where concepts are the nodes and
+  semantic relations are the edges. This allows a computational system to traverse
+  the graph, inferring relationships and measuring semantic similarity between
+  concepts.
+  
+  The great strength of such knowledge-based approaches is the high quality and
+  explicit nature of the encoded information. However, they are enormously
+  expensive and time-consuming to create and maintain. They can also struggle to
+  cover niche domains or keep pace with the rapid evolution of language. This
+  challenge sets the stage for the data-driven, distributional methods we will
+  explore next.
+  
+  To understand how a resource like WordNet represents meaning, we must look
+  beyond individual words and focus on its fundamental building blocks and the
+  relationships between them. At its core, WordNet is not a dictionary of words
+  but a network of concepts. Its structure is built upon two key elements:
+  *synsets* and the *semantic relations* that link them.
+  
+  The primary unit in WordNet is the **synonym set**, or *synset*. A synset is a
+  group of words or short phrases that are treated as semantically equivalent in a
+  particular context; they all represent the same underlying concept. For example,
+  the words {car, auto, automobile, machine, motorcar} can be grouped into a
+  single synset that represents the concept of a four-wheeled passenger vehicle.
+  Each synset is more than just a list of words; it also contains:
+  
+  - A specific **part-of-speech** (noun, verb, adjective, or adverb). The word
+    *back*, for instance, belongs to different synsets depending on whether it's
+    used as a noun (the rear part of the body), an adverb (in the reverse
+    direction), or a verb (to support).
+  - A **gloss**, which is a brief, dictionary-style definition of the concept. For
+    our car synset, the gloss might be "a motor vehicle with four wheels; usually
+    propelled by an internal combustion engine."
+  - Example sentences that illustrate the usage of the synset's members.
+  
+  The real power of WordNet, however, emerges from the rich network of connections
+  between these synsets. These connections are not arbitrary; they represent
+  well-defined semantic relations that allow a machine to navigate the landscape
+  of meaning. The most important of these relations are:
+  
+  - **Hypernymy and Hyponymy:** This is the foundational "is-a" relationship that
+    organizes most nouns and verbs into a large, hierarchical structure. A concept
+    *Y* is a **hypernym** of a concept *X* if *X* is a type of *Y*. Conversely,
+    *X* is a **hyponym** of *Y*. For example, the synset {motor vehicle} is a
+    hypernym of {car, auto, ...}, because a car *is a type of* motor vehicle. This
+    relationship is transitive: since a {sedan} is a hyponym of {car, auto, ...},
+    it is also, by extension, a hyponym of {motor vehicle}. Traversing these links
+    allows a program to generalize (by moving up to hypernyms) or specialize (by
+    moving down to hyponyms).
+  
+  - **Meronymy and Holonymy:** This relationship captures the "part-of" or "has-a"
+    connection between concepts. A concept *X* is a **meronym** of *Y* if *X* is a
+    part of *Y*. Conversely, *Y* is the **holonym** of *X*. For instance, the
+    synset {wheel} is a meronym of {car, auto, ...}, because a wheel is a part of
+    a car. Unlike the "is-a" hierarchy, this relation describes composition rather
+    than classification. WordNet further divides this into different kinds of
+    part-whole relations, such as `part_of` ({engine} is a part of a {car}),
+    `member_of` ({player} is a member of a {team}), and `substance_of` ({wood} is
+    the substance of a {table}).
+  
+  As illustrated in **Fig. 7.4**, these relationships form a complex, directed
+  graph. The synset {car, auto, automobile} appears as a node in this network. A
+  directed edge labeled `is-a` points from this node to its hypernym, {motor
+  vehicle}, signifying its place in the classification hierarchy. Simultaneously,
+  other edges, such as one labeled `has-part`, connect it to its meronyms, like
+  the synset {wheel}. By following these labeled edges, a computational system can
+  infer that a car is a vehicle and that it has wheels, all without understanding
+  the raw text of the definitions.
+  
+  WordNet also encodes other relations tailored to specific parts of speech. For
+  adjectives, a key relation is **antonymy**, which links synsets with opposite
+  meanings (e.g., {good} is an antonym of {bad}). For verbs, a crucial relation is
+  **entailment**, where one verb logically implies another (e.g., the act of
+  {snoring} entails the state of {sleeping}). This carefully engineered structure,
+  developed over many years at Princeton University, provides a formal,
+  machine-readable model of the human lexicon that has been an invaluable resource
+  for countless computational linguistics tasks.[^1]
+  
+  The true power of WordNet's structure is realized when we traverse its graph
+  computationally. By programmatically following the pointers that define
+  relations like hyponymy and meronymy, we can explore a word's semantic
+  neighborhood, quantify relationships between concepts, and leverage this
+  knowledge for downstream tasks. A common and intuitive example is to trace the
+  hypernym ('is-a') hierarchy for a given word.
+  
+  Let's illustrate this by finding the generalization path for the word *car*. We
+  begin by looking up the word in WordNet to find its corresponding synonym sets.
+  The most frequent sense of 'car' is represented by the synset `car.n.01`, which
+  has the gloss: "a motor vehicle with four wheels; usually propelled by an
+  internal combustion engine". This synset serves as our starting node in the
+  graph.
+  
+  From `car.n.01`, we can iteratively follow the hypernym pointers to ascend the
+  'is-a' hierarchy, moving to a more general concept at each step. The direct
+  hypernym of `car.n.01` is `motor_vehicle.n.01`. Following this chain upward
+  reveals a path of increasing abstraction, as depicted in **Fig. 7.5**. The full
+  traversal from the specific concept of a car to the most general physical
+  concept looks like this:
+  
+  - `car.n.01` ⟶ `motor_vehicle.n.01`
+  - ⟶ `wheeled_vehicle.n.01`
+  - ⟶ `vehicle.n.01`
+  - ⟶ `conveyance.n.03`
+  - ⟶ `instrumentality.n.03`
+  - ⟶ `artifact.n.01`
+  - ⟶ `whole.n.02`
+  - ⟶ `object.n.01`
+  - ⟶ `physical_entity.n.01`
+  - ⟶ `entity.n.01`
+  
+  This ability to navigate the semantic hierarchy is invaluable. For instance, we
+  can compute a measure of semantic similarity between words by finding their
+  lowest common ancestor in the hypernym tree. A 'car' and a 'truck' are
+  semantically close because their common ancestor, `motor_vehicle`, is very
+  specific. This type of reasoning is fundamental for tasks like textual
+  entailment and query expansion, where understanding these hierarchical
+  relationships allows a system to infer meaning beyond literal word matching.
+  
+  While powerful, knowledge-based resources like WordNet have inherent
+  limitations. They are expensive and time-consuming to create, may not cover all
+  words or specialized domains, and struggle to adapt to the ever-evolving nature
+  of language. To overcome these challenges, modern computational linguistics has
+  largely shifted to data-driven methods for capturing meaning, all of which are
+  built upon a foundational principle known as the **distributional hypothesis**.
+  
+  The core idea is captured perfectly by the linguist J.R. Firth's famous dictum:
+  "You shall know a word by the company it keeps."[^1] This hypothesis posits that
+  the meaning of a word is not an intrinsic property but is defined by the
+  contexts in which it typically appears. Words that occur in similar contexts are
+  assumed to have similar meanings. For example, consider the words *cat* and
+  *dog*. Both frequently appear alongside words like *pet*, *food*, *walk*,
+  *play*, and *vet*. This shared contextual environment suggests they occupy a
+  similar semantic space—in this case, the category of common household pets. We
+  don't need a manually curated dictionary to tell us they are related; the
+  pattern of their usage in a large body of text reveals this relationship
+  automatically.
+  
+  This principle is particularly powerful for handling polysemy, where a single
+  word has multiple meanings. The surrounding words, or the *distribution*,
+  provide the necessary clues to disambiguate the intended sense. As illustrated
+  in Fig. 7.6, the word *bass* can refer to a type of fish or a musical
+  instrument. If *bass* appears in a sentence with words like *fishing*, *river*,
+  *lure*, and *caught*, its context clearly points to the aquatic meaning.
+  Conversely, if it co-occurs with *music*, *guitar*, *treble*, and *band*, its
+  meaning as a low-frequency instrument is activated. The context doesn't just
+  suggest the meaning; in the distributional view, it *constitutes* the meaning.
+  
+  The profound implication of this hypothesis is that we can transform the
+  abstract concept of meaning into something computationally tractable. If a
+  word's meaning is the set of all its contexts, we can represent that meaning by
+  aggregating those contexts statistically. This insight paves the way for
+  representing words as numerical vectors, where each dimension corresponds to
+  some aspect of their contextual environment. Instead of relying on a predefined
+  graph of semantic relations, we can *learn* these relationships directly from
+  raw, unstructured text, forming the basis for the vector space models we will
+  explore next.
+  
+  This principle is formalized through **vector space models (VSM)**, a paradigm
+  where words are represented as points or vectors in a high-dimensional geometric
+  space. The fundamental idea is that a word’s meaning can be captured by a vector
+  that summarizes its distribution across different contexts. The relationships
+  between words, such as similarity or analogy, can then be modeled as geometric
+  relationships between their corresponding vectors.
+  
+  The most straightforward way to build such a model is by constructing a
+  **term-context co-occurrence matrix**. In this matrix, each row represents a
+  target word from our vocabulary, and each column represents a context word. A
+  "context" is typically defined as a fixed-size window of words surrounding the
+  target word. A cell at the intersection of a target word *w* and a context word
+  *c* contains a count of how many times *c* appeared within the context window of
+  *w* across a large corpus.
+  
+  Each row of this matrix is, therefore, a vector for a target word. For a
+  vocabulary of 50,000 words, the vector for the word *'cat'* would have 50,000
+  dimensions, with each dimension corresponding to a potential context word like
+  *'meow'*, *'pet'*, or *'kitchen'*. These raw count vectors are typically very
+  sparse, as most words do not co-occur with most other words.
+  
+  Once we have these vectors, the core insight of the distributional
+  hypothesis—that words appearing in similar contexts have similar meanings—can be
+  measured computationally. We can quantify the similarity between two word
+  vectors, $\mathbf{A}$ and $\mathbf{B}$, using a distance metric. The most common
+  is **cosine similarity**, which measures the cosine of the angle between two
+  vectors:
+  
+  $ \cos(\theta) = \frac{\mathbf{A} \cdot \mathbf{B}}{\|\mathbf{A}\| \|\mathbf{B}\|} = \frac{\sum_{i=1}^{n} A_i B_i}{\sqrt{\sum_{i=1}^{n} A_i^2} \sqrt{\sum_{i=1}^{n} B_i^2}} $
+  
+  A cosine value near 1 indicates the vectors point in a very similar direction,
+  implying high semantic similarity, while a value near 0 indicates orthogonality,
+  or dissimilarity. This allows us to find the closest words to *'dog'* by simply
+  calculating its cosine similarity to all other vectors in the space. As shown in
+  the simplified two-dimensional projection in Fig. 7.7, this spatial arrangement
+  can capture remarkably nuanced relationships. Notice how the vector from *'man'*
+  to *'woman'* is very similar to the vector from *'king'* to *'queen'*,
+  preserving the concept of gender as a direction in the space.
+  
+  While co-occurrence vectors formalize the distributional hypothesis, they have
+  significant practical limitations. A typical vocabulary can contain tens of
+  thousands of words, which means each vector is also tens of thousands of
+  dimensions long. Furthermore, most entries in these vectors are zero, a property
+  known as *sparsity*. These sparse, high-dimensional vectors are computationally
+  inefficient and often fail to capture subtle semantic relationships, as they
+  only model direct, hard-count co-occurrences. They can tell you that `car`
+  appears near `road`, but they struggle to generalize that `car` is also similar
+  to `automobile`, which might appear in slightly different contexts.
+  
+  To overcome these issues, we use **word embeddings**. An embedding is a
+  *learned*, *dense*, and relatively *low-dimensional* vector representation of a
+  word. Instead of a vector with 50,000 dimensions where each dimension
+  corresponds to a specific word in the vocabulary, an embedding might have only
+  50 to 300 dimensions. These dimensions do not have an obvious interpretation;
+  instead, they represent latent semantic features that are learned automatically
+  from the data. The term *dense* means that most values in the vector are
+  non-zero, with each dimension contributing in some small way to defining the
+  word’s meaning.
+  
+  The crucial insight behind modern embeddings is that we can learn these dense
+  vectors by training a simple neural network on an auxiliary prediction task. The
+  goal isn't to build a state-of-the-art prediction model, but to use the task to
+  force the model to learn good word representations. For instance, the model
+  might be tasked with predicting a word given its surrounding context words. In
+  the process of learning to make these predictions, the network's internal
+  weights are adjusted. These learned weights, which represent each word, become
+  the word embeddings. This "learning" process forces the model to distill the
+  essence of a word's typical contexts into its fixed-size vector.
+  
+  The power of this approach is that the resulting vector space encodes semantic
+  similarity as geometric proximity. Words that appear in similar contexts, such
+  as `boat` and `ship`, will be pushed towards having similar vectors, making them
+  close to each other in the space. Conversely, semantically distinct words like
+  `boat` and `apple` will end up with distant vectors. We can measure this
+  distance formally using metrics like cosine similarity, which calculates the
+  cosine of the angle between two vectors:
+  
+  $$
+  \text{similarity}(\vec{u}, \vec{v}) = \cos(\theta) = \frac{\vec{u} \cdot \vec{v}}{\|\vec{u}\| \|\vec{v}\|}
+  $$
+  
+  This remarkable property—encoding complex meaning in vector geometry—makes
+  embeddings a foundational component of nearly all modern NLP systems. The
+  following sections will detail two of the most influential algorithms for
+  learning these representations: Word2Vec and GloVe.
+  
+  The Word2Vec model, introduced by Mikolov et al. at Google in 2013, provided a
+  highly efficient and scalable framework for learning such embeddings. Its key
+  innovation was to reframe the learning problem. Instead of directly counting
+  co-occurrences, Word2Vec trains a simple neural network on a proxy task:
+  predicting a word from its neighbors. The goal is not the task itself, but the
+  learned weights of the network's hidden layer. These weights, once training is
+  complete, become the dense vector representations for each word in the
+  vocabulary. Word2Vec proposes two distinct architectures for this proxy task:
+  the Continuous Bag-of-Words (CBOW) and Skip-gram.
+  
+  The first architecture, Continuous Bag-of-Words (CBOW), works by predicting a
+  target (center) word from its surrounding context words. For the sentence "the
+  quick brown fox jumps", if "fox" is our target word and we use a context window
+  of two, the context words would be "quick", "brown", "jumps", and "over" (if the
+  next word was "over"). As shown on the left side of Fig. 7.9, the CBOW model
+  takes the embedding vectors for these context words, averages them to create a
+  single context vector, and then uses this vector to predict the target word,
+  "fox". The term "bag-of-words" signifies that the order of the context words is
+  disregarded; their influence is combined through averaging. During training, the
+  model's prediction is compared to the actual target word. The resulting error is
+  then backpropagated to adjust the embedding vectors of the context words,
+  nudging them to be better predictors of that specific target.
+  
+  The Skip-gram model, depicted on the right of Fig. 7.9, reverses this logic.
+  Instead of predicting the center from the context, it uses a single input word
+  to predict its surrounding context words. Given the input word "fox", the model
+  attempts to predict "quick", "brown", "jumps", and "over". For each word in the
+  training corpus, the Skip-gram model creates multiple training examples: the
+  input word is paired with each of its context words. This means that for a
+  single instance of "fox", the model learns to predict its neighbors, effectively
+  generating more training data from the same amount of text compared to CBOW.
+  This makes Skip-gram slower to train but allows it to capture the semantics of
+  the input word more precisely, often resulting in higher-quality embeddings,
+  especially for infrequent words.
+  
+  A naive implementation of either architecture would be computationally
+  prohibitive. The final layer of the network must produce a probability
+  distribution over the entire vocabulary, which can contain hundreds of thousands
+  of words. Calculating the softmax function over this large vector is a major
+  bottleneck. To make training feasible, Word2Vec introduces two key
+  optimizations:
+  
+  - **Hierarchical Softmax:** This technique replaces the flat softmax layer with
+    a binary tree structure, typically a Huffman tree built from word frequencies.
+    Predicting a word becomes a sequence of binary decisions navigating the tree
+    from the root to the target word's leaf node. This reduces the computational
+    complexity from being proportional to the vocabulary size, `$O(|V|)$`, to
+    being proportional to the logarithm of the vocabulary size, `$O(\log_2|V|)`.
+  
+  - **Negative Sampling:** This is the more common and often more effective
+    approach. Instead of updating weights for the entire vocabulary, the model
+    updates only a small sample. For a given training instance (e.g., target:
+    `fox`, context: `jumps`), the model is trained to increase the probability of
+    this "positive" pair. Concurrently, it randomly selects a few "negative"
+    samples—words that do not appear in the context (e.g., `car`, `ocean`,
+    `music`). The model is then trained to decrease the probability of these
+    negative pairs. This transforms a complex multi-class classification problem
+    into a much simpler set of binary classification tasks, dramatically speeding
+    up training.[^1]
+  
+  In practice, a choice must be made between the two architectures. CBOW is faster
+  and tends to perform better for frequent words, as the averaging of context
+  vectors acts as a form of regularization. Skip-gram, while slower, excels at
+  learning representations for rare words and is generally considered to produce
+  more robust and higher-quality embeddings overall, making it a popular choice
+  for many applications. Through these architectures and optimizations, Word2Vec
+  provided the first truly practical method for training high-quality, dense word
+  embeddings on massive text corpora.
+  
+  While the local context window approach of Word2Vec is powerful, another
+  influential model called **GloVe**, short for *Global Vectors for Word
+  Representation*, argues that such predictive models do not efficiently leverage
+  the vast statistical information available in the corpus. Instead of learning
+  from individual, local context windows as they appear, GloVe is a *count-based*
+  model that first aggregates global co-occurrence statistics from the entire
+  corpus and then learns vectors that best explain these statistics.
+  
+  The process begins by constructing a large co-occurrence matrix, $X$, from the
+  corpus. An entry in this matrix, $X_{ij}$, represents the number of times word
+  $j$ appears in the context of word $i$. This matrix is a direct, global
+  statistical summary of the corpus. The core insight behind GloVe is that the
+  *ratios* of co-occurrence probabilities can encode meaning more effectively than
+  the raw probabilities themselves. For instance, consider the words *ice* and
+  *steam*.
+  
+  - A probe word like *solid* is semantically related to *ice* but not *steam*. We
+    would expect the ratio
+    $P(\text{solid} | \text{ice}) / P(\text{solid} | \text{steam})$ to be very
+    large.
+  - A probe word like *gas* is related to *steam* but not *ice*. We would expect
+    the ratio $P(\text{gas} | \text{ice}) / P(\text{gas} | \text{steam})$ to be
+    very small.
+  - A word like *water*, which is related to both, should have a ratio close to
+    1.0.
+  - An unrelated word like *fashion* should also have a ratio close to 1.0.
+  
+  GloVe is designed to learn word vectors that capture these ratios as linear
+  relationships in the vector space. The model aims to learn two vectors for each
+  word: a word vector $w_i$ and a separate context vector $\tilde{w}_j$. The
+  training objective is to learn these vectors such that their dot product models
+  the logarithm of their co-occurrence count. More formally, the model is trained
+  on the following objective:
+  
+  $w_i^T \tilde{w}_j + b_i + \tilde{b}_j = \log(X_{ij})$
+  
+  Here, $b_i$ and $\tilde{b}_j$ are bias terms for each word and context word,
+  respectively. The model is trained to minimize a weighted least-squares cost
+  function that measures the difference between the two sides of this equation for
+  all word pairs in the vocabulary.
+  
+  $J = \sum_{i,j=1}^{V} f(X_{ij}) (w_i^T \tilde{w}_j + b_i + \tilde{b}_j - \log(X_{ij}))^2$
+  
+  The weighting function, $f(X_{ij})$, is crucial. It serves two purposes: it
+  prevents the model from being dominated by extremely frequent co-occurrences
+  (e.g., 'the' appearing with 'is'), which provide little semantic information,
+  and it gives zero weight to pairs that never co-occur ($X_{ij}=0$), making the
+  computation tractable.
+  
+  In essence, the fundamental distinction between the two models is this:
+  
+  - **Word2Vec** is a *predictive* model. It iterates through the corpus and
+    learns by making local predictions (e.g., predicting a center word from its
+    context). It captures the global statistics *implicitly*.
+  - **GloVe** is a *count-based* model. It first pre-computes a global
+    co-occurrence matrix and then directly learns vectors that best explain this
+    explicit statistical information.
+  
+  This makes GloVe a hybrid method, combining the strengths of traditional
+  count-based matrix factorization methods (like Latent Semantic Analysis) with
+  the local context window methods of Word2Vec. In practice, both GloVe and
+  Word2Vec produce high-quality embeddings that excel at capturing semantic
+  regularities, and the final vector for each word is typically the sum of its
+  word and context vectors ($w_i + \tilde{w}_i$).
+  
+  One of the most remarkable and illustrative properties of dense word embeddings
+  is their ability to capture semantic relationships as consistent vector offsets.
+  This goes beyond simply placing similar words near each other; it means the
+  geometric arrangement of words in the vector space encodes analogies. This
+  allows us to use simple vector arithmetic to perform a kind of conceptual
+  algebra.
+  
+  The classic case study that demonstrates this power is the analogy: "man is to
+  king as woman is to queen." A well-trained word embedding model learns this
+  relationship not as a rule, but as a geometric configuration. We can express
+  this analogy through vector arithmetic:
+  
+  $\vec{v}_{\text{king}} - \vec{v}_{\text{man}} + \vec{v}_{\text{woman}} \approx \vec{v}_{\text{queen}}$
+  
+  When we perform this calculation, the word whose embedding is closest (typically
+  measured by cosine similarity) to the resulting vector is, indeed, *queen*. The
+  intuition behind this is that the difference vector,
+  $\vec{v}_{\text{king}} - \vec{v}_{\text{man}}$, can be thought of as capturing
+  the abstract concept of *royalty* or *monarchy*. By adding this "royalty vector"
+  to the vector for *woman*, we effectively navigate the semantic space to the
+  location representing a female monarch. The visual representation in **Fig.
+  7.11** illustrates this process, showing how starting at the 'king' vector,
+  subtracting the 'man' vector, and then adding the 'woman' vector lands us in the
+  immediate vicinity of the 'queen' vector.
+  
+  This property is not a special case; it generalizes to many other types of
+  relationships, showcasing the rich structure learned by these models. Examples
+  include:
+  
+  - **Country-Capital:**
+    $\vec{v}_{\text{Paris}} - \vec{v}_{\text{France}} + \vec{v}_{\text{Germany}}$
+    results in a vector very close to $\vec{v}_{\text{Berlin}}$.
+  - **Verb Tense:**
+    $\vec{v}_{\text{walking}} - \vec{v}_{\text{walk}} + \vec{v}_{\text{swam}}$
+    results in a vector close to $\vec{v}_{\text{swimming}}$.
+  - **Company-Product:**
+    $\vec{v}_{\text{Microsoft}} - \vec{v}_{\text{Windows}} + \vec{v}_{\text{Google}}$
+    points towards vectors for products like *Android* or *Search*.
+  
+  These analogy-solving capabilities provided early, compelling evidence that
+  distributional models do more than just count co-occurrences. They learn a
+  high-dimensional semantic space where the directions and distances between words
+  are meaningful. This latent structure is what gives word embeddings their power
+  and makes them such a successful foundational component for more complex natural
+  language understanding tasks. The ability to capture relational meaning was a
+  significant leap beyond the capabilities of earlier sparse, knowledge-based
+  representations.
+  
+  Having explored how to represent the meaning of individual words, we now turn to
+  a fundamental question: how do these individual meanings combine to create the
+  meaning of phrases and sentences? We rarely communicate in isolated words; we
+  combine them into complex structures to express complex ideas. This is the
+  central concern of *compositional semantics*.
+  
+  The guiding principle in this field is the **Principle of Compositionality**, a
+  concept most often attributed to the German logician and philosopher Gottlob
+  Frege.[^1] The principle states that the meaning of a complex expression is a
+  function of the meanings of its parts and of the syntactic rules by which they
+  are combined. This idea is powerfully intuitive. We understand the sentence "The
+  student read the book" because we know the meanings of *student*, *read*, and
+  *book*, and we understand how the English grammatical structure assigns roles to
+  each of them. If we change the structure to "The book read the student," the
+  sentence becomes nonsensical, even though the component words and their lexical
+  meanings remain identical. The rules of combination are just as important as the
+  meanings of the parts.
+  
+  We can formalize this principle abstractly. If an expression $E$ is composed of
+  two parts, $\alpha$ and $\beta$, its meaning $M(E)$ can be expressed as a
+  function of the meanings of its parts:
+  
+  $M(E) = f_{\text{compose}}(M(\alpha), M(\beta))$
+  
+  Here, $f_{\text{compose}}$ is the composition function that is guided by the
+  syntactic structure combining $\alpha$ and $\beta$. The central challenge for
+  computational semantics is defining this function. Now that we have powerful
+  vector representations for lexical meaning (i.e., word embeddings), the question
+  becomes: what is the right $f_{\text{compose}}$ for combining word vectors into
+  phrase or sentence vectors? How do we computationally model the way meaning is
+  constructed? The following sections will explore several approaches to this very
+  problem.
+  
+  Having established a method for representing individual word meanings as
+  vectors, we now turn to the challenge of compositional semantics. How do we
+  combine these word vectors to create meaningful representations for multi-word
+  expressions like phrases and sentences? Frege's principle suggests we need rules
+  for combining the meanings of the parts. The most direct computational approach
+  is to apply simple vector arithmetic.
+  
+  Two common baseline methods for composing a sequence of word vectors
+  $\vec{v}_{w_1}, \vec{v}_{w_2}, \dots, \vec{v}_{w_n}$ into a single phrase vector
+  $\vec{v}_{\text{phrase}}$ are element-wise addition and averaging.
+  
+  - **Vector Sum:** The phrase vector is the sum of its constituent word vectors.
+    \$$
+    \vec{v}_{\text{phrase}} = \sum_{i=1}^{n} \vec{v}_{w_i}
+    $\$
+  - **Vector Average:** The phrase vector is the average of its constituent word
+    vectors.
+    \$$
+    \vec{v}_{\text{phrase}} = \frac{1}{n} \sum_{i=1}^{n} \vec{v}_{w_i}
+    $\$
+  
+  These methods are intuitive and computationally inexpensive. For example, as
+  illustrated in **Fig. 7.13**, we could compute a vector for the noun phrase "The
+  cat" by averaging the vectors for *The* and *cat*. This new phrase vector could
+  then be combined, perhaps again through averaging, with the vector for *sat* to
+  produce a single vector representing the entire sentence. This technique
+  effectively creates a "bag of vectors," where the final representation is an
+  amalgamation of all word meanings in the phrase, disregarding their structural
+  relationships.
+  
+  Despite their simplicity, these additive and averaging methods have severe
+  limitations. Most critically, they are *insensitive to word order*. Because
+  vector addition is commutative, the phrase "the student taught the professor"
+  would yield the exact same vector representation as "the professor taught the
+  student," even though their meanings are entirely different. The compositional
+  operation fails to capture the crucial syntactic structure that assigns the
+  roles of teacher and learner. Similarly, the sentence "The cat is not on the
+  mat" would likely produce a vector very similar to "The cat is on the mat," as
+  the vector for *not* is simply averaged in with the others, failing to properly
+  negate the proposition. These simple operations cannot adequately model the
+  complex semantic impact of syntax, function words, and logical operators. While
+  useful for tasks where word order is less critical (like document
+  classification), they are insufficient for capturing the nuanced meaning
+  required for true sentence understanding, motivating the need for more
+  structured approaches.
+  
+  While simple compositional techniques like vector addition can capture the
+  general topic of a phrase, they are fundamentally limited. The meaning of a
+  sentence like "The cat chased the mouse" is not merely the sum of its parts; it
+  is a structured event with distinct participants playing specific roles.
+  Averaging the vectors for `cat`, `chased`, and `mouse` would give us a
+  representation in the semantic neighborhood of felines, rodents, and pursuit,
+  but it critically fails to preserve the information of *who* did the chasing and
+  *who* was chased. To capture this vital relational information, we need a more
+  sophisticated model of sentence-level semantics.
+  
+  This brings us to the task of **Semantic Role Labeling (SRL)**, a process that
+  aims to uncover the underlying predicate-argument structure of a sentence. Often
+  described as determining "who did what to whom, where, when, and how," SRL
+  provides a shallow semantic representation of events. The core idea is to
+  identify the main predicate of a sentence—typically a verb—and then identify and
+  label the phrases (arguments) that fill the semantic roles associated with that
+  predicate. This moves beyond simple co-occurrence to model the explicit
+  relationships between participants in an event.
+  
+  Consider the sentence: *“The startup will launch its innovative new app in
+  Singapore next quarter.”* An SRL system would first identify the predicate,
+  which is the event-denoting word `launch`. It would then identify and label the
+  arguments associated with this predicate's frame of meaning:
+  
+  - **Agent (The doer):** *The startup*
+  - **Theme (The thing being acted upon):** *its innovative new app*
+  - **Location (Where the event happens):** *in Singapore*
+  - **Time (When the event happens):** *next quarter*
+  
+  By identifying these roles, SRL extracts a structured representation of the
+  sentence's meaning:
+  `LAUNCH(Agent: The startup, Theme: its innovative new app, Location: in Singapore, Time: next quarter)`.
+  This structured output is far more useful for downstream tasks like question
+  answering or information extraction than a single sentence vector.
+  
+  It is crucial to distinguish semantic roles from syntactic roles. Syntactic
+  parsing identifies grammatical functions like *subject* and *direct object*,
+  which are tied to the sentence's structure. Semantic roles, in contrast, are
+  tied to the underlying meaning. For example, consider these two sentences:
+  
+  1. \*\[The researcher\]_Subject_ published \_\[the paper\]_Object_.
+  2. \*\[The paper\]_Subject_ was published by \_\[the researcher\]_Object of
+     Preposition_.
+  
+  Syntactically, the subject of sentence (1) is "The researcher," while the
+  subject of sentence (2) is "The paper." However, in terms of meaning, "The
+  researcher" is the *Agent* (the one doing the publishing) in both sentences, and
+  "the paper" is the *Patient* or *Theme* (the thing being published). SRL
+  abstracts away from these syntactic variations to produce a consistent semantic
+  representation, capturing the fact that both sentences describe the very same
+  event. This ability to normalize meaning across different surface forms makes
+  SRL a powerful tool for computational language understanding. The next section
+  will explore the lexical resources that formally define these roles.
+  
+  To formalize the predicate-argument structure identified by Semantic Role
+  Labeling, we require a standardized inventory of roles. A system cannot simply
+  invent labels like 'doer' or 'thing being done' on the fly; it needs a
+  consistent lexicon to describe the part each constituent plays in the event. Two
+  major resources, PropBank and FrameNet, provide comprehensive frameworks for
+  defining and annotating these roles, albeit with different philosophical
+  approaches. **Fig. 7.15** provides a summary of several fundamental roles common
+  to these frameworks, offering a quick reference for the concepts discussed here.
+  
+  ______________________________________________________________________
+  
+  The Proposition Bank, or PropBank, takes a verb-centric approach. It develops a
+  specific set of roles for each individual verb, meaning the definition of a role
+  is tied to the verb that introduces it. However, PropBank maintains consistency
+  by defining general, numbered "arguments" whose semantic meaning is broadly
+  similar across verbs. The core roles are:
+  
+  - **Arg0:** Typically the Agent or 'doer' of the action. This corresponds to the
+    *Proto-Agent*, the entity that instigates or controls the event.
+  - **Arg1:** Typically the Patient or 'theme' of the action. This corresponds to
+    the *Proto-Patient*, the entity that is affected by the event or undergoes a
+    change of state.
+  - **Arg2, Arg3, ...:** These higher-numbered arguments represent other essential
+    participants whose meanings are highly specific to the verb. For the verb
+    *give*, Arg2 would be the recipient. For *move*, it might be the destination.
+  
+  Consider the verb *to eat*:
+  
+  > \[The students\]**Arg0** ate \[the pizza\]**Arg1** \[in the
+  > cafeteria\]**ArgM-LOC**.
+  
+  Here, *the students* are the eaters (Arg0) and *the pizza* is the thing eaten
+  (Arg1). PropBank also includes a set of general-purpose modifier arguments,
+  prefixed with **ArgM**, that capture circumstantial information not essential to
+  the core verb meaning. Common modifiers include **ArgM-LOC** for location,
+  **ArgM-TMP** for time, **ArgM-MNR** for manner, and **ArgM-DIR** for direction.
+  These modifiers can be attached to nearly any verb's argument structure.
+  
+  An alternative, more semantically-driven resource is FrameNet. Instead of
+  focusing on individual verbs, FrameNet is organized around **semantic frames**,
+  which are schematic representations of situations or events (e.g., a commercial
+  transaction, a journey, a conflict). Each frame defines a set of **Frame
+  Elements (FEs)**, which are the semantic roles specific to that conceptual
+  scenario. A key insight of FrameNet is that multiple verbs, nouns, or adjectives
+  can evoke the same frame.
+  
+  For example, the `COMMERCE_BUY` frame describes a situation involving a
+  commercial transaction. Its core Frame Elements include the `Buyer`, the
+  `Seller`, the `Goods`, and the `Money`. This single frame can be evoked by
+  various words:
+  
+  1. \[The customer\]**Buyer** **bought** \[a new laptop\]**Goods** from \[the
+     store\]**Seller**.
+  2. \[The store\]**Seller** **sold** \[a new laptop\]**Goods** to \[the
+     customer\]**Buyer**.
+  3. The **price** of \[the new laptop\]**Goods** was \[\$1200\]**Money**.
+  
+  Notice how FrameNet captures the same underlying semantic event even when the
+  syntactic structure and triggering words change dramatically. In the first two
+  sentences, the `Buyer` and `Seller` switch between being the subject and an
+  object of a prepositional phrase, but their semantic roles within the
+  transaction frame remain constant. This abstraction from syntax to a deeper
+  semantic level is FrameNet's primary strength.
+  
+  In practice, PropBank's verb-centric, generalized roles provide broader coverage
+  and are often simpler to annotate, making it a highly practical resource for
+  building robust SRL systems. FrameNet offers a more fine-grained and
+  semantically nuanced representation, which can be more powerful for deep
+  understanding tasks, but its complexity means it may not cover as wide a range
+  of linguistic phenomena. By converting a sentence from a linear string of words
+  into a structured representation like this—a predicate with its labeled
+  arguments—we equip a machine to begin reasoning about the events described in
+  the text, a crucial step towards true language understanding.
+  
+  To see the power of Semantic Role Labeling (SRL) in action, let's consider a
+  practical case study: building a system to automatically extract information
+  about corporate acquisitions from financial news. The goal is to move beyond
+  simple keyword searches and create a structured database of these events that
+  can answer sophisticated questions.
+  
+  Imagine our system processes the following sentence from a news wire:
+  
+  > *Innovate Corp, the cloud-computing giant, finalized its acquisition of the AI
+  > startup Synapse Dynamics for \$2.5 billion on Tuesday.*
+  
+  A traditional information retrieval system might identify keywords like
+  'Innovate Corp', 'acquisition', and 'Synapse Dynamics'. However, it would
+  struggle to understand the precise relationship between them. Was Innovate Corp
+  acquired? Did the deal fail? How much was it worth?
+  
+  This is where an SRL system provides a much deeper level of understanding. By
+  focusing on the predicate—the action word `finalize` (or its underlying verb
+  `acquire`)—the system identifies and labels the semantic roles of the
+  surrounding phrases. The output would look something like this:
+  
+  - **Predicate:** `finalize` (within the event frame of *Acquisition*)
+  - **Agent** (the entity performing the action):
+    `Innovate Corp, the cloud-computing giant`
+  - **Theme** (the entity being acted upon):
+    `its acquisition of the AI startup Synapse Dynamics`
+  - **ARG-Value** (the price or value): `for $2.5 billion`
+  - **ARG-Temporal** (the time of the action): `on Tuesday`
+  
+  This structured output is far more valuable than a list of keywords. The
+  linguistic analysis can be directly mapped into a structured format, like a
+  database record or a JSON object, that represents the core event:
+  
+  ```json
+  {
+    "event_type": "ACQUISITION",
+    "acquirer": "Innovate Corp",
+    "acquired_entity": "Synapse Dynamics",
+    "value": 2500000000,
+    "currency": "USD",
+    "date": "Tuesday"
+  }
+  ```
+  
+  By processing thousands of such articles, we transform a chaotic stream of
+  unstructured text into a structured knowledge base. This enables an advanced
+  question-answering capability that would be impossible with keyword matching
+  alone. We can now ask precise questions and get reliable answers:
+  
+  - "Who acquired Synapse Dynamics?"
+    - The system queries for the `acquirer` field where `acquired_entity` is
+      'Synapse Dynamics'.
+  - "List all acquisitions with a value greater than \$1 billion."
+    - The system filters all records where the `value` field is greater than
+      1,000,000,000.
+  - "What companies did Innovate Corp acquire?"
+    - The system retrieves all `acquired_entity` values from records where
+      `acquirer` is 'Innovate Corp'.
+  
+  Crucially, SRL distinguishes roles. If another article stated, "Synapse Dynamics
+  rejected an acquisition offer from Innovate Corp," the system would correctly
+  identify 'Innovate Corp' as the Agent of the 'offer' but would not log a
+  completed acquisition. This case study demonstrates how SRL serves as a critical
+  bridge from raw text to actionable knowledge, enabling applications to
+  understand not just *what* a text is about, but *who did what to whom, when, and
+  for how much*.
+  
+  This chapter has navigated the fundamental challenge of representing meaning
+  computationally, charting a course from individual words to the structure of
+  simple sentences. We contrasted two major paradigms: the symbolic,
+  knowledge-based approach of lexical resources like *WordNet*, and the
+  statistical, data-driven approach of *distributional semantics*. The shift from
+  meticulously handcrafted semantic networks to learning dense vector
+  representations like Word2Vec and GloVe directly from text marks a pivotal
+  development in computational linguistics, allowing models to capture subtle
+  semantic relationships from raw data.
+  
+  However, these representations are not an end goal. Whether we are using word
+  embeddings to measure semantic similarity or Semantic Role Labeling to identify
+  "who did what to whom," we are building foundational components. A robust model
+  of semantics is the bedrock upon which more sophisticated language understanding
+  is built. The ability to analyze discourse, translate between languages, or
+  extract structured information—all topics we will soon explore—depends
+  critically on the techniques for representing meaning that we have established
+  in this chapter.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+  
+  [^1]: While the principle is widely known as "Frege's Principle," its explicit
+  formulation in his work is a subject of scholarly debate. Regardless of
+  attribution, it remains the foundational assumption of most formal and
+  computational semantics.
+hash: 5aca89d64dcc46b93e990c22e322eb7983bd26d4a754d775b4176350ae8f456f
+response:
+  A simple, clean line drawing depicting the act of semantic analysis from a
+  slightly angled overhead perspective. On a plain surface rests a piece of paper
+  with a simple, clearly written sentence. A person's hands are carefully placing
+  small, distinct labels above key phrases in the sentence. One label, reading
+  'AGENT', is being positioned over the subject of the sentence, while another
+  label, perhaps 'THEME' or 'PATIENT', is already in place over the object. The
+  composition should feel focused and deliberate, highlighting the human act of
+  deconstructing a sentence to reveal its underlying structure of meaning.
+duration: 20660 ms
+usage_stats:
+  {
+    "candidates_token_count": 119,
+    "prompt_token_count": 11073,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 11073
+      }
+    ],
+    "thoughts_token_count": 1687,
+    "total_token_count": 12879
+  }
+...

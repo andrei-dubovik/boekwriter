@@ -1,0 +1,38 @@
+{model: str, query: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-flash-image-preview
+query: image
+prompt:
+  A clean, minimalist illustration of a person at a long workbench, carefully
+  organizing a collection of small, tangible objects. The objects are simple
+  wooden blocks, each with a single word etched onto its surface (e.g., 'book',
+  'watch', 'quick', 'over'). The person is in the process of pasting a small,
+  handwritten label onto each block. Several stacks of pre-written labels are
+  visible on the bench, with the top labels clearly reading 'NOUN', 'VERB',
+  'ADJECTIVE', and so on. The focus of the image is on the person's hands—one
+  holding a block with an ambiguous word like 'watch', the other hovering with a
+  'NOUN' label, capturing a moment of thoughtful decision-making before the final
+  classification. The style should be simple line art with a limited, muted color
+  palette, emphasizing the quiet, methodical act of sorting and categorizing.
+hash: dcfc30b0e6b2db8d19889df3c7e4c1c688028f62c4a5afd79460208c50415da6
+response: image-5.png
+duration: 6121 ms
+usage_stats:
+  {
+    "candidates_token_count": 1309,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 196,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 196
+      }
+    ],
+    "total_token_count": 1505
+  }
+...

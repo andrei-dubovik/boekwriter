@@ -1,0 +1,37 @@
+{model: str, query: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-flash-image-preview
+query: image
+prompt:
+  Create a simple, clean-lined illustration of a large corkboard. Pinned to the
+  board are various pieces of information: a few photographs of different people,
+  several small handwritten notes, and excerpts of typed text. The central focus
+  is the network of colored yarn or string stretched taut between the pins,
+  connecting these disparate items. One prominent thread, for example, connects a
+  photo of a person to a handwritten note, and then connects that note to a
+  specific word like "she" or "him" that has been circled within one of the text
+  excerpts. The overall impression should be of someone piecing together a story
+  or an identity by linking scattered clues, emphasizing the web of connections
+  over the details of the individual items.
+hash: 68e339a27d2785e22ed1501125e2b98a0dd5597199dec40b22ce7cb73548387e
+response: image-8.png
+duration: 5828 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 156,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 156
+      }
+    ],
+    "total_token_count": 1446
+  }
+...

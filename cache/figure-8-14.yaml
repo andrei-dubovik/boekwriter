@@ -1,0 +1,106 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To conclude, the three pillars of this chapter—discourse analysis, coreference
+  resolution, and dialogue modeling—are not isolated fields but are fundamentally
+  interconnected. Understanding language requires moving beyond the analysis of
+  single sentences. Discourse analysis provides the theoretical framework for
+  understanding how multiple sentences combine to form a *coherent* and
+  *structured* text, explaining the logical and rhetorical links between
+  utterances.
+  
+  Within this broader structure, coreference resolution serves as a critical
+  enabling task. It provides the mechanism for tracking entities—people, places,
+  and concepts—as they are mentioned and re-mentioned throughout a text or
+  conversation. Without it, a system cannot connect "the scientist" to a later
+  mention of "she."
+  
+  Ultimately, both of these concepts are prerequisites for building effective
+  dialogue systems. A conversational agent relies on an implicit understanding of
+  discourse structure to generate relevant responses and uses coreference
+  resolution to maintain context across turns. As visually summarized in Fig.
+  8.14, these foundational components are what elevate a system from a simple
+  command-processor to a truly conversational partner.
+  
+  This fragment refers to Fig. 8.14. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A conceptual diagram summarizing the relationships between the chapter's three
+  core topics. Three main nodes will be labeled 'Discourse Analysis,' 'Coreference
+  Resolution,' and 'Dialogue Systems.' An arrow from Discourse Analysis will point
+  to Coreference Resolution, labeled 'is a key sub-task of.' Arrows from both
+  Discourse Analysis and Coreference Resolution will point to Dialogue Systems,
+  labeled with phrases like 'provides structure' and 'enables tracking,' to
+  illustrate how the first two concepts are foundational for building coherent and
+  context-aware conversational agents.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 01dd92a899901acf2cfbb30c9a17d3d4659abf9b321828636807961417086b4e
+response:
+  caption:
+    Fig. 8.14: A conceptual diagram illustrating the foundational role of Discourse
+    Analysis and Coreference Resolution in the development of Dialogue Systems.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <g>
+        <rect x="30" y="50" width="140" height="50" rx="5" fill="#eaf4ff" stroke="#333" stroke-width="1.5"/>
+        <text x="100" y="75" font-family="sans-serif" font-size="12px" text-anchor="middle" dominant-baseline="central">
+          <tspan x="100" dy="-0.6em">Discourse</tspan>
+          <tspan x="100" dy="1.2em">Analysis</tspan>
+        </text>
+      </g>
+      <g>
+        <rect x="230" y="50" width="140" height="50" rx="5" fill="#eaf4ff" stroke="#333" stroke-width="1.5"/>
+        <text x="300" y="75" font-family="sans-serif" font-size="12px" text-anchor="middle" dominant-baseline="central">
+          <tspan x="300" dy="-0.6em">Coreference</tspan>
+          <tspan x="300" dy="1.2em">Resolution</tspan>
+        </text>
+      </g>
+      <g>
+        <rect x="130" y="220" width="140" height="50" rx="5" fill="#eaf4ff" stroke="#333" stroke-width="1.5"/>
+        <text x="200" y="245" font-family="sans-serif" font-size="12px" text-anchor="middle" dominant-baseline="central">
+          <tspan x="200" dy="-0.6em">Dialogue</tspan>
+          <tspan x="200" dy="1.2em">Systems</tspan>
+        </text>
+      </g>
+      <g>
+        <line x1="170" y1="75" x2="222" y2="75" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <text x="196" y="65" font-family="sans-serif" font-size="10px" font-style="italic" text-anchor="middle">is a key sub-task of</text>
+      </g>
+      <g>
+        <line x1="105" y1="100" x2="188" y2="215" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <text x="130" y="155" font-family="sans-serif" font-size="10px" font-style="italic" text-anchor="middle" transform="rotate(-50 130 155)">provides structure</text>
+      </g>
+      <g>
+        <line x1="295" y1="100" x2="212" y2="215" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <text x="270" y="155" font-family="sans-serif" font-size="10px" font-style="italic" text-anchor="middle" transform="rotate(50 270 155)">enables tracking</text>
+      </g>
+    </svg>
+duration: 48834 ms
+usage_stats:
+  {
+    "candidates_token_count": 947,
+    "prompt_token_count": 446,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 446
+      }
+    ],
+    "thoughts_token_count": 5730,
+    "total_token_count": 7123
+  }
+...

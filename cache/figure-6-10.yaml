@@ -1,0 +1,111 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The output of a dependency parser is a *dependency graph* (or dependency tree),
+  a structure that represents the grammatical relationships within a sentence.
+  Unlike a constituency tree that groups words into phrases, a dependency graph
+  consists of directed, labeled arcs connecting individual words. In this graph,
+  words are the *nodes*, and the grammatical relationships are the *arcs*. Each
+  arc connects a *head* (the word that governs the relationship) to a *dependent*
+  (the word that modifies or is an argument of the head). By convention, the arrow
+  points from the head to the dependent.
+  
+  To make this concrete, let's analyze the sentence "She ate a green apple." The
+  dependency parse for this sentence is illustrated in Fig. 6.10. The structure is
+  rooted in the main verb of the sentence, *ate*. A special pseudo-node, `ROOT`,
+  is typically used to mark the head of the entire sentence, with an arc pointing
+  to this main verb. From *ate*, arcs extend to its arguments and modifiers.
+  
+  ______________________________________________________________________
+  
+  **Fig. 6.10** A dependency graph for the sentence "She ate a green apple".
+  
+  ______________________________________________________________________
+  
+  In the graph, we can observe the following key relationships:
+  
+  - An arc from `ate` to `She` is labeled `nsubj`, indicating that "She" is the
+    *nominal subject* of the verb "ate". This tells us who performed the action.
+  - An arc from `ate` to `apple` is labeled `dobj`, identifying "apple" as the
+    *direct object*. This tells us what was acted upon.
+  - The noun `apple` is itself a head. An arc from `apple` to `green` is labeled
+    `amod` (*adjectival modifier*), showing that "green" describes the apple.
+  - Similarly, an arc from `apple` to `a` is labeled `det` (*determiner*),
+    specifying the article associated with the noun.
+  
+  This representation explicitly captures the functional relationships between
+  words. The triplet `nsubj(ate, She)` and `dobj(ate, apple)` directly encodes the
+  core predicate-argument structure: *who did what*. This is a significant
+  advantage of dependency grammar, as it often makes extracting semantic
+  information more straightforward than navigating a complex phrase structure
+  tree. The labels for these grammatical relations typically come from a
+  standardized set, such as the one defined by the Universal Dependencies (UD)
+  project, which aims to create consistent annotation schemes across different
+  languages. This standardization is crucial for building robust, multilingual
+  parsing tools. The entire structure forms a directed, acyclic graph where each
+  word (except the root) has exactly one head, ensuring a coherent grammatical
+  analysis.
+  
+  This fragment refers to Fig. 6.10. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A dependency graph for a sample sentence like 'She ate a green apple'. The
+  diagram will show the words of the sentence with directed arrows (arcs) between
+  them. Each arc will be labeled with its grammatical relation type (e.g., an arc
+  from 'ate' to 'She' labeled 'nsubj', an arc from 'ate' to 'apple' labeled
+  'dobj', and an arc from 'apple' to 'green' labeled 'amod').
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: b3dfde93ddd495959137dbf5a80574254a1198d87320ebeca5ca07c8b2683f2d
+response:
+  caption:
+    A dependency graph for the sentence 'She ate a green apple', showing words
+    connected by labeled, directed arcs that represent grammatical relationships.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+      </defs>
+      <style>.word { font-family: sans-serif; font-size: 18px; text-anchor: middle; } .label { font-family: sans-serif; font-size: 14px; font-style: italic; text-anchor: middle; fill: #005588; } .arc { fill: none; stroke: #333; stroke-width: 1.5px; marker-end: url(#arrow); }</style>
+      <text x="140" y="50" class="word">ROOT</text>
+      <text x="80" y="220" class="word">She</text>
+      <text x="140" y="220" class="word">ate</text>
+      <text x="200" y="220" class="word">a</text>
+      <text x="260" y="220" class="word">green</text>
+      <text x="340" y="220" class="word">apple</text>
+      <path d="M140,65 V200" class="arc"/>
+      <text x="155" y="130" class="label">root</text>
+      <path d="M140,205 C120,170 100,170 80,205" class="arc"/>
+      <text x="110" y="170" class="label">nsubj</text>
+      <path d="M140,205 C200,120 280,120 340,205" class="arc"/>
+      <text x="240" y="125" class="label">dobj</text>
+      <path d="M340,205 C300,150 240,150 200,205" class="arc"/>
+      <text x="270" y="150" class="label">det</text>
+      <path d="M340,205 C310,175 290,175 260,205" class="arc"/>
+      <text x="300" y="175" class="label">amod</text>
+    </svg>
+duration: 56578 ms
+usage_stats:
+  {
+    "candidates_token_count": 701,
+    "prompt_token_count": 792,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 792
+      }
+    ],
+    "thoughts_token_count": 7061,
+    "total_token_count": 8554
+  }
+...

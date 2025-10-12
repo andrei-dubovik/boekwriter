@@ -1,0 +1,138 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To explain how texts achieve coherence, researchers have developed formal
+  frameworks to model their internal structure. One of the most influential is
+  **Rhetorical Structure Theory (RST)**, developed by William Mann and Sandra
+  Thompson. RST is not just a theory of discourse; it provides a detailed
+  analytical method for describing the relations between different parts of a
+  text. The core premise of RST is that a coherent text can be described by a
+  hierarchical tree structure, where every part of the text serves a specific
+  rhetorical purpose in relation to another part.
+  
+  RST analysis begins by breaking a text down into its minimal, non-overlapping
+  spans, called *Elementary Discourse Units* (EDUs). An EDU typically corresponds
+  to a single clause. These EDUs form the leaves of the RST tree. The magic
+  happens in how these leaves are connected. Adjacent spans of text—either
+  individual EDUs or larger, previously combined spans—are linked by **rhetorical
+  relations**. These relations describe the functional connection between them.
+  There are dozens of defined relations, each capturing a specific type of
+  connection. Some common examples include:
+  
+  - **Elaboration**: One span provides more detail, a definition, or an example
+    related to the other.
+  - **Cause / Result**: One span describes a situation that caused the situation
+    in the other.
+  - **Evidence**: One span provides information intended to increase the reader's
+    belief in the other.
+  - **Contrast**: The two spans present information that is seen as being in
+    contrast.
+  - **Justification**: One span provides a reason for an action or belief
+    presented in the other.
+  - **Background**: One span provides context or background information for the
+    other.
+  
+  A crucial aspect of RST is the asymmetry of most relations. Each relation
+  connects a *nucleus* and a *satellite*. The **nucleus** is the more central and
+  essential part of the text, while the **satellite** is supplementary, providing
+  supporting information. A simple test is to imagine deleting one of the spans;
+  if the text can still function without the satellite, but not without the
+  nucleus, the distinction is clear. For instance, in an *Evidence* relation, the
+  claim being made is the nucleus, and the information supporting it is the
+  satellite. While most relations are monosatellite, some, like *Contrast* or
+  *Sequence*, are multi-nuclear, connecting two or more spans of equal importance.
+  
+  These components combine recursively to form a complete tree structure that
+  spans the entire text. This process is illustrated in **Fig. 8.4**. At the
+  bottom of the diagram, we see the individual EDUs extracted from the paragraph.
+  Moving up the tree, pairs of spans are joined by a rhetorical relation. For
+  example, one EDU might act as the satellite in an *Elaboration* relation,
+  providing more detail for its neighboring nucleus. This newly formed, larger
+  span then acts as a single unit—perhaps as a nucleus in a *Cause* relation with
+  another span. This continues until the entire text is unified under a single
+  root node, representing the primary rhetorical purpose of the whole passage.
+  
+  A text is considered coherent under RST if such a comprehensive tree can be
+  constructed. The tree itself is an explicit model of the text’s coherence,
+  demonstrating precisely how each clause contributes to the overall message. The
+  automatic creation of these trees, known as RST parsing, is a complex but
+  valuable computational task. Models that can identify these deep rhetorical
+  structures can perform more sophisticated text understanding, enabling
+  applications like automated text summarization (by prioritizing the extraction
+  of key nuclei), more coherent text generation, and advanced argumentation
+  mining.
+  
+  This fragment refers to Fig. 8.4. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A tree diagram illustrating the Rhetorical Structure Theory (RST) analysis of a
+  short, multi-sentence paragraph. The diagram will show terminal nodes (leaves)
+  as elementary discourse units (clauses) and non-terminal nodes representing the
+  rhetorical relations (e.g., Elaboration, Contrast, Cause) that connect them.
+  Each relation will connect a 'nucleus' (the more central part of the text) and a
+  'satellite' (the part that modifies the nucleus), clearly labeling which is
+  which.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: d4065aa4c1ecf35d3faa8e084cba2e1cc0ebfc983583514e97287e110c580589
+response:
+  caption:
+    A diagram illustrating the hierarchical structure of a text according to
+    Rhetorical Structure Theory (RST), referred to as Fig. 8.4. The analysis breaks
+    the text into Elementary Discourse Units (EDUs) at the leaf nodes. These units
+    are recursively combined into larger spans through rhetorical relations like
+    'Elaboration', 'Cause', and 'Contrast'. Each relation connects a central Nucleus
+    (N) with a supplementary Satellite (S), or in the case of 'Contrast', multiple
+    Nuclei.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <style>.edu-text { font-family: Arial, sans-serif; font-size: 16px; text-anchor: middle; }.relation-text { font-family: Arial, sans-serif; font-size: 17px; font-weight: bold; text-anchor: middle; fill: #003366; }.ns-text { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; text-anchor: middle; fill: #444; }.tree-line { stroke: #333; stroke-width: 2; }</style>
+      </defs>
+      <line x1="125" y1="540" x2="125" y2="480" class="tree-line"/>
+      <line x1="325" y1="540" x2="325" y2="480" class="tree-line"/>
+      <line x1="525" y1="540" x2="525" y2="480" class="tree-line"/>
+      <line x1="675" y1="540" x2="675" y2="480" class="tree-line"/>
+      <line x1="125" y1="480" x2="325" y2="480" class="tree-line"/>
+      <line x1="225" y1="480" x2="225" y2="380" class="tree-line"/>
+      <text x="225" y="360" class="relation-text">Elaboration</text>
+      <text x="125" y="460" class="ns-text">N</text>
+      <text x="325" y="460" class="ns-text">S</text>
+      <line x1="525" y1="480" x2="675" y2="480" class="tree-line"/>
+      <line x1="600" y1="480" x2="600" y2="380" class="tree-line"/>
+      <text x="600" y="360" class="relation-text">Cause</text>
+      <text x="525" y="460" class="ns-text">N</text>
+      <text x="675" y="460" class="ns-text">S</text>
+      <line x1="225" y1="380" x2="600" y2="380" class="tree-line"/>
+      <line x1="412.5" y1="380" x2="412.5" y2="280" class="tree-line"/>
+      <text x="412.5" y="260" class="relation-text">Contrast</text>
+      <text x="225" y="398" class="ns-text">N</text>
+      <text x="600" y="398" class="ns-text">N</text>
+      <text x="125" y="560" class="edu-text">[1] I love sunny days.</text>
+      <text x="325" y="560" class="edu-text">[2] They make me happy.</text>
+      <text x="525" y="560" class="edu-text">[3] However, I stay inside.</text>
+      <text x="675" y="560" class="edu-text">[4] I get sunburned easily.</text>
+    </svg>
+duration: 57121 ms
+usage_stats:
+  {
+    "candidates_token_count": 1017,
+    "prompt_token_count": 993,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 993
+      }
+    ],
+    "thoughts_token_count": 6942,
+    "total_token_count": 8952
+  }
+...
