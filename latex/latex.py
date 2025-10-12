@@ -167,8 +167,13 @@ def md2tex(obj):
                 formula = formula.replace('\n', ' ')
                 formula = normalize_quotes(formula, 'formula')
                 formula = '$' + formula + '$'
-                if len(obj.parent.children) == 1:  # display formula
-                    formula = '$' + formula + '$'
+                parent = obj.parent
+                while parent.type != 'inline':  # skip over emphasis, if any
+                    parent = parent.parent
+                if len(parent.children) == 1:  # display formula
+                    parent3 = parent.parent.parent
+                    if not (parent3.type == 'list_item' and len(parent3.children) == 1):
+                        formula = '$' + formula + '$'
                 return '\0' + formula + '\0'
             case SyntaxTreeNode(type='math_block'):
                 formula = obj.content.strip()
