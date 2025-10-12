@@ -238,6 +238,8 @@ def normalize_span(match):
             text = normalize_quotes(text, 'text')
             # Unescape erroneously escaped asterisks (a known issue with the caching pipeline)
             text = re.sub(r'(?<!\\)\\\*', r'*', text)
+            # Escape unmatched $ before numbers (a likely currency symbol)
+            text = re.sub(r'\$(?=[0-9][^$]*$)', r'\\$', text, flags=re.M)
             return text
 
 
