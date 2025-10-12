@@ -240,6 +240,7 @@ def normalize_quotes(text, context):
         case 'text':
             text = re.sub("(?<![a-zA-Z}])'(.*?)'", "`\\1'", text)  # single quotes
             text = re.sub('"(.*?)"', "`\\1'", text)  # double quotes
+            text = re.sub('“(.*?)”', r"`\1'", text)  # double Unicode quotes
         case 'formula':
             text = re.sub("(?<![a-zA-Z}])'([^`]+?)'", r"\\ltq{}\1\\rtq{}", text)  # single quotes
             text = re.sub("`([^']+?)`", r"\\ltq{}\1\\rtq{}", text)  # backquotes
@@ -265,6 +266,8 @@ class TestQuoteNormalization(unittest.TestCase):
              "uncertainty doesn't come"),
             (r"the number of \emph{a}'s to ensure an equal number of \emph{b}'s",
              r"the number of \emph{a}'s to ensure an equal number of \emph{b}'s"),
+            (r'query for \emph{“study computational linguistics”} to match',
+             r"query for \emph{`study computational linguistics'} to match"),
         ],
         'formula': [
             (r"vector('king') - vector('man')",
