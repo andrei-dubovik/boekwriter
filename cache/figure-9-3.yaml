@@ -1,0 +1,121 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  At its heart, translation is a process of mapping meaning from a source language
+  to a target language. If language were a simple code where each word had a
+  single, unambiguous counterpart, this would be a trivial task. However, the
+  reality is far more complex. The fundamental difficulty of machine translation
+  stems from the inherent ambiguity of human language, which manifests in several
+  critical ways.
+  
+  The most straightforward challenge is *lexical ambiguity*, where a single word
+  can have multiple meanings. Consider the English word "bat." As shown in Fig.
+  9.3, the sentence "The bat flew over the field" presents two distinct
+  interpretations. In Spanish, these meanings require entirely different words:
+  *murciélago* for the flying mammal and *bate* for the sporting equipment.
+  Without sufficient context, an MT system cannot know which translation is
+  correct. Similarly, words like "bank" (a financial institution or a river's
+  edge) or "light" (not heavy or a form of energy) present the same problem. The
+  system must learn to disambiguate based on the surrounding words.
+  
+  Equally challenging is *structural ambiguity*, where the grammatical structure
+  of a sentence allows for multiple interpretations. The classic example is "I saw
+  the man with the telescope." This sentence could mean:
+  
+  1. I used a telescope to see the man.
+  2. I saw a man who was holding a telescope.
+  
+  A human speaker often resolves this ambiguity unconsciously, but an MT system
+  must make an explicit choice. This is crucial because the two interpretations
+  might require vastly different grammatical constructions in the target language.
+  
+  Finally, languages fundamentally differ in their syntactic structure, such as
+  word order. English follows a Subject-Verb-Object (SVO) order ("She reads the
+  book"), while languages like Japanese use Subject-Object-Verb (SOV) and Irish
+  uses Verb-Subject-Object (VSO). These differences require more than a simple
+  reordering of words; they demand a deep analysis of the sentence's grammatical
+  structure. These challenges demonstrate that translation is not merely a process
+  of substitution but a complex task of interpretation and generation.
+  
+  This fragment refers to Fig. 9.3. The figure in question is a "Illustration" and
+  its description is as follows:
+  
+  An illustration demonstrating lexical ambiguity. It will show a simple English
+  sentence like 'The bat flew over the field.' and present two distinct visual
+  interpretations and corresponding target-language translations: one for a flying
+  mammal and another for a piece of sporting equipment. This will make the
+  challenge of disambiguation concrete for the reader.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 640369e5fa4775e6c107248614218aa834ed2d73bd9e0db9d3b08f47216bb0d5
+response:
+  caption:
+    Fig. 9.3: An illustration of lexical ambiguity using the English sentence 'The
+    bat flew over the field.' The word 'bat' can be interpreted as either a flying
+    mammal (murciélago in Spanish) or as sporting equipment (bate in Spanish),
+    leading to two different translations.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300" font-family="sans-serif">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+      </defs>
+    
+      <rect width="400" height="300" fill="white"/>
+    
+      <!-- Source Sentence -->
+      <g>
+        <rect x="50" y="15" width="300" height="40" rx="5" fill="#f0f8ff" stroke="#b0c4de"/>
+        <text x="200" y="40" font-size="14" text-anchor="middle" font-style="italic" fill="#333">"The bat flew over the field."</text>
+      </g>
+    
+      <!-- Arrows -->
+      <path d="M 180,55 Q 140,80 110,105" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+      <path d="M 220,55 Q 260,80 290,105" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+    
+      <!-- Left Panel: Animal -->
+      <g transform="translate(100, 0)">
+        <!-- Animal Bat Drawing -->
+        <path d="M -15,115 C -45,100 -50,140 -50,140 C -30,135 -5,145 -5,145 L 0,130 L 5,145 C 5,145 30,135 50,140 C 50,140 45,100 15,115 L 0,125 Z" fill="#4a4a4a"/>
+        <!-- Text Description -->
+        <text x="0" y="190" text-anchor="middle" font-size="13" font-weight="bold">Interpretation 1</text>
+        <text x="0" y="220" text-anchor="middle" font-size="13">Spanish: <tspan font-style="italic">El murci&#233;lago vol&#243;...</tspan></text>
+        <text x="0" y="240" text-anchor="middle" font-size="12" fill="#555">(bat = flying mammal)</text>
+      </g>
+    
+      <!-- Right Panel: Equipment -->
+      <g transform="translate(300, 0)">
+        <!-- Baseball Bat Drawing -->
+        <path d="M -20,150 L 20,110 L 28,118 L -12,158 Z" fill="#8B4513" stroke="#5a2d0c" stroke-width="1"/>
+        <ellipse cx="24" cy="114" rx="5" ry="2" fill="#8B4513" stroke="#5a2d0c" stroke-width="1" transform="rotate(45 24 114)"/>
+        <ellipse cx="-16" cy="154" rx="3" ry="1.5" fill="#6b3609" stroke="#5a2d0c" stroke-width="1" transform="rotate(45 -16 154)"/>
+        <!-- Text Description -->
+        <text x="0" y="190" text-anchor="middle" font-size="13" font-weight="bold">Interpretation 2</text>
+        <text x="0" y="220" text-anchor="middle" font-size="13">Spanish: <tspan font-style="italic">El bate vol&#243;...</tspan></text>
+        <text x="0" y="240" text-anchor="middle" font-size="12" fill="#555">(bat = sporting equipment)</text>
+      </g>
+    
+    </svg>
+duration: 31533 ms
+usage_stats:
+  {
+    "candidates_token_count": 1196,
+    "prompt_token_count": 619,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 619
+      }
+    ],
+    "thoughts_token_count": 2813,
+    "total_token_count": 4628
+  }
+...

@@ -1,0 +1,108 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To make these distinctions concrete, consider a typical hotel review, which we
+  can analyze at each of the three levels as illustrated in Fig. 11.5.
+  
+  > "The location was perfect, but the room was a bit noisy. Overall, a good
+  > stay."
+  
+  The insights derived depend entirely on the chosen granularity:
+  
+  1. **Document-Level:** At the coarsest level, a model considers the entire text
+     as a single document. Influenced by the phrase "a good stay," it would likely
+     assign a single, overarching *Positive* polarity to the review. This gives a
+     general summary but obscures important details.
+  
+  2. **Sentence-Level:** Here, the review is broken down into its constituent
+     sentences or clauses. A system would classify "The location was perfect" as
+     *Positive* and "the room was a bit noisy" as *Negative*. This reveals the
+     conflicting opinions present within the same review.
+  
+  3. **Aspect-Based Level:** This most fine-grained analysis links sentiment
+     directly to specific features, or *aspects*, of the hotel. The model
+     identifies that the sentiment towards the aspect *'location'* is *Positive*
+     ("perfect"), while the sentiment towards the aspect *'room'* is *Negative*
+     ("noisy"). This level provides the most specific and actionable feedback.
+  
+  This fragment refers to Fig. 11.5. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A diagram illustrating the three levels of sentiment analysis using a single
+  hotel review: "The location was perfect, but the room was a bit noisy. Overall,
+  a good stay." The diagram would visually parse this review in three ways: (1)
+  Document-level: A single 'Positive' label for the entire review. (2)
+  Sentence-level: A 'Positive' label for the first sentence and a 'Negative' label
+  for the second. (3) Aspect-based level: A 'Positive' sentiment linked to the
+  aspect 'location' and a 'Negative' sentiment linked to the aspect 'room'.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 63881a9ddcbbe8b7c10a589b0644500e1ff908b79c145778272896032d511e35
+response:
+  caption:
+    A diagram illustrating the three levels of sentiment analysis: document-level,
+    sentence-level, and aspect-based, using a hotel review as an example.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" font-family="sans-serif">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+        </marker>
+      </defs>
+      <text x="400" y="40" font-size="16" text-anchor="middle" font-style="italic">"The location was perfect, but the room was a bit noisy. Overall, a good stay."</text>
+      <line x1="50" y1="65" x2="750" y2="65" stroke="#ccc" stroke-width="1"/>
+      <g id="document-level">
+        <text x="400" y="100" font-size="18" font-weight="bold" text-anchor="middle">1. Document-Level</text>
+        <text x="400" y="125" font-size="14" text-anchor="middle" fill="#555">(Entire review)</text>
+        <line x1="400" y1="40" x2="400" y2="155" stroke="#aaa" stroke-width="1.5" marker-end="url(#arrowhead)" stroke-dasharray="4"/>
+        <rect x="340" y="165" width="120" height="40" rx="5" fill="#e6ffed" stroke="#79d793"/>
+        <text x="400" y="190" font-size="16" text-anchor="middle">Positive</text>
+      </g>
+      <g id="sentence-level">
+        <text x="400" y="250" font-size="18" font-weight="bold" text-anchor="middle">2. Sentence-Level</text>
+        <text x="400" y="275" font-size="14" text-anchor="middle" fill="#555">(By clause/sentence)</text>
+        <text x="225" y="315" font-size="15" text-anchor="middle">"The location was perfect..."</text>
+        <line x1="225" y1="325" x2="225" y2="355" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <rect x="165" y="365" width="120" height="40" rx="5" fill="#e6ffed" stroke="#79d793"/>
+        <text x="225" y="390" font-size="16" text-anchor="middle">Positive</text>
+        <text x="575" y="315" font-size="15" text-anchor="middle">"...the room was a bit noisy."</text>
+        <line x1="575" y1="325" x2="575" y2="355" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <rect x="515" y="365" width="120" height="40" rx="5" fill="#ffeeee" stroke="#ff7878"/>
+        <text x="575" y="390" font-size="16" text-anchor="middle">Negative</text>
+      </g>
+      <g id="aspect-level">
+        <text x="400" y="450" font-size="18" font-weight="bold" text-anchor="middle">3. Aspect-Based</text>
+        <text x="400" y="475" font-size="14" text-anchor="middle" fill="#555">(By specific feature)</text>
+        <rect x="100" y="500" width="275" height="70" rx="5" fill="#f0f8ff" stroke="#b0c4de"/>
+        <text x="237.5" y="525" text-anchor="middle" font-size="15">Aspect: <tspan font-weight="bold">'location'</tspan></text>
+        <line x1="150" y1="535" x2="325" y2="535" stroke="#b0c4de"/>
+        <text x="237.5" y="555" text-anchor="middle" font-size="15">Sentiment: <tspan font-weight="bold" fill="#28a745">Positive</tspan> ("perfect")</text>
+        <rect x="425" y="500" width="275" height="70" rx="5" fill="#f0f8ff" stroke="#b0c4de"/>
+        <text x="562.5" y="525" text-anchor="middle" font-size="15">Aspect: <tspan font-weight="bold">'room'</tspan></text>
+        <line x1="475" y1="535" x2="650" y2="535" stroke="#b0c4de"/>
+        <text x="562.5" y="555" text-anchor="middle" font-size="15">Sentiment: <tspan font-weight="bold" fill="#dc3545">Negative</tspan> ("noisy")</text>
+      </g>
+    </svg>
+duration: 62727 ms
+usage_stats:
+  {
+    "candidates_token_count": 1408,
+    "prompt_token_count": 519,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 519
+      }
+    ],
+    "thoughts_token_count": 7603,
+    "total_token_count": 9530
+  }
+...

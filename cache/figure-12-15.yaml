@@ -1,0 +1,172 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The immense scale of modern Large Language Models is not just a matter of
+  parameter counts; it entails staggering computational and environmental costs.
+  Training a model with billions or even trillions of parameters on terabytes of
+  text requires an enormous expenditure of energy and processing time. This
+  reality is often obscured by the models' seamless interfaces, but it has
+  profound real-world consequences that must be considered as part of their
+  ethical evaluation. The pursuit of state-of-the-art performance has often relied
+  on a "Red AI"[^1] approach, prioritizing accuracy and scale above computational
+  efficiency.
+  
+  The computational budget for training a major LLM is measured in
+  *petaflop/s-days*. One petaflop/s-day represents the total computation performed
+  by a system running at $10^{15}$ floating-point operations per second (FLOPS)
+  for a full 24 hours. As shown in **Fig. 12.15**, the resources required have
+  grown exponentially with model size. While an early large model like BERT
+  required a few dozen petaflop/s-days, a model on the scale of GPT-3 demands tens
+  of thousands. This compute is provided by massive data centers housing thousands
+  of specialized processors, like GPUs or TPUs, running continuously for weeks or
+  even months. This not only represents a significant financial investment but
+  also concentrates immense computational power in the hands of a few large
+  technology corporations.
+  
+  This intensive computation translates directly into a significant environmental
+  footprint. The primary driver is electricity consumption. The total energy used
+  to train a single large model can be equivalent to the annual electricity usage
+  of hundreds of households. The resulting carbon emissions depend heavily on the
+  energy mix powering the data center—whether it relies on carbon-intensive fossil
+  fuels or renewable sources. As **Fig. 12.15** illustrates, the estimated carbon
+  footprint can be substantial. For instance, one influential 2019 study estimated
+  that training a single large transformer model could emit over 626,000 pounds of
+  CO2 equivalent—roughly five times the lifetime emissions of an average American
+  car, including its manufacture. While newer data centers increasingly utilize
+  renewable energy, the sheer demand for power remains a critical sustainability
+  challenge for the field.
+  
+  The high cost of training has spurred a growing field of research into *Green
+  AI* and model efficiency. Techniques such as network pruning (removing redundant
+  parameters), quantization (using lower-precision numbers), and developing more
+  efficient architectures aim to reduce the computational requirements for both
+  training and inference. These efforts are critical for democratizing access to
+  powerful NLP technology and mitigating its environmental impact, ensuring that
+  the future of the field is not only more capable but also more sustainable.
+  
+  This fragment refers to Fig. 12.15. The figure in question is a "Chart" and its
+  description is as follows:
+  
+  A bar chart quantifying the environmental and computational cost of training
+  prominent LLMs. The x-axis will list different models (e.g., BERT, GPT-3,
+  Megatron-Turing NLG), while the y-axis will represent the estimated CO2
+  emissions (in tons) or the total petaflop/s-days required for training. This
+  provides a clear, impactful visualization of the scale of resources involved.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+  
+  [^1]: Schwartz, R., Dodge, J., Smith, N. A., & Etzioni, O. (2020). Green AI.
+  *Communications of the ACM*, 63(12), 54-63.
+hash: d44b7d5f5f3f4913e8af297dc92d26b8eaa4d0e98143a473413b9e3076ec9e60
+response:
+  caption:
+    Fig. 12.15: A bar chart illustrating the exponential growth in computational and
+    environmental costs for training large language models. Blue bars represent the
+    computational budget in petaflop/s-days (left axis, log scale), while red bars
+    show the estimated carbon footprint in tons of CO2 equivalent (right axis, log
+    scale). Data for models like BERT, GPT-3, and Megatron-Turing NLG are shown to
+    highlight the increasing scale.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" font-family="sans-serif" font-size="14">
+      <rect width="100%" height="100%" fill="white"/>
+      <g transform="translate(70, 40)">
+        <g class="y1-axis" fill="none" stroke="#333">
+          <path d="M0,0V500"/>
+          <text fill="#333" x="-250" y="-55" transform="rotate(-90)" text-anchor="middle" font-size="16">Petaflop/s-days (log scale)</text>
+          <g transform="translate(0, 439.79)" text-anchor="end">
+            <line x2="-5" stroke="#333"/>
+            <text fill="#333" x="-8" dy=".32em">100</text>
+          </g>
+          <g transform="translate(0, 319.59)" text-anchor="end">
+            <line x2="-5" stroke="#333"/>
+            <text fill="#333" x="-8" dy=".32em">1k</text>
+          </g>
+          <g transform="translate(0, 199.38)" text-anchor="end">
+            <line x2="-5" stroke="#333"/>
+            <text fill="#333" x="-8" dy=".32em">10k</text>
+          </g>
+          <g transform="translate(0, 79.18)" text-anchor="end">
+            <line x2="-5" stroke="#333"/>
+            <text fill="#333" x="-8" dy=".32em">100k</text>
+          </g>
+          <g transform="translate(0, 500)" text-anchor="end">
+            <line x2="-5" stroke="#333"/>
+            <text fill="#333" x="-8" dy=".32em">10</text>
+          </g>
+        </g>
+        <g class="y2-axis" transform="translate(660, 0)" fill="none" stroke="#333">
+          <path d="M0,0V500"/>
+          <text fill="#333" x="250" y="65" transform="rotate(90)" text-anchor="middle" font-size="16">CO2 Emissions (tons, log scale)</text>
+          <g transform="translate(0, 415.89)" text-anchor="start">
+            <line x2="5" stroke="#333"/>
+            <text fill="#333" x="8" dy=".32em">100</text>
+          </g>
+          <g transform="translate(0, 165.89)" text-anchor="start">
+            <line x2="5" stroke="#333"/>
+            <text fill="#333" x="8" dy=".32em">1k</text>
+          </g>
+          <g transform="translate(0, -84.11)" text-anchor="start">
+            <line x2="5" stroke="#333"/>
+            <text fill="#333" x="8" dy=".32em">10k</text>
+          </g>
+        </g>
+        <g class="grid" stroke="#ccc" stroke-opacity="0.5" stroke-dasharray="2,2">
+          <line x1="0" x2="660" y1="439.79" y2="439.79"/>
+          <line x1="0" x2="660" y1="319.59" y2="319.59"/>
+          <line x1="0" x2="660" y1="199.38" y2="199.38"/>
+          <line x1="0" x2="660" y1="79.18" y2="79.18"/>
+          <line x1="0" x2="660" y1="500" y2="500"/>
+        </g>
+        <g class="x-axis" transform="translate(0, 500)" fill="none" stroke="#333">
+          <path d="M0,0H660"/>
+          <g transform="translate(110, 0)" text-anchor="middle">
+            <line y2="5" stroke="#333"/>
+            <text fill="#333" y="20">BERT</text>
+          </g>
+          <g transform="translate(330, 0)" text-anchor="middle">
+            <line y2="5" stroke="#333"/>
+            <text fill="#333" y="20">GPT-3</text>
+          </g>
+          <g transform="translate(550, 0)" text-anchor="middle">
+            <line y2="5" stroke="#333"/>
+            <text fill="#333" y="20">Megatron-Turing NLG</text>
+          </g>
+        </g>
+        <g class="bars">
+          <rect x="57" y="422.06" width="80" height="77.94" fill="#4e79a7"/>
+          <rect x="142" y="349.56" width="80" height="150.44" fill="#e15759"/>
+          <rect x="277" y="63.88" width="80" height="436.12" fill="#4e79a7"/>
+          <rect x="362" y="199.56" width="80" height="300.44" fill="#e15759"/>
+          <rect x="497" y="6.2" width="80" height="493.8" fill="#4e79a7"/>
+          <rect x="582" y="96" width="80" height="404" fill="#e15759"/>
+        </g>
+        <g class="legend" transform="translate(190, 560)">
+          <rect x="0" y="-10" width="15" height="15" fill="#4e79a7"/>
+          <text x="20" y="4" fill="#333">Petaflop/s-days</text>
+          <rect x="180" y="-10" width="15" height="15" fill="#e15759"/>
+          <text x="200" y="4" fill="#333">CO2 Emissions (tons)</text>
+        </g>
+      </g>
+    </svg>
+duration: 41353 ms
+usage_stats:
+  {
+    "candidates_token_count": 1695,
+    "prompt_token_count": 826,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 826
+      }
+    ],
+    "thoughts_token_count": 3862,
+    "total_token_count": 6383
+  }
+...

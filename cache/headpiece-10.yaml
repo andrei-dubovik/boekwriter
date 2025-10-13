@@ -1,0 +1,720 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: headpiece
+prompt:
+  What follows is a text for a chapter from a book called "Introduction to
+  Computational Linguistics".
+  
+  <chapter>
+  
+  This chapter focuses on two critical tasks for managing and extracting value
+  from the vast amounts of text available today: *Information Retrieval* (IR) and
+  *Information Extraction* (IE). While both disciplines aim to satisfy a user's
+  need for information, their goals and outputs are fundamentally different.
+  
+  Information Retrieval is the task of finding a subset of documents from a large
+  collection that are relevant to a user's query. This is the classic problem
+  solved by search engines. When you search for a topic, an IR system sifts
+  through millions of documents to return a ranked list of the ones most likely to
+  contain the information you seek. The core output of an IR system is a set of
+  *relevant documents*.
+  
+  In contrast, Information Extraction operates at a more granular level. Its goal
+  is not to retrieve entire documents, but to automatically identify and pull out
+  specific, pre-defined types of information from within the text. Instead of
+  returning a list of articles, an IE system outputs *structured data*, such as
+  filling a database table with names, locations, or events mentioned in the text.
+  This chapter will delve into the foundational models for both of these essential
+  fields.
+  
+  To grasp the fundamental difference between these two fields, consider a
+  practical scenario. Imagine you are a financial analyst tasked with tracking the
+  performance of a fictional company, "InnovateCorp," during the fourth quarter of
+  2023\.
+  
+  Your first step might involve **Information Retrieval**. You would use a search
+  engine with a query like `InnovateCorp Q4 2023 earnings`. The IR system's goal
+  is to locate documents relevant to this query from a vast collection. It would
+  return a ranked list of results: perhaps the company's official press release, a
+  news article from a financial publication, and a detailed regulatory filing. The
+  system has successfully retrieved potentially relevant sources, but your work is
+  not done. You must now manually read through these documents to locate the
+  specific figures you need. In short, IR helps you find the right haystack.
+  
+  This is where **Information Extraction** provides a more direct solution. An IE
+  system is not concerned with returning entire documents. Instead, it is designed
+  to parse the text *within* those documents to identify and pull out specific,
+  predefined types of information. Its goal is to turn unstructured prose into
+  structured data. Given the same set of documents, an IE system would aim to
+  produce a structured output, like a table or a database entry:
+  
+  - **Company:** InnovateCorp
+  - **Fiscal Period:** Q4 2023
+  - **Revenue:** \$15.2 Billion
+  - **Net Income:** \$2.1 Billion
+  - **Earnings Per Share:** \$1.35
+  
+  In this contrast, the core distinction becomes clear. IR systems return
+  *documents* that are relevant to a query. IE systems return *facts* extracted
+  from text. IR helps you find *where* the information is, while IE aims to
+  deliver the information itself, structured and ready for analysis.
+  
+  At its core, the Information Retrieval (IR) problem is about satisfying a user's
+  *information need*. We can formally define the classic IR task using three main
+  components. First, there is a static **document collection**, which is a set of
+  texts $D = \{d_1, d_2, ..., d_N\}$ through which we want to search. Second, a
+  user provides a **query**, $q$, which is a representation of their information
+  need, typically expressed as a short string of keywords.
+  
+  The objective of an IR system is to process the query $q$ against the collection
+  $D$ and return a **ranked list of documents**. This list is ordered by
+  *relevance*, with the documents that the system predicts are most likely to
+  satisfy the user's need placed at the top. The high-level architecture of this
+  process, from query input to ranked output, is visualized in Fig. 10.3. The
+  central challenge, therefore, is to accurately and efficiently model this notion
+  of relevance. The upcoming sections will explore the fundamental data structures
+  and algorithms used to accomplish this.
+  
+  How can a system efficiently find documents containing a query term from a
+  collection of millions or even billions of texts? A brute-force approach, which
+  involves scanning every document for the term at query time, is computationally
+  infeasible. The solution to this problem is a data structure at the heart of
+  nearly all modern search engines: the **inverted index**. The core idea is
+  simple and elegant, analogous to the index at the back of a physical book.
+  Instead of mapping from a document to the terms it contains, an inverted index
+  maps from a term to the documents that contain it.
+  
+  An inverted index consists of two main components:
+  
+  - **Dictionary (or Vocabulary):** This is a list of all unique terms that appear
+    in the entire document collection. For fast lookups, the dictionary is
+    typically sorted or stored in a complex data structure like a B-tree.
+  - **Postings Lists:** For every term in the dictionary, there is an associated
+    list of pointers to the documents that contain that term. Each entry in this
+    list, called a *posting*, is typically a document identifier (DocID).
+  
+  When a single-word query, such as "computational", arrives, the system performs
+  a fast lookup in the dictionary to find the term. It then retrieves the
+  corresponding postings list, which immediately provides the set of all relevant
+  documents.
+  
+  The real power of the inverted index becomes apparent with multi-word queries,
+  such as `"computational" AND "linguistics"`. The system retrieves the postings
+  list for "computational" and the postings list for "linguistics". It then
+  computes the *intersection* of these two lists—the set of DocIDs that appear in
+  both. This operation is vastly more efficient than scanning every document for
+  both terms. The inverted index trades a slower, one-time indexing process for
+  extremely fast query resolution, making it the foundational component for modern
+  Information Retrieval.
+  
+  To illustrate how an inverted index is built, let's consider the small
+  collection of four documents shown in the top half of **Fig. 10.5**. The process
+  begins by collecting all unique, normalized tokens from the entire collection to
+  form the dictionary. For our example, this dictionary would include terms like
+  `company`, `earnings`, `growth`, `report`, `revenue`, and so on.
+  
+  Next, we iterate through each term in the dictionary and compile its *postings
+  list*—the list of all document IDs containing that term. To find the postings
+  for the term "revenue", we scan the collection and note that it appears in
+  Document 2 and Document 4. Therefore, its postings list is `[2, 4]`. This
+  process is repeated for every unique term.
+  
+  The complete inverted index is shown in the bottom half of **Fig. 10.5**. It
+  consists of the dictionary of terms, where each term points to its corresponding
+  postings list. Once built, this structure allows for extremely fast retrieval.
+  Finding documents that mention "revenue" is now a simple lookup operation, not
+  an expensive scan of every document.
+  
+  While an inverted index efficiently finds documents containing a query term, it
+  doesn't inherently rank them by relevance. To do this, we need a way to quantify
+  the thematic content of a document. The **vector space model (VSM)** provides an
+  elegant algebraic framework for this task by representing documents and queries
+  as numerical vectors in a high-dimensional space.
+  
+  In this model, each unique term in the entire document collection corresponds to
+  a dimension. A document is then represented as a vector, $\vec{d}$, where each
+  component of the vector reflects the importance of the corresponding term within
+  that document. For example, a document about corporate acquisitions would have
+  large vector components in the dimensions for terms like 'acquisition',
+  'merger', and 'shares'.
+  
+  The fundamental insight of the VSM is that proximity in this vector space
+  equates to thematic similarity. Documents whose vectors point in a similar
+  direction are considered semantically related. By also casting the user's query
+  as a vector, $\vec{q}$, we can transform relevance ranking into a geometric
+  problem: finding the document vectors that are closest to the query vector.
+  
+  To represent documents and queries as numerical vectors, we use a foundational
+  data structure called the **term-document matrix**. Conceptually, this is a
+  large table where each row corresponds to a unique term in the entire
+  collection's vocabulary, and each column corresponds to a single document. The
+  value in a cell at the intersection of a term *t* and a document *d* quantifies
+  the importance of that term within that document.
+  
+  In its most basic form, this value is simply the raw frequency of the term. For
+  a vocabulary of size $|V|$ and a collection of $|D|$ documents, we have a matrix
+  $M$ of size $|V| \times |D|$. The entry $M_{td}$ would be the count of term *t*
+  in document *d*. Consequently, each column of this matrix *is* the vector
+  representation for a specific document, existing in a $|V|$-dimensional space.
+  For instance, if 'algorithm' is the 50th term in our vocabulary and it appears 4
+  times in Document 12, the value at $M_{50,12}$ would be 4. While intuitive,
+  these raw counts are just a starting point; a more sophisticated weighting is
+  needed for an effective system.
+  
+  Not all terms in the term-document matrix carry equal weight. A word like "the"
+  might appear frequently in every document but provides little information about
+  a document's specific topic. Conversely, a technical term that appears many
+  times in one document but is absent from most others is likely a strong
+  indicator of its content. The **TF-IDF** (Term Frequency-Inverse Document
+  Frequency) weighting scheme is designed to formalize this intuition, assigning a
+  numerical score to each term that reflects its importance to a document within a
+  collection.
+  
+  TF-IDF is composed of two distinct parts:
+  
+  - **Term Frequency (TF):** This measures how often a term *t* appears in a
+    document *d*. A higher frequency implies greater importance within that
+    specific document. To prevent very frequent terms from overly dominating the
+    score, we often use a logarithmically scaled frequency. The formula is:
+    \$$ tf_{t,d} = \log(1 + f_{t,d}) $$
+    where $f\_{t,d}\$ is the raw count of term
+    *t* in document *d*.
+  
+  - **Inverse Document Frequency (IDF):** This measures how common or rare a term
+    is across the entire document collection. The intuition is that a term
+    appearing in many documents is less informative than one appearing in only a
+    few. The IDF score is high for rare terms and low for common ones. It is
+    calculated as:
+    \$$ idf_t = \log\frac{N}{df_t} $$
+    where *N* is the total number of documents in the collection, and $df_t\$
+    is the number of documents that contain the term *t* (the document frequency).
+  
+  The final TF-IDF weight for a term *t* in a document *d* is the product of these
+  two components:
+  
+  $$ w_{t,d} = tf_{t,d} \times idf_t $$
+  
+  The effect of this calculation is powerful. A term receives a high TF-IDF score
+  if it appears frequently in a document (high TF) but is rare in the overall
+  collection (high IDF). These are precisely the terms that best characterize a
+  document's unique topic. By replacing the raw counts in the term-document matrix
+  with these TF-IDF scores, we create much more meaningful vectors for use in the
+  vector space model, leading to more accurate relevance rankings.
+  
+  With both documents and the query represented as TF-IDF vectors, the task of
+  ranking becomes a geometric problem: measuring the proximity between the query
+  vector **q** and each document vector **d**. In the vector space model, the
+  standard measure is *cosine similarity*. This metric is effective because it
+  measures the angle between two vectors, making it sensitive to the orientation
+  (the topics) rather than the magnitude (the length of the documents).
+  
+  The similarity is calculated as the cosine of the angle $\theta$ between the two
+  vectors:
+  \$$
+  \text{similarity}(\mathbf{q}, \mathbf{d}) = \cos(\theta) = \frac{\mathbf{q} \cdot \mathbf{d}}{||\mathbf{q}|| \ ||\mathbf{d}||}
+  $\$
+  The resulting score ranges from 0 to 1 for non-negative TF-IDF vectors. A score
+  closer to 1 signifies a smaller angle and thus higher conceptual similarity. As
+  illustrated in Fig. 10.9, the document vector **d1** is deemed more relevant to
+  the query **q** than **d2** because the angle between them is smaller. An IR
+  system computes this similarity score for every document in the collection and
+  then sorts the documents in descending order to generate the final ranked list
+  of results.
+  
+  Once an IR system returns a list of documents, how do we measure its success?
+  The quality of a search result is not a simple binary judgment. To formally
+  evaluate performance, we rely on metrics that capture different aspects of
+  relevance. The two most fundamental of these are *precision* and *recall*.
+  
+  Precision answers the question: *Of the documents the system retrieved, what
+  fraction were actually relevant?* It is a measure of exactness or fidelity. If
+  every document you see is on-topic, the system has high precision. Recall, on
+  the other hand, answers: *Of all the relevant documents that exist in the
+  collection, what fraction did the system find?* It is a measure of completeness.
+  If the system found every possible relevant document, it has high recall.
+  
+  These concepts are often visualized using the sets of retrieved and relevant
+  documents, as shown in **Fig. 10.10**. To formalize this, we can categorize any
+  document as a *True Positive* (relevant and retrieved), a *False Positive*
+  (retrieved but not relevant), or a *False Negative* (relevant but not
+  retrieved). The formulas are then:
+  
+  - $\text{Precision} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Positives}}$
+  - $\text{Recall} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}}$
+  
+  There is an inherent trade-off between these two metrics. A system designed for
+  maximum recall could simply return every document in the collection,
+  guaranteeing it finds all relevant ones (100% recall) but with abysmal
+  precision. Conversely, a cautious system that returns only a single document it
+  is extremely confident about might achieve perfect precision but have terrible
+  recall. Balancing this trade-off is a central challenge in designing IR systems.
+  
+  Often, there is an inverse relationship between precision and recall; improving
+  one can hurt the other. This trade-off makes it difficult to compare systems
+  using two separate numbers. To address this, the *F1-score* provides a single
+  metric that combines them. The F1-score is the harmonic mean of precision and
+  recall:
+  
+  $F_1 = 2 \cdot \frac{\text{precision} \cdot \text{recall}}{\text{precision} + \text{recall}}$
+  
+  Unlike a simple average, the harmonic mean penalizes extreme values more
+  heavily. This means a system must achieve both reasonably high precision *and*
+  high recall to get a high F1-score. For instance, a system with perfect
+  precision (1.0) but very low recall (0.1) would have a low F1-score of only
+  about 0.18. This property makes it one of the most common and robust evaluation
+  metrics in information retrieval.
+  
+  While precision and recall evaluate an unordered set of documents, most IR
+  systems produce a *ranked list*. A good system must place relevant documents at
+  the top. Metrics designed for this purpose are crucial, with *Mean Average
+  Precision (MAP)* being a standard measure.
+  
+  MAP is calculated in two stages. First, for a single query, we compute the
+  *Average Precision (AP)*. This is the average of the precision values at each
+  point in the ranked list where a relevant document is found. It rewards systems
+  for ranking relevant documents higher. The formula is:
+  
+  $AP = \frac{\sum_{k=1}^{n} (P(k) \times \text{rel}(k))}{\text{number of relevant documents}}$
+  
+  Here, $P(k)$ is the precision at rank $k$, and $\text{rel}(k)$ is 1 if the
+  document at rank $k$ is relevant. Second, the MAP is simply the mean of these AP
+  scores calculated over a large set of queries.
+  
+  Let's consolidate the theoretical concepts of Information Retrieval by building
+  a miniature search engine. Our goal is to rank a small collection of news
+  headlines based on their relevance to a user query.
+  
+  Imagine our document collection consists of four headlines:
+  
+  - **D1:** "The Federal Reserve hinted at another interest rate hike to combat
+    inflation."
+  - **D2:** "Global stock markets reacted nervously to the Federal Reserve's
+    policy statement."
+  - **D3:** "A new tech stock surged today after a successful product launch."
+  - **D4:** "Market analysts predict a stock hike following the interest rate
+    decision."
+  
+  Our first step is pre-processing. We tokenize the text, convert it to lowercase,
+  and remove common stop words ("the", "at", "to", "a", etc.). This process yields
+  a vocabulary of unique terms. From this, we construct our inverted index, which
+  maps each term to the documents containing it:
+  
+  - `federal`: {D1, D2}
+  - `reserve`: {D1, D2}
+  - `interest`: {D1, D4}
+  - `rate`: {D1, D4}
+  - `hike`: {D1, D4}
+  - `stock`: {D2, D3, D4}
+  - `market`: {D2, D4}
+  - ...and so on for every term in the vocabulary.
+  
+  Next, we transform these documents into numerical vectors using the TF-IDF
+  weighting scheme. We create a term-document matrix where each cell will hold the
+  TF-IDF score for a term in a specific document. For example, let's calculate the
+  weight for the term *federal* in D1. The Term Frequency (TF) is high, as it
+  appears once in a short document. The Inverse Document Frequency (IDF) is
+  calculated as $log(\frac{N}{n_t})$, where $N$ is the total number of documents
+  (4) and $n_t$ is the number of documents containing the term *federal* (2).
+  Thus, the IDF is $log(\frac{4}{2}) \approx 0.301$. The final TF-IDF score
+  combines these two values. In contrast, the term *stock* has a lower IDF of
+  $log(\frac{4}{3}) \approx 0.125$ because it is more common in our collection.
+  This process is repeated for every term in every document, resulting in four
+  vectors, $v_{D1}, v_{D2}, v_{D3}, v_{D4}$, in a high-dimensional space where
+  each dimension corresponds to a term in our vocabulary.
+  
+  Now, a user submits the query: "Federal Reserve stock". We apply the same
+  pre-processing and TF-IDF vectorization process to the query itself, creating a
+  query vector, $v_q$. The final step is to measure the relevance between the
+  query and each document. We do this by calculating the cosine similarity, which
+  measures the angle between the query vector and each document vector. The
+  formula is:
+  
+  $$
+  \text{similarity}(q, d) = \cos(\theta) = \frac{v_q \cdot v_d}{\|v_q\| \|v_d\|}
+  $$
+  
+  A higher score (closer to 1) indicates a smaller angle and thus greater
+  similarity. After performing these calculations, we might get the following
+  hypothetical scores:
+  
+  - `similarity(q, D2)`: 0.91
+  - `similarity(q, D1)`: 0.78
+  - `similarity(q, D4)`: 0.45
+  - `similarity(q, D3)`: 0.31
+  
+  Based on these scores, our search engine would return the ranked list of
+  documents: \[D2, D1, D4, D3\]. This simple case study demonstrates the complete
+  IR pipeline, from processing raw text with an inverted index to representing
+  documents in a vector space and ranking them by relevance to a query.
+  
+  While Information Retrieval systems excel at finding relevant documents from a
+  large collection, they typically stop there, leaving the user to read the
+  document to find the specific facts they need. We now shift our focus to a
+  different, though related, task: **Information Extraction (IE)**.
+  
+  The goal of Information Extraction is to automatically identify and pull
+  structured information from unstructured or semi-structured text. Instead of
+  returning an entire document, an IE system returns specific pieces of data
+  formatted for direct use in a database or spreadsheet. Where IR might return a
+  dozen news articles about corporate mergers, an IE system would process those
+  articles to extract the specific names of the acquiring company, the company
+  being acquired, and the monetary value of the deal. This process transforms a
+  sea of free-form text into a structured, queryable knowledge base, turning raw
+  prose into actionable data. The subsequent sections will detail the core
+  subtasks required to build such a system.
+  
+  To make the goal of Information Extraction more concrete, consider the
+  difference between finding a document and understanding its contents. While an
+  IR system would successfully retrieve a news article about a corporate
+  acquisition, an IE system would process that same article to pull out the key
+  facts. Imagine the system encounters the following text in a press release:
+  "Global Tech Inc. announced today its definitive agreement to acquire Innovate
+  Solutions for a staggering \$2.5 billion."
+  
+  The objective of IE is to automatically populate a structured record, like a
+  database table, from this unstructured sentence. As shown in **Fig. 10.15**, the
+  system must identify specific text fragments and map them to predefined slots.
+  It needs to recognize that "Global Tech Inc." is the *Acquirer*, "Innovate
+  Solutions" is the *Target Company*, and "\$2.5 billion" is the *Acquisition
+  Price*. This process effectively transforms a block of prose into a row of data
+  that can be easily queried, aggregated, and analyzed. The core challenge lies in
+  building models that can perform this mapping accurately across countless
+  variations in phrasing and sentence structure.
+  
+  With the overall goal of Information Extraction established, we begin with its
+  most fundamental subtask: **Named Entity Recognition (NER)**. The objective of
+  NER is to locate and classify named entities—mentions of real-world objects—into
+  pre-defined categories. These entities are typically rigid designators, meaning
+  they refer to a specific, unique thing. While the set of categories can be
+  tailored to any domain, a common starting point includes:
+  
+  - **PER**: Person (e.g., *Ada Lovelace*, *the CEO*)
+  - **ORG**: Organization (e.g., *Google*, *The United Nations*)
+  - **LOC**: Location (e.g., *Silicon Valley*, *Mount Everest*)
+  - **GPE**: Geopolitical Entity (e.g., *France*, *Tokyo*)
+  
+  Essentially, NER is a classification task performed on spans of text. For
+  instance, given the sentence, "In 2014, Amazon acquired Twitch," an NER system
+  would identify *Amazon* as an ORG and *Twitch* as another ORG. By identifying
+  these key players, NER provides the foundational building blocks—the nouns of an
+  information database—upon which more complex tasks, such as Relation Extraction,
+  can be built. This process is the first crucial step in transforming a sea of
+  unstructured text into structured, queryable knowledge.
+  
+  Before the widespread adoption of statistical methods, early approaches to NER
+  relied on human expertise and manually curated resources. Two of the most
+  prominent techniques from this era were the use of *gazetteers* and
+  *hand-crafted rules*.
+  
+  A gazetteer is essentially a large dictionary or pre-defined list of specific
+  entity names. For instance, an NER system could be equipped with separate
+  gazetteers containing:
+  
+  - All countries and major cities in the world (for LOCATIONS).
+  - A list of well-known corporations (for ORGANIZATIONS).
+  - Common first names and surnames (for PERSONS).
+  
+  The system performs a simple lookup, matching sequences of words in the text
+  against entries in these lists. If a match is found, the corresponding entity
+  type is assigned. The primary limitation of this approach is coverage; a
+  gazetteer is only as good as its contents and will fail to identify any new or
+  unlisted entities.
+  
+  To capture more general patterns, developers wrote hand-crafted rules, often
+  using the power of regular expressions (as discussed in Chapter 2). These rules
+  encode orthographic and contextual clues. A simple rule might state that any
+  capitalized word followed immediately by "Inc." or "Corp." should be tagged as
+  an ORGANIZATION. Another rule could identify a title like "Mr." or "Dr."
+  followed by a capitalized name as a PERSON. While effective in specific,
+  well-understood domains, rule-based systems are brittle, labor-intensive to
+  create, and difficult to maintain or adapt to new types of text.
+  
+  While rule-based systems are intuitive, they are often brittle and require
+  significant manual effort to create and maintain. Modern approaches have largely
+  shifted towards statistical models by framing NER as a *sequence labeling* task.
+  This paradigm should be familiar, as it is the same fundamental approach we used
+  for Part-of-Speech tagging in Chapter 5. The goal is to assign a label from a
+  predefined set of tags to each token in an input sequence.
+  
+  However, NER presents a challenge not found in POS tagging: entities can span
+  multiple tokens. For instance, in "Maria Rossi," we need to know that both words
+  refer to a single entity. A simple tag set like `{PER, LOC, ORG}` is
+  insufficient. To address this, we use a more expressive tagging scheme, the most
+  common of which is the **BIO** encoding:
+  
+  - **B-TYPE**: Marks the *Beginning* of an entity of a certain type.
+  - **I-TYPE**: Marks the *Inside* of an entity, used for the second and
+    subsequent tokens.
+  - **O**: Marks a token as being *Outside* any named entity.
+  
+  This scheme allows a model to explicitly mark the boundaries of multi-word
+  entities. As shown in **Fig. 10.18**, the sentence "Maria Rossi moved to Rome."
+  is transformed into a sequence of token-tag pairs. The token `Maria` is labeled
+  `B-PER` as it begins a person entity, while `Rossi` is labeled `I-PER`,
+  indicating it is inside the same person entity. The single-word entity `Rome` is
+  tagged with `B-LOC`[^1], and the remaining tokens are tagged with `O`.
+  
+  By converting raw text into this labeled sequence format, we can leverage
+  powerful machine learning algorithms. Models like Hidden Markov Models (HMMs),
+  Conditional Random Fields (CRFs), and modern neural networks can be trained on
+  annotated corpora to learn how to predict the most probable sequence of BIO tags
+  for a new, unseen sentence. These models make their predictions by learning from
+  the features of the words themselves and the context in which they appear.
+  
+  For a statistical model to perform Named Entity Recognition, it cannot rely on
+  the word itself; it needs descriptive clues, or *features*, about the word and
+  its environment. These features are the evidence the model uses to make its
+  classification decisions. A rich set of features is crucial for building an
+  accurate NER system.
+  
+  Common features can be grouped into several categories:
+  
+  - **Word-Level Features:** These capture information internal to the word token.
+  
+    - *Word Shape:* Abstracts away from the specific word to its orthographic
+      pattern. For instance, `Apple` might have the shape `Xxxxx`, `IBM` would be
+      `XXXX`, and `12/03/2024` could be `dd/dd/dddd`. This helps the model
+      generalize to unseen words that follow common capitalization or formatting
+      patterns for entities.
+    - *Affixes:* Prefixes and suffixes of a word (e.g., `-berg`, `-ton`, `-shire`)
+      can be strong indicators of names or locations.
+    - *Part-of-Speech Tag:* The word's grammatical category is a powerful feature.
+      A proper noun tag (NNP in the Penn Treebank tagset) is a very strong signal
+      for an entity.
+  
+  - **Contextual Features:** These look at the words surrounding the target token.
+  
+    - *Surrounding Words:* The identity of the previous and next few words (e.g.,
+      the two words before and two words after) provides immediate context. The
+      word *Washington* is more likely a person if preceded by *Mr.* and a
+      location if preceded by *in*.
+    - *Surrounding POS Tags:* Similarly, the POS tags of neighboring words are
+      also highly informative.
+  
+  - **Gazetteer Features:** This involves using pre-existing lists of entities,
+    known as gazetteers. A simple binary feature can be created: "Is this word
+    present in a list of known U.S. cities?" This allows the model to incorporate
+    external world knowledge directly.
+  
+  Identifying named entities is a crucial first step, but it often leaves us with
+  a collection of disconnected labels. To truly understand a text, we must uncover
+  how these entities relate to one another. This is the goal of **Relation
+  Extraction (RE)**: the task of identifying and categorizing the specific
+  semantic relationships that exist between the entities found by an NER system.
+  The objective is to convert unstructured text into structured, relational data.
+  
+  Typically, these relationships are represented as tuples, often of the form
+  `(entity₁, relation_type, entity₂)`. For instance, from the sentence "Tesla, a
+  company based in Austin, announced a new factory," an RE system should be able
+  to identify the `LocatedIn(Tesla, Austin)` relation. Other examples of target
+  relations could include `WorksFor(Person, Organization)` or
+  `Acquired(Company, Company)`. By transforming unstructured sentences into a set
+  of such relational facts, RE systems build a scaffold of knowledge that can be
+  used to populate databases, construct knowledge graphs, or answer complex
+  questions about the information contained within a text corpus.
+  
+  Once entities have been identified, the simplest way to find relations between
+  them is to search for recurring patterns in the text. These pattern-based
+  approaches, while straightforward, can be surprisingly effective, especially in
+  domains with regular, conventional language like news reports.
+  
+  The most direct method involves applying regular expressions over the raw text
+  string. After an NER system has tagged entities, we can search for specific
+  lexical patterns between them. For instance, a pattern like
+  `(ORGANIZATION) acquired (ORGANIZATION)` is a strong indicator of an
+  *acquisition* relationship. Similarly, `(PERSON) , CEO of (ORGANIZATION)`
+  clearly signals an *is-CEO-of* relation. The main weakness of this approach is
+  its brittleness; a slight variation in phrasing, such as "the acquisition of Y
+  by X," would fail to match the initial pattern.
+  
+  A more robust technique uses patterns over syntactic structures rather than
+  linear text. By first parsing a sentence to get its dependency graph (as
+  discussed in Chapter 6), we can identify relations based on the dependency path
+  between two entities. For the sentence "Steve Jobs founded Apple in Cupertino,"
+  the dependency path between *Jobs* and *Apple* might be represented as:
+  
+  `Jobs <-nsubj- founded -dobj-> Apple`
+  
+  This pattern, which captures the grammatical subject-verb-object relationship,
+  is far more general. It can successfully identify the *founded_by* relation in
+  various syntactic constructions like "Apple was founded by Steve Jobs" or "In
+  1976, Jobs, along with Wozniak, founded Apple," because the core dependency
+  structure remains consistent. These methods provide a strong baseline for
+  relation extraction, often used to create high-precision rules or to generate
+  training data for more advanced models.
+  
+  While pattern-based systems are effective, they can be brittle and require
+  manual effort. A more robust and generalizable approach is to use supervised
+  machine learning, which frames relation extraction as a classification problem.
+  The goal is to train a model that can predict the correct relation type for any
+  given pair of entities, $(e_1, e_2)$, within a sentence.
+  
+  This process requires a corpus annotated with entities and the relations between
+  them. For each sentence containing a marked entity pair, we extract a feature
+  vector that represents the pair and its context. A classifier, such as a Support
+  Vector Machine (SVM) or Logistic Regression model, is then trained on these
+  vectors and their corresponding relation labels. The set of possible labels
+  includes all pre-defined relation types (e.g., `Located_In`, `Founded_By`) plus
+  a crucial `No_Relation` label for pairs that are co-located in a sentence but
+  are not semantically related.
+  
+  Common features used for this task include:
+  
+  - **Entity-based features:** The text of the entities, their types (e.g.,
+    *PERSON*, *ORGANIZATION*), and their order in the sentence.
+  - **Contextual features:** The sequence of words and their Part-of-Speech tags
+    between the two entities. The words immediately preceding $e_1$ and following
+    $e_2$ are also often included.
+  - **Syntactic features:** The dependency path between the two entities in the
+    sentence's parse tree. This is a particularly powerful feature, as it captures
+    the grammatical relationship directly, abstracting away from the specific
+    surface words.
+  
+  Once trained, the model can be applied to new, unseen text to identify and
+  classify relationships between entities.
+  
+  To make this concrete, let's illustrate how relations are extracted from a
+  biographical text. Consider the sentence:
+  
+  *After leaving Atari, Steve Jobs co-founded Apple with Steve Wozniak in 1976.*
+  
+  First, a Named Entity Recognition (NER) system would identify the entities:
+  `[PER Steve Jobs]`, `[ORG Apple]`, and `[PER Steve Wozniak]`. The relation
+  extraction task then processes pairs of these entities.
+  
+  For the pair (`Steve Jobs`, `Apple`), a pattern-based system could use a simple
+  rule that looks for the verb "found" (or its variants) between a `PER` and an
+  `ORG` entity, triggering the extraction. A supervised machine learning
+  classifier, in contrast, would convert the context—the words "co-founded" and
+  "with", their POS tags, and the syntactic path between the entities—into a
+  feature vector. This vector would then be fed into a model trained to predict
+  relation types.
+  
+  In either case, the system would ideally extract the structured fact
+  `founded_by(Apple, Steve Jobs)`. Notice that the same sentence also yields
+  `founded_by(Apple, Steve Wozniak)`, demonstrating how multiple relations can be
+  harvested from a single piece of text.
+  
+  To see Information Extraction in action, let's consider a practical case study:
+  automatically populating a knowledge base of corporate executives and their
+  roles from financial news reports. The goal is to create a structured database
+  that can answer queries like "Who is the CEO of InnovateCorp?" or "List all
+  executives at TechSolutions."
+  
+  Our input is a stream of unstructured text from news articles:
+  
+  - "Following the quarterly report, Jane Doe, the newly appointed Chief Financial
+    Officer of InnovateCorp, presented the financial outlook."
+  - "Meanwhile, John Smith will be stepping down as Chief Operating Officer at
+    rival firm TechSolutions."
+  - "InnovateCorp's founder, Emily Chen, remains on the board."
+  
+  An IE pipeline would process this text in two main stages. First, *Named Entity
+  Recognition* (NER) identifies the key entities. The system would tag the text as
+  follows:
+  
+  - `Jane Doe` (PERSON), `Chief Financial Officer` (ROLE), `InnovateCorp`
+    (ORGANIZATION)
+  - `John Smith` (PERSON), `Chief Operating Officer` (ROLE), `TechSolutions`
+    (ORGANIZATION)
+  - `InnovateCorp` (ORGANIZATION), `Emily Chen` (PERSON)
+  
+  Next, the *Relation Extraction* stage analyzes the context surrounding these
+  entities to identify relationships between them. It looks for linguistic
+  patterns like "...\[PERSON\], the \[ROLE\] of \[ORGANIZATION\]..." or
+  "\[ORGANIZATION\]'s founder, \[PERSON\]...". From our examples, the system would
+  extract a set of structured relational triples:
+  
+  - `(Jane Doe, is_cfo_of, InnovateCorp)`
+  - `(John Smith, was_coo_of, TechSolutions)`
+  - `(Emily Chen, is_founder_of, InnovateCorp)`
+  
+  These triples are then added to our knowledge base. As the system processes
+  thousands of articles, it builds a rich, interconnected graph of people, their
+  roles, and their affiliations. This task is challenging; the system must handle
+  ambiguity (many people named John Smith), track changes in roles over time, and
+  resolve coreferences (e.g., understanding that "*she* later joined the board"
+  refers to Jane Doe). Nonetheless, this application demonstrates the core power
+  of IE: transforming vast quantities of messy, unstructured text into a valuable,
+  queryable asset.
+  
+  Having explored both Information Retrieval and Information Extraction, we can
+  now synthesize their relationship. The fundamental differences between them,
+  summarized concisely in **Fig. 10.25**, are critical. At its core, IR answers
+  the question, *'Which documents are about my topic?'* Its goal is discovery, and
+  its output is a ranked list of documents. In contrast, IE answers the question,
+  *'What specific facts are in this text?'* Its goal is structuring, and its
+  output is structured data, such as filled database records or a knowledge graph.
+  
+  Despite these distinct objectives, IR and IE are highly complementary and are
+  often combined in a powerful pipeline. A typical workflow begins with an IR
+  system retrieving a set of relevant documents from a vast corpus—for example,
+  finding all articles about company acquisitions. This step acts as a coarse
+  filter, dramatically reducing the search space. Subsequently, an IE system
+  processes this smaller, topic-focused collection to extract precise, structured
+  details like the acquirer, the target, and the acquisition price for each event.
+  This synergistic process efficiently transforms a broad information need into a
+  structured, queryable knowledge base, highlighting the practical interplay
+  between these two essential fields.
+  
+  While the statistical and rule-based methods described in this chapter represent
+  the foundational principles of Information Retrieval and Information Extraction,
+  the field has been profoundly reshaped by modern deep learning. These techniques
+  have moved beyond the limitations of sparse, keyword-based representations and
+  manual feature engineering, setting a new standard for performance.
+  
+  In Information Retrieval, the paradigm has shifted from sparse TF-IDF vectors to
+  *dense* vector representations, or embeddings, generated by large neural models.
+  This approach, often called *dense retrieval*, allows search systems to move
+  beyond simple keyword matching and capture the semantic *intent* behind a query.
+  A search for "films about the US Civil War" can thus intelligently match a
+  document titled "A historical drama on the conflict between North and South"
+  even without significant term overlap.
+  
+  For Information Extraction, transformer-based models like BERT (which we will
+  explore in Chapter 12) have become the state-of-the-art. By pre-training on vast
+  amounts of text, these models learn rich, contextual representations of words.
+  When fine-tuned for tasks like Named Entity Recognition or Relation Extraction,
+  they consistently outperform older systems that rely on hand-crafted features
+  like word shape or gazetteers. This powerful contextual understanding enables
+  them to accurately identify entities and their relationships with unprecedented
+  accuracy, pushing the boundaries of what can be automatically structured from
+  raw text.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+  
+  [^1]: Note that for single-token entities, the `B-` tag is used by convention. There
+  is no corresponding `I-` tag.
+hash: 3f47ade1f19872b4e1c3e29fbf69c17c78d1de98c0debb604d9568ba53d159a5
+response:
+  Create a simple, line-art illustration depicting a top-down view of a workspace.
+  On the left side of the desk lies an open book or a dense printed report. A
+  person's hand is visible, using a bright highlighter to mark a few specific
+  names and numbers within a block of text. On the right side of the desk, a
+  small, neatly organized stack of index cards is shown, where the highlighted
+  information has been transcribed into a structured list. The overall image
+  should convey a sense of transforming dense, unstructured information into
+  clean, organized facts.
+duration: 15964 ms
+usage_stats:
+  {
+    "candidates_token_count": 112,
+    "prompt_token_count": 9021,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 9021
+      }
+    ],
+    "thoughts_token_count": 1481,
+    "total_token_count": 10614
+  }
+...

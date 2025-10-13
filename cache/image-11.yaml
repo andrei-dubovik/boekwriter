@@ -1,0 +1,34 @@
+{model: str, query: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-flash-image-preview
+query: image
+prompt:
+  Create a simple line art illustration depicting a person's hands holding a
+  comment card. The card contains a short, stylized piece of text representing a
+  customer review. One of the hands is holding a pen, which has just finished
+  annotating the text. Next to one line of text, there is a clear, hand-drawn plus
+  sign (+), and next to another line, a minus sign (-). The focus should be on the
+  act of dissecting and evaluating the feedback. The overall aesthetic should be
+  clean, minimalist, and focused, with no distracting background elements.
+hash: 826202ee7c22bd868b7175ee53b32dbc82dec6ed039226a9e13c374157631950
+response: image-11.png
+duration: 5457 ms
+usage_stats:
+  {
+    "candidates_token_count": 1300,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 120,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 120
+      }
+    ],
+    "total_token_count": 1420
+  }
+...

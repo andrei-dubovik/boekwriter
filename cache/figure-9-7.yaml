@@ -1,0 +1,126 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Before an SMT system can learn that the French phrase *ne ... pas* is a good
+  translation for the English phrase *do not*, it must first learn a more
+  fundamental correspondence: that the word *pas* often appears in French
+  sentences when the word *not* appears in their English counterparts. This
+  foundational task of identifying word-level correspondences between sentences in
+  a parallel corpus is known as **word alignment**. It is the essential first step
+  in learning a statistical translation model. The goal is to produce a mapping
+  that indicates which word or words in the target sentence are translations of
+  each word in the source sentence.
+  
+  This mapping is rarely a simple one-to-one correspondence between words in
+  sequence. Languages have different grammatical structures, word orders, and ways
+  of expressing concepts. As illustrated in **Fig. 9.7**, word alignments can
+  exhibit several patterns:
+  
+  - **One-to-one:** A single source word maps to a single target word (e.g.,
+    *blue* → *bleu*). This is the most straightforward type of alignment.
+  - **One-to-many:** A single source word maps to multiple target words. This
+    often occurs when a concept encapsulated in one word in the source language
+    requires a multi-word phrase in the target language (e.g., a German verb like
+    *mitgehen* might align to *go with* in English).
+  - **Many-to-one:** Multiple source words map to a single target word (e.g., the
+    English phrase *floppy disk* aligns to the single French word *disquette*).
+  - **Many-to-many:** Multiple source words map to multiple target words, a common
+    pattern for idioms or complex phrases.
+  
+  Furthermore, some words in one language may have no direct equivalent in the
+  other. For instance, English requires an auxiliary verb in "I *do* not agree,"
+  where the word *do* has a purely grammatical function. In its French
+  translation, "Je ne suis pas d'accord," the word *do* has no corresponding word.
+  We model this by allowing source words to align to a special `NULL` token in the
+  target sentence, effectively marking them as unaligned. The number of target
+  words a source word aligns to is sometimes called its *fertility*.
+  
+  Word alignments are not present in our parallel corpora; we only have the source
+  and target sentences. The alignments are therefore *latent variables* that must
+  be inferred. The core challenge is a circular one: if we had correct word
+  alignments, we could easily estimate the probability of a word being the
+  translation of another. Conversely, if we knew these translation probabilities,
+  we could determine the most likely alignments. Breaking this cycle is the
+  primary goal of the first SMT models. They are designed to learn these
+  alignments automatically from nothing more than thousands of sentence pairs,
+  forming the statistical bedrock upon which the entire translation model is
+  built.
+  
+  This fragment refers to Fig. 9.7. The figure in question is a "Illustration" and
+  its description is as follows:
+  
+  A visual representation of word alignment in a parallel sentence pair. The
+  illustration will display an English sentence at the top and its French
+  translation at the bottom. Lines will be drawn connecting words that are
+  translations of each other, showcasing one-to-one, one-to-many, and many-to-one
+  alignments to highlight the complexity of the correspondence.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: fb901c6c8e98a09cd75600c74a4bbefdeaac2270746c5c34c32f631a783158a3
+response:
+  caption:
+    An illustration of word alignment between an English source sentence and its
+    French translation, as described in Fig. 9.7. The lines show different alignment
+    patterns: one-to-one (e.g., *house* → *maison*), one-to-many (e.g., *not* → *n'
+    pas*), and many-to-one (e.g., *floppy disk* → *disquette*). The English word
+    *does* is unaligned, demonstrating a NULL alignment.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+      <rect width="100%" height="100%" fill="white"/>
+      <g font-family="sans-serif" font-size="28" text-anchor="middle" fill="black">
+        <text x="100" y="150">The</text>
+        <text x="180" y="150">blue</text>
+        <text x="260" y="150">house</text>
+        <text x="340" y="150">does</text>
+        <text x="420" y="150">not</text>
+        <text x="500" y="150">have</text>
+        <text x="580" y="150">a</text>
+        <text x="660" y="150">floppy</text>
+        <text x="740" y="150">disk</text>
+        <text x="100" y="450">La</text>
+        <text x="190" y="450">maison</text>
+        <text x="280" y="450">bleue</text>
+        <text x="370" y="450">n'</text>
+        <text x="440" y="450">a</text>
+        <text x="510" y="450">pas</text>
+        <text x="590" y="450">de</text>
+        <text x="690" y="450">disquette</text>
+      </g>
+      <g stroke="gray" stroke-width="2">
+        <line x1="100" y1="165" x2="100" y2="435"/>
+        <line x1="260" y1="165" x2="190" y2="435"/>
+        <line x1="180" y1="165" x2="280" y2="435"/>
+        <line x1="500" y1="165" x2="440" y2="435"/>
+        <line x1="580" y1="165" x2="590" y2="435"/>
+        <circle cx="420" cy="270" r="4" fill="gray"/>
+        <line x1="420" y1="165" x2="420" y2="270"/>
+        <line x1="420" y1="270" x2="370" y2="435"/>
+        <line x1="420" y1="270" x2="510" y2="435"/>
+        <circle cx="700" cy="330" r="4" fill="gray"/>
+        <line x1="660" y1="165" x2="700" y2="330"/>
+        <line x1="740" y1="165" x2="700" y2="330"/>
+        <line x1="700" y1="330" x2="690" y2="435"/>
+      </g>
+    </svg>
+duration: 42984 ms
+usage_stats:
+  {
+    "candidates_token_count": 891,
+    "prompt_token_count": 807,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 807
+      }
+    ],
+    "thoughts_token_count": 4518,
+    "total_token_count": 6216
+  }
+...

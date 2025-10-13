@@ -1,0 +1,151 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Large Language Models learn from data created by humans, and human data is a
+  mirror of our world, reflecting its societal, historical, and systemic biases.
+  The vast text corpora scraped from the internet are not neutral repositories of
+  fact; they are laden with the stereotypes and prejudices, both subtle and overt,
+  of their creators. Since LLMs are fundamentally powerful statistical pattern
+  recognizers, they do not just learn the rules of grammar and semantics; they
+  also learn and internalize these social biases as statistical regularities. The
+  principle is straightforward: if the training data repeatedly associates certain
+  groups with certain attributes, the model learns this association as a strong
+  probabilistic link.
+  
+  This process is often more than mere reflection; it can be *bias amplification*.
+  The model’s objective is to predict the most probable sequence of words. If a
+  slight statistical bias exists in the data—for instance, if the word *CEO*
+  co-occurs with male pronouns 60% of the time—the model might learn this as a
+  primary signal and amplify it, generating text where the association appears 80%
+  or 90% of the time. The model doesn't understand that a correlation represents a
+  harmful stereotype; it only registers it as a high-probability pattern to be
+  replicated. As illustrated in Fig. 12.12, this pipeline from skewed input data
+  to biased model output can create a dangerous feedback loop, where the model’s
+  stereotyped generations could eventually pollute future training sets,
+  entrenching the bias even further.
+  
+  The biases learned by LLMs manifest in numerous harmful ways:
+  
+  - **Gender Bias:** Models frequently assign professions, traits, and activities
+    based on gender stereotypes. For example, a model may be more likely to
+    complete the sentence "The doctor said..." with the pronoun *he*, and "The
+    nurse said..." with the pronoun *she*, simply because this pattern is dominant
+    in the training data. Mathematically, the model has learned a biased
+    conditional probability where:
+    \$$
+    P(\text{"he"} | \text{"The brilliant scientist..."}) > P(\text{"she"} | \text{"The brilliant scientist..."})
+    $\$
+  - **Racial and Ethnic Bias:** Models can associate specific racial or ethnic
+    groups with negative stereotypes, criminal activities, or a limited set of
+    socioeconomic roles, leading to the generation of defamatory or derogatory
+    content.
+  - **Cultural Bias:** Because training data is predominantly in English and
+    sourced from Western countries, LLMs often adopt a Western-centric worldview
+    as the default, marginalizing or misrepresenting other cultures, traditions,
+    and viewpoints.
+  
+  The real-world consequences of deploying these biased models are significant and
+  severe. They can perpetuate damaging stereotypes at an unprecedented scale, lead
+  to discriminatory and unfair outcomes in critical applications like hiring or
+  loan assessments, and generate toxic or offensive language that fuels social
+  harm. An AI system used to screen résumés, for instance, could systematically
+  downgrade qualified candidates from a specific demographic, not due to malicious
+  programming, but because its underlying language model has internalized the
+  biased patterns of human-written text. This challenge is not a simple bug to be
+  fixed but a deep-seated problem rooted in the data we use to build AI and the
+  society that data reflects. The old adage of "garbage in, garbage out" is
+  insufficient here; with LLMs, the reality is often "bias in, bias amplified
+  out."
+  
+  This fragment refers to Fig. 12.12. The figure in question is a "Diagram" and
+  its description is as follows:
+  
+  An infographic diagram illustrating the mechanism of bias amplification. It
+  would start with a visual representation of skewed data (e.g., a chart showing a
+  high co-occurrence of 'doctor' with male pronouns and 'nurse' with female
+  pronouns in the training text). It will then show how the model learns these
+  statistical correlations, leading to the generation of stereotyped and biased
+  outputs when given a neutral prompt.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 51a55b53e9476532db28224bb3767e3723719ce1332bc92fb835873da2cbba12
+response:
+  caption:
+    Figure 12.12: The process of bias amplification in Large Language Models. Skewed
+    training data, containing societal biases (e.g., gendered associations with
+    professions), is ingested by the LLM. The model learns these statistical
+    correlations and may amplify them, leading to highly stereotyped outputs even
+    from neutral prompts. This creates a dangerous feedback loop where the model's
+    biased generations can pollute future training datasets, further entrenching the
+    bias.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+        </marker>
+      </defs>
+      <style>.title { font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; text-anchor: middle; } .label { font-family: Arial, sans-serif; font-size: 14px; text-anchor: middle; } .code { font-family: 'Courier New', monospace; font-size: 14px; }</style>
+      <g id="input-data">
+        <rect x="25" y="150" width="250" height="250" rx="15" ry="15" fill="#f0f8ff" stroke="#a0c4e4" stroke-width="2"/>
+        <text x="150" y="180" class="title">1. Skewed Training Data</text>
+        <text x="150" y="215" class="label">Text contains societal biases:</text>
+        <text x="40" y="245" class="code">"The <tspan fill="#0077b6" font-weight="bold">doctor</tspan> said <tspan fill="#0077b6" font-weight="bold">he</tspan>..."</text>
+        <text x="40" y="265" class="code">"The <tspan fill="#d00000" font-weight="bold">nurse</tspan> helped <tspan fill="#d00000" font-weight="bold">her</tspan>..."</text>
+        <text x="150" y="305" class="label">Observed Frequency for "Doctor"</text>
+        <rect x="80" y="360" width="40" height="-40" fill="#0077b6"/>
+        <rect x="180" y="360" width="40" height="-27" fill="#d00000"/>
+        <text x="100" y="375" class="label">'he' (60%)</text>
+        <text x="200" y="375" class="label">'she' (40%)</text>
+        <line x1="60" y1="360" x2="240" y2="360" stroke="#333" stroke-width="1"/>
+      </g>
+      <line x1="275" y1="275" x2="350" y2="275" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+      <g id="model">
+        <circle cx="425" cy="275" r="70" fill="#e8f5e9" stroke="#81c784" stroke-width="2"/>
+        <text x="425" y="240" class="title">2. LLM Learns Patterns</text>
+        <text x="425" y="265" class="label">Internalizes correlations</text>
+        <text x="425" y="285" class="label">as statistical links:</text>
+        <text x="425" y="310" class="code" font-size="12px">P("he"|<tspan fill="#0077b6" font-weight="bold">doctor</tspan>) &gt; P("she"|<tspan fill="#0077b6" font-weight="bold">doctor</tspan>)</text>
+      </g>
+      <line x1="495" y1="275" x2="570" y2="275" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+      <g id="output-data">
+        <rect x="570" y="150" width="200" height="250" rx="15" ry="15" fill="#fff3e0" stroke="#ffb74d" stroke-width="2"/>
+        <text x="670" y="180" class="title">3. Bias Amplification</text>
+        <text x="670" y="215" class="label">Input Prompt:</text>
+        <text x="670" y="235" class="code" text-anchor="middle">"The doctor is..."</text>
+        <text x="670" y="265" class="label">Model's Output Likelihood:</text>
+        <rect x="610" y="360" width="40" height="-90" fill="#0077b6"/>
+        <rect x="690" y="360" width="40" height="-10" fill="#d00000"/>
+        <text x="630" y="375" class="label">'he' (90%)</text>
+        <text x="710" y="375" class="label">'she' (10%)</text>
+        <line x1="590" y1="360" x2="750" y2="360" stroke="#333" stroke-width="1"/>
+      </g>
+      <g id="feedback-loop">
+        <path d="M 670 400 Q 670 480, 425 480 Q 180 480, 180 400" stroke="#d32f2f" stroke-width="3" fill="none" stroke-dasharray="8, 4" marker-end="url(#arrowhead)"/>
+        <text x="425" y="500" fill="#d32f2f" class="label" font-weight="bold">4. DANGEROUS FEEDBACK LOOP</text>
+        <text x="425" y="520" fill="#d32f2f" class="label">Biased output pollutes future training data</text>
+      </g>
+    </svg>
+duration: 41601 ms
+usage_stats:
+  {
+    "candidates_token_count": 1635,
+    "prompt_token_count": 937,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 937
+      }
+    ],
+    "thoughts_token_count": 3921,
+    "total_token_count": 6493
+  }
+...

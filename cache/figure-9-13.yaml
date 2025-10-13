@@ -1,0 +1,160 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The paradigm shift to Neural Machine Translation (NMT) introduced a
+  fundamentally different and more elegant architecture for tackling the
+  translation task. Instead of a complex pipeline of separately engineered
+  components, as seen in SMT, NMT uses a single, large neural network that is
+  trained *end-to-end*. The foundational architecture for this approach is the
+  **sequence-to-sequence (seq2seq)** model, which is designed to map an input
+  sequence of one length to an output sequence of a potentially different length.
+  This model consists of two primary components: an *encoder* and a *decoder*.
+  
+  The **encoder** is tasked with processing the source sentence and compressing
+  its meaning into a dense, fixed-size numerical representation. As depicted in
+  **Fig. 9.13**, the encoder is typically a Recurrent Neural Network (RNN), or one
+  of its more powerful variants like a Long Short-Term Memory (LSTM) or Gated
+  Recurrent Unit (GRU) network.[^1] It reads the source sentence one word (or
+  token) at a time, from left to right. At each step, the RNN updates its internal
+  *hidden state*, which incorporates information about the current word and the
+  context from all previous words. After processing the final word of the input
+  sentence, the encoder's last hidden state serves as a summary of the entire
+  sentence. This final vector is often called the **context vector** (or sometimes
+  a "thought vector"). The central idea is that this single vector encapsulates
+  the complete meaning—the semantic essence—of the source sentence.
+  
+  The **decoder** is the second major component, and its job is to take the
+  context vector and generate the target sentence word by word. The decoder is
+  also an RNN, and its initial hidden state is initialized with the context vector
+  produced by the encoder. This "primes" the decoder with the meaning of the
+  sentence it needs to generate. The generation process then unfolds sequentially:
+  
+  1. The decoder is first given a special start-of-sentence token (e.g.,
+     `<start>`).
+  2. Using the context vector and this initial token, it predicts the most
+     probable first word of the target sentence.
+  3. The word it just generated is then fed back as the input for the next time
+     step.
+  4. The decoder then predicts the second word, conditioned on both the context
+     vector and the first word it generated.
+  5. This auto-regressive process continues, with each newly generated word
+     becoming the input for the subsequent step, until the model predicts a
+     special end-of-sentence token (e.g., `<end>`).
+  
+  The entire seq2seq model is trained as a single system on a parallel corpus. The
+  network's goal is to learn to maximize the conditional probability of producing
+  the correct target sentence $Y = (y_1, ..., y_m)$ given a source sentence
+  $X = (x_1, ..., x_n)$. Formally, it optimizes its parameters to maximize
+  $P(Y | X)$. During training, the model's output at each step is compared to the
+  ground-truth word from the training data, and the error is calculated. This
+  error is then propagated back through the entire network—from the decoder all
+  the way back through the encoder—to adjust the model's millions of parameters.
+  This end-to-end training allows the model to learn a complex, non-linear mapping
+  from source text to target text directly, without any need for explicit word
+  alignments or phrase tables.
+  
+  This fragment refers to Fig. 9.13. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A high-level architectural diagram of a sequence-to-sequence (seq2seq) model. It
+  will depict two main components: an Encoder RNN that processes the input
+  sentence step-by-step and compresses it into a fixed-size context vector, and a
+  Decoder RNN which uses this vector to generate the output sentence token by
+  token. The flow of information from source to context vector to target will be
+  clearly marked.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+  
+  [^1]: LSTMs and GRUs are advanced types of RNNs specifically designed to better handle
+  long-range dependencies in sequences, mitigating issues like the vanishing
+  gradient problem that can affect simpler RNNs.
+hash: 00495c71f039e74dfc3a6f7742717f38d26a5f8ecc36bc52c2e81fabb8136926
+response:
+  caption:
+    A high-level architectural diagram of a sequence-to-sequence (seq2seq) model, as
+    described in Fig. 9.13. The Encoder RNN processes the input sentence
+    step-by-step, compressing it into a fixed-size context vector. The Decoder RNN
+    then uses this vector to generate the output sentence token-by-token in an
+    auto-regressive manner.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" font-family="Arial, sans-serif">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L10,3.5 L0,7 z" fill="#333"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <rect x="25" y="125" width="350" height="350" rx="15" fill="none" stroke="#90caf9" stroke-width="2" stroke-dasharray="8,4"/>
+      <text x="200" y="100" font-size="24" font-weight="bold" text-anchor="middle">Encoder</text>
+      <rect x="425" y="125" width="350" height="350" rx="15" fill="none" stroke="#a5d6a7" stroke-width="2" stroke-dasharray="8,4"/>
+      <text x="600" y="100" font-size="24" font-weight="bold" text-anchor="middle">Decoder</text>
+      <g id="encoder-cells">
+        <rect x="50" y="250" width="80" height="60" rx="10" fill="#e3f2fd" stroke="#90caf9" stroke-width="2"/>
+        <text x="90" y="285" text-anchor="middle" font-size="16">RNN</text>
+        <rect x="150" y="250" width="80" height="60" rx="10" fill="#e3f2fd" stroke="#90caf9" stroke-width="2"/>
+        <text x="190" y="285" text-anchor="middle" font-size="16">RNN</text>
+        <rect x="250" y="250" width="80" height="60" rx="10" fill="#e3f2fd" stroke="#90caf9" stroke-width="2"/>
+        <text x="290" y="285" text-anchor="middle" font-size="16">RNN</text>
+        <text x="90" y="420" text-anchor="middle" font-size="18">je</text>
+        <text x="190" y="420" text-anchor="middle" font-size="18">suis</text>
+        <text x="290" y="420" text-anchor="middle" font-size="18">&#233;tudiant</text>
+        <line x1="90" y1="400" x2="90" y2="315" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="190" y1="400" x2="190" y2="315" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="290" y1="400" x2="290" y2="315" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="130" y1="280" x2="145" y2="280" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="230" y1="280" x2="245" y2="280" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+      </g>
+      <g id="context-vector">
+        <rect x="365" y="260" width="30" height="40" fill="#fff3e0" stroke="#ffb74d" stroke-width="2"/>
+        <text x="380" y="325" text-anchor="middle" font-size="14">c</text>
+        <text x="380" y="230" text-anchor="middle" font-size="16" font-weight="bold">Context</text>
+        <text x="380" y="250" text-anchor="middle" font-size="16" font-weight="bold">Vector</text>
+        <line x1="330" y1="280" x2="360" y2="280" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+      </g>
+      <g id="decoder-cells">
+        <rect x="450" y="250" width="80" height="60" rx="10" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="2"/>
+        <text x="490" y="285" text-anchor="middle" font-size="16">RNN</text>
+        <rect x="550" y="250" width="80" height="60" rx="10" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="2"/>
+        <text x="590" y="285" text-anchor="middle" font-size="16">RNN</text>
+        <rect x="650" y="250" width="80" height="60" rx="10" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="2"/>
+        <text x="690" y="285" text-anchor="middle" font-size="16">RNN</text>
+        <text x="490" y="200" text-anchor="middle" font-size="18">I</text>
+        <text x="590" y="200" text-anchor="middle" font-size="18">am</text>
+        <text x="690" y="200" text-anchor="middle" font-size="18">a</text>
+        <text x="750" y="200" text-anchor="middle" font-size="18">...</text>
+        <line x1="490" y1="245" x2="490" y2="210" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="590" y1="245" x2="590" y2="210" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="690" y1="245" x2="690" y2="210" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="530" y1="280" x2="545" y2="280" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="630" y1="280" x2="645" y2="280" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="395" y1="280" x2="445" y2="280" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+        <text x="490" y="420" text-anchor="middle" font-size="18">&lt;start&gt;</text>
+        <line x1="490" y1="400" x2="490" y2="315" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <text x="590" y="420" text-anchor="middle" font-size="18">I</text>
+        <path d="M 490 210 C 490 350, 590 350, 590 400" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" fill="none" stroke-dasharray="4"/>
+        <text x="690" y="420" text-anchor="middle" font-size="18">am</text>
+        <path d="M 590 210 C 590 350, 690 350, 690 400" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" fill="none" stroke-dasharray="4"/>
+      </g>
+    </svg>
+duration: 75087 ms
+usage_stats:
+  {
+    "candidates_token_count": 2243,
+    "prompt_token_count": 994,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 994
+      }
+    ],
+    "thoughts_token_count": 8053,
+    "total_token_count": 11290
+  }
+...

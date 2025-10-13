@@ -1,0 +1,133 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Machine Translation (MT) stands as one of the oldest and most ambitious goals in
+  the history of computer science. The dream of automatic translation is nearly as
+  old as the electronic computer itself. Long before the term "artificial
+  intelligence" was coined, researchers envisioned machines that could break down
+  language barriers, a quest that began in earnest after World War II. The field's
+  origins are often traced to a 1949 memorandum by scientist Warren Weaver, who
+  famously proposed treating translation as a problem of cryptography—essentially
+  "decoding" a foreign language.
+  
+  This early optimism fueled efforts like the 1954 Georgetown-IBM experiment, a
+  public demonstration that successfully translated a small set of Russian
+  sentences into English. The initial hype, however, soon met the profound
+  complexity of human language. The influential 1966 ALPAC report concluded that
+  progress was slow and expensive, ushering in a long "AI winter" for MT research.
+  It was only with the rise of new data-driven statistical and neural methods that
+  the field experienced its modern renaissance. This dramatic history, from early
+  rule-based systems to today's powerful models, is outlined in the timeline in
+  **Fig. 9.1**.
+  
+  This fragment refers to Fig. 9.1. The figure in question is a "Timeline" and its
+  description is as follows:
+  
+  A timeline charting the history of machine translation. It will begin with
+  Warren Weaver's 1949 memorandum, mark the Georgetown-IBM experiment in 1954, the
+  influential ALPAC report in 1966, the rise of statistical methods in the late
+  1980s/early 1990s, the advent of phrase-based SMT in the early 2000s, and the
+  paradigm shift to Neural MT starting around 2014 with sequence-to-sequence
+  models and the Transformer in 2017.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 535880a1edce88eeb377612bc42c1047309557cbe14adb3e1ca45b4a4e98cd27
+response:
+  caption:
+    Fig. 9.1. A timeline showing key milestones in the history of Machine
+    Translation (MT), from early concepts to modern neural architectures.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+      <style>.year{font-family:sans-serif;font-size:14px;text-anchor:middle;fill:#333}.desc{font-family:sans-serif;font-size:15px;text-anchor:middle}.leader{fill:none;stroke:black;stroke-width:1.5}.dot{fill:black}</style>
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="black"/>
+        </marker>
+      </defs>
+      <line x1="40" y1="300" x2="770" y2="300" stroke="black" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <g>
+        <circle class="dot" cx="60" cy="300" r="5"/>
+        <path class="leader" d="M 60 300 v -80"/>
+        <text x="60" y="285" class="year">1949</text>
+        <text x="60" y="200" class="desc">
+          <tspan x="60" dy="0">Warren Weaver's</tspan>
+          <tspan x="60" dy="1.2em">Memorandum</tspan>
+        </text>
+      </g>
+      <g>
+        <circle class="dot" cx="108" cy="300" r="5"/>
+        <path class="leader" d="M 108 300 v 80"/>
+        <text x="108" y="320" class="year">1954</text>
+        <text x="108" y="400" class="desc">
+          <tspan x="108" dy="0">Georgetown-IBM</tspan>
+          <tspan x="108" dy="1.2em">Experiment</tspan>
+        </text>
+      </g>
+      <g>
+        <circle class="dot" cx="225" cy="300" r="5"/>
+        <path class="leader" d="M 225 300 v -80"/>
+        <text x="225" y="285" class="year">1966</text>
+        <text x="225" y="200" class="desc">
+          <tspan x="225" dy="0">ALPAC Report</tspan>
+          <tspan x="225" dy="1.2em">("AI Winter")</tspan>
+        </text>
+      </g>
+      <g>
+        <circle class="dot" cx="458" cy="300" r="5"/>
+        <path class="leader" d="M 458 300 v 80"/>
+        <text x="458" y="320" class="year">c. 1990</text>
+        <text x="458" y="400" class="desc">
+          <tspan x="458" dy="0">Rise of Statistical MT</tspan>
+          <tspan x="458" dy="1.2em">(SMT)</tspan>
+        </text>
+      </g>
+      <g>
+        <circle class="dot" cx="585" cy="300" r="5"/>
+        <path class="leader" d="M 585 300 v -80"/>
+        <text x="585" y="285" class="year">c. 2003</text>
+        <text x="585" y="200" class="desc">
+          <tspan x="585" dy="0">Phrase-Based SMT</tspan>
+        </text>
+      </g>
+      <g>
+        <circle class="dot" cx="692" cy="300" r="5"/>
+        <path class="leader" d="M 692 300 v 60 h -42"/>
+        <text x="692" y="320" class="year">2014</text>
+        <text x="650" y="380" class="desc">
+          <tspan x="650" dy="0">Neural MT (NMT)</tspan>
+          <tspan x="650" dy="1.2em">seq-to-seq models</tspan>
+        </text>
+      </g>
+      <g>
+        <circle class="dot" cx="721" cy="300" r="5"/>
+        <path class="leader" d="M 721 300 v -60 h 29"/>
+        <text x="721" y="285" class="year">2017</text>
+        <text x="750" y="220" class="desc">
+          <tspan x="750" dy="0">Transformer</tspan>
+          <tspan x="750" dy="1.2em">Architecture</tspan>
+        </text>
+      </g>
+    </svg>
+duration: 70495 ms
+usage_stats:
+  {
+    "candidates_token_count": 1245,
+    "prompt_token_count": 485,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 485
+      }
+    ],
+    "thoughts_token_count": 8547,
+    "total_token_count": 10277
+  }
+...

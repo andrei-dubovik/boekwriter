@@ -1,0 +1,122 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Prior to the current era, the standard approach involved training a model *from
+  scratch* for each new natural language processing task. A model intended for
+  sentiment analysis, for instance, would be trained solely on a dataset of
+  labeled reviews, learning about language only through that narrow lens. This
+  process was not only computationally expensive but also required a large,
+  task-specific labeled dataset for every problem, limiting the model's general
+  linguistic competence. The arrival of the transformer architecture fundamentally
+  changed this, introducing the more powerful and efficient paradigm of
+  *pre-training and fine-tuning*.
+  
+  This new approach begins with **pre-training**, a computationally massive,
+  one-time process. In this stage, a large transformer model is trained on a vast
+  and diverse corpus of unlabeled text, such as the entirety of Wikipedia and
+  large collections of books. The model is not trained to perform any specific
+  user-facing task. Instead, it is given a general objective, such as predicting
+  randomly masked words within a sentence (as in BERT) or predicting the next word
+  in a sequence (as in GPT). By learning to perform this objective at a massive
+  scale, the model is forced to develop a deep, contextualized understanding of
+  language, internalizing grammar, syntax, semantic relationships, and a
+  significant amount of world knowledge. This creates a versatile base model that
+  serves as a powerful starting point for many different applications.
+  
+  The second stage, **fine-tuning**, adapts this general-purpose model to a
+  specific *downstream task*. This involves taking the pre-trained model and
+  training it further, but on a much smaller, task-specific labeled dataset. For
+  example, to create a sentiment classifier, one would add a simple classification
+  layer to the pre-trained model and continue training on a few thousand labeled
+  movie reviews. Because the model has already learned the nuances of language
+  during pre-training, it can learn the new task with far greater data efficiency
+  and achieve a much higher level of performance than a model trained from
+  scratch. This two-stage workflow, which separates the general language
+  acquisition from the specific task adaptation, is visualized in **Fig. 12.8**.
+  This paradigm has democratized access to state-of-the-art NLP, as developers can
+  now leverage powerful, publicly available pre-trained models without incurring
+  the immense cost of the initial pre-training phase.
+  
+  This fragment refers to Fig. 12.8. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A two-stage diagram illustrating the pre-training and fine-tuning paradigm. The
+  'Pre-training' stage will depict a large, general-purpose model learning from a
+  massive, unlabeled text corpus. The 'Fine-tuning' stage will show the same model
+  being adapted with a smaller, task-specific labeled dataset (e.g., for sentiment
+  analysis), clarifying this fundamental shift in model training.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 6f1618ebb0dfdb9cb52e660727ebf9733050762c03bf8bec58527f3268dde775
+response:
+  caption:
+    Fig. 12.8: The pre-training and fine-tuning paradigm. In the first stage, a
+    large model is pre-trained on a massive, unlabeled text corpus to develop a
+    general understanding of language. In the second stage, this base model is
+    fine-tuned using a much smaller, task-specific labeled dataset to adapt it for a
+    particular application, such as sentiment analysis.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" font-family="sans-serif">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <g id="pre-training">
+        <text x="400" y="40" font-size="22" font-weight="bold" text-anchor="middle">Stage 1: Pre-training</text>
+        <rect x="50" y="80" width="250" height="120" rx="10" fill="#e3f2fd" stroke="#90caf9" stroke-width="2"/>
+        <text x="175" y="125" text-anchor="middle" font-size="16" font-weight="bold">Massive Unlabeled Corpus</text>
+        <text x="175" y="155" text-anchor="middle" font-size="14" fill="#555">(e.g., Wikipedia, Books)</text>
+        <line x1="310" y1="140" x2="430" y2="140" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <text x="370" y="125" text-anchor="middle" font-size="14" fill="#333">Train with</text>
+        <text x="370" y="145" text-anchor="middle" font-size="14" fill="#333">general objective</text>
+        <rect x="440" y="80" width="310" height="120" rx="10" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="2"/>
+        <text x="595" y="125" text-anchor="middle" font-size="16" font-weight="bold">General Purpose Base Model</text>
+        <text x="595" y="155" text-anchor="middle" font-size="14" fill="#555">(Internalizes grammar, semantics, etc.)</text>
+      </g>
+      <path d="M 595 200 L 595 280" stroke="#333" stroke-width="3" stroke-dasharray="8 4" marker-end="url(#arrowhead)" fill="none"/>
+      <g id="fine-tuning">
+        <text x="400" y="270" font-size="22" font-weight="bold" text-anchor="middle">Stage 2: Fine-tuning</text>
+        <rect x="50" y="350" width="250" height="120" rx="10" fill="#fff3e0" stroke="#ffcc80" stroke-width="2"/>
+        <text x="175" y="395" text-anchor="middle" font-size="16" font-weight="bold">Small Labeled Dataset</text>
+        <text x="175" y="425" text-anchor="middle" font-size="14" fill="#555">(e.g., Sentiment Reviews)</text>
+        <line x1="310" y1="410" x2="430" y2="410" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <text x="370" y="400" text-anchor="middle" font-size="14" fill="#333">Adapt with</text>
+        <text x="370" y="420" text-anchor="middle" font-size="14" fill="#333">specific examples</text>
+        <g>
+          <title>The pre-trained model is adapted with a new task-specific layer.</title>
+          <rect x="440" y="350" width="310" height="120" rx="10" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="2"/>
+          <rect x="440" y="350" width="310" height="35" rx="10" ry="10" fill="#fce4ec" stroke="#f48fb1" stroke-width="2"/>
+          <path d="M 440 385 L 750 385" stroke="#f48fb1" stroke-width="2"/>
+          <text x="595" y="373" text-anchor="middle" font-size="14" font-weight="bold" fill="#c2185b">New Classification Layer</text>
+          <text x="595" y="425" text-anchor="middle" font-size="16" font-weight="bold">Fine-tuned Model</text>
+        </g>
+        <line x1="595" y1="470" x2="595" y2="510" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <rect x="520" y="520" width="150" height="60" rx="10" fill="#f1f8e9" stroke="#c5e1a5" stroke-width="2"/>
+        <text x="595" y="550" text-anchor="middle" font-size="14" font-weight="bold">Task Output</text>
+        <text x="595" y="568" text-anchor="middle" font-size="14" fill="#555">(e.g., "Positive")</text>
+      </g>
+    </svg>
+duration: 75014 ms
+usage_stats:
+  {
+    "candidates_token_count": 1535,
+    "prompt_token_count": 689,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 689
+      }
+    ],
+    "thoughts_token_count": 8583,
+    "total_token_count": 10807
+  }
+...

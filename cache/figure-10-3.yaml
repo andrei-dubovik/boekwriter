@@ -1,0 +1,100 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  At its core, the Information Retrieval (IR) problem is about satisfying a user's
+  *information need*. We can formally define the classic IR task using three main
+  components. First, there is a static **document collection**, which is a set of
+  texts $D = \{d_1, d_2, ..., d_N\}$ through which we want to search. Second, a
+  user provides a **query**, $q$, which is a representation of their information
+  need, typically expressed as a short string of keywords.
+  
+  The objective of an IR system is to process the query $q$ against the collection
+  $D$ and return a **ranked list of documents**. This list is ordered by
+  *relevance*, with the documents that the system predicts are most likely to
+  satisfy the user's need placed at the top. The high-level architecture of this
+  process, from query input to ranked output, is visualized in Fig. 10.3. The
+  central challenge, therefore, is to accurately and efficiently model this notion
+  of relevance. The upcoming sections will explore the fundamental data structures
+  and algorithms used to accomplish this.
+  
+  This fragment refers to Fig. 10.3. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A flowchart-style diagram illustrating the high-level architecture of a classic
+  Information Retrieval system. It will show a 'User Query' as input to a central
+  'IR System' box. This central box will be shown to use a 'Document Collection'
+  and an 'Inverted Index'. The final output from the system will be a 'Ranked List
+  of Documents'.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 04a9b0ad69f1141ea353cd59a06bd18164ab5837eb7d20eb908562f6c0981418
+response:
+  caption:
+    High-level architecture of a classic Information Retrieval (IR) system. A user
+    query is processed by the system, which utilizes a document collection and an
+    inverted index to produce a ranked list of relevant documents.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <style>.box { fill: #f0f8ff; stroke: #333; stroke-width: 1.5; rx: 5; } .text { font-family: sans-serif; font-size: 13px; text-anchor: middle; dominant-baseline: middle; }</style>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+      </defs>
+      <g>
+        <rect class="box" x="10" y="125" width="110" height="50"/>
+        <text class="text" x="65" y="150">User Query</text>
+      </g>
+      <g>
+        <rect class="box" x="280" y="125" width="110" height="50"/>
+        <text class="text" x="335" y="150">
+          <tspan x="335" dy="-0.6em">Ranked List</tspan>
+          <tspan x="335" dy="1.2em">of Documents</tspan>
+        </text>
+      </g>
+      <g>
+        <rect class="box" x="145" y="15" width="110" height="50"/>
+        <text class="text" x="200" y="40">
+          <tspan x="200" dy="-0.6em">Document</tspan>
+          <tspan x="200" dy="1.2em">Collection</tspan>
+        </text>
+      </g>
+      <g>
+        <rect class="box" x="145" y="235" width="110" height="50"/>
+        <text class="text" x="200" y="260">
+          <tspan x="200" dy="-0.6em">Inverted</tspan>
+          <tspan x="200" dy="1.2em">Index</tspan>
+        </text>
+      </g>
+      <g>
+        <rect class="box" x="145" y="100" width="110" height="100" style="fill:#e6e6fa;"/>
+        <text class="text" x="200" y="150">IR System</text>
+      </g>
+      <line x1="120" y1="150" x2="145" y2="150" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+      <line x1="255" y1="150" x2="280" y2="150" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+      <line x1="200" y1="65" x2="200" y2="100" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+      <line x1="200" y1="235" x2="200" y2="200" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+    </svg>
+duration: 45472 ms
+usage_stats:
+  {
+    "candidates_token_count": 884,
+    "prompt_token_count": 416,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 416
+      }
+    ],
+    "thoughts_token_count": 5262,
+    "total_token_count": 6562
+  }
+...

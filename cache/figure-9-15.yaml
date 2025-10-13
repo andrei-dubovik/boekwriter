@@ -1,0 +1,170 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The fixed-length context vector used in early encoder-decoder models, as we have
+  seen, creates a significant *information bottleneck*. It forces the model to
+  compress the entire meaning of a source sentence—regardless of its length or
+  complexity—into a single vector of a few hundred dimensions. This is an immense
+  burden. A long, nuanced sentence about political philosophy and a short, simple
+  sentence like "The cat sat" must both be squeezed into the same fixed-size
+  representation. Unsurprisingly, the performance of these models degrades sharply
+  as sentence length increases, as information from early in the sentence is often
+  lost by the time the vector is fully constructed.
+  
+  To overcome this critical limitation, a powerful and elegant solution was
+  introduced: the **attention mechanism**. The central idea is intuitive yet
+  revolutionary: instead of forcing the decoder to rely on a single, static
+  context vector, we allow it to *attend* to different parts of the source
+  sentence at each step of the decoding process. At the moment it generates the
+  word "la", the French translation of "the", it might need to focus on the
+  English word "The". When it later generates "souris", it should focus on
+  "mouse". The attention mechanism gives the model a way to learn and implement
+  this dynamic focus automatically.
+  
+  At its core, the attention mechanism provides the decoder with access to *all*
+  of the encoder's hidden states ($h_1, h_2, ..., h_N$) at every decoding time
+  step, $t$. Instead of using a pre-computed summary of the source, the decoder
+  actively decides which encoder states are most relevant for predicting the
+  current target word, $y_t$. It then computes a context-specific vector based on
+  this decision. This process, visualized in **Fig. 9.15**, can be broken down
+  into a few key steps.
+  
+  First, we need to score how well each encoder hidden state $h_j$ aligns with the
+  decoder's hidden state from the *previous* time step, $s_{t-1}$. This score
+  quantifies the relevance of the $j$-th source word to the $t$-th target word we
+  are about to generate. This is accomplished using an *alignment score function*,
+  which can be as simple as a dot product or a small feed-forward neural network
+  that takes both states as input. We can represent this as:
+  
+  $e_{tj} = \text{score}(s_{t-1}, h_j)$
+  
+  This gives us a vector of scores, one for each source word position.
+  
+  Second, these raw alignment scores are normalized into a probability
+  distribution using the softmax function. The resulting values, $\alpha_{tj}$,
+  are called the *attention weights*. Each weight represents the amount of
+  attention the decoder should place on the $j$-th source word when generating the
+  $t$-th target word. Because they are the output of a softmax function, these
+  weights conveniently sum to 1 over all source words.
+  
+  $\alpha_{tj} = \frac{\exp(e_{tj})}{\sum_{k=1}^{N} \exp(e_{tk})}$
+  
+  Third, a dynamic context vector, $c_t$, is computed as a weighted sum of all the
+  encoder hidden states. The weights used in this sum are precisely the attention
+  weights, $\alpha_{tj}$, we just calculated.
+  
+  $c_t = \sum_{j=1}^{N} \alpha_{tj} h_j$
+  
+  This context vector is a powerful construct. If a particular source word at
+  position $j$ is deemed highly relevant for the current decoding step, its
+  attention weight $\alpha_{tj}$ will be high, and its corresponding hidden state
+  $h_j$ will dominate the context vector $c_t$. If another source word is
+  irrelevant, its weight will be near zero, effectively silencing its
+  contribution.
+  
+  Finally, this tailored context vector $c_t$ is combined with the decoder's
+  current hidden state, typically by concatenation, and then used to predict the
+  target word $y_t$. The entire mechanism, from scoring to prediction, is
+  implemented with differentiable operations, meaning it can be trained end-to-end
+  with backpropagation, just like the rest of the network.
+  
+  The introduction of attention was a watershed moment for NMT. By relieving the
+  encoder of the impossible task of perfect compression, it dramatically improved
+  translation quality, especially for long sentences. Furthermore, it offered a
+  rare and valuable glimpse into the model's inner workings. By visualizing the
+  attention weights $\alpha_{tj}$ as a matrix, we can see which source words the
+  model "looked at" when generating each target word. This often reveals
+  plausible, soft alignments between languages, making the model more
+  interpretable and easier to debug. This ability to dynamically weigh input
+  components proved so effective that it became the foundational concept for the
+  next generation of neural architectures.
+  
+  This fragment refers to Fig. 9.15. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A diagram illustrating the attention mechanism. It will show the decoder at a
+  specific timestep, generating one target word. Instead of using a single context
+  vector, arrows will originate from the current decoder state and point to all of
+  the encoder's hidden states. This visualizes the calculation of attention
+  scores, which create a context-specific vector that allows the model to 'focus'
+  on the most relevant input words for the current output word.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 07245658ac06bc849fbc33a0d14ea0c26f554140b16ab32d059425615ab90bb2
+response:
+  caption:
+    Fig. 9.15: The attention mechanism at a single decoder time step. The decoder's
+    previous state, s(t-1), 'attends' to all encoder hidden states by calculating
+    alignment scores. These scores are converted via softmax into attention weights
+    (α), which determine each hidden state's contribution to the dynamic context
+    vector c(t). The varied thickness of the purple arrows represents these weights,
+    showing the model focusing heavily on the second hidden state. This context
+    vector is then used with the decoder state to predict the next word, y(t).
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+      <defs>
+        <style>.label{font-family:sans-serif;font-size:18px;text-anchor:middle}.math-label{font-family:'Times New Roman',serif;font-size:20px;text-anchor:middle}.box-label{font-family:sans-serif;font-size:16px;text-anchor:middle}.encoder-box{fill:#dbeafe;stroke:#60a5fa;stroke-width:2}.decoder-box{fill:#dcfce7;stroke:#4ade80;stroke-width:2}.context-box{fill:#e0e7ff;stroke:#818cf8;stroke-width:2}.arrow-head{fill:#333}</style>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" class="arrow-head"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <g id="encoder">
+        <text x="400" y="580" class="label" fill="#6b7280">Encoder Hidden States</text>
+        <rect x="150" y="480" width="100" height="50" rx="5" class="encoder-box"/>
+        <text x="200" y="508" class="math-label">h<tspan baseline-shift="sub" font-size="0.7em">1</tspan></text>
+        <rect x="350" y="480" width="100" height="50" rx="5" class="encoder-box"/>
+        <text x="400" y="508" class="math-label">h<tspan baseline-shift="sub" font-size="0.7em">2</tspan></text>
+        <rect x="550" y="480" width="100" height="50" rx="5" class="encoder-box"/>
+        <text x="600" y="508" class="math-label">h<tspan baseline-shift="sub" font-size="0.7em">3</tspan></text>
+      </g>
+      <g id="decoder">
+        <rect x="340" y="50" width="120" height="60" rx="5" class="decoder-box"/>
+        <text x="400" y="75" class="math-label">s<tspan baseline-shift="sub" font-size="0.7em">t-1</tspan></text>
+        <text x="400" y="95" class="box-label" fill="#333">(Prev. State)</text>
+        <rect x="550" y="220" width="150" height="60" rx="5" class="decoder-box"/>
+        <text x="625" y="253" class="box-label">Decoder and Prediction</text>
+        <text x="750" y="253" class="math-label">y<tspan baseline-shift="sub" font-size="0.7em">t</tspan></text>
+        <line x1="700" y1="250" x2="730" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+      </g>
+      <g id="attention">
+        <line x1="400" y1="110" x2="200" y2="480" stroke="#aaa" stroke-width="1.5" stroke-dasharray="5,5"/>
+        <line x1="400" y1="110" x2="400" y2="480" stroke="#aaa" stroke-width="1.5" stroke-dasharray="5,5"/>
+        <line x1="400" y1="110" x2="600" y2="480" stroke="#aaa" stroke-width="1.5" stroke-dasharray="5,5"/>
+        <text x="300" y="280" class="label" fill="#6b7280" transform="rotate(-60 300 280)">score(s<tspan baseline-shift="sub">t-1</tspan>, h<tspan baseline-shift="sub">j</tspan>)</text>
+        <text x="200" y="460" class="math-label">&#945;<tspan baseline-shift="sub" font-size="0.7em">t1</tspan>=0.1</text>
+        <text x="400" y="460" class="math-label" font-weight="bold">&#945;<tspan baseline-shift="sub" font-size="0.7em">t2</tspan>=0.8</text>
+        <text x="600" y="460" class="math-label">&#945;<tspan baseline-shift="sub" font-size="0.7em">t3</tspan>=0.1</text>
+        <text x="400" y="430" class="label" fill="#6b7280">Attention Weights (from Softmax)</text>
+        <line x1="200" y1="480" x2="400" y2="280" stroke="#818cf8" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="400" y1="480" x2="400" y2="280" stroke="#818cf8" stroke-width="8" marker-end="url(#arrowhead)"/>
+        <line x1="600" y1="480" x2="400" y2="280" stroke="#818cf8" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <rect x="325" y="220" width="150" height="60" rx="5" class="context-box"/>
+        <text x="400" y="245" class="math-label">c<tspan baseline-shift="sub" font-size="0.7em">t</tspan> = &#931; &#945;<tspan baseline-shift="sub" font-size="0.7em">tj</tspan>h<tspan baseline-shift="sub" font-size="0.7em">j</tspan></text>
+        <text x="400" y="265" class="box-label" fill="#333">(Context Vector)</text>
+        <path d="M 400 110 Q 400 220, 550 235" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+        <line x1="475" y1="250" x2="550" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+      </g>
+    </svg>
+duration: 114216 ms
+usage_stats:
+  {
+    "candidates_token_count": 1841,
+    "prompt_token_count": 1239,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1239
+      }
+    ],
+    "thoughts_token_count": 13514,
+    "total_token_count": 16594
+  }
+...

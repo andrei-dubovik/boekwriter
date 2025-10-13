@@ -1,0 +1,173 @@
+{model: str, query: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: visuals
+prompt:
+  You are writing a chapter titled "Sentiment Analysis and Opinion Mining" in a
+  book called "Introduction to Computational Linguistics". The plan for the
+  chapter is a follows.
+  
+  01. This chapter introduces sentiment analysis, the computational task of
+      identifying and extracting opinions, sentiments, and emotions from text
+      data.
+  02. We begin by exploring the widespread applications of this technology, from
+      analyzing product reviews and social media trends to gauging political
+      opinion.
+  03. The chapter will guide you through core methodologies, starting with simple
+      dictionary-based techniques and progressing to sophisticated machine
+      learning models.
+  04. First, we will differentiate the three main levels of analysis:
+      document-level, sentence-level, and the more fine-grained aspect-based
+      level.
+  05. An example is provided to contrast how each level would analyze a single
+      hotel review to determine overall, sentence-specific, and feature-specific
+      sentiment.
+  06. The first major approach we cover is the lexicon-based method, which relies
+      on pre-compiled dictionaries of words with assigned positive or negative
+      polarity scores.
+  07. We will examine popular sentiment lexicons like MPQA and SentiWordNet and
+      discuss their construction and inherent properties.
+  08. A simple algorithm is detailed that classifies a text's sentiment by
+      aggregating the scores of its constituent words from a chosen lexicon.
+  09. A worked example demonstrates how to calculate the sentiment of a short
+      movie review by summing word polarities.
+  10. Key challenges for lexicon-based methods are discussed, including the
+      difficult tasks of handling negation, intensifiers, and domain-specific
+      language.
+  11. A case study illustrates how an e-commerce company could rapidly deploy a
+      lexicon-based system to monitor customer feedback on new products.
+  12. Next, we frame sentiment analysis as a supervised machine learning problem,
+      where a model learns to classify text from a large corpus of labeled
+      examples.
+  13. The critical process of creating a suitable training dataset is explained,
+      often by leveraging existing explicit ratings such as movie or product
+      stars.
+  14. We then detail how to convert raw text into numerical feature vectors
+      suitable for machine learning, focusing on the classic bag-of-words and
+      TF-IDF models.
+  15. This section provides an overview of training classic classification
+      algorithms, such as Naive Bayes and Support Vector Machines, for the
+      sentiment classification task.
+  16. A step-by-step example walks through training a simple Naive Bayes
+      classifier on a small dataset of labeled positive and negative sentences.
+  17. The chapter explains essential evaluation metrics for classification,
+      including accuracy, precision, recall, and the F1-score, to measure model
+      performance objectively.
+  18. We conclude this section by briefly introducing how modern neural network
+      architectures, such as Recurrent Neural Networks, can capture sequence
+      information for improved performance.
+  19. To achieve a more nuanced understanding, we introduce Aspect-Based Sentiment
+      Analysis (ABSA), which identifies opinions about specific entities or their
+      attributes.
+  20. The two fundamental sub-tasks of ABSA are defined: aspect term extraction to
+      identify what is being discussed, and aspect sentiment classification to
+      determine the polarity towards it.
+  21. A clear example analyzes the sentence, "The pizza was delicious, but the
+      service was slow," to identify distinct sentiments towards the aspects
+      'pizza' and 'service'.
+  22. We explore techniques for aspect term extraction, ranging from rule-based
+      linguistic patterns to supervised sequence labeling models like Conditional
+      Random Fields.
+  23. Methods are then presented for classifying the sentiment polarity for each
+      extracted aspect, often by considering the local context of the aspect term.
+  24. A case study shows how a restaurant chain can use ABSA on customer reviews
+      to gain actionable insights into specific strengths and weaknesses, such as
+      food quality or ambiance.
+  25. Finally, the chapter summarizes the key approaches covered and revisits
+      their respective strengths and weaknesses in different scenarios.
+  26. We address several ongoing challenges in the field, including the
+      computational difficulty of detecting sarcasm, irony, and context-dependent
+      sentiment.
+  27. The chapter concludes by looking toward the future of opinion mining,
+      including its integration with large language models and emerging ethical
+      considerations.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 6 aids. Explain the chosen aids in detail. Only list the items where an aid
+  has been chosen.
+hash: 2aeeb1a9d760cb31dcf56c304a5b0fcf1df93dc72868ab260072e2cc22fc6437
+response:
+- number: 5
+  aid: Diagram
+  description:
+    A diagram illustrating the three levels of sentiment analysis using a single
+    hotel review: "The location was perfect, but the room was a bit noisy. Overall,
+    a good stay." The diagram would visually parse this review in three ways: (1)
+    Document-level: A single 'Positive' label for the entire review. (2)
+    Sentence-level: A 'Positive' label for the first sentence and a 'Negative' label
+    for the second. (3) Aspect-based level: A 'Positive' sentiment linked to the
+    aspect 'location' and a 'Negative' sentiment linked to the aspect 'room'.
+- number: 8
+  aid: Diagram
+  description:
+    A flowchart diagram that visually represents the steps of a simple lexicon-based
+    sentiment analysis algorithm. It would start with an "Input Text" box, followed
+    by arrows leading to subsequent steps: "Tokenize Text into Words", "For each
+    word, look up polarity in Sentiment Lexicon (e.g., +1, -1, 0)", "Aggregate
+    scores for all words (e.g., Summation)", and finally an "Output Sentiment Class
+    (Positive/Negative/Neutral)" box based on the final score. This clarifies the
+    process flow.
+- number: 14
+  aid: Table
+  description:
+    A table demonstrating the conversion of two simple sentences into bag-of-words
+    feature vectors. The table columns would represent the unique words in the
+    combined vocabulary (e.g., 'the', 'movie', 'was', 'good', 'boring'). The rows
+    would represent the sentences (e.g., "The movie was good" and "The movie was
+    boring"). The cells would contain the word counts, clearly illustrating how
+    unstructured text is transformed into a numerical format for machine learning
+    models.
+- number: 17
+  aid: Diagram
+  description:
+    A diagram of a 2x2 confusion matrix for a binary sentiment classification task
+    (Positive/Negative). The axes would be 'Predicted Label' and 'True Label'. The
+    four cells would be clearly labeled: True Positive (TP), False Positive (FP),
+    True Negative (TN), and False Negative (FN). Below the matrix, the formulas for
+    Accuracy, Precision, Recall, and F1-score would be written in terms of TP, FP,
+    TN, and FN, directly linking the metrics to the visual representation.
+- number: 21
+  aid: Diagram
+  description:
+    A diagram that visually deconstructs the sentence, "The pizza was delicious, but
+    the service was slow." It would show the full sentence, then have two distinct
+    branches. One branch would highlight the word 'pizza' (the aspect) and connect
+    it with an arrow to the word 'delicious' (the opinion word), labeled with a '+'
+    or 'Positive'. The second branch would highlight 'service' and connect it with
+    an arrow to 'slow', labeled with a '-' or 'Negative'. This clearly illustrates
+    the core task of ABSA.
+- number: 24
+  aid: Chart
+  description:
+    A horizontal bar chart summarizing the results of an Aspect-Based Sentiment
+    Analysis on a large set of restaurant reviews. The Y-axis would list key aspects
+    of the restaurant experience (e.g., 'Food Quality', 'Service Speed', 'Ambiance',
+    'Price', 'Cleanliness'). The X-axis would represent the average sentiment score
+    (e.g., from -1 to +1). Each bar would show the aggregated sentiment for its
+    corresponding aspect, allowing for at-a-glance identification of strengths (long
+    positive bars) and weaknesses (long negative bars).
+duration: 29158 ms
+usage_stats:
+  {
+    "candidates_token_count": 842,
+    "prompt_token_count": 1062,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1062
+      }
+    ],
+    "thoughts_token_count": 2569,
+    "total_token_count": 4473
+  }
+...

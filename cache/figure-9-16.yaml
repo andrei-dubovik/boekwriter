@@ -1,0 +1,135 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The abstract concept of the attention mechanism becomes much clearer when
+  visualized. At each step of generating a target word, the decoder calculates a
+  set of *attention weights*, one for each word in the source sentence. These
+  weights, which are positive and sum to one, determine the influence each source
+  word has on the generation of the current target word. We can arrange these
+  weights into a matrix, where rows correspond to the generated target words and
+  columns correspond to the source words.
+  
+  **Fig. 9.16** presents a heatmap of such an attention matrix for a sample
+  translation from French to English. The source sentence is laid out along the
+  x-axis, and the generated target sentence is along the y-axis. The intensity of
+  the color in each cell $(i, j)$ represents the attention weight $\alpha_{ij}$,
+  which indicates how much the model focused on the *j*-th source word when
+  producing the *i*-th target word. A brighter cell signifies a higher weight,
+  meaning a stronger focus.
+  
+  Notice the strong diagonal pattern in the visualization. This is common for
+  languages with similar word order, indicating that the model often aligns the
+  *n*-th target word with the *n*-th source word. However, the true power of
+  attention is revealed in the non-diagonal alignments, which show the model
+  handling differences in grammar and word order. For instance, in translating the
+  French phrase "la voiture verte" to the English "the green car", the model must
+  reorder the adjective and noun. When generating the word "green", the attention
+  mechanism would allow it to place a high weight on the source word "verte",
+  regardless of their different positions in their respective sentences. This
+  would be visible as a bright, off-diagonal cell in the matrix.
+  
+  This ability to dynamically link target words to relevant source words is
+  precisely what overcomes the fixed-context-vector bottleneck of earlier models.
+  Instead of relying on a single, compressed summary of the entire input, the
+  decoder has direct, selective access to the source representation at every step.
+  This not only dramatically improves translation quality but also offers a
+  valuable form of *interpretability*. By visualizing attention, we gain a direct
+  insight into the model's internal decision-making process, observing how it
+  aligns words across languages to construct a coherent translation.
+  
+  This fragment refers to Fig. 9.16. The figure in question is a "Chart" and its
+  description is as follows:
+  
+  A heatmap chart visualizing an attention matrix. The x-axis will list the words
+  of a source sentence and the y-axis will list the words of the generated target
+  sentence. Each cell in the grid will be colored based on the attention weight,
+  with brighter colors indicating a higher weight. The chart will clearly show how
+  the model aligns source and target words during translation, often forming a
+  strong diagonal pattern.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: c446c3e6d173a4c74546167b7af15dea41fd62ecc3f12eec4d38d5a34c5c6f50
+response:
+  caption:
+    Fig. 9.16: A heatmap of an attention matrix for a sample translation from French
+    to English. The source sentence is on the x-axis and the generated target
+    sentence is on the y-axis. The brightness of a cell (i, j) indicates the
+    attention weight, showing how much the model focused on the j-th source word
+    when generating the i-th target word. The strong off-diagonal alignments for
+    'green'/'verte' and 'car'/'voiture' demonstrate the model's ability to handle
+    word reordering.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300" font-family="sans-serif" font-size="12">
+      <rect width="100%" height="100%" fill="white"/>
+      <g transform="translate(70, 30)">
+        <rect x="0" y="0" width="62" height="42" fill="rgb(212, 212, 163)"/>
+        <rect x="62" y="0" width="62" height="42" fill="rgb(64, 74, 125)"/>
+        <rect x="124" y="0" width="62" height="42" fill="rgb(54, 64, 123)"/>
+        <rect x="186" y="0" width="62" height="42" fill="rgb(47, 58, 121)"/>
+        <rect x="248" y="0" width="62" height="42" fill="rgb(49, 60, 122)"/>
+        <rect x="0" y="42" width="62" height="42" fill="rgb(54, 64, 123)"/>
+        <rect x="62" y="42" width="62" height="42" fill="rgb(64, 74, 125)"/>
+        <rect x="124" y="42" width="62" height="42" fill="rgb(212, 212, 163)"/>
+        <rect x="186" y="42" width="62" height="42" fill="rgb(47, 58, 121)"/>
+        <rect x="248" y="42" width="62" height="42" fill="rgb(49, 60, 122)"/>
+        <rect x="0" y="84" width="62" height="42" fill="rgb(64, 74, 125)"/>
+        <rect x="62" y="84" width="62" height="42" fill="rgb(212, 212, 163)"/>
+        <rect x="124" y="84" width="62" height="42" fill="rgb(54, 64, 123)"/>
+        <rect x="186" y="84" width="62" height="42" fill="rgb(47, 58, 121)"/>
+        <rect x="248" y="84" width="62" height="42" fill="rgb(49, 60, 122)"/>
+        <rect x="0" y="126" width="62" height="42" fill="rgb(47, 58, 121)"/>
+        <rect x="62" y="126" width="62" height="42" fill="rgb(47, 58, 121)"/>
+        <rect x="124" y="126" width="62" height="42" fill="rgb(49, 60, 122)"/>
+        <rect x="186" y="126" width="62" height="42" fill="rgb(233, 232, 169)"/>
+        <rect x="248" y="126" width="62" height="42" fill="rgb(49, 60, 122)"/>
+        <rect x="0" y="168" width="62" height="42" fill="rgb(49, 60, 122)"/>
+        <rect x="62" y="168" width="62" height="42" fill="rgb(49, 60, 122)"/>
+        <rect x="124" y="168" width="62" height="42" fill="rgb(47, 58, 121)"/>
+        <rect x="186" y="168" width="62" height="42" fill="rgb(49, 60, 122)"/>
+        <rect x="248" y="168" width="62" height="42" fill="rgb(233, 232, 169)"/>
+        <g stroke="white" stroke-opacity="0.1">
+          <line x1="62" y1="0" x2="62" y2="210"/>
+          <line x1="124" y1="0" x2="124" y2="210"/>
+          <line x1="186" y1="0" x2="186" y2="210"/>
+          <line x1="248" y1="0" x2="248" y2="210"/>
+          <line x1="0" y1="42" x2="310" y2="42"/>
+          <line x1="0" y1="84" x2="310" y2="84"/>
+          <line x1="0" y1="126" x2="310" y2="126"/>
+          <line x1="0" y1="168" x2="310" y2="168"/>
+        </g>
+        <text x="31" y="225" text-anchor="middle" fill="black">la</text>
+        <text x="93" y="225" text-anchor="middle" fill="black">voiture</text>
+        <text x="155" y="225" text-anchor="middle" fill="black">verte</text>
+        <text x="217" y="225" text-anchor="middle" fill="black">est</text>
+        <text x="279" y="225" text-anchor="middle" fill="black">rapide</text>
+        <text x="-10" y="21" text-anchor="end" dominant-baseline="middle" fill="black">the</text>
+        <text x="-10" y="63" text-anchor="end" dominant-baseline="middle" fill="black">green</text>
+        <text x="-10" y="105" text-anchor="end" dominant-baseline="middle" fill="black">car</text>
+        <text x="-10" y="147" text-anchor="end" dominant-baseline="middle" fill="black">is</text>
+        <text x="-10" y="189" text-anchor="end" dominant-baseline="middle" fill="black">fast</text>
+        <text x="155" y="250" text-anchor="middle" font-weight="bold" font-size="14" fill="black">Source Sentence (French)</text>
+        <text x="-50" y="105" text-anchor="middle" font-weight="bold" font-size="14" fill="black" transform="rotate(-90, -50, 105)">Generated Target (English)</text>
+      </g>
+    </svg>
+duration: 88444 ms
+usage_stats:
+  {
+    "candidates_token_count": 1838,
+    "prompt_token_count": 680,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 680
+      }
+    ],
+    "thoughts_token_count": 10325,
+    "total_token_count": 12843
+  }
+...

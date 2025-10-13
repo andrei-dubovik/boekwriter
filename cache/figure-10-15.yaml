@@ -1,0 +1,111 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To make the goal of Information Extraction more concrete, consider the
+  difference between finding a document and understanding its contents. While an
+  IR system would successfully retrieve a news article about a corporate
+  acquisition, an IE system would process that same article to pull out the key
+  facts. Imagine the system encounters the following text in a press release:
+  "Global Tech Inc. announced today its definitive agreement to acquire Innovate
+  Solutions for a staggering \$2.5 billion."
+  
+  The objective of IE is to automatically populate a structured record, like a
+  database table, from this unstructured sentence. As shown in **Fig. 10.15**, the
+  system must identify specific text fragments and map them to predefined slots.
+  It needs to recognize that "Global Tech Inc." is the *Acquirer*, "Innovate
+  Solutions" is the *Target Company*, and "\$2.5 billion" is the *Acquisition
+  Price*. This process effectively transforms a block of prose into a row of data
+  that can be easily queried, aggregated, and analyzed. The core challenge lies in
+  building models that can perform this mapping accurately across countless
+  variations in phrasing and sentence structure.
+  
+  This fragment refers to Fig. 10.15. The figure in question is a "Illustration"
+  and its description is as follows:
+  
+  A side-by-side illustration contrasting unstructured text with structured
+  output. On the left, a paragraph of sample text about a corporate acquisition
+  will be shown. On the right, a structured table with columns like 'Acquirer',
+  'Target Company', and 'Acquisition Price' will be populated with data extracted
+  from the text. Arrows will connect the specific phrases in the text to their
+  corresponding cells in the table.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 09e698f3ba7ba3a1a35126dd246b00b0d4a89f29b69b4c5e64eed94e6a0a83f8
+response:
+  caption:
+    Illustration of Information Extraction (IE). An IE system processes an
+    unstructured sentence about a corporate acquisition (left) to identify and
+    extract key pieces of information, populating them into a structured data record
+    (right). Arrows indicate the mapping from text fragments to their corresponding
+    data slots.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" font-family="sans-serif">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="strokeWidth" markerWidth="4" markerHeight="3" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#555"/>
+        </marker>
+      </defs>
+      <g id="unstructured-text">
+        <text x="215" y="60" font-size="22" font-weight="bold" text-anchor="middle">Unstructured Text</text>
+        <rect x="40" y="85" width="350" height="170" rx="10" ry="10" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1.5"/>
+        <text x="55" y="125" font-size="16" fill="#212529">
+          <tspan>"</tspan>
+          <tspan id="acquirer-src" font-weight="bold" fill="#0056b3">Global Tech Inc.</tspan>
+          <tspan> announced today</tspan>
+          <tspan x="55" dy="1.5em">its definitive agreement to acquire</tspan>
+          <tspan x="55" dy="1.5em">
+            <tspan id="target-src" font-weight="bold" fill="#155724">Innovate Solutions</tspan>
+            <tspan> for a</tspan>
+          </tspan>
+          <tspan x="55" dy="1.5em">staggering </tspan>
+          <tspan id="price-src" font-weight="bold" fill="#721c24">$2.5 billion</tspan>
+          <tspan>."</tspan>
+        </text>
+      </g>
+      <g id="structured-output">
+        <text x="600" y="60" font-size="22" font-weight="bold" text-anchor="middle">Structured Output</text>
+        <g id="acquirer-row">
+          <rect x="440" y="100" width="320" height="55" rx="5" ry="5" fill="#e7f1ff" stroke="#b3d7ff"/>
+          <text x="455" y="132" font-size="15" font-weight="bold">Acquirer:</text>
+          <text x="545" y="132" font-size="16" fill="#0056b3">Global Tech Inc.</text>
+        </g>
+        <g id="target-row">
+          <rect x="440" y="175" width="320" height="55" rx="5" ry="5" fill="#eafaf1" stroke="#b8e6ca"/>
+          <text x="455" y="207" font-size="15" font-weight="bold">Target Company:</text>
+          <text x="605" y="207" font-size="16" fill="#155724">Innovate Solutions</text>
+        </g>
+        <g id="price-row">
+          <rect x="440" y="250" width="320" height="55" rx="5" ry="5" fill="#fdecea" stroke="#f5c6cb"/>
+          <text x="455" y="282" font-size="15" font-weight="bold">Acquisition Price:</text>
+          <text x="610" y="282" font-size="16" fill="#721c24">$2.5 billion</text>
+        </g>
+      </g>
+      <g id="arrows" stroke-width="2" fill="none" marker-end="url(#arrowhead)">
+        <path d="M 200 125 Q 320 105 435 125" stroke="#007bff"/>
+        <path d="M 220 173 Q 330 195 435 195" stroke="#28a745"/>
+        <path d="M 210 221 Q 325 280 435 275" stroke="#dc3545"/>
+      </g>
+    </svg>
+duration: 63494 ms
+usage_stats:
+  {
+    "candidates_token_count": 1141,
+    "prompt_token_count": 429,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 429
+      }
+    ],
+    "thoughts_token_count": 7238,
+    "total_token_count": 8808
+  }
+...

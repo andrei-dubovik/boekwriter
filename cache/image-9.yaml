@@ -1,0 +1,37 @@
+{model: str, query: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-flash-image-preview
+query: image
+prompt:
+  A simple, clean-line illustration from a top-down perspective, showing a pair of
+  hands at a wooden desk. On the desk lies a single sheet of paper divided into
+  two columns. The left column contains a short sentence written in English, while
+  the right column shows its translation in a language with a different script,
+  like Japanese. One hand holds a pen, which is drawing faint, curved lines
+  connecting individual words and phrases between the two columns. The lines
+  reveal a complex mapping: some connect one word to another, one connects a
+  single English word to a two-word phrase in Japanese, and another connects a
+  multi-word English phrase to a single character, visually representing the
+  puzzle of finding meaning correspondence across languages.
+hash: f59593f5249e37f1d811aeb774aaec80c353370bbc004ce7b0862323e418ecdd
+response: image-9.png
+duration: 5899 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 154,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 154
+      }
+    ],
+    "total_token_count": 1444
+  }
+...

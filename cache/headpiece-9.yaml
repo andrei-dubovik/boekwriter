@@ -1,0 +1,797 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: headpiece
+prompt:
+  What follows is a text for a chapter from a book called "Introduction to
+  Computational Linguistics".
+  
+  <chapter>
+  
+  Machine Translation (MT) stands as one of the oldest and most ambitious goals in
+  the history of computer science. The dream of automatic translation is nearly as
+  old as the electronic computer itself. Long before the term "artificial
+  intelligence" was coined, researchers envisioned machines that could break down
+  language barriers, a quest that began in earnest after World War II. The field's
+  origins are often traced to a 1949 memorandum by scientist Warren Weaver, who
+  famously proposed treating translation as a problem of cryptography—essentially
+  "decoding" a foreign language.
+  
+  This early optimism fueled efforts like the 1954 Georgetown-IBM experiment, a
+  public demonstration that successfully translated a small set of Russian
+  sentences into English. The initial hype, however, soon met the profound
+  complexity of human language. The influential 1966 ALPAC report concluded that
+  progress was slow and expensive, ushering in a long "AI winter" for MT research.
+  It was only with the rise of new data-driven statistical and neural methods that
+  the field experienced its modern renaissance. This dramatic history, from early
+  rule-based systems to today's powerful models, is outlined in the timeline in
+  **Fig. 9.1**.
+  
+  At its core, machine translation (MT) is the task of automatically converting
+  text from a *source language* to a *target language*. The goal is to produce a
+  translation that is both *fluent* in the target language and *faithful* to the
+  source text's meaning. Over the decades, the computational approach to this
+  challenge has evolved through three distinct paradigms, each with a
+  fundamentally different philosophy. This chapter will focus on the latter two,
+  but understanding all three provides essential context.
+  
+  1. **Rule-Based Machine Translation (RBMT):** The earliest systems relied on
+     direct human expertise. RBMT uses vast sets of hand-crafted rules created by
+     linguists, including large bilingual dictionaries for word-level translation
+     and explicit rules for grammatical transformations (e.g., word reordering to
+     match target syntax). This approach is highly interpretable but brittle; it
+     struggles with linguistic ambiguity and exceptions, and requires immense
+     manual effort to build and maintain.
+  
+  2. **Statistical Machine Translation (SMT):** The dominant paradigm from the
+     1990s to the mid-2010s, SMT reframes translation as a probabilistic problem.
+     Instead of rules, SMT systems learn how to translate by analyzing massive
+     parallel corpora. The guiding principle is to find the most probable
+     translation $\mathbf{t}$ for a given source sentence $\mathbf{s}$, a task
+     often modeled using Bayes' theorem: $P(\mathbf{t}|\mathbf{s})$. These systems
+     learn word and phrase correspondences directly from data.
+  
+  3. **Neural Machine Translation (NMT):** The current state-of-the-art, NMT uses
+     deep neural networks for translation. Architectures like sequence-to-sequence
+     models encode the source sentence into a dense vector representation and then
+     decode this representation into the target language. This holistic,
+     end-to-end approach allows the model to capture complex context and
+     long-range dependencies, overcoming many limitations of the more fragmented
+     SMT pipeline.
+  
+  At its heart, translation is a process of mapping meaning from a source language
+  to a target language. If language were a simple code where each word had a
+  single, unambiguous counterpart, this would be a trivial task. However, the
+  reality is far more complex. The fundamental difficulty of machine translation
+  stems from the inherent ambiguity of human language, which manifests in several
+  critical ways.
+  
+  The most straightforward challenge is *lexical ambiguity*, where a single word
+  can have multiple meanings. Consider the English word "bat." As shown in Fig.
+  9.3, the sentence "The bat flew over the field" presents two distinct
+  interpretations. In Spanish, these meanings require entirely different words:
+  *murciélago* for the flying mammal and *bate* for the sporting equipment.
+  Without sufficient context, an MT system cannot know which translation is
+  correct. Similarly, words like "bank" (a financial institution or a river's
+  edge) or "light" (not heavy or a form of energy) present the same problem. The
+  system must learn to disambiguate based on the surrounding words.
+  
+  Equally challenging is *structural ambiguity*, where the grammatical structure
+  of a sentence allows for multiple interpretations. The classic example is "I saw
+  the man with the telescope." This sentence could mean:
+  
+  1. I used a telescope to see the man.
+  2. I saw a man who was holding a telescope.
+  
+  A human speaker often resolves this ambiguity unconsciously, but an MT system
+  must make an explicit choice. This is crucial because the two interpretations
+  might require vastly different grammatical constructions in the target language.
+  
+  Finally, languages fundamentally differ in their syntactic structure, such as
+  word order. English follows a Subject-Verb-Object (SVO) order ("She reads the
+  book"), while languages like Japanese use Subject-Object-Verb (SOV) and Irish
+  uses Verb-Subject-Object (VSO). These differences require more than a simple
+  reordering of words; they demand a deep analysis of the sentence's grammatical
+  structure. These challenges demonstrate that translation is not merely a process
+  of substitution but a complex task of interpretation and generation.
+  
+  Modern machine translation systems, particularly the statistical and neural
+  paradigms we will explore, learn to translate not from hand-crafted linguistic
+  rules but from data. The essential resource for this data-driven approach is the
+  *parallel corpus*, also known as a bitext. A parallel corpus is a collection of
+  texts in a source language presented alongside its translation in a target
+  language.
+  
+  Crucially, these texts are aligned, most commonly at the sentence level. This
+  means each sentence in the source text is explicitly linked to its corresponding
+  translated sentence. For example:
+  
+  - **EN:** The book is on the table.
+  - **DE:** Das Buch liegt auf dem Tisch.
+  
+  By processing millions or even billions of these aligned sentence pairs, MT
+  models discover powerful statistical patterns. They learn the probability that a
+  source word like "book" corresponds to a target word like "Buch," and that the
+  phrase "on the table" often translates to "auf dem Tisch."
+  
+  Sources for large-scale parallel corpora are often official documents that
+  require translation by law, such as the proceedings of the Canadian Parliament
+  (the Hansard corpus) or the European Parliament (Europarl). Religious texts and
+  translated literary works also serve as valuable sources. The size and quality
+  of this training data are paramount; they are arguably the single most important
+  factors influencing the performance of a modern MT system.
+  
+  How do we automatically measure the quality of a translation? While human
+  evaluation is the gold standard, it is slow, expensive, and difficult to
+  replicate consistently. For the rapid development and comparison of systems, we
+  need automated metrics. The most influential of these is **BLEU** (Bilingual
+  Evaluation Understudy). The core intuition behind BLEU is straightforward: a
+  good machine translation will share a significant number of words and phrases
+  with a professional human translation.
+  
+  BLEU measures the correspondence between a machine-generated translation (the
+  *candidate*) and one or more high-quality human translations (the *references*).
+  Its score is based on a modified form of n-gram precision. For different n-gram
+  sizes (typically 1-grams to 4-grams), we calculate the proportion of n-grams in
+  the candidate that also appear in any of the reference translations. To prevent
+  systems from gaining an unfair advantage by over-generating common words, this
+  precision is "clipped." For example, if the word "the" appears once in a
+  reference but three times in the candidate, its count for the precision
+  calculation is clipped to one.
+  
+  Furthermore, a system could achieve high precision by producing a very short but
+  accurate output. To counteract this, BLEU incorporates a *brevity penalty* (BP)
+  that penalizes candidate translations that are shorter than their corresponding
+  references. The final score combines these elements as a geometric mean of the
+  modified n-gram precisions, multiplied by the brevity penalty:
+  
+  $BLEU = BP \cdot \exp\left(\sum_{n=1}^{N} w_n \log p_n\right)$
+  
+  Here, $p_n$ is the modified n-gram precision for n-grams of size $n$, and $N$ is
+  typically 4. While indispensable for research, it's crucial to remember that
+  BLEU is an imperfect proxy for quality and does not always correlate perfectly
+  with human judgments of fluency or adequacy.
+  
+  The breakthrough of Statistical Machine Translation (SMT) was to reframe
+  translation not as a linguistic puzzle of rule application, but as a problem of
+  probability. Given a source sentence *x* (e.g., in French), the goal is to find
+  the target sentence *y* (e.g., in English) that is most probable. We want to
+  find the *y* that maximizes the conditional probability $P(y|x)$:
+  
+  $$ \hat{y} = \underset{y}{\mathrm{arg\,max}}\, P(y|x) $$
+  
+  Directly modeling $P(y|x)$ is difficult. The key insight of SMT was to use
+  Bayes' theorem to decompose this problem into two more manageable components:
+  
+  $$ P(y|x) = \frac{P(x|y)P(y)}{P(x)} $$
+  
+  Since we are searching for the best *y* for a fixed input *x*, the denominator
+  $P(x)$ is a constant and can be ignored. Our maximization problem thus becomes:
+  
+  $$ \hat{y} = \underset{y}{\mathrm{arg\,max}}\, P(x|y)P(y) $$
+  
+  This formulation is famously known as the *noisy channel model*, a concept
+  borrowed from information theory (see Fig. 9.6). We imagine that the 'true'
+  message is the target sentence *y*, which was corrupted by a 'noisy channel' to
+  produce the source sentence *x* that we observe. The decoder's task is to
+  recover the original message by combining two separate models:
+  
+  - **The Translation Model, $P(x|y)$:** This component answers the question: how
+    likely are we to see the source sentence *x* if the original sentence was *y*?
+    It models the *faithfulness* of the translation. For instance, it would assign
+    a high probability to $P(\text{le chat} | \text{the cat})$.
+  
+  - **The Language Model, $P(y)$:** This component, which we covered in Chapter 4,
+    answers the question: how likely is *y* to be a sentence in the target
+    language? It models the *fluency* of the translation, ensuring the output is
+    grammatical and natural. For example, $P(\text{the cat sat})$ would be much
+    higher than $P(\text{cat the sat})$.
+  
+  SMT's power lies in this separation. It searches for a translation that is not
+  only a plausible rendering of the source text (a high translation model
+  probability) but is also a well-formed sentence in the target language (a high
+  language model probability). The system must balance these two competing
+  objectives to find the optimal output.
+  
+  Before an SMT system can learn that the French phrase *ne ... pas* is a good
+  translation for the English phrase *do not*, it must first learn a more
+  fundamental correspondence: that the word *pas* often appears in French
+  sentences when the word *not* appears in their English counterparts. This
+  foundational task of identifying word-level correspondences between sentences in
+  a parallel corpus is known as **word alignment**. It is the essential first step
+  in learning a statistical translation model. The goal is to produce a mapping
+  that indicates which word or words in the target sentence are translations of
+  each word in the source sentence.
+  
+  This mapping is rarely a simple one-to-one correspondence between words in
+  sequence. Languages have different grammatical structures, word orders, and ways
+  of expressing concepts. As illustrated in **Fig. 9.7**, word alignments can
+  exhibit several patterns:
+  
+  - **One-to-one:** A single source word maps to a single target word (e.g.,
+    *blue* → *bleu*). This is the most straightforward type of alignment.
+  - **One-to-many:** A single source word maps to multiple target words. This
+    often occurs when a concept encapsulated in one word in the source language
+    requires a multi-word phrase in the target language (e.g., a German verb like
+    *mitgehen* might align to *go with* in English).
+  - **Many-to-one:** Multiple source words map to a single target word (e.g., the
+    English phrase *floppy disk* aligns to the single French word *disquette*).
+  - **Many-to-many:** Multiple source words map to multiple target words, a common
+    pattern for idioms or complex phrases.
+  
+  Furthermore, some words in one language may have no direct equivalent in the
+  other. For instance, English requires an auxiliary verb in "I *do* not agree,"
+  where the word *do* has a purely grammatical function. In its French
+  translation, "Je ne suis pas d'accord," the word *do* has no corresponding word.
+  We model this by allowing source words to align to a special `NULL` token in the
+  target sentence, effectively marking them as unaligned. The number of target
+  words a source word aligns to is sometimes called its *fertility*.
+  
+  Word alignments are not present in our parallel corpora; we only have the source
+  and target sentences. The alignments are therefore *latent variables* that must
+  be inferred. The core challenge is a circular one: if we had correct word
+  alignments, we could easily estimate the probability of a word being the
+  translation of another. Conversely, if we knew these translation probabilities,
+  we could determine the most likely alignments. Breaking this cycle is the
+  primary goal of the first SMT models. They are designed to learn these
+  alignments automatically from nothing more than thousands of sentence pairs,
+  forming the statistical bedrock upon which the entire translation model is
+  built.
+  
+  The foundational work on learning word alignments automatically was conducted at
+  IBM in the early 1990s. The result was a series of five increasingly complex
+  statistical models, known collectively as the *IBM Models*, which provided a
+  principled, data-driven method for this crucial sub-task. These models treat the
+  alignment as a hidden variable; while we observe the source and target sentences
+  in a parallel corpus, the true word-level correspondences are unknown and must
+  be inferred.
+  
+  The core of the IBM Models is a generative story that probabilistically
+  describes how a target sentence *T* and its alignment *A* could be generated
+  from a source sentence *S*. The objective is to learn model parameters that
+  maximize the probability $P(T, A | S)$. The simplest of these, IBM Model 1,
+  imagines a straightforward, if linguistically naive, process: for each position
+  in the target sentence, it first chooses a source word to align with and then
+  generates the target word based on a learned translation probability, $p(t|s)$.
+  
+  The key challenge is that we know neither the alignments nor the translation
+  probabilities. The IBM Models solve this chicken-and-egg problem using the
+  Expectation-Maximization (EM) algorithm. The process iterates between two steps:
+  
+  - **E-Step (Expectation):** Using the current estimates of translation
+    probabilities, calculate the expected alignment counts for all word pairs in
+    the corpus. Essentially, we "softly" guess the alignments.
+  - **M-Step (Maximization):** Use these expected counts to re-estimate and
+    improve the translation probabilities. We update our model based on the
+    guesses from the E-step.
+  
+  This iterative process, which might start with uniform probabilities, converges
+  towards a robust set of lexical translation probabilities. The subsequent models
+  (Model 2 through 5) build upon this foundation, adding more sophisticated
+  parameters to account for linguistic phenomena like word reordering (distortion)
+  and the number of words a source word translates to (fertility). These models
+  were revolutionary, providing the statistical bedrock upon which phrase-based
+  SMT was built.
+  
+  While the IBM Models provided a powerful mathematical foundation for learning
+  word-to-word correspondences, translating text one word at a time is
+  fundamentally flawed. The limitations of this approach quickly become apparent.
+  Languages have different word orders, and meaning is often conveyed by groups of
+  words, not single lexical items. A word-for-word translation of the English
+  phrase *the green house* into Spanish might incorrectly yield *el verde casa*,
+  when the correct translation is *la casa verde*, demonstrating a change in both
+  noun-adjective order and gender agreement. Furthermore, idiomatic expressions
+  are impossible to translate literally; the English idiom *he kicked the bucket*
+  has no meaningful word-for-word equivalent in most other languages.
+  
+  The solution to these challenges was the leap from word-based to *phrase-based*
+  statistical machine translation. This paradigm shift is centered on a simple but
+  powerful idea: the fundamental unit of translation should not be a single word,
+  but a contiguous sequence of words, or a "phrase."[^1] Instead of translating
+  *green* and then *house*, the system learns to translate the block *green house*
+  directly into *casa verde*. This seemingly simple shift allows the model to
+  inherently learn local reordering, collocations, and short idiomatic expressions
+  directly from the data.
+  
+  The core of a phrase-based SMT system is a **phrase table**, which stores a
+  massive collection of source phrases, their corresponding target phrase
+  translations, and the probabilities associated with each pairing. These phrase
+  pairs are not defined by linguistic rules but are extracted automatically from
+  the parallel corpus using the word alignments generated by the IBM Models. The
+  guiding heuristic is simple: any group of source words that is consistently
+  aligned *only* with a specific group of target words across the corpus is a
+  candidate phrase pair.
+  
+  For instance, from the alignment between *the green house* and *la casa verde*,
+  the system could extract the following valid phrase pairs:
+  
+  - (*the*, *la*)
+  - (*house*, *casa*)
+  - (*green house*, *casa verde*)
+  - (*the green house*, *la casa verde*)
+  
+  Each of these pairs is assigned a translation probability, such as
+  $p(\text{casa verde} | \text{green house})$, estimated from its frequency of
+  co-occurrence in the aligned corpus. By learning to translate multi-word chunks,
+  phrase-based SMT achieved a dramatic improvement in translation fluency and
+  adequacy over its word-based predecessors. The model no longer had to piece
+  together translations from individual words; it could now use larger, more
+  meaningful building blocks. With a massive phrase table constructed, the task of
+  translation transforms into a search problem: finding the optimal way to segment
+  the source sentence into phrases and combine their most probable translations to
+  form a coherent and fluent target sentence.
+  
+  Once we have a phrase table and a language model, the central task is to combine
+  them to translate a new source sentence, $\mathbf{f}$. The challenge is not just
+  to find *a* translation, but the *best* one. Formally, we are searching for the
+  target sentence, $\hat{\mathbf{e}}$, that maximizes the probability of the
+  translation. This is expressed as finding the sentence that maximizes a score
+  combining the translation model (TM), which ensures faithfulness to the source,
+  and the language model (LM), which ensures fluency in the target language:
+  
+  $\hat{\mathbf{e}} = \arg\max_{\mathbf{e}} \text{score}_{TM}(\mathbf{f}, \mathbf{e}) \cdot \text{score}_{LM}(\mathbf{e})$
+  
+  Finding this optimal translation is a monumental search problem. Consider the
+  possibilities: a single source sentence can be segmented into phrases in many
+  different ways. Each source phrase might have dozens of possible target phrase
+  translations in our phrase table. Finally, the chosen target phrases can often
+  be reordered to fit the grammatical structure of the target language. This
+  combination of segmentation, translation, and reordering choices leads to a
+  combinatorial explosion, creating an astronomically large space of candidate
+  translations. Generating and scoring every single one to find the absolute best
+  is computationally impossible for all but the shortest of sentences.
+  
+  This search for the highest-scoring translation is known as *decoding*. To make
+  this problem tractable, SMT systems rely on heuristic algorithms. The dominant
+  approach is a form of beam search. Instead of exploring all paths, a beam search
+  decoder builds the translation incrementally, typically from left to right. At
+  each step, it considers all possible ways to extend its current set of partial
+  translations, or *hypotheses*. It then scores these newly expanded hypotheses
+  and prunes the list, keeping only a fixed number of the most promising ones—a
+  collection known as the "beam." All other, lower-scoring hypotheses are
+  permanently discarded. This process of extending and pruning continues until
+  complete sentences are formed.
+  
+  Beam search is a greedy approach; by discarding hypotheses at each step, it is
+  not guaranteed to find the single best translation. However, it provides an
+  essential trade-off between computational cost and translation quality. It
+  effectively navigates the vast search space to find a very high-quality
+  translation in a fraction of the time an exhaustive search would require.
+  
+  To make the decoding process concrete, let's walk through a simplified case
+  study of a phrase-based SMT system translating the English sentence, *"The small
+  house is on the hill"*, into Spanish. The goal of the system is to find the
+  Spanish sentence $\hat{s}$ that maximizes a probabilistic score combining three
+  components: a phrase translation model, a reordering (or distortion) model, and
+  a target language model.
+  
+  #### Step 1: Segmentation
+  
+  First, the system considers all possible ways to segment the source sentence
+  into phrases that exist in its pre-learned phrase table. For instance, a few of
+  the many possible segmentations are:
+  
+  - `[The small house] [is on] [the hill]`
+  - `[The] [small house] [is] [on the hill]`
+  - `[The small] [house] [is on the hill]`
+  
+  #### Step 2: Translation Options
+  
+  For each segmented phrase, the system looks up potential translations and their
+  associated probabilities, $\phi(\text{target phrase}|\text{source phrase})$,
+  from the phrase table. A sample of these options might include:
+  
+  - `The small house` $\rightarrow$ `La casa pequeña` (prob: 0.7),
+    `La pequeña casa` (prob: 0.2)
+  - `is on` $\rightarrow$ `está en` (prob: 0.9)
+  - `the hill` $\rightarrow$ `la colina` (prob: 0.8), `el cerro` (prob: 0.1)
+  - `small house` $\rightarrow$ `casa pequeña` (prob: 0.6)
+  
+  #### Step 3: Decoding and Scoring
+  
+  The decoder's job is to navigate the immense search space of these options to
+  find the highest-scoring complete translation. It does this by building
+  hypotheses incrementally. Let's compare two competing hypotheses for translating
+  the first part of the sentence, "The small house":
+  
+  - **Hypothesis A:** This hypothesis is generated by translating the single
+    phrase `[The small house]` to `La pequeña casa`. This translation is
+    *monotonic*—it directly preserves the English word order. It would incur a
+    very low reordering penalty. Its score would be based on the phrase
+    translation probability (0.2) and the language model's probability for "La
+    pequeña casa".
+  
+  - **Hypothesis B:** This hypothesis is generated from the same source phrase
+    `[The small house]` but uses the higher-probability translation
+    `La casa pequeña`. This phrase pair implicitly captures the necessary
+    reordering of the adjective.
+  
+  The crucial step is scoring these alternatives with the Spanish language model.
+  A strong language model, trained on vast amounts of Spanish text, would know
+  that `casa pequeña` (house small) is far more common and natural than
+  `pequeña casa` (small house). Therefore, the language model score for Hypothesis
+  B, $P_{LM}(\text{La casa pequeña})$, would be significantly higher than for
+  Hypothesis A.
+  
+  Even if Hypothesis A had a lower reordering cost, the powerful signal from the
+  language model makes Hypothesis B the clear winner for this part of the
+  sentence. The decoder prunes away less likely hypotheses like A and continues
+  building upon promising ones like B. By extending this process, it combines
+  `La casa pequeña` with the best translations for the rest of the sentence (e.g.,
+  `está en` and `la colina`), ultimately yielding the final, fluent output:
+  `La casa pequeña está en la colina`.
+  
+  For over a decade, Statistical Machine Translation, particularly phrase-based
+  systems, represented the state-of-the-art. These models were a significant leap
+  over their rule-based predecessors and produced useful translations for many
+  language pairs. However, their core architecture contained inherent weaknesses
+  that ultimately limited their potential and motivated a paradigm shift toward a
+  new, more integrated approach.
+  
+  The primary limitations of SMT systems stemmed from their complexity and
+  fragmented design. An SMT system was not a single, unified model but a complex
+  pipeline of several independently optimized components, including:
+  
+  - A *translation model* to map source phrases to target phrases.
+  - A *language model* to ensure the fluency of the target output.
+  - A *reordering model* to handle different word orders between languages.
+  
+  Tuning these disparate parts to work together was a formidable task, and errors
+  from one stage would inevitably propagate to the next. Furthermore, SMT systems
+  required extensive and painstaking *feature engineering*. Human experts had to
+  manually design hundreds or even thousands of features to guide the translation
+  process, making the models brittle and difficult to adapt to new language pairs
+  or domains.
+  
+  Perhaps most critically, phrase-based SMT had a fundamentally local view of the
+  translation task. By processing sentences chunk by chunk, it struggled to
+  capture long-range dependencies and broader contextual nuances, often resulting
+  in disfluent or grammatically awkward output. The desire for a single, powerful
+  model that could learn to translate in an *end-to-end* fashion—reading an entire
+  source sentence and generating a translation without separate components—led
+  directly to the rise of Neural Machine Translation.
+  
+  The paradigm shift to Neural Machine Translation (NMT) introduced a
+  fundamentally different and more elegant architecture for tackling the
+  translation task. Instead of a complex pipeline of separately engineered
+  components, as seen in SMT, NMT uses a single, large neural network that is
+  trained *end-to-end*. The foundational architecture for this approach is the
+  **sequence-to-sequence (seq2seq)** model, which is designed to map an input
+  sequence of one length to an output sequence of a potentially different length.
+  This model consists of two primary components: an *encoder* and a *decoder*.
+  
+  The **encoder** is tasked with processing the source sentence and compressing
+  its meaning into a dense, fixed-size numerical representation. As depicted in
+  **Fig. 9.13**, the encoder is typically a Recurrent Neural Network (RNN), or one
+  of its more powerful variants like a Long Short-Term Memory (LSTM) or Gated
+  Recurrent Unit (GRU) network.[^1] It reads the source sentence one word (or
+  token) at a time, from left to right. At each step, the RNN updates its internal
+  *hidden state*, which incorporates information about the current word and the
+  context from all previous words. After processing the final word of the input
+  sentence, the encoder's last hidden state serves as a summary of the entire
+  sentence. This final vector is often called the **context vector** (or sometimes
+  a "thought vector"). The central idea is that this single vector encapsulates
+  the complete meaning—the semantic essence—of the source sentence.
+  
+  The **decoder** is the second major component, and its job is to take the
+  context vector and generate the target sentence word by word. The decoder is
+  also an RNN, and its initial hidden state is initialized with the context vector
+  produced by the encoder. This "primes" the decoder with the meaning of the
+  sentence it needs to generate. The generation process then unfolds sequentially:
+  
+  1. The decoder is first given a special start-of-sentence token (e.g.,
+     `<start>`).
+  2. Using the context vector and this initial token, it predicts the most
+     probable first word of the target sentence.
+  3. The word it just generated is then fed back as the input for the next time
+     step.
+  4. The decoder then predicts the second word, conditioned on both the context
+     vector and the first word it generated.
+  5. This auto-regressive process continues, with each newly generated word
+     becoming the input for the subsequent step, until the model predicts a
+     special end-of-sentence token (e.g., `<end>`).
+  
+  The entire seq2seq model is trained as a single system on a parallel corpus. The
+  network's goal is to learn to maximize the conditional probability of producing
+  the correct target sentence $Y = (y_1, ..., y_m)$ given a source sentence
+  $X = (x_1, ..., x_n)$. Formally, it optimizes its parameters to maximize
+  $P(Y | X)$. During training, the model's output at each step is compared to the
+  ground-truth word from the training data, and the error is calculated. This
+  error is then propagated back through the entire network—from the decoder all
+  the way back through the encoder—to adjust the model's millions of parameters.
+  This end-to-end training allows the model to learn a complex, non-linear mapping
+  from source text to target text directly, without any need for explicit word
+  alignments or phrase tables.
+  
+  While the sequence-to-sequence architecture was a major breakthrough, its
+  initial design harbored a critical weakness. The encoder is tasked with
+  processing an input of arbitrary length and compressing its entire semantic
+  content into a single, fixed-length vector. This vector, sometimes called the
+  *context vector* or "thought vector," must encapsulate everything the decoder
+  needs to know to generate a correct translation—the words, their meanings, their
+  relationships, and their order.
+  
+  This design imposes a severe **information bottleneck**. Consider the challenge
+  of summarizing a long, complex sentence versus a short, simple one. A single
+  vector of a predefined size has a finite capacity to store information. As the
+  length and complexity of the source sentence increase, the model’s ability to
+  cram all the necessary nuance into this single representation diminishes.
+  Inevitably, information is lost.
+  
+  This architectural flaw had a direct and measurable impact: the performance of
+  these early NMT models degraded significantly as sentence length grew. The model
+  might successfully translate the first part of a long sentence but "forget" key
+  details or context from the beginning by the time it starts generating the end
+  of the target sentence. The decoder is working from a single, static summary and
+  has no way to refer back to the original source words. This limitation made it
+  clear that a more dynamic way of accessing the source information was needed,
+  leading directly to the development of the attention mechanism.
+  
+  The fixed-length context vector used in early encoder-decoder models, as we have
+  seen, creates a significant *information bottleneck*. It forces the model to
+  compress the entire meaning of a source sentence—regardless of its length or
+  complexity—into a single vector of a few hundred dimensions. This is an immense
+  burden. A long, nuanced sentence about political philosophy and a short, simple
+  sentence like "The cat sat" must both be squeezed into the same fixed-size
+  representation. Unsurprisingly, the performance of these models degrades sharply
+  as sentence length increases, as information from early in the sentence is often
+  lost by the time the vector is fully constructed.
+  
+  To overcome this critical limitation, a powerful and elegant solution was
+  introduced: the **attention mechanism**. The central idea is intuitive yet
+  revolutionary: instead of forcing the decoder to rely on a single, static
+  context vector, we allow it to *attend* to different parts of the source
+  sentence at each step of the decoding process. At the moment it generates the
+  word "la", the French translation of "the", it might need to focus on the
+  English word "The". When it later generates "souris", it should focus on
+  "mouse". The attention mechanism gives the model a way to learn and implement
+  this dynamic focus automatically.
+  
+  At its core, the attention mechanism provides the decoder with access to *all*
+  of the encoder's hidden states ($h_1, h_2, ..., h_N$) at every decoding time
+  step, $t$. Instead of using a pre-computed summary of the source, the decoder
+  actively decides which encoder states are most relevant for predicting the
+  current target word, $y_t$. It then computes a context-specific vector based on
+  this decision. This process, visualized in **Fig. 9.15**, can be broken down
+  into a few key steps.
+  
+  First, we need to score how well each encoder hidden state $h_j$ aligns with the
+  decoder's hidden state from the *previous* time step, $s_{t-1}$. This score
+  quantifies the relevance of the $j$-th source word to the $t$-th target word we
+  are about to generate. This is accomplished using an *alignment score function*,
+  which can be as simple as a dot product or a small feed-forward neural network
+  that takes both states as input. We can represent this as:
+  
+  $e_{tj} = \text{score}(s_{t-1}, h_j)$
+  
+  This gives us a vector of scores, one for each source word position.
+  
+  Second, these raw alignment scores are normalized into a probability
+  distribution using the softmax function. The resulting values, $\alpha_{tj}$,
+  are called the *attention weights*. Each weight represents the amount of
+  attention the decoder should place on the $j$-th source word when generating the
+  $t$-th target word. Because they are the output of a softmax function, these
+  weights conveniently sum to 1 over all source words.
+  
+  $\alpha_{tj} = \frac{\exp(e_{tj})}{\sum_{k=1}^{N} \exp(e_{tk})}$
+  
+  Third, a dynamic context vector, $c_t$, is computed as a weighted sum of all the
+  encoder hidden states. The weights used in this sum are precisely the attention
+  weights, $\alpha_{tj}$, we just calculated.
+  
+  $c_t = \sum_{j=1}^{N} \alpha_{tj} h_j$
+  
+  This context vector is a powerful construct. If a particular source word at
+  position $j$ is deemed highly relevant for the current decoding step, its
+  attention weight $\alpha_{tj}$ will be high, and its corresponding hidden state
+  $h_j$ will dominate the context vector $c_t$. If another source word is
+  irrelevant, its weight will be near zero, effectively silencing its
+  contribution.
+  
+  Finally, this tailored context vector $c_t$ is combined with the decoder's
+  current hidden state, typically by concatenation, and then used to predict the
+  target word $y_t$. The entire mechanism, from scoring to prediction, is
+  implemented with differentiable operations, meaning it can be trained end-to-end
+  with backpropagation, just like the rest of the network.
+  
+  The introduction of attention was a watershed moment for NMT. By relieving the
+  encoder of the impossible task of perfect compression, it dramatically improved
+  translation quality, especially for long sentences. Furthermore, it offered a
+  rare and valuable glimpse into the model's inner workings. By visualizing the
+  attention weights $\alpha_{tj}$ as a matrix, we can see which source words the
+  model "looked at" when generating each target word. This often reveals
+  plausible, soft alignments between languages, making the model more
+  interpretable and easier to debug. This ability to dynamically weigh input
+  components proved so effective that it became the foundational concept for the
+  next generation of neural architectures.
+  
+  The abstract concept of the attention mechanism becomes much clearer when
+  visualized. At each step of generating a target word, the decoder calculates a
+  set of *attention weights*, one for each word in the source sentence. These
+  weights, which are positive and sum to one, determine the influence each source
+  word has on the generation of the current target word. We can arrange these
+  weights into a matrix, where rows correspond to the generated target words and
+  columns correspond to the source words.
+  
+  **Fig. 9.16** presents a heatmap of such an attention matrix for a sample
+  translation from French to English. The source sentence is laid out along the
+  x-axis, and the generated target sentence is along the y-axis. The intensity of
+  the color in each cell $(i, j)$ represents the attention weight $\alpha_{ij}$,
+  which indicates how much the model focused on the *j*-th source word when
+  producing the *i*-th target word. A brighter cell signifies a higher weight,
+  meaning a stronger focus.
+  
+  Notice the strong diagonal pattern in the visualization. This is common for
+  languages with similar word order, indicating that the model often aligns the
+  *n*-th target word with the *n*-th source word. However, the true power of
+  attention is revealed in the non-diagonal alignments, which show the model
+  handling differences in grammar and word order. For instance, in translating the
+  French phrase "la voiture verte" to the English "the green car", the model must
+  reorder the adjective and noun. When generating the word "green", the attention
+  mechanism would allow it to place a high weight on the source word "verte",
+  regardless of their different positions in their respective sentences. This
+  would be visible as a bright, off-diagonal cell in the matrix.
+  
+  This ability to dynamically link target words to relevant source words is
+  precisely what overcomes the fixed-context-vector bottleneck of earlier models.
+  Instead of relying on a single, compressed summary of the entire input, the
+  decoder has direct, selective access to the source representation at every step.
+  This not only dramatically improves translation quality but also offers a
+  valuable form of *interpretability*. By visualizing attention, we gain a direct
+  insight into the model's internal decision-making process, observing how it
+  aligns words across languages to construct a coherent translation.
+  
+  While the attention mechanism solved the information bottleneck of simple
+  encoder-decoder models, the underlying recurrent neural networks (RNNs) still
+  possessed a fundamental limitation: their sequential nature. Because the
+  computation for each word depended on the hidden state of the previous word, the
+  process was inherently difficult to parallelize, making it slow to train on very
+  large datasets and long sentences. In 2017, a landmark paper titled "Attention
+  Is All You Need" introduced the *Transformer* architecture, a new model for NMT
+  that dispensed with recurrence entirely.
+  
+  The Transformer's core innovation is a mechanism called *self-attention*.
+  Instead of passing information sequentially, self-attention allows every word in
+  the source sentence to directly look at and weigh the importance of all other
+  words in that same sentence. This process is repeated in multiple layers,
+  allowing the model to build a deeply contextualized representation for each word
+  by aggregating information from across the entire input. The Transformer
+  maintains the familiar encoder-decoder structure, but each component is now a
+  stack of these self-attention layers rather than a recurrent network.
+  
+  This architectural shift had two profound consequences. First, by allowing
+  direct connections between any two words, it became exceptionally good at
+  modeling long-range dependencies. Second, and perhaps more importantly, the
+  removal of recurrence made the computations massively parallelizable. The
+  representation for every word could be calculated simultaneously, leading to
+  dramatic reductions in training time on modern hardware like GPUs. The
+  Transformer's superior performance and efficiency quickly established it as the
+  new state-of-the-art for machine translation, and its architecture became the
+  foundational blueprint for the large language models that would come to dominate
+  the field, as we will see in the final chapter.
+  
+  The theoretical advantages of Neural Machine Translation, especially the
+  attention mechanism's capacity to model long-range dependencies, translate
+  directly into a dramatic and observable leap in translation quality. While
+  Statistical Machine Translation often produces literal and sometimes disjointed
+  translations by stitching together memorized phrases, NMT systems generate text
+  that is significantly more fluent, coherent, and accurate.
+  
+  This qualitative gap is starkly illustrated in the comparative example shown in
+  **Fig. 9.18**. The English source sentence, "The policy, which had been under
+  discussion for months, was eventually shot down by the opposition," presents
+  challenges in its complex syntax and idiomatic phrasing ("shot down").
+  
+  The SMT output demonstrates the typical weaknesses of the phrase-based approach.
+  It struggles with the long-distance dependency between "The policy" and
+  "was...shot down," and it is likely to produce a clumsy, literal translation of
+  the idiom—perhaps as "was fired down" or "was gunned down." The result is a
+  grammatically awkward sentence that fails to convey the correct political
+  meaning and would require significant human post-editing to be usable.
+  
+  In contrast, the NMT output reveals a much deeper, more holistic understanding
+  of the source text. By processing the entire sentence contextually, the model
+  correctly interprets "shot down" as a metaphor for "rejected" or "defeated" and
+  finds an appropriate, non-literal equivalent in the target language. It smoothly
+  handles the embedded clause, maintaining the sentence's logical flow. This
+  ability to move beyond local word and phrase substitutions to re-express
+  sentence-level meaning is the hallmark of the NMT revolution. It marks the
+  transition from a mechanical process of fragment replacement to a more nuanced
+  act of linguistic regeneration.
+  
+  The evolution from Statistical Machine Translation (SMT) to Neural Machine
+  Translation (NMT) marks a profound shift in methodology and core philosophy. The
+  SMT paradigm is one of *decomposition*. It dissects the translation process into
+  distinct, manageable sub-problems: word alignment, phrase extraction, and
+  decoding, each optimized separately. Its power comes from combining a
+  translation model, which ensures faithfulness to the source, with a language
+  model, which ensures fluency in the target. The system relies heavily on
+  explicit, count-based statistical tables and carefully engineered features to
+  guide the search for the best translation.
+  
+  NMT, in contrast, champions a *holistic*, end-to-end approach. It replaces the
+  complex pipeline of SMT with a single, large neural network trained to perform
+  the entire translation task. This model learns to directly map a sequence of
+  source words to a sequence of target words without relying on explicit phrase
+  tables or intermediate steps. By representing language in continuous vector
+  spaces and using mechanisms like attention, NMT models can capture long-range
+  dependencies and subtle contextual nuances that were difficult for SMT to
+  manage, leading to more fluent and human-like translations.
+  
+  Despite the remarkable advances brought by Neural Machine Translation, the field
+  is far from solved. Significant challenges remain, and exciting new research
+  directions are constantly emerging. The data-hungry nature of NMT models creates
+  a major bottleneck, leading to a stark digital divide between high-resource
+  languages with abundant parallel corpora (like English and French) and the vast
+  majority of the world's languages, which are considered *low-resource*. Current
+  research actively tackles this problem through techniques like transfer
+  learning, where a model trained on a high-resource pair is fine-tuned on a
+  smaller low-resource dataset, and unsupervised methods that learn translations
+  using only monolingual data.
+  
+  Beyond data availability, several other key challenges persist:
+  
+  - **Domain Mismatch:** A model trained on news articles will struggle to
+    translate legal documents or social media posts. Adapting MT systems to
+    specific domains and handling noisy, informal text remains a crucial area of
+    work.
+  - **Evaluation:** As we have seen, automated metrics like BLEU are an imperfect
+    proxy for human judgment. They can penalize valid translations that use
+    different phrasing and often fail to capture subtle nuances of fluency and
+    adequacy. The development of better evaluation metrics is an ongoing pursuit.
+  - **Bias and Fairness:** Like other large models trained on web data, MT systems
+    can learn and amplify societal biases related to gender, race, and culture.
+    Ensuring fair and unbiased translations is a critical ethical imperative.
+  
+  Looking forward, the future of machine translation is likely to be more
+  contextual and interactive. One of the most promising frontiers is *multimodal
+  machine translation*, which aims to incorporate information from other
+  modalities, such as images or audio, into the translation process. For example,
+  an accompanying image could help a model correctly disambiguate the word "bat"
+  (animal vs. sports equipment) when translating a sentence. Another exciting
+  direction is developing *controllable* translation systems, allowing users to
+  specify constraints such as formality, tone, or the inclusion of specific
+  terminology. This would transform MT from a static tool into a dynamic,
+  collaborative assistant, particularly for professional translators. The quest
+  for perfect translation continues, driving innovation at the heart of
+  computational linguistics.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+  
+  [^1]: LSTMs and GRUs are advanced types of RNNs specifically designed to better handle
+  long-range dependencies in sequences, mitigating issues like the vanishing
+  gradient problem that can affect simpler RNNs.
+hash: 60336534c7718870cfbde1ec384b8b6abb4359e3d0b0a84dccf3b1b6a085a4e3
+response:
+  A simple, clean-line illustration from a top-down perspective, showing a pair of
+  hands at a wooden desk. On the desk lies a single sheet of paper divided into
+  two columns. The left column contains a short sentence written in English, while
+  the right column shows its translation in a language with a different script,
+  like Japanese. One hand holds a pen, which is drawing faint, curved lines
+  connecting individual words and phrases between the two columns. The lines
+  reveal a complex mapping: some connect one word to another, one connects a
+  single English word to a two-word phrase in Japanese, and another connects a
+  multi-word English phrase to a single character, visually representing the
+  puzzle of finding meaning correspondence across languages.
+duration: 20392 ms
+usage_stats:
+  {
+    "candidates_token_count": 144,
+    "prompt_token_count": 10048,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 10048
+      }
+    ],
+    "thoughts_token_count": 1739,
+    "total_token_count": 11931
+  }
+...

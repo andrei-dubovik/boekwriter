@@ -1,0 +1,152 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The architecture that powered this revolution is the **Transformer**, introduced
+  by Vaswani et al. in their seminal 2017 paper, "Attention Is All You Need." Its
+  core innovation was to dispense entirely with the sequential processing of
+  Recurrent Neural Networks (RNNs) and instead rely exclusively on a mechanism
+  called *self-attention*. This allows the model to process all input tokens
+  simultaneously and directly weigh the influence of every word on every other
+  word in a sequence, capturing complex, long-range dependencies more effectively
+  than its predecessors.
+  
+  As illustrated in Fig. 12.3, the original Transformer has a sophisticated
+  encoder-decoder structure, designed for sequence-to-sequence tasks like machine
+  translation. The *encoder* stack takes the input sequence and builds a rich,
+  context-aware numerical representation of it. The *decoder* stack then uses this
+  representation, along with the output it has generated so far, to produce the
+  next token in the output sequence. Each stack is composed of multiple identical
+  layers containing two primary sub-components: a multi-head self-attention
+  mechanism and a simple, position-wise feed-forward network. Residual connections
+  and layer normalization are used around each sub-component to facilitate
+  training.
+  
+  This flexible architecture became the blueprint for most modern LLMs. Models
+  like BERT (*Bidirectional Encoder Representations from Transformers*) leverage
+  the encoder stack to excel at tasks requiring deep language understanding. In
+  contrast, models in the GPT (*Generative Pre-trained Transformer*) family
+  primarily use the decoder stack, making them exceptionally powerful for text
+  generation. The key to their success lies in the self-attention mechanism, which
+  we will now explore in detail.
+  
+  This fragment refers to Fig. 12.3. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A high-level architectural diagram of the Transformer model, illustrating the
+  encoder and decoder stacks. The diagram will show the flow of input embeddings
+  through multi-head attention and feed-forward network layers, including residual
+  connections and layer normalization, providing a complete visual map of the
+  model's structure.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: f052489dbc2541c0d110c5d125dcfa03531fc5355ba25dc106bde5ce8dbee69a
+response:
+  caption:
+    A high-level architectural diagram of the Transformer model, illustrating the
+    encoder and decoder stacks. The diagram shows the flow of input embeddings
+    through multi-head attention and feed-forward network layers, including residual
+    connections and layer normalization, providing a complete visual map of the
+    model's structure.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+        <style>.label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 13px; text-anchor: middle; fill: #111; } .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 20px; text-anchor: middle; font-weight: bold; } .box { fill: #e3f2fd; stroke: #64b5f6; stroke-width: 1.5; rx: 8; } .sub-box { fill: #fff3e0; stroke: #ffb74d; stroke-width: 1; rx: 4; } .add-norm { fill: #e8eaf6; stroke: #9fa8da; stroke-width: 1; rx: 4; } .flow-line { stroke: #333; stroke-width: 1.5; marker-end: url(#arrow); fill: none; } .residual-line { stroke: #999; stroke-width: 1; marker-end: url(#arrow); fill: none; }</style>
+      </defs>
+      <rect width="800" height="600" fill="white"/>
+      <g id="encoder">
+        <rect x="110" y="120" width="200" height="340" class="box"/>
+        <text x="210" y="100" class="title">Encoder</text>
+        <text x="325" y="290" class="label">N&#215;</text>
+        <rect x="120" y="370" width="180" height="50" class="sub-box"/>
+        <text x="210" y="395" class="label">Multi-Head Attention</text>
+        <rect x="120" y="300" width="180" height="40" class="add-norm"/>
+        <text x="210" y="325" class="label">Add &amp; Norm</text>
+        <rect x="120" y="220" width="180" height="40" class="sub-box"/>
+        <text x="210" y="245" class="label">Feed-Forward Network</text>
+        <rect x="120" y="150" width="180" height="40" class="add-norm"/>
+        <text x="210" y="175" class="label">Add &amp; Norm</text>
+        <text x="210" y="585" class="label">Inputs</text>
+        <rect x="120" y="530" width="180" height="30" class="sub-box"/>
+        <text x="210" y="550" class="label">Input Embeddings</text>
+        <rect x="120" y="480" width="180" height="30" class="add-norm"/>
+        <text x="210" y="500" class="label">+ Positional Encoding</text>
+        <path class="flow-line" d="M 210 530 V 510"/>
+        <path class="flow-line" d="M 210 480 V 460"/>
+        <path class="flow-line" d="M 210 460 V 420"/>
+        <path class="flow-line" d="M 210 370 V 340"/>
+        <path class="flow-line" d="M 210 300 V 260"/>
+        <path class="flow-line" d="M 210 220 V 190"/>
+        <path class="flow-line" d="M 210 150 V 120"/>
+        <path class="residual-line" d="M 200 420 C 80 420, 80 340, 200 340"/>
+        <path class="residual-line" d="M 200 260 C 80 260, 80 190, 200 190"/>
+      </g>
+      <g id="decoder">
+        <rect x="490" y="110" width="200" height="350" class="box"/>
+        <text x="590" y="90" class="title">Decoder</text>
+        <text x="705" y="285" class="label">N&#215;</text>
+        <rect x="500" y="400" width="180" height="40" class="sub-box"/>
+        <text x="590" y="420" class="label">Masked M-H Attention</text>
+        <rect x="500" y="350" width="180" height="30" class="add-norm"/>
+        <text x="590" y="370" class="label">Add &amp; Norm</text>
+        <rect x="500" y="290" width="180" height="40" class="sub-box"/>
+        <text x="590" y="310" class="label">Multi-Head Attention</text>
+        <rect x="500" y="240" width="180" height="30" class="add-norm"/>
+        <text x="590" y="260" class="label">Add &amp; Norm</text>
+        <rect x="500" y="190" width="180" height="30" class="sub-box"/>
+        <text x="590" y="210" class="label">Feed-Forward Network</text>
+        <rect x="500" y="140" width="180" height="30" class="add-norm"/>
+        <text x="590" y="160" class="label">Add &amp; Norm</text>
+        <text x="590" y="585" class="label">Outputs (shifted right)</text>
+        <rect x="500" y="530" width="180" height="30" class="sub-box"/>
+        <text x="590" y="550" class="label">Output Embeddings</text>
+        <rect x="500" y="480" width="180" height="30" class="add-norm"/>
+        <text x="590" y="500" class="label">+ Positional Encoding</text>
+        <text x="590" y="15" class="label">Output Probabilities</text>
+        <path class="flow-line" d="M 590 30 V 20"/>
+        <rect x="500" y="30" width="180" height="30" class="sub-box"/>
+        <text x="590" y="50" class="label">Softmax</text>
+        <path class="flow-line" d="M 590 70 V 60"/>
+        <rect x="500" y="70" width="180" height="30" class="sub-box"/>
+        <text x="590" y="90" class="label">Linear</text>
+        <path class="flow-line" d="M 590 530 V 510"/>
+        <path class="flow-line" d="M 590 480 V 460"/>
+        <path class="flow-line" d="M 590 460 V 440"/>
+        <path class="flow-line" d="M 590 400 V 380"/>
+        <path class="flow-line" d="M 590 350 V 330"/>
+        <path class="flow-line" d="M 590 290 V 270"/>
+        <path class="flow-line" d="M 590 240 V 220"/>
+        <path class="flow-line" d="M 590 190 V 170"/>
+        <path class="flow-line" d="M 590 140 V 110"/>
+        <path class="flow-line" d="M 590 110 V 100"/>
+        <path class="residual-line" d="M 580 440 C 460 440, 460 380, 580 380"/>
+        <path class="residual-line" d="M 580 330 C 460 330, 460 270, 580 270"/>
+        <path class="residual-line" d="M 580 220 C 460 220, 460 170, 580 170"/>
+        <path class="residual-line" d="M 680 545 H 740 V 50 H 590"/>
+      </g>
+      <path class="flow-line" d="M 310 290 C 400 290, 400 310, 490 310" style="stroke-width:2;"/>
+    </svg>
+duration: 91783 ms
+usage_stats:
+  {
+    "candidates_token_count": 2401,
+    "prompt_token_count": 519,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 519
+      }
+    ],
+    "thoughts_token_count": 10326,
+    "total_token_count": 13246
+  }
+...

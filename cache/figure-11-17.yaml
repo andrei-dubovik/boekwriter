@@ -1,0 +1,110 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Once a sentiment classifier is trained, we need a systematic way to measure its
+  performance. A simple "percentage correct" can be misleading, especially with
+  imbalanced data. A more nuanced evaluation starts with a *confusion matrix*,
+  which visualizes how the model's predictions align with the true labels, as
+  shown in Fig. 11.17. This matrix categorizes predictions into four types:
+  
+  - **True Positives (TP):** Positive instances correctly identified as positive.
+  - **True Negatives (TN):** Negative instances correctly identified as negative.
+  - **False Positives (FP):** Negative instances incorrectly labeled as positive
+    (a Type I error).
+  - **False Negatives (FN):** Positive instances incorrectly labeled as negative
+    (a Type II error).
+  
+  From these counts, we derive several key metrics. *Accuracy* is the most
+  intuitive, representing the overall fraction of correct predictions:
+  \$$ \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN} $\$
+  
+  To understand the trade-offs, we use *Precision* and *Recall*. Precision
+  measures exactness: of all instances the model predicted as positive, how many
+  were actually positive?
+  \$$ \text{Precision} = \frac{TP}{TP + FP} $$
+  Recall measures completeness: of all the instances that were truly positive, how many did the model find?
+  $$ \text{Recall} = \frac{TP}{TP + FN} $\$
+  
+  The *F1-score* combines these two into a single number by calculating their
+  harmonic mean, providing a balanced measure that is useful when both precision
+  and recall are important.
+  \$$ F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}} = \frac{2TP}{2TP + FP + FN} $\$
+  Together, these metrics provide a robust framework for comparing different
+  sentiment analysis models.
+  
+  This fragment refers to Fig. 11.17. The figure in question is a "Diagram" and
+  its description is as follows:
+  
+  A diagram of a 2x2 confusion matrix for a binary sentiment classification task
+  (Positive/Negative). The axes would be 'Predicted Label' and 'True Label'. The
+  four cells would be clearly labeled: True Positive (TP), False Positive (FP),
+  True Negative (TN), and False Negative (FN). Below the matrix, the formulas for
+  Accuracy, Precision, Recall, and F1-score would be written in terms of TP, FP,
+  TN, and FN, directly linking the metrics to the visual representation.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 78bcf4ee9fe3ad1c8e421a9843d192a2f2e759b735d0a0eb37717205bae2c411
+response:
+  caption:
+    Fig. 11.17: A confusion matrix for a binary classification task. It visualizes
+    the four possible outcomes—True Positive (TP), True Negative (TN), False
+    Positive (FP), and False Negative (FN)—which are used to calculate key
+    evaluation metrics.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+      <defs>
+        <style>.bg { fill: white; } .grid-line { stroke: #333; stroke-width: 2; } .cell-bg-correct { fill: #e8f5e9; } .cell-bg-error { fill: #ffebee; } .axis-label { font-family: Arial, sans-serif; font-size: 22px; font-weight: bold; text-anchor: middle; } .header-label { font-family: Arial, sans-serif; font-size: 20px; text-anchor: middle; } .cell-text { font-family: Arial, sans-serif; text-anchor: middle; } .cell-main { font-size: 20px; } .cell-abbr { font-size: 18px; font-style: italic; fill: #444; } .formula-text { font-family: 'Consolas', 'Courier New', monospace; font-size: 19px; } .formula-label { font-weight: bold; font-family: Arial, sans-serif; }</style>
+      </defs>
+      <rect class="bg" width="800" height="600"/>
+      <text x="425" y="40" class="axis-label">Predicted Label</text>
+      <text x="60" y="255" class="axis-label" transform="rotate(-90, 60, 255)">True Label</text>
+      <rect x="175" y="105" width="250" height="150" class="cell-bg-correct"/>
+      <rect x="425" y="105" width="250" height="150" class="cell-bg-error"/>
+      <rect x="175" y="255" width="250" height="150" class="cell-bg-error"/>
+      <rect x="425" y="255" width="250" height="150" class="cell-bg-correct"/>
+      <rect x="175" y="105" width="500" height="300" fill="none" class="grid-line"/>
+      <line x1="425" y1="105" x2="425" y2="405" class="grid-line"/>
+      <line x1="175" y1="255" x2="675" y2="255" class="grid-line"/>
+      <text x="300" y="85" class="header-label">Positive</text>
+      <text x="550" y="85" class="header-label">Negative</text>
+      <text x="165" y="180" class="header-label" text-anchor="end">Positive</text>
+      <text x="165" y="330" class="header-label" text-anchor="end">Negative</text>
+      <text x="300" y="170" class="cell-text cell-main">True Positive</text>
+      <text x="300" y="200" class="cell-text cell-abbr">(TP)</text>
+      <text x="550" y="170" class="cell-text cell-main">False Negative</text>
+      <text x="550" y="200" class="cell-text cell-abbr">(FN)</text>
+      <text x="300" y="320" class="cell-text cell-main">False Positive</text>
+      <text x="300" y="350" class="cell-text cell-abbr">(FP)</text>
+      <text x="550" y="320" class="cell-text cell-main">True Negative</text>
+      <text x="550" y="350" class="cell-text cell-abbr">(TN)</text>
+      <text x="220" y="460" text-anchor="end" class="formula-text formula-label">Accuracy</text>
+      <text x="230" y="460" class="formula-text">= (TP + TN) / (TP + TN + FP + FN)</text>
+      <text x="220" y="495" text-anchor="end" class="formula-text formula-label">Precision</text>
+      <text x="230" y="495" class="formula-text">= TP / (TP + FP)</text>
+      <text x="220" y="530" text-anchor="end" class="formula-text formula-label">Recall</text>
+      <text x="230" y="530" class="formula-text">= TP / (TP + FN)</text>
+      <text x="220" y="565" text-anchor="end" class="formula-text formula-label">F1-score</text>
+      <text x="230" y="565" class="formula-text">= 2TP / (2TP + FP + FN)</text>
+    </svg>
+duration: 78019 ms
+usage_stats:
+  {
+    "candidates_token_count": 1260,
+    "prompt_token_count": 632,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 632
+      }
+    ],
+    "thoughts_token_count": 9432,
+    "total_token_count": 11324
+  }
+...

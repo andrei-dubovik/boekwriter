@@ -1,0 +1,153 @@
+{model: str, query: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: visuals
+prompt:
+  You are writing a chapter titled "Machine Translation" in a book called
+  "Introduction to Computational Linguistics". The plan for the chapter is a
+  follows.
+  
+  01. Begin with the historical context of machine translation, framing it as one
+      of the earliest and most ambitious goals of artificial intelligence.
+  02. Define the core task of machine translation and introduce the three major
+      paradigms to be discussed: rule-based, statistical, and neural.
+  03. Illustrate the fundamental challenges of translation, such as lexical and
+      structural ambiguity, using cross-linguistic examples.
+  04. Introduce the concept of a parallel corpus as the essential bilingual text
+      data required to train modern MT systems.
+  05. Explain how the quality of machine translation is quantitatively measured
+      using automated evaluation metrics like the BLEU score.
+  06. Introduce Statistical Machine Translation (SMT) by framing the task
+      probabilistically using the noisy channel model and Bayes' theorem.
+  07. Detail the crucial sub-task of word alignment, which involves learning the
+      correspondence between words in a source and target sentence pair.
+  08. Provide a conceptual overview of the IBM Models for learning word alignment
+      probabilities directly from parallel corpora.
+  09. Explain the leap from word-based models to phrase-based SMT, which
+      translates contiguous sequences of words to improve fluency.
+  10. Describe the decoding process in SMT as a complex search problem for finding
+      the highest-probability translation among countless possibilities.
+  11. Present a simplified case study of a phrase-based SMT system translating a
+      short English sentence into another language.
+  12. Motivate the paradigm shift to Neural Machine Translation (NMT) by
+      highlighting the limitations of SMT, such as feature engineering and context
+      handling.
+  13. Introduce the foundational sequence-to-sequence architecture, detailing how
+      an encoder network reads the source sentence and a decoder network generates
+      the target sentence.
+  14. Explain the information bottleneck problem inherent in early encoder-decoder
+      models where the entire source sentence meaning is compressed into a single
+      vector.
+  15. Detail the revolutionary attention mechanism, which overcomes the bottleneck
+      by allowing the decoder to dynamically focus on relevant parts of the source
+      input at each step.
+  16. Use a visualization of an attention matrix as a pedagogical aid to
+      demonstrate how the model aligns source and target words during translation.
+  17. Briefly discuss the Transformer architecture, noting how it replaced
+      recurrent layers with self-attention to become the state-of-the-art for NMT.
+  18. Showcase the qualitative leap in translation quality with a compelling
+      example comparing outputs from SMT and NMT systems for the same source
+      sentence.
+  19. Summarize the chapter by contrasting the core philosophies of SMT and NMT.
+  20. Conclude by discussing current challenges and future directions in machine
+      translation, including low-resource languages and multimodality.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 8 aids. Explain the chosen aids in detail. Only list the items where an aid
+  has been chosen.
+hash: 1094fafe6b5367caadca2be8b8bb545b5e5f4e8380a203ccb8a76c686cec17ba
+response:
+- number: 1
+  aid: Timeline
+  description:
+    A timeline charting the history of machine translation. It will begin with
+    Warren Weaver's 1949 memorandum, mark the Georgetown-IBM experiment in 1954, the
+    influential ALPAC report in 1966, the rise of statistical methods in the late
+    1980s/early 1990s, the advent of phrase-based SMT in the early 2000s, and the
+    paradigm shift to Neural MT starting around 2014 with sequence-to-sequence
+    models and the Transformer in 2017.
+- number: 3
+  aid: Illustration
+  description:
+    An illustration demonstrating lexical ambiguity. It will show a simple English
+    sentence like 'The bat flew over the field.' and present two distinct visual
+    interpretations and corresponding target-language translations: one for a flying
+    mammal and another for a piece of sporting equipment. This will make the
+    challenge of disambiguation concrete for the reader.
+- number: 6
+  aid: Diagram
+  description:
+    A conceptual diagram of the noisy channel model for Statistical Machine
+    Translation. The diagram will show an intended target sentence 'y' entering a
+    'noisy channel' (the translation process), which outputs the observed source
+    sentence 'x'. The decoder's task is shown as recovering the most probable 'y'
+    given 'x' by combining a translation model P(x|y) and a language model P(y),
+    visually representing Bayes' theorem.
+- number: 7
+  aid: Illustration
+  description:
+    A visual representation of word alignment in a parallel sentence pair. The
+    illustration will display an English sentence at the top and its French
+    translation at the bottom. Lines will be drawn connecting words that are
+    translations of each other, showcasing one-to-one, one-to-many, and many-to-one
+    alignments to highlight the complexity of the correspondence.
+- number: 13
+  aid: Diagram
+  description:
+    A high-level architectural diagram of a sequence-to-sequence (seq2seq) model. It
+    will depict two main components: an Encoder RNN that processes the input
+    sentence step-by-step and compresses it into a fixed-size context vector, and a
+    Decoder RNN which uses this vector to generate the output sentence token by
+    token. The flow of information from source to context vector to target will be
+    clearly marked.
+- number: 15
+  aid: Diagram
+  description:
+    A diagram illustrating the attention mechanism. It will show the decoder at a
+    specific timestep, generating one target word. Instead of using a single context
+    vector, arrows will originate from the current decoder state and point to all of
+    the encoder's hidden states. This visualizes the calculation of attention
+    scores, which create a context-specific vector that allows the model to 'focus'
+    on the most relevant input words for the current output word.
+- number: 16
+  aid: Chart
+  description:
+    A heatmap chart visualizing an attention matrix. The x-axis will list the words
+    of a source sentence and the y-axis will list the words of the generated target
+    sentence. Each cell in the grid will be colored based on the attention weight,
+    with brighter colors indicating a higher weight. The chart will clearly show how
+    the model aligns source and target words during translation, often forming a
+    strong diagonal pattern.
+- number: 18
+  aid: Table
+  description:
+    A comparative table showcasing the qualitative difference between SMT and NMT
+    outputs. The table will have three columns: 'Source Sentence', 'SMT Output', and
+    'NMT Output'. It will feature a sentence with complex syntax or idiomatic
+    phrasing, where the SMT output appears literal and disfluent, while the NMT
+    output demonstrates superior fluency and accuracy.
+duration: 32576 ms
+usage_stats:
+  {
+    "candidates_token_count": 895,
+    "prompt_token_count": 739,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 739
+      }
+    ],
+    "thoughts_token_count": 2603,
+    "total_token_count": 4237
+  }
+...

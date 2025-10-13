@@ -1,0 +1,102 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The fundamental algorithm for lexicon-based sentiment analysis is both intuitive
+  and computationally efficient. It operates by aggregating the polarity of
+  individual words to determine the overall sentiment of a text, a process
+  summarized visually in Fig. 11.8. The procedure can be broken down into four
+  main steps:
+  
+  1. **Tokenization:** First, the input text is segmented into a list of words, or
+     tokens.
+  2. **Polarity Scoring:** Each token is looked up in the sentiment lexicon. If
+     the word is present, its pre-assigned polarity score is retrieved (e.g., +1
+     for positive, -1 for negative). Words not found in the lexicon are typically
+     assigned a neutral score of 0.
+  3. **Aggregation:** The scores for all tokens in the text are combined, usually
+     through simple summation, to produce a final sentiment score. This is
+     calculated as: $S_{text} = \sum_{i=1}^{n} \text{polarity}(w_i)$ where $w_i$
+     is the *i*-th word in the *n*-word text.
+  4. **Classification:** The final aggregated score, $S_{text}$, is then compared
+     against a threshold to assign a category. For instance:
+     - **Positive** if $S_{text} > 0$
+     - **Negative** if $S_{text} < 0$
+     - **Neutral** if $S_{text} = 0$
+  
+  This method provides a transparent and easily implemented baseline for sentiment
+  classification, serving as a valuable first approach before moving to more
+  complex models.
+  
+  This fragment refers to Fig. 11.8. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A flowchart diagram that visually represents the steps of a simple lexicon-based
+  sentiment analysis algorithm. It would start with an "Input Text" box, followed
+  by arrows leading to subsequent steps: "Tokenize Text into Words", "For each
+  word, look up polarity in Sentiment Lexicon (e.g., +1, -1, 0)", "Aggregate
+  scores for all words (e.g., Summation)", and finally an "Output Sentiment Class
+  (Positive/Negative/Neutral)" box based on the final score. This clarifies the
+  process flow.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 5bdd0d805f11d46e20f10c9992e4b6c05b3f26cb7b4461faff45d0241cbbd80c
+response:
+  caption:
+    Fig. 11.8. A flowchart diagram illustrating the steps of a simple lexicon-based
+    sentiment analysis algorithm, from tokenization to classification.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+        <style>.box { fill: #f0f8ff; stroke: #4682b4; stroke-width: 2; rx: 10; } .label { font-family: sans-serif; font-size: 16px; fill: #333; text-anchor: middle; } .arrow { stroke: #333; stroke-width: 2; marker-end: url(#arrowhead); }</style>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <rect class="box" x="250" y="30" width="300" height="50"/>
+      <text class="label" x="400" y="60">Input Text</text>
+      <line class="arrow" x1="400" y1="80" x2="400" y2="120"/>
+      <rect class="box" x="250" y="130" width="300" height="50"/>
+      <text class="label" x="400" y="160">Tokenize Text into Words</text>
+      <line class="arrow" x1="400" y1="180" x2="400" y2="220"/>
+      <rect class="box" x="200" y="230" width="400" height="90"/>
+      <text class="label" x="400" y="255">
+        <tspan x="400">For each word, look up polarity</tspan>
+        <tspan x="400" dy="1.4em">in Sentiment Lexicon</tspan>
+        <tspan x="400" dy="1.4em">(e.g., +1, -1, 0)</tspan>
+      </text>
+      <line class="arrow" x1="400" y1="320" x2="400" y2="360"/>
+      <rect class="box" x="250" y="370" width="300" height="70"/>
+      <text class="label" x="400" y="395">
+        <tspan x="400">Aggregate scores for all words</tspan>
+        <tspan x="400" dy="1.4em">(e.g., Summation)</tspan>
+      </text>
+      <line class="arrow" x1="400" y1="440" x2="400" y2="480"/>
+      <rect class="box" x="250" y="490" width="300" height="70"/>
+      <text class="label" x="400" y="515">
+        <tspan x="400">Output Sentiment Class</tspan>
+        <tspan x="400" dy="1.4em">(Positive/Negative/Neutral)</tspan>
+      </text>
+    </svg>
+duration: 50100 ms
+usage_stats:
+  {
+    "candidates_token_count": 827,
+    "prompt_token_count": 568,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 568
+      }
+    ],
+    "thoughts_token_count": 5714,
+    "total_token_count": 7109
+  }
+...

@@ -1,0 +1,100 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Document-level sentiment analysis can be a blunt instrument, often failing to
+  capture the full picture when a text contains mixed opinions. To illustrate the
+  power and necessity of Aspect-Based Sentiment Analysis (ABSA), consider this
+  common type of review:
+  
+  - "The pizza was delicious, but the service was slow."
+  
+  A document-level classifier might label this sentence as neutral, as the
+  positive and negative sentiments could effectively cancel each other out. This
+  overlooks crucial information. ABSA, in contrast, dissects the sentence to
+  extract more granular insights. The goal is to identify the specific *aspects*
+  being discussed and then determine the *polarity* of the opinion expressed
+  towards each one.
+  
+  In this example, there are two distinct aspect-opinion pairs:
+  
+  1. **Aspect:** `pizza`
+  
+     - **Opinion Expression:** `delicious`
+     - **Sentiment Polarity:** Positive (+)
+  
+  2. **Aspect:** `service`
+  
+     - **Opinion Expression:** `slow`
+     - **Sentiment Polarity:** Negative (-)
+  
+  This process, visually deconstructed in Fig. 11.21, provides a much richer
+  understanding of the reviewer's feedback. A restaurant owner reading this review
+  learns precisely what customers liked (the food) and what needs improvement (the
+  service). This level of detail is far more actionable than a simple "neutral"
+  rating and demonstrates the core value of the ABSA task.
+  
+  This fragment refers to Fig. 11.21. The figure in question is a "Diagram" and
+  its description is as follows:
+  
+  A diagram that visually deconstructs the sentence, "The pizza was delicious, but
+  the service was slow." It would show the full sentence, then have two distinct
+  branches. One branch would highlight the word 'pizza' (the aspect) and connect
+  it with an arrow to the word 'delicious' (the opinion word), labeled with a '+'
+  or 'Positive'. The second branch would highlight 'service' and connect it with
+  an arrow to 'slow', labeled with a '-' or 'Negative'. This clearly illustrates
+  the core task of ABSA.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 93f6165f7533d3e469199e687465ec85a0db476317631c7213e877c3e4ae5563
+response:
+  caption:
+    Fig. 11.21: A diagram illustrating Aspect-Based Sentiment Analysis (ABSA). The
+    sentence "The pizza was delicious, but the service was slow" is deconstructed
+    into its two core aspect-opinion pairs. The 'pizza' aspect is linked to the
+    positive opinion 'delicious', while the 'service' aspect is linked to the
+    negative opinion 'slow', visually representing the granular analysis provided by
+    ABSA.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+      <rect width="800" height="600" fill="white"/>
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+      </defs>
+      <rect x="150" y="255" width="80" height="40" fill="#e0f2fe" rx="5"/>
+      <rect x="270" y="255" width="125" height="40" fill="#dcfce7" rx="5"/>
+      <rect x="500" y="255" width="100" height="40" fill="#e0f2fe" rx="5"/>
+      <rect x="645" y="255" width="65" height="40" fill="#fee2e2" rx="5"/>
+      <text x="400" y="285" font-family="sans-serif" font-size="28" text-anchor="middle">The pizza was delicious, but the service was slow.</text>
+      <text x="190" y="245" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#0284c7" font-weight="500">Aspect</text>
+      <text x="332.5" y="245" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#16a34a" font-weight="500">Opinion</text>
+      <path d="M 190 300 Q 261 360 332.5 300" stroke="#333" fill="none" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <text x="261" y="385" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#15803d" font-weight="bold">Positive (+)</text>
+      <text x="550" y="245" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#0284c7" font-weight="500">Aspect</text>
+      <text x="677.5" y="245" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#b91c1c" font-weight="500">Opinion</text>
+      <path d="M 550 300 Q 614 360 677.5 300" stroke="#333" fill="none" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <text x="614" y="385" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#b91c1c" font-weight="bold">Negative (-)</text>
+    </svg>
+duration: 73374 ms
+usage_stats:
+  {
+    "candidates_token_count": 890,
+    "prompt_token_count": 517,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 517
+      }
+    ],
+    "thoughts_token_count": 8528,
+    "total_token_count": 9935
+  }
+...

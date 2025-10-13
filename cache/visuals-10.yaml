@@ -1,0 +1,160 @@
+{model: str, query: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: visuals
+prompt:
+  You are writing a chapter titled "Information Retrieval and Information
+  Extraction" in a book called "Introduction to Computational Linguistics". The
+  plan for the chapter is a follows.
+  
+  01. This chapter introduces Information Retrieval, the task of finding relevant
+      documents, and Information Extraction, the task of pulling structured data
+      from text.
+  02. We will use the example of searching for company earnings reports versus
+      extracting specific revenue figures to contrast the goals of IR and IE.
+  03. First, we formally define the classic Information Retrieval problem,
+      consisting of a user query, a document collection, and a ranked list of
+      results.
+  04. The section then explains the concept of an inverted index, the core data
+      structure that enables efficient lookup of documents containing specific
+      terms.
+  05. A simple step-by-step example will demonstrate how to build an inverted
+      index from a small collection of four documents.
+  06. We then introduce the vector space model, which represents documents and
+      queries as numerical vectors in a high-dimensional space.
+  07. The term-document matrix is presented as the conceptual foundation for
+      creating these vector representations.
+  08. We will provide a detailed explanation of the TF-IDF weighting scheme, which
+      scores the importance of terms within and across documents.
+  09. This part concludes by showing how to calculate the cosine similarity
+      between a query vector and document vectors to rank documents by relevance.
+  10. To evaluate the performance of IR systems, we introduce the fundamental
+      metrics of precision and recall.
+  11. The F1-score is explained as a harmonic mean that provides a single,
+      combined measure of precision and recall.
+  12. We will also briefly discuss other important metrics, such as Mean Average
+      Precision, which are specifically designed for evaluating ranked lists.
+  13. A practical case study will guide the reader through the process of building
+      a simple search engine for a collection of news articles.
+  14. Shifting focus, we define Information Extraction as the task of
+      automatically identifying and extracting structured information from
+      unstructured text.
+  15. A clear example will illustrate this process by showing raw text about
+      corporate acquisitions alongside the desired structured table of acquirers,
+      targets, and prices.
+  16. We begin the study of IE with Named Entity Recognition, the subtask of
+      identifying and categorizing key entities like persons, organizations, and
+      locations.
+  17. Early approaches to NER are discussed, including hand-crafted rules and the
+      use of gazetteers or pre-defined lists of names.
+  18. The chapter then explains modern statistical NER models by framing the
+      problem as a sequence labeling task similar to Part-of-Speech tagging.
+  19. We will cover the common types of features, such as word shape and
+      surrounding words, that are used in these statistical models.
+  20. Next, we define Relation Extraction as the task of identifying the specific
+      semantic relationships that exist between the entities found by NER.
+  21. Simple yet effective pattern-based approaches are explored, which use
+      regular expressions over either raw text or syntactic dependency paths.
+  22. We then introduce supervised machine learning methods that classify the
+      relationship type between a given pair of entities.
+  23. An illustrative example demonstrates how to extract relations, such as
+      'founded_by(Apple, Steve Jobs)', from a biographical text.
+  24. A case study then shows how IE can be used to automatically populate a
+      knowledge base of corporate executives and their roles from financial news
+      reports.
+  25. Finally, the chapter summarizes the key differences between IR and IE while
+      also highlighting how they can be used together in a pipeline.
+  26. We conclude with a brief discussion of the profound impact that modern deep
+      learning techniques have had on advancing both IR and IE.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 7 aids. Explain the chosen aids in detail. Only list the items where an aid
+  has been chosen.
+hash: 64769b5b6ef21baacb7f44265baa6db4e0f7bf5c7fda904875b8ab05908a6e8b
+response:
+- number: 3
+  aid: Diagram
+  description:
+    A flowchart-style diagram illustrating the high-level architecture of a classic
+    Information Retrieval system. It will show a 'User Query' as input to a central
+    'IR System' box. This central box will be shown to use a 'Document Collection'
+    and an 'Inverted Index'. The final output from the system will be a 'Ranked List
+    of Documents'.
+- number: 5
+  aid: Table
+  description:
+    A two-part visual aid to demonstrate the construction of an inverted index. The
+    first part will show a small collection of four sample documents with IDs. The
+    second part will be a two-column table representing the final index. The first
+    column will list unique terms ('token') from the documents, and the second
+    column ('postings list') will show the list of document IDs in which that term
+    appears.
+- number: 9
+  aid: Diagram
+  description:
+    A 2D vector space diagram to intuitively explain cosine similarity. The diagram
+    will show a query vector ('q') and two document vectors ('d1' and 'd2')
+    originating from the same point. The angle between 'q' and 'd1' will be visibly
+    smaller than the angle between 'q' and 'd2', illustrating that 'd1' is
+    considered more relevant to the query.
+- number: 10
+  aid: Diagram
+  description:
+    A classic Venn diagram to define precision and recall. One circle will represent
+    the set of 'Relevant Documents' and an overlapping circle will represent the
+    'Retrieved Documents'. The intersecting area will be labeled 'True Positives',
+    visually grounding the concepts of precision (the fraction of retrieved
+    documents that are relevant) and recall (the fraction of relevant documents that
+    are retrieved).
+- number: 15
+  aid: Illustration
+  description:
+    A side-by-side illustration contrasting unstructured text with structured
+    output. On the left, a paragraph of sample text about a corporate acquisition
+    will be shown. On the right, a structured table with columns like 'Acquirer',
+    'Target Company', and 'Acquisition Price' will be populated with data extracted
+    from the text. Arrows will connect the specific phrases in the text to their
+    corresponding cells in the table.
+- number: 18
+  aid: Diagram
+  description:
+    A diagram that frames Named Entity Recognition as a sequence labeling task. A
+    sample sentence (e.g., 'Maria Rossi moved to Rome.') will be shown as a sequence
+    of tokens at the bottom. Above each token, a corresponding label from the BIO
+    (Beginning, Inside, Outside) tagging scheme will be displayed (e.g., B-PER,
+    I-PER, O, O, B-LOC), clearly illustrating the input and desired output for a
+    statistical model.
+- number: 25
+  aid: Table
+  description:
+    A summary table that concisely contrasts the core differences between
+    Information Retrieval and Information Extraction. The table will have three
+    columns: 'Aspect', 'Information Retrieval', and 'Information Extraction'. Rows
+    will compare key aspects such as 'Goal' (Find relevant documents vs. Extract
+    structured facts), 'Output' (Ranked list of documents vs. Filled database
+    records), and 'Scope' (Document-level vs. Sub-document level).
+duration: 37290 ms
+usage_stats:
+  {
+    "candidates_token_count": 774,
+    "prompt_token_count": 935,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 935
+      }
+    ],
+    "thoughts_token_count": 3418,
+    "total_token_count": 5127
+  }
+...

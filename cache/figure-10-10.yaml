@@ -1,0 +1,90 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Once an IR system returns a list of documents, how do we measure its success?
+  The quality of a search result is not a simple binary judgment. To formally
+  evaluate performance, we rely on metrics that capture different aspects of
+  relevance. The two most fundamental of these are *precision* and *recall*.
+  
+  Precision answers the question: *Of the documents the system retrieved, what
+  fraction were actually relevant?* It is a measure of exactness or fidelity. If
+  every document you see is on-topic, the system has high precision. Recall, on
+  the other hand, answers: *Of all the relevant documents that exist in the
+  collection, what fraction did the system find?* It is a measure of completeness.
+  If the system found every possible relevant document, it has high recall.
+  
+  These concepts are often visualized using the sets of retrieved and relevant
+  documents, as shown in **Fig. 10.10**. To formalize this, we can categorize any
+  document as a *True Positive* (relevant and retrieved), a *False Positive*
+  (retrieved but not relevant), or a *False Negative* (relevant but not
+  retrieved). The formulas are then:
+  
+  - $\text{Precision} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Positives}}$
+  - $\text{Recall} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}}$
+  
+  There is an inherent trade-off between these two metrics. A system designed for
+  maximum recall could simply return every document in the collection,
+  guaranteeing it finds all relevant ones (100% recall) but with abysmal
+  precision. Conversely, a cautious system that returns only a single document it
+  is extremely confident about might achieve perfect precision but have terrible
+  recall. Balancing this trade-off is a central challenge in designing IR systems.
+  
+  This fragment refers to Fig. 10.10. The figure in question is a "Diagram" and
+  its description is as follows:
+  
+  A classic Venn diagram to define precision and recall. One circle will represent
+  the set of 'Relevant Documents' and an overlapping circle will represent the
+  'Retrieved Documents'. The intersecting area will be labeled 'True Positives',
+  visually grounding the concepts of precision (the fraction of retrieved
+  documents that are relevant) and recall (the fraction of relevant documents that
+  are retrieved).
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: e49ddc485937188141f02fc98c09488dc8a7a98d3b9237685b56f56fc1495ac1
+response:
+  caption:
+    Fig. 10.10: A Venn diagram illustrating the concepts of precision and recall by
+    showing the overlap between the set of relevant documents and the set of
+    retrieved documents.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+      <defs>
+        <style>.title{font-family:sans-serif;font-size:16px;text-anchor:middle;font-weight:bold;}.label{font-family:sans-serif;font-size:14px;text-anchor:middle;}.desc{font-size:12px;}</style>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <g id="relevant-set">
+        <circle cx="160" cy="150" r="100" fill="#aaccff" stroke="#3366cc" stroke-width="2" fill-opacity="0.6"/>
+        <text x="160" y="80" class="title">Relevant Documents</text>
+      </g>
+      <g id="retrieved-set">
+        <circle cx="240" cy="150" r="100" fill="#aaffaa" stroke="#339933" stroke-width="2" fill-opacity="0.6"/>
+        <text x="240" y="80" class="title">Retrieved Documents</text>
+      </g>
+      <g id="labels">
+        <text x="100" y="145" class="label">False Negatives<tspan x="100" dy="1.2em" class="desc">(relevant, not retrieved)</tspan></text>
+        <text x="300" y="145" class="label">False Positives<tspan x="300" dy="1.2em" class="desc">(retrieved, not relevant)</tspan></text>
+        <text x="200" y="145" class="label">True Positives<tspan x="200" dy="1.2em" class="desc">(relevant &amp; retrieved)</tspan></text>
+      </g>
+    </svg>
+duration: 21881 ms
+usage_stats:
+  {
+    "candidates_token_count": 522,
+    "prompt_token_count": 582,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 582
+      }
+    ],
+    "thoughts_token_count": 2131,
+    "total_token_count": 3235
+  }
+...

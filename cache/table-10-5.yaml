@@ -1,0 +1,90 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  To illustrate how an inverted index is built, let's consider the small
+  collection of four documents shown in the top half of **Fig. 10.5**. The process
+  begins by collecting all unique, normalized tokens from the entire collection to
+  form the dictionary. For our example, this dictionary would include terms like
+  `company`, `earnings`, `growth`, `report`, `revenue`, and so on.
+  
+  Next, we iterate through each term in the dictionary and compile its *postings
+  list*—the list of all document IDs containing that term. To find the postings
+  for the term "revenue", we scan the collection and note that it appears in
+  Document 2 and Document 4. Therefore, its postings list is `[2, 4]`. This
+  process is repeated for every unique term.
+  
+  The complete inverted index is shown in the bottom half of **Fig. 10.5**. It
+  consists of the dictionary of terms, where each term points to its corresponding
+  postings list. Once built, this structure allows for extremely fast retrieval.
+  Finding documents that mention "revenue" is now a simple lookup operation, not
+  an expensive scan of every document.
+  
+  This fragment refers to Fig. 10.5, which is a table. Its description is as
+  follows:
+  
+  A two-part visual aid to demonstrate the construction of an inverted index. The
+  first part will show a small collection of four sample documents with IDs. The
+  second part will be a two-column table representing the final index. The first
+  column will list unique terms ('token') from the documents, and the second
+  column ('postings list') will show the list of document IDs in which that term
+  appears.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: c4e6dab972cbec8865a623da270b1cff060b8bcf2d49bc5726b38b6ce906752a
+response:
+  caption:
+    Building an inverted index. The top part shows the source document collection.
+    The bottom part shows the resulting index, mapping each unique term to its
+    postings list (the documents in which it appears). The example for the term
+    'revenue' with postings list \[2, 4\] matches the text's description.
+  latex:
+    \begin{tabular}{ll}
+    \toprule
+    \multicolumn{2}{c}{\textbf{I. Document Collection}} \\
+    \midrule
+    \textbf{Document ID} & \textbf{Content} \\
+    \midrule
+    1 & Company growth report. \\
+    2 & Earnings report shows revenue growth. \\
+    3 & New company strategy. \\
+    4 & Quarterly revenue exceeds expectations. \\
+    \midrule[\heavyrulewidth]
+    \multicolumn{2}{c}{\textbf{II. Resulting Inverted Index}} \\
+    \midrule
+    \textbf{Token} & \textbf{Postings List} \\
+    \midrule
+    company & [1, 3] \\
+    earnings & [2] \\
+    exceeds & [4] \\
+    expectations & [4] \\
+    growth & [1, 2] \\
+    new & [3] \\
+    quarterly & [4] \\
+    report & [1, 2] \\
+    revenue & [2, 4] \\
+    shows & [2] \\
+    strategy & [3] \\
+    \bottomrule
+    \end{tabular}
+duration: 20536 ms
+usage_stats:
+  {
+    "candidates_token_count": 335,
+    "prompt_token_count": 425,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 425
+      }
+    ],
+    "thoughts_token_count": 2137,
+    "total_token_count": 2897
+  }
+...

@@ -1,0 +1,72 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The theoretical advantages of Neural Machine Translation, especially the
+  attention mechanism's capacity to model long-range dependencies, translate
+  directly into a dramatic and observable leap in translation quality. While
+  Statistical Machine Translation often produces literal and sometimes disjointed
+  translations by stitching together memorized phrases, NMT systems generate text
+  that is significantly more fluent, coherent, and accurate.
+  
+  This qualitative gap is starkly illustrated in the comparative example shown in
+  **Fig. 9.18**. The English source sentence, "The policy, which had been under
+  discussion for months, was eventually shot down by the opposition," presents
+  challenges in its complex syntax and idiomatic phrasing ("shot down").
+  
+  The SMT output demonstrates the typical weaknesses of the phrase-based approach.
+  It struggles with the long-distance dependency between "The policy" and
+  "was...shot down," and it is likely to produce a clumsy, literal translation of
+  the idiom—perhaps as "was fired down" or "was gunned down." The result is a
+  grammatically awkward sentence that fails to convey the correct political
+  meaning and would require significant human post-editing to be usable.
+  
+  In contrast, the NMT output reveals a much deeper, more holistic understanding
+  of the source text. By processing the entire sentence contextually, the model
+  correctly interprets "shot down" as a metaphor for "rejected" or "defeated" and
+  finds an appropriate, non-literal equivalent in the target language. It smoothly
+  handles the embedded clause, maintaining the sentence's logical flow. This
+  ability to move beyond local word and phrase substitutions to re-express
+  sentence-level meaning is the hallmark of the NMT revolution. It marks the
+  transition from a mechanical process of fragment replacement to a more nuanced
+  act of linguistic regeneration.
+  
+  This fragment refers to Fig. 9.18, which is a table. Its description is as
+  follows:
+  
+  A comparative table showcasing the qualitative difference between SMT and NMT
+  outputs. The table will have three columns: 'Source Sentence', 'SMT Output', and
+  'NMT Output'. It will feature a sentence with complex syntax or idiomatic
+  phrasing, where the SMT output appears literal and disfluent, while the NMT
+  output demonstrates superior fluency and accuracy.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: 5bb1a2895fa185670f41c05d2d4a4ee3ed917fcc360126aba3e1fc98d2514408
+response:
+  caption:
+    Fig. 9.18: A comparative table showcasing the qualitative difference between
+    Statistical Machine Translation (SMT) and Neural Machine Translation (NMT)
+    outputs. The NMT model correctly interprets the idiomatic phrase 'shot down',
+    whereas the SMT model produces a literal and disfluent translation.
+  latex: \begin{tabular}{p{0.3\linewidth} p{0.3\linewidth} p{0.3\linewidth}} \toprule \textbf{Source Sentence} & \textbf{SMT Output} & \textbf{NMT Output} \\ \midrule The policy, which had been under discussion for months, was eventually shot down by the opposition. & The policy, which was in discussion for months, was finally gunned down by the opposition. & The policy, which had been under discussion for months, was ultimately rejected by the opposition. \\ \bottomrule \end{tabular}
+duration: 19862 ms
+usage_stats:
+  {
+    "candidates_token_count": 199,
+    "prompt_token_count": 538,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 538
+      }
+    ],
+    "thoughts_token_count": 2135,
+    "total_token_count": 2872
+  }
+...

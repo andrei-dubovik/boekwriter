@@ -1,0 +1,136 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  While a single self-attention mechanism is powerful, it forces the model to
+  average all types of linguistic relationships—syntactic, semantic, and
+  anaphoric—into a single representation. This can create an informational
+  bottleneck. To overcome this, the transformer architecture employs *multi-head
+  attention*, which allows the model to jointly attend to information from
+  different perspectives simultaneously.
+  
+  The core idea is to run the scaled dot-product attention mechanism multiple
+  times in parallel. As illustrated in Fig. 12.6, rather than performing a single
+  attention function on the model’s full-dimensional inputs, multi-head attention
+  first linearly projects the queries, keys, and values *h* times using different,
+  learned projection matrices. These projected versions are then fed into *h*
+  separate attention "heads." Each head can focus on a different representation
+  subspace, enabling one head to capture, for example, subject-verb agreement
+  while another tracks semantic similarity between distant words.
+  
+  The outputs from each of the *h* heads are then concatenated and passed through
+  one final linear projection to produce the layer's output. This process is
+  formalized as:
+  
+  $\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \dots, \text{head}_h)W^O$
+  
+  where $\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$.
+  
+  The parameters to be learned are the projection matrices for each head
+  ($W_i^Q, W_i^K, W_i^V$) and the final output projection matrix ($W^O$). This
+  parallel structure provides a richer, more nuanced way for the model to process
+  relationships within a sequence, significantly enhancing its expressive power.
+  
+  This fragment refers to Fig. 12.6. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A diagram that visually contrasts a single attention head with the multi-head
+  attention mechanism. It will show how the model's input vectors are split and
+  fed into multiple parallel attention 'heads', and how their individual outputs
+  are concatenated and linearly transformed, clarifying how the model attends to
+  information in different representation subspaces simultaneously.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: ed7ba9c16c9a4521450269f44fda310481494ae0956a077dcb012d35ef85f671
+response:
+  caption:
+    A diagram contrasting single-head attention (left) with multi-head attention
+    (right). Multi-head attention projects the queries (Q), keys (K), and values (V)
+    through parallel linear layers, feeding the results into multiple independent
+    attention 'heads'. The outputs of these heads are concatenated and passed
+    through a final linear transformation to produce the output, allowing the model
+    to focus on different information subspaces simultaneously.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+        </marker>
+        <style>.block{fill:#e9ecef;stroke:#6c757d;stroke-width:1.5;rx:5;ry:5}.label{font-family:sans-serif;font-size:14px;text-anchor:middle;dominant-baseline:middle;fill:#212529}.title{font-family:sans-serif;font-size:18px;font-weight:bold;text-anchor:middle}.arrow{stroke:#333;stroke-width:1.5;marker-end:url(#arrow)}.dots{font-family:sans-serif;font-size:24px;text-anchor:middle;dominant-baseline:middle;fill:#6c757d}</style>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <text x="200" y="40" class="title">Single-Head Attention</text>
+      <text x="600" y="40" class="title">Multi-Head Attention</text>
+      <line x1="400" y1="20" x2="400" y2="580" stroke="#ced4da" stroke-dasharray="5,5"/>
+      <rect x="100" y="80" width="60" height="30" class="block"/>
+      <text x="130" y="95" class="label">Q</text>
+      <rect x="170" y="80" width="60" height="30" class="block"/>
+      <text x="200" y="95" class="label">K</text>
+      <rect x="240" y="80" width="60" height="30" class="block"/>
+      <text x="270" y="95" class="label">V</text>
+      <rect x="100" y="250" width="200" height="80" class="block"/>
+      <text x="200" y="280" class="label">Scaled Dot-Product</text>
+      <text x="200" y="300" class="label">Attention</text>
+      <line x1="130" y1="110" x2="200" y2="245" class="arrow"/>
+      <line x1="200" y1="110" x2="200" y2="245" class="arrow"/>
+      <line x1="270" y1="110" x2="200" y2="245" class="arrow"/>
+      <rect x="150" y="450" width="100" height="40" class="block"/>
+      <text x="200" y="470" class="label">Output</text>
+      <line x1="200" y1="330" x2="200" y2="445" class="arrow"/>
+      <rect x="500" y="80" width="60" height="30" class="block"/>
+      <text x="530" y="95" class="label">Q</text>
+      <rect x="570" y="80" width="60" height="30" class="block"/>
+      <text x="600" y="95" class="label">K</text>
+      <rect x="640" y="80" width="60" height="30" class="block"/>
+      <text x="670" y="95" class="label">V</text>
+      <rect x="450" y="150" width="300" height="40" class="block"/>
+      <text x="600" y="170" class="label">Linear Projections (h times)</text>
+      <line x1="530" y1="110" x2="600" y2="145" class="arrow"/>
+      <line x1="600" y1="110" x2="600" y2="145" class="arrow"/>
+      <line x1="670" y1="110" x2="600" y2="145" class="arrow"/>
+      <rect x="440" y="220" width="100" height="60" class="block"/>
+      <text x="490" y="240" class="label" style="font-size:12px">Attention</text>
+      <text x="490" y="260" class="label" style="font-size:12px">(head&#8321;)</text>
+      <path d="M 600 190 C 600 210, 490 200, 490 215" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+      <rect x="550" y="220" width="100" height="60" class="block"/>
+      <text x="600" y="240" class="label" style="font-size:12px">Attention</text>
+      <text x="600" y="260" class="label" style="font-size:12px">(head&#8322;)</text>
+      <path d="M 600 190 V 215" class="arrow"/>
+      <text x="680" y="250" class="dots">...</text>
+      <rect x="700" y="220" width="100" height="60" class="block"/>
+      <text x="750" y="240" class="label" style="font-size:12px">Attention</text>
+      <text x="750" y="260" class="label" style="font-size:12px">(head&#8341;)</text>
+      <path d="M 600 190 C 600 210, 750 200, 750 215" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+      <rect x="450" y="350" width="300" height="40" class="block"/>
+      <text x="600" y="370" class="label">Concat</text>
+      <line x1="490" y1="280" x2="490" y2="345" class="arrow"/>
+      <line x1="600" y1="280" x2="600" y2="345" class="arrow"/>
+      <line x1="750" y1="280" x2="750" y2="345" class="arrow"/>
+      <rect x="550" y="420" width="100" height="40" class="block"/>
+      <text x="600" y="440" class="label">Linear (W&#7484;)</text>
+      <line x1="600" y1="390" x2="600" y2="415" class="arrow"/>
+      <rect x="550" y="500" width="100" height="40" class="block"/>
+      <text x="600" y="520" class="label">Output</text>
+      <line x1="600" y1="460" x2="600" y2="495" class="arrow"/>
+    </svg>
+duration: 84195 ms
+usage_stats:
+  {
+    "candidates_token_count": 1990,
+    "prompt_token_count": 553,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 553
+      }
+    ],
+    "thoughts_token_count": 10432,
+    "total_token_count": 12975
+  }
+...

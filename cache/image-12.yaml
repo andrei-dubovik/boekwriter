@@ -1,0 +1,35 @@
+{model: str, query: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-flash-image-preview
+query: image
+prompt:
+  A simple, two-tone line drawing of a person sitting at a desk in a vast,
+  stylized library. The person is looking at a single open book. From this central
+  book, thin, luminous lines radiate outwards, connecting to many other books on
+  the surrounding shelves, some near and some far. The focus is on the act of
+  simultaneous connection and information retrieval, showing how the context of
+  one item is being drawn from many other sources at once. The style should be
+  minimalist and clean, emphasizing the network of relationships over realistic
+  detail.
+hash: 1cbb9ab1b750adaf232862631036aecf1ca0d7b48539a3ffcc4d1bc572fc9f99
+response: image-12.png
+duration: 5713 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 118,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 118
+      }
+    ],
+    "total_token_count": 1408
+  }
+...

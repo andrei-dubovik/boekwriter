@@ -1,0 +1,35 @@
+{model: str, query: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-flash-image-preview
+query: image
+prompt:
+  Create a simple, line-art illustration depicting a top-down view of a workspace.
+  On the left side of the desk lies an open book or a dense printed report. A
+  person's hand is visible, using a bright highlighter to mark a few specific
+  names and numbers within a block of text. On the right side of the desk, a
+  small, neatly organized stack of index cards is shown, where the highlighted
+  information has been transcribed into a structured list. The overall image
+  should convey a sense of transforming dense, unstructured information into
+  clean, organized facts.
+hash: 323a9de0140ac3bdade46cc11a1157f2aeb064b19fdf43c47ad8bceaa07d030b
+response: image-10.png
+duration: 6226 ms
+usage_stats:
+  {
+    "candidates_token_count": 1297,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 120,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 120
+      }
+    ],
+    "total_token_count": 1417
+  }
+...

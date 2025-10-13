@@ -1,0 +1,69 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Having explored both Information Retrieval and Information Extraction, we can
+  now synthesize their relationship. The fundamental differences between them,
+  summarized concisely in **Fig. 10.25**, are critical. At its core, IR answers
+  the question, *'Which documents are about my topic?'* Its goal is discovery, and
+  its output is a ranked list of documents. In contrast, IE answers the question,
+  *'What specific facts are in this text?'* Its goal is structuring, and its
+  output is structured data, such as filled database records or a knowledge graph.
+  
+  Despite these distinct objectives, IR and IE are highly complementary and are
+  often combined in a powerful pipeline. A typical workflow begins with an IR
+  system retrieving a set of relevant documents from a vast corpus—for example,
+  finding all articles about company acquisitions. This step acts as a coarse
+  filter, dramatically reducing the search space. Subsequently, an IE system
+  processes this smaller, topic-focused collection to extract precise, structured
+  details like the acquirer, the target, and the acquisition price for each event.
+  This synergistic process efficiently transforms a broad information need into a
+  structured, queryable knowledge base, highlighting the practical interplay
+  between these two essential fields.
+  
+  This fragment refers to Fig. 10.25, which is a table. Its description is as
+  follows:
+  
+  A summary table that concisely contrasts the core differences between
+  Information Retrieval and Information Extraction. The table will have three
+  columns: 'Aspect', 'Information Retrieval', and 'Information Extraction'. Rows
+  will compare key aspects such as 'Goal' (Find relevant documents vs. Extract
+  structured facts), 'Output' (Ranked list of documents vs. Filled database
+  records), and 'Scope' (Document-level vs. Sub-document level).
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: 8946f806f61a0cd98dc84a99ca0d80c6082f1b484625f7e0a2a2c6827084a0c5
+response:
+  caption:
+    A summary of the core differences between Information Retrieval and Information
+    Extraction.
+  latex:
+    \begin{tabular}{lll}\toprule
+    \textbf{Aspect} & \textbf{Information Retrieval} & \textbf{Information Extraction} \\
+    \midrule
+    Goal & Find relevant documents & Extract structured facts \\
+    Output & Ranked list of documents & Filled database records \\
+    Scope & Document-level & Sub-document level \\
+    \bottomrule
+    \end{tabular}
+duration: 13000 ms
+usage_stats:
+  {
+    "candidates_token_count": 111,
+    "prompt_token_count": 435,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 435
+      }
+    ],
+    "thoughts_token_count": 1365,
+    "total_token_count": 1911
+  }
+...

@@ -1,0 +1,90 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  With both documents and the query represented as TF-IDF vectors, the task of
+  ranking becomes a geometric problem: measuring the proximity between the query
+  vector **q** and each document vector **d**. In the vector space model, the
+  standard measure is *cosine similarity*. This metric is effective because it
+  measures the angle between two vectors, making it sensitive to the orientation
+  (the topics) rather than the magnitude (the length of the documents).
+  
+  The similarity is calculated as the cosine of the angle $\theta$ between the two
+  vectors:
+  \$$
+  \text{similarity}(\mathbf{q}, \mathbf{d}) = \cos(\theta) = \frac{\mathbf{q} \cdot \mathbf{d}}{||\mathbf{q}|| \ ||\mathbf{d}||}
+  $\$
+  The resulting score ranges from 0 to 1 for non-negative TF-IDF vectors. A score
+  closer to 1 signifies a smaller angle and thus higher conceptual similarity. As
+  illustrated in Fig. 10.9, the document vector **d1** is deemed more relevant to
+  the query **q** than **d2** because the angle between them is smaller. An IR
+  system computes this similarity score for every document in the collection and
+  then sorts the documents in descending order to generate the final ranked list
+  of results.
+  
+  This fragment refers to Fig. 10.9. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A 2D vector space diagram to intuitively explain cosine similarity. The diagram
+  will show a query vector ('q') and two document vectors ('d1' and 'd2')
+  originating from the same point. The angle between 'q' and 'd1' will be visibly
+  smaller than the angle between 'q' and 'd2', illustrating that 'd1' is
+  considered more relevant to the query.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: aa1be85bb9551a1b311a16fb8213cfa73eb730bd12a5a1a59ed4d545b8749a50
+response:
+  caption:
+    A 2D vector space diagram to intuitively explain cosine similarity. The diagram
+    shows a query vector ('q') and two document vectors ('d1' and 'd2') originating
+    from the same point. The angle between 'q' and 'd1' is visibly smaller than the
+    angle between 'q' and 'd2', illustrating that 'd1' is considered more relevant
+    to the query.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrow_q" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#e67e22"/>
+        </marker>
+        <marker id="arrow_d1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#2980b9"/>
+        </marker>
+        <marker id="arrow_d2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#27ae60"/>
+        </marker>
+      </defs>
+      <line x1="50" y1="250" x2="380" y2="250" stroke="#cccccc" stroke-width="1"/>
+      <line x1="50" y1="250" x2="50" y2="20" stroke="#cccccc" stroke-width="1"/>
+      <g stroke-width="2.5">
+        <line x1="50" y1="250" x2="200" y2="50" stroke="#27ae60" marker-end="url(#arrow_d2)"/>
+        <line x1="50" y1="250" x2="300" y2="150" stroke="#e67e22" marker-end="url(#arrow_q)"/>
+        <line x1="50" y1="250" x2="340" y2="190" stroke="#2980b9" marker-end="url(#arrow_d1)"/>
+      </g>
+      <g font-family="sans-serif" font-size="20" font-weight="bold" font-style="italic">
+        <text x="205" y="45" fill="#27ae60">d<tspan baseline-shift="sub" font-size="15">2</tspan></text>
+        <text x="305" y="145" fill="#e67e22">q</text>
+        <text x="345" y="195" fill="#2980b9">d<tspan baseline-shift="sub" font-size="15">1</tspan></text>
+      </g>
+    </svg>
+duration: 52413 ms
+usage_stats:
+  {
+    "candidates_token_count": 796,
+    "prompt_token_count": 467,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 467
+      }
+    ],
+    "thoughts_token_count": 6134,
+    "total_token_count": 7397
+  }
+...

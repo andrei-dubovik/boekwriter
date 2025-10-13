@@ -1,0 +1,88 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Machine learning algorithms operate on numerical data, not raw text. Therefore,
+  a crucial step in building a supervised sentiment classifier is to convert text
+  documents into fixed-length numerical feature vectors. This process is known as
+  *feature extraction* or *vectorization*.
+  
+  The most common and intuitive approach is the **bag-of-words (BoW)** model. This
+  model represents text by disregarding grammar and word order, treating it as an
+  unordered collection—or "bag"—of its words. The process involves two steps:
+  first, a vocabulary of all unique words in the entire training corpus is
+  compiled. Second, each document is converted into a vector with the same length
+  as the vocabulary. Each dimension of the vector corresponds to a unique word,
+  and its value is typically the frequency (count) of that word in the document.
+  This transformation is illustrated in Fig. 11.14, which shows how two sentences
+  are converted into sparse vectors where most values are zero.
+  
+  A limitation of BoW is that very common words (e.g., "the," "is," "a") dominate
+  the frequency counts but often carry little semantic weight. An effective
+  alternative is the **Term Frequency-Inverse Document Frequency (TF-IDF)**
+  weighting scheme. TF-IDF evaluates how important a word is to a document within
+  a collection. It is the product of two statistics:
+  
+  - **Term Frequency (TF)**: Measures how frequently a term $t$ appears in a
+    document $d$. $tf(t, d)$
+  - **Inverse Document Frequency (IDF)**: Measures how informative a term is by
+    down-weighting common terms. It is calculated as the logarithm of the total
+    number of documents $|D|$ divided by the number of documents containing the
+    term $t$. $idf(t, D) = \log \frac{|D|}{|\{d \in D: t \in d\}|}$
+  
+  The resulting TF-IDF score, $tfidf(t, d, D) = tf(t, d) \times idf(t, D)$,
+  replaces the raw counts in the feature vector. This gives higher weight to terms
+  that are frequent in a specific document but rare across the entire corpus,
+  making them more discriminative for classification. These resulting vectors,
+  whether from BoW or TF-IDF, serve as the input for training a classification
+  model.
+  
+  This fragment refers to Fig. 11.14, which is a table. Its description is as
+  follows:
+  
+  A table demonstrating the conversion of two simple sentences into bag-of-words
+  feature vectors. The table columns would represent the unique words in the
+  combined vocabulary (e.g., 'the', 'movie', 'was', 'good', 'boring'). The rows
+  would represent the sentences (e.g., "The movie was good" and "The movie was
+  boring"). The cells would contain the word counts, clearly illustrating how
+  unstructured text is transformed into a numerical format for machine learning
+  models.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: 6c7cef7b6bac1ce731d07ed1e5d1f66f9033e79d4810c9ec52b000308d3b608c
+response:
+  caption:
+    Fig. 11.14: An illustration of the Bag-of-Words (BoW) feature extraction
+    process. Two sentences are converted into sparse numerical vectors based on the
+    word counts from a combined vocabulary. Most values are zero for any given
+    document, a characteristic of BoW representations.
+  latex:
+    \begin{tabular}{lccccc}
+    \toprule
+    \textbf{Document} & \textbf{the} & \textbf{movie} & \textbf{was} & \textbf{good} & \textbf{boring} \\
+    \midrule
+    "The movie was good" & 1 & 1 & 1 & 1 & 0 \\
+    "The movie was boring" & 1 & 1 & 1 & 0 & 1 \\
+    \bottomrule
+    \end{tabular}
+duration: 8899 ms
+usage_stats:
+  {
+    "candidates_token_count": 188,
+    "prompt_token_count": 705,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 705
+      }
+    ],
+    "thoughts_token_count": 763,
+    "total_token_count": 1656
+  }
+...

@@ -1,0 +1,106 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  While rule-based systems are intuitive, they are often brittle and require
+  significant manual effort to create and maintain. Modern approaches have largely
+  shifted towards statistical models by framing NER as a *sequence labeling* task.
+  This paradigm should be familiar, as it is the same fundamental approach we used
+  for Part-of-Speech tagging in Chapter 5. The goal is to assign a label from a
+  predefined set of tags to each token in an input sequence.
+  
+  However, NER presents a challenge not found in POS tagging: entities can span
+  multiple tokens. For instance, in "Maria Rossi," we need to know that both words
+  refer to a single entity. A simple tag set like `{PER, LOC, ORG}` is
+  insufficient. To address this, we use a more expressive tagging scheme, the most
+  common of which is the **BIO** encoding:
+  
+  - **B-TYPE**: Marks the *Beginning* of an entity of a certain type.
+  - **I-TYPE**: Marks the *Inside* of an entity, used for the second and
+    subsequent tokens.
+  - **O**: Marks a token as being *Outside* any named entity.
+  
+  This scheme allows a model to explicitly mark the boundaries of multi-word
+  entities. As shown in **Fig. 10.18**, the sentence "Maria Rossi moved to Rome."
+  is transformed into a sequence of token-tag pairs. The token `Maria` is labeled
+  `B-PER` as it begins a person entity, while `Rossi` is labeled `I-PER`,
+  indicating it is inside the same person entity. The single-word entity `Rome` is
+  tagged with `B-LOC`[^1], and the remaining tokens are tagged with `O`.
+  
+  By converting raw text into this labeled sequence format, we can leverage
+  powerful machine learning algorithms. Models like Hidden Markov Models (HMMs),
+  Conditional Random Fields (CRFs), and modern neural networks can be trained on
+  annotated corpora to learn how to predict the most probable sequence of BIO tags
+  for a new, unseen sentence. These models make their predictions by learning from
+  the features of the words themselves and the context in which they appear.
+  
+  This fragment refers to Fig. 10.18. The figure in question is a "Diagram" and
+  its description is as follows:
+  
+  A diagram that frames Named Entity Recognition as a sequence labeling task. A
+  sample sentence (e.g., 'Maria Rossi moved to Rome.') will be shown as a sequence
+  of tokens at the bottom. Above each token, a corresponding label from the BIO
+  (Beginning, Inside, Outside) tagging scheme will be displayed (e.g., B-PER,
+  I-PER, O, O, B-LOC), clearly illustrating the input and desired output for a
+  statistical model.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+  
+  [^1]: Note that for single-token entities, the `B-` tag is used by convention. There
+  is no corresponding `I-` tag.
+hash: 40bef2204f010b1856d003e431a9dbc80b0b53e03ad3431885c80ebc22be868a
+response:
+  caption:
+    Fig. 10.18. Named Entity Recognition (NER) framed as a sequence labeling task
+    using the BIO encoding scheme. Each token in the input sentence is assigned a
+    tag indicating whether it is at the beginning (B-TYPE), inside (I-TYPE), or
+    outside (O) of a named entity.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+      <rect width="100%" height="100%" fill="white"/>
+      <defs>
+        <marker id="arrowhead" markerWidth="8" markerHeight="5.6" refX="0" refY="2.8" orient="auto">
+          <polygon points="0 0, 8 2.8, 0 5.6" fill="#333"/>
+        </marker>
+      </defs>
+      <style>.token { font-family: 'Courier New', Courier, monospace; font-size: 20px; fill: black; }.label { font-family: 'Courier New', Courier, monospace; font-size: 18px; font-weight: bold; }.per { fill: #4a90e2; } .loc { fill: #7ed321; } .o { fill: #555555; } .arrow { stroke: #333; stroke-width: 1.5; marker-end: url(#arrowhead); }</style>
+      <text x="60" y="120" text-anchor="middle" class="label per">B-PER</text>
+      <line x1="60" y1="130" x2="60" y2="155" class="arrow"/>
+      <text x="60" y="180" text-anchor="middle" class="token">Maria</text>
+      <text x="125" y="120" text-anchor="middle" class="label per">I-PER</text>
+      <line x1="125" y1="130" x2="125" y2="155" class="arrow"/>
+      <text x="125" y="180" text-anchor="middle" class="token">Rossi</text>
+      <text x="190" y="120" text-anchor="middle" class="label o">O</text>
+      <line x1="190" y1="130" x2="190" y2="155" class="arrow"/>
+      <text x="190" y="180" text-anchor="middle" class="token">moved</text>
+      <text x="240" y="120" text-anchor="middle" class="label o">O</text>
+      <line x1="240" y1="130" x2="240" y2="155" class="arrow"/>
+      <text x="240" y="180" text-anchor="middle" class="token">to</text>
+      <text x="295" y="120" text-anchor="middle" class="label loc">B-LOC</text>
+      <line x1="295" y1="130" x2="295" y2="155" class="arrow"/>
+      <text x="295" y="180" text-anchor="middle" class="token">Rome</text>
+      <text x="345" y="120" text-anchor="middle" class="label o">O</text>
+      <line x1="345" y1="130" x2="345" y2="155" class="arrow"/>
+      <text x="345" y="180" text-anchor="middle" class="token">.</text>
+    </svg>
+duration: 41767 ms
+usage_stats:
+  {
+    "candidates_token_count": 885,
+    "prompt_token_count": 696,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 696
+      }
+    ],
+    "thoughts_token_count": 4655,
+    "total_token_count": 6236
+  }
+...

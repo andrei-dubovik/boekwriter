@@ -1,0 +1,70 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: table
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  Before the models that now define the state-of-the-art, the field relied heavily
+  on Recurrent Neural Networks (RNNs), particularly Long Short-Term Memory (LSTM)
+  and Gated Recurrent Unit (GRU) networks. These architectures process language
+  sequentially, ingesting one word at a time and updating an internal "memory" or
+  hidden state. This approach was intuitive and effective for many tasks, from
+  part-of-speech tagging to machine translation.
+  
+  However, this sequential design presented two fundamental obstacles to further
+  progress. The first was computational: since the processing of word $w_t$
+  depends on the hidden state from word $w_{t-1}$, the architecture is inherently
+  non-parallelizable. This created a major bottleneck for training on ever-larger
+  datasets. The second was a context-length limitation. While LSTMs were a
+  significant improvement over simple RNNs, they still struggled to effectively
+  connect words separated by long distances. Information from the beginning of a
+  paragraph could be "forgotten" by the time the model reached the end. A new
+  paradigm was needed—one that could process all input simultaneously and model
+  long-range dependencies more directly. Fig. 12.2 provides a detailed comparison
+  of these architectural trade-offs.
+  
+  This fragment refers to Fig. 12.2, which is a table. Its description is as
+  follows:
+  
+  A comparative table contrasting Recurrent Neural Networks (RNNs/LSTMs) with the
+  Transformer architecture. Columns will include 'Feature' (e.g., Handling of
+  Sequential Data, Parallelization Capability, Long-Range Dependency Capture),
+  'RNN/LSTM Approach', and 'Transformer Approach' to visually summarize the key
+  limitations that motivated the development of transformers.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+hash: cc407ad7b0f16365baf78c39e4c15d6d0dcef25197cfe511bfff545cf3282886
+response:
+  caption:
+    Fig. 12.2: A comparison of architectural trade-offs between Recurrent Neural
+    Networks (RNNs/LSTMs) and the Transformer architecture, highlighting the key
+    limitations that motivated the shift in paradigm.
+  latex:
+    \begin{tabular}{lll}
+    \toprule
+    \textbf{Feature} & \textbf{RNN/LSTM Approach} & \textbf{Transformer Approach} \\
+    \midrule
+    Handling of Sequential Data & Processes tokens sequentially (one by one). & Processes all tokens simultaneously. \\
+    Parallelization Capability & Inherently sequential; difficult to parallelize. & Highly parallelizable due to self-attention. \\
+    Long-Range Dependency Capture & Struggles with long distances (vanishing gradients). & Directly models all token-pair relationships. \\
+    \bottomrule
+    \end{tabular}
+duration: 10187 ms
+usage_stats:
+  {
+    "candidates_token_count": 182,
+    "prompt_token_count": 436,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 436
+      }
+    ],
+    "thoughts_token_count": 1071,
+    "total_token_count": 1689
+  }
+...

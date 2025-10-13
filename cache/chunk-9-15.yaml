@@ -1,0 +1,309 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: chunk
+prompt:
+  You are writing a book called "Introduction to Computational Linguistics". The
+  book consists of the following chapters.
+  
+  # Chapter 1: Introduction to Computational Linguistics.
+  
+  This chapter provides a foundational overview of computational linguistics,
+  defining the field at the intersection of computer science, linguistics, and
+  artificial intelligence. We will trace its historical development, from early
+  rule-based systems to the modern data-driven era, and explore the fundamental
+  goals of enabling computers to understand, interpret, and generate human
+  language. The chapter will also highlight a diverse range of real-world
+  applications, such as machine translation, search engines, and virtual
+  assistants, setting the stage for the core concepts and techniques that will be
+  explored in the remainder of the book.
+  
+  # Chapter 2: Words, Regular Expressions, and Automata.
+  
+  Before we can process language, we must first understand its fundamental
+  building blocks and how to model them formally. This chapter introduces the
+  basics of formal language theory, starting with the concept of regular
+  languages. We will explore the power of regular expressions for pattern matching
+  in text and connect this practical tool to its theoretical underpinning in
+  finite-state automata (FSA). By understanding how these simple computational
+  models can recognize and generate patterns, readers will gain a crucial
+  foundation for more complex language processing tasks.
+  
+  # Chapter 3: Corpus Linguistics and Text Normalization.
+  
+  This chapter delves into the empirical foundation of modern computational
+  linguistics: the corpus. We explore what constitutes a linguistic corpus, how
+  they are constructed, and the importance of annotation schemas. The focus then
+  shifts to the essential pre-processing steps required to prepare raw text for
+  analysis, a process known as text normalization. Key techniques such as
+  tokenization (breaking text into words), stemming (reducing words to their root
+  form), and lemmatization (finding the dictionary form of a word) are covered in
+  detail, providing the practical skills needed to work with real-world language
+  data.
+  
+  # Chapter 4: Language Modeling with N-grams.
+  
+  How can we quantify the probability of a sequence of words? This chapter
+  introduces language modeling, a core task in computational linguistics that aims
+  to answer this question. We will focus on the classic N-gram model, a
+  statistical approach that estimates the probability of a word given the previous
+  N-1 words. The chapter covers the mechanics of training these models from a
+  corpus, the challenges of data sparsity, and essential smoothing techniques like
+  Laplace and Good-Turing smoothing that help create more robust and generalizable
+  models. Finally, we will learn how to evaluate language models using the concept
+  of perplexity.
+  
+  # Chapter 5: Part-of-Speech Tagging.
+  
+  Assigning grammatical categories like noun, verb, or adjective to each word in a
+  sentence is a fundamental step in understanding its structure and meaning. This
+  chapter explores Part-of-Speech (POS) tagging, a foundational NLP task. We will
+  journey from early rule-based systems to the more powerful and widely used
+  stochastic methods, with a deep dive into Hidden Markov Models (HMMs). The
+  chapter will explain the Viterbi algorithm for finding the most likely sequence
+  of tags, providing readers with a solid understanding of how sequence labeling
+  problems are modeled and solved computationally.
+  
+  # Chapter 6: Syntactic Parsing.
+  
+  Beyond individual words, how do we uncover the grammatical structure of a
+  sentence? This chapter tackles syntactic parsing, the process of analyzing a
+  string of words to reveal its hierarchical or relational structure. We will
+  explore two dominant paradigms: constituency parsing, which breaks sentences
+  into nested phrases using Context-Free Grammars (CFGs), and dependency parsing,
+  which models the grammatical relationships between words as a directed graph.
+  The chapter will cover key algorithms, such as CYK for constituency parsing and
+  transition-based methods for dependency parsing, equipping readers to
+  computationally model sentence syntax.
+  
+  # Chapter 7: Lexical and Compositional Semantics.
+  
+  This chapter moves from syntax to semantics—the study of meaning. We first
+  address lexical semantics, focusing on how to represent the meaning of
+  individual words. This includes traditional approaches like WordNet and modern
+  distributional methods like word embeddings (e.g., Word2Vec, GloVe), which
+  capture meaning from context. We then move to compositional semantics, exploring
+  how word meanings combine to form the meaning of phrases and sentences.
+  Techniques such as Semantic Role Labeling (SRL) will be introduced to identify
+  the roles that entities play within a sentence, providing a framework for
+  computational meaning representation.
+  
+  # Chapter 8: Discourse, Coreference, and Dialogue.
+  
+  Language understanding often requires looking beyond individual sentences to the
+  broader context of a conversation or document. This chapter introduces the
+  fields of discourse analysis and pragmatics. We will investigate how sentences
+  relate to one another to form a coherent text, exploring topics like discourse
+  coherence and structure. A key focus will be on coreference resolution—the task
+  of identifying all expressions that refer to the same entity (e.g., 'she,' 'Dr.
+  Evans,' 'the professor'). Finally, we will touch upon the fundamentals of
+  dialogue systems, examining how these principles are applied to build
+  conversational agents that can interact meaningfully with humans.
+  
+  # Chapter 9: Machine Translation.
+  
+  Machine Translation (MT) is one of the oldest and most challenging applications
+  of computational linguistics. This chapter charts the evolution of MT systems,
+  beginning with the core concepts of Statistical Machine Translation (SMT). We
+  will explore how SMT models learn translation probabilities from parallel
+  corpora using word alignment and phrase-based decoding. The second half of the
+  chapter introduces the modern paradigm of Neural Machine Translation (NMT),
+  explaining the powerful sequence-to-sequence architecture, the role of encoder-
+  decoder models, and the revolutionary attention mechanism that has enabled
+  significant breakthroughs in translation quality.
+  
+  # Chapter 10: Information Retrieval and Information Extraction.
+  
+  This chapter focuses on two critical tasks for managing and extracting value
+  from vast amounts of text: Information Retrieval (IR) and Information Extraction
+  (IE). For IR, we will explore the foundational models used by search engines,
+  including the vector space model and the TF-IDF weighting scheme, to rank
+  documents based on their relevance to a user's query. For IE, we will learn how
+  to automatically extract structured information from unstructured text. Key
+  subtasks, such as Named Entity Recognition (NER) for identifying people and
+  places, and Relation Extraction for finding the relationships between them, will
+  be covered in detail.
+  
+  # Chapter 11: Sentiment Analysis and Opinion Mining.
+  
+  Understanding the opinions, sentiments, and emotions expressed in text is a
+  major commercial and academic area of computational linguistics. This chapter
+  provides a comprehensive introduction to sentiment analysis. We will cover
+  methods for classifying a document's polarity (positive, negative, or neutral),
+  from lexicon-based approaches that rely on pre-compiled lists of sentimental
+  words to supervised machine learning models trained on labeled data. The
+  discussion will also extend to more nuanced tasks like aspect-based sentiment
+  analysis, which identifies opinions about specific features or topics within a
+  text.
+  
+  # Chapter 12: The Future: Large Language Models and Ethics.
+  
+  The final chapter brings us to the cutting edge of the field, dominated by Large
+  Language Models (LLMs). We will demystify the transformer architecture, the
+  foundation for models like BERT and GPT, and understand how self-attention
+  mechanisms enable them to process language with unprecedented contextual
+  awareness. The chapter will discuss the paradigm shift towards pre-training and
+  fine-tuning and explore the remarkable capabilities these models have unlocked.
+  Crucially, we will also engage with the significant ethical challenges posed by
+  this technology, including issues of bias, misinformation, and environmental
+  impact, concluding with a look toward future research directions.
+  
+  Consider Chapter 9 "Machine Translation". A plan has been prepared for this
+  chapter.
+  
+  01. Begin with the historical context of machine translation, framing it as one
+      of the earliest and most ambitious goals of artificial intelligence.
+  02. Define the core task of machine translation and introduce the three major
+      paradigms to be discussed: rule-based, statistical, and neural.
+  03. Illustrate the fundamental challenges of translation, such as lexical and
+      structural ambiguity, using cross-linguistic examples.
+  04. Introduce the concept of a parallel corpus as the essential bilingual text
+      data required to train modern MT systems.
+  05. Explain how the quality of machine translation is quantitatively measured
+      using automated evaluation metrics like the BLEU score.
+  06. Introduce Statistical Machine Translation (SMT) by framing the task
+      probabilistically using the noisy channel model and Bayes' theorem.
+  07. Detail the crucial sub-task of word alignment, which involves learning the
+      correspondence between words in a source and target sentence pair.
+  08. Provide a conceptual overview of the IBM Models for learning word alignment
+      probabilities directly from parallel corpora.
+  09. Explain the leap from word-based models to phrase-based SMT, which
+      translates contiguous sequences of words to improve fluency.
+  10. Describe the decoding process in SMT as a complex search problem for finding
+      the highest-probability translation among countless possibilities.
+  11. Present a simplified case study of a phrase-based SMT system translating a
+      short English sentence into another language.
+  12. Motivate the paradigm shift to Neural Machine Translation (NMT) by
+      highlighting the limitations of SMT, such as feature engineering and context
+      handling.
+  13. Introduce the foundational sequence-to-sequence architecture, detailing how
+      an encoder network reads the source sentence and a decoder network generates
+      the target sentence.
+  14. Explain the information bottleneck problem inherent in early encoder-decoder
+      models where the entire source sentence meaning is compressed into a single
+      vector.
+  15. Detail the revolutionary attention mechanism, which overcomes the bottleneck
+      by allowing the decoder to dynamically focus on relevant parts of the source
+      input at each step.
+  16. Use a visualization of an attention matrix as a pedagogical aid to
+      demonstrate how the model aligns source and target words during translation.
+  17. Briefly discuss the Transformer architecture, noting how it replaced
+      recurrent layers with self-attention to become the state-of-the-art for NMT.
+  18. Showcase the qualitative leap in translation quality with a compelling
+      example comparing outputs from SMT and NMT systems for the same source
+      sentence.
+  19. Summarize the chapter by contrasting the core philosophies of SMT and NMT.
+  20. Conclude by discussing current challenges and future directions in machine
+      translation, including low-resource languages and multimodality.
+  
+  Consider point 15 of the plan. Write this part of the book. Be consise in your
+  writing, avoid an overly verbose prose. Use Markdown for paragraphs, emphasis,
+  numbered or unnumbered lists. Use LaTeX for formulas. Do not add any headers.
+  Footnotes are allowed but should be used sparingly. In total, you should write
+  between 675 and 900 words.
+  
+  This section of the book will feature a Diagram. Its description is as follows.
+  
+  A diagram illustrating the attention mechanism. It will show the decoder at a
+  specific timestep, generating one target word. Instead of using a single context
+  vector, arrows will originate from the current decoder state and point to all of
+  the encoder's hidden states. This visualizes the calculation of attention
+  scores, which create a context-specific vector that allows the model to 'focus'
+  on the most relevant input words for the current output word.
+  
+  This visual aid will be drafted separately, but you can already refer to it as
+  Fig. 9.15 in the text.
+hash: 1472f1814e3a5036718a3739c1da47d0219119fe4c727ce705fde1735056e75c
+response:
+  The fixed-length context vector used in early encoder-decoder models, as we have
+  seen, creates a significant *information bottleneck*. It forces the model to
+  compress the entire meaning of a source sentence—regardless of its length or
+  complexity—into a single vector of a few hundred dimensions. This is an immense
+  burden. A long, nuanced sentence about political philosophy and a short, simple
+  sentence like "The cat sat" must both be squeezed into the same fixed-size
+  representation. Unsurprisingly, the performance of these models degrades sharply
+  as sentence length increases, as information from early in the sentence is often
+  lost by the time the vector is fully constructed.
+  
+  To overcome this critical limitation, a powerful and elegant solution was
+  introduced: the **attention mechanism**. The central idea is intuitive yet
+  revolutionary: instead of forcing the decoder to rely on a single, static
+  context vector, we allow it to *attend* to different parts of the source
+  sentence at each step of the decoding process. At the moment it generates the
+  word "la", the French translation of "the", it might need to focus on the
+  English word "The". When it later generates "souris", it should focus on
+  "mouse". The attention mechanism gives the model a way to learn and implement
+  this dynamic focus automatically.
+  
+  At its core, the attention mechanism provides the decoder with access to *all*
+  of the encoder's hidden states ($h_1, h_2, ..., h_N$) at every decoding time
+  step, $t$. Instead of using a pre-computed summary of the source, the decoder
+  actively decides which encoder states are most relevant for predicting the
+  current target word, $y_t$. It then computes a context-specific vector based on
+  this decision. This process, visualized in **Fig. 9.15**, can be broken down
+  into a few key steps.
+  
+  First, we need to score how well each encoder hidden state $h_j$ aligns with the
+  decoder's hidden state from the *previous* time step, $s_{t-1}$. This score
+  quantifies the relevance of the $j$-th source word to the $t$-th target word we
+  are about to generate. This is accomplished using an *alignment score function*,
+  which can be as simple as a dot product or a small feed-forward neural network
+  that takes both states as input. We can represent this as:
+  
+  $e_{tj} = \text{score}(s_{t-1}, h_j)$
+  
+  This gives us a vector of scores, one for each source word position.
+  
+  Second, these raw alignment scores are normalized into a probability
+  distribution using the softmax function. The resulting values, $\alpha_{tj}$,
+  are called the *attention weights*. Each weight represents the amount of
+  attention the decoder should place on the $j$-th source word when generating the
+  $t$-th target word. Because they are the output of a softmax function, these
+  weights conveniently sum to 1 over all source words.
+  
+  $\alpha_{tj} = \frac{\exp(e_{tj})}{\sum_{k=1}^{N} \exp(e_{tk})}$
+  
+  Third, a dynamic context vector, $c_t$, is computed as a weighted sum of all the
+  encoder hidden states. The weights used in this sum are precisely the attention
+  weights, $\alpha_{tj}$, we just calculated.
+  
+  $c_t = \sum_{j=1}^{N} \alpha_{tj} h_j$
+  
+  This context vector is a powerful construct. If a particular source word at
+  position $j$ is deemed highly relevant for the current decoding step, its
+  attention weight $\alpha_{tj}$ will be high, and its corresponding hidden state
+  $h_j$ will dominate the context vector $c_t$. If another source word is
+  irrelevant, its weight will be near zero, effectively silencing its
+  contribution.
+  
+  Finally, this tailored context vector $c_t$ is combined with the decoder's
+  current hidden state, typically by concatenation, and then used to predict the
+  target word $y_t$. The entire mechanism, from scoring to prediction, is
+  implemented with differentiable operations, meaning it can be trained end-to-end
+  with backpropagation, just like the rest of the network.
+  
+  The introduction of attention was a watershed moment for NMT. By relieving the
+  encoder of the impossible task of perfect compression, it dramatically improved
+  translation quality, especially for long sentences. Furthermore, it offered a
+  rare and valuable glimpse into the model's inner workings. By visualizing the
+  attention weights $\alpha_{tj}$ as a matrix, we can see which source words the
+  model "looked at" when generating each target word. This often reveals
+  plausible, soft alignments between languages, making the model more
+  interpretable and easier to debug. This ability to dynamically weigh input
+  components proved so effective that it became the foundational concept for the
+  next generation of neural architectures.
+duration: 26868 ms
+usage_stats:
+  {
+    "candidates_token_count": 994,
+    "prompt_token_count": 2511,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 2511
+      }
+    ],
+    "thoughts_token_count": 1774,
+    "total_token_count": 5279
+  }
+...

@@ -1,0 +1,120 @@
+{model: str, query: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: figure
+prompt:
+  Consider the following text fragment from a book called "Introduction to
+  Computational Linguistics".
+  
+  The breakthrough of Statistical Machine Translation (SMT) was to reframe
+  translation not as a linguistic puzzle of rule application, but as a problem of
+  probability. Given a source sentence *x* (e.g., in French), the goal is to find
+  the target sentence *y* (e.g., in English) that is most probable. We want to
+  find the *y* that maximizes the conditional probability $P(y|x)$:
+  
+  $$ \hat{y} = \underset{y}{\mathrm{arg\,max}}\, P(y|x) $$
+  
+  Directly modeling $P(y|x)$ is difficult. The key insight of SMT was to use
+  Bayes' theorem to decompose this problem into two more manageable components:
+  
+  $$ P(y|x) = \frac{P(x|y)P(y)}{P(x)} $$
+  
+  Since we are searching for the best *y* for a fixed input *x*, the denominator
+  $P(x)$ is a constant and can be ignored. Our maximization problem thus becomes:
+  
+  $$ \hat{y} = \underset{y}{\mathrm{arg\,max}}\, P(x|y)P(y) $$
+  
+  This formulation is famously known as the *noisy channel model*, a concept
+  borrowed from information theory (see Fig. 9.6). We imagine that the 'true'
+  message is the target sentence *y*, which was corrupted by a 'noisy channel' to
+  produce the source sentence *x* that we observe. The decoder's task is to
+  recover the original message by combining two separate models:
+  
+  - **The Translation Model, $P(x|y)$:** This component answers the question: how
+    likely are we to see the source sentence *x* if the original sentence was *y*?
+    It models the *faithfulness* of the translation. For instance, it would assign
+    a high probability to $P(\text{le chat} | \text{the cat})$.
+  
+  - **The Language Model, $P(y)$:** This component, which we covered in Chapter 4,
+    answers the question: how likely is *y* to be a sentence in the target
+    language? It models the *fluency* of the translation, ensuring the output is
+    grammatical and natural. For example, $P(\text{the cat sat})$ would be much
+    higher than $P(\text{cat the sat})$.
+  
+  SMT's power lies in this separation. It searches for a translation that is not
+  only a plausible rendering of the source text (a high translation model
+  probability) but is also a well-formed sentence in the target language (a high
+  language model probability). The system must balance these two competing
+  objectives to find the optimal output.
+  
+  This fragment refers to Fig. 9.6. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A conceptual diagram of the noisy channel model for Statistical Machine
+  Translation. The diagram will show an intended target sentence 'y' entering a
+  'noisy channel' (the translation process), which outputs the observed source
+  sentence 'x'. The decoder's task is shown as recovering the most probable 'y'
+  given 'x' by combining a translation model P(x|y) and a language model P(y),
+  visually representing Bayes' theorem.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+hash: 253c8dcafe8b0ab1e81cb7889b069bfd9da836dbb2e65153f56eb7dda6096084
+response:
+  caption:
+    A diagram of the noisy channel model for Statistical Machine Translation. The
+    top half shows the conceptual model: an intended target sentence 'y' is
+    transformed by a 'noisy channel' into an observed source sentence 'x'. The
+    bottom half illustrates the decoding task: a decoder takes 'x' as input and uses
+    a Language Model P(y) and a Translation Model P(x|y) to find the most probable
+    target sentence 'ŷ'.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 315">
+      <defs>
+        <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="black"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="white"/>
+      <style>.label { font: 12px sans-serif; text-anchor: middle; }.var { font: italic 16px sans-serif; text-anchor: middle; }.box-label { font: 14px sans-serif; text-anchor: middle; }.model-label { font: 12px sans-serif; text-anchor: middle; }.arrow { stroke: black; stroke-width: 1.5; marker-end: url(#arrowhead); fill: none; }</style>
+      <text x="65" y="45" class="label">Intended Target Sentence</text>
+      <text x="65" y="65" class="var">y</text>
+      <path d="M 110 55 h 45" class="arrow"/>
+      <rect x="160" y="30" width="120" height="50" fill="#f0f0f0" stroke="black" rx="5"/>
+      <text x="220" y="60" class="box-label">Noisy Channel</text>
+      <path d="M 280 55 h 45" class="arrow"/>
+      <text x="355" y="45" class="label">Observed Source Sentence</text>
+      <text x="355" y="65" class="var">x</text>
+      <path d="M 220 80 v 80" class="arrow"/>
+      <rect x="160" y="160" width="120" height="50" fill="#f8f8e8" stroke="black" rx="5"/>
+      <text x="220" y="180" class="box-label">Decoder</text>
+      <text x="220" y="200" class="label" font-size="10" font-style="italic">argmax P(x|y)P(y)</text>
+      <text x="220" y="200" class="label" font-size="8" font-style="italic" dy="4" dx="-28">y</text>
+      <path d="M 280 185 h 45" class="arrow"/>
+      <text x="355" y="175" class="label">Best Target Sentence</text>
+      <text x="355" y="195" class="var">&#375;</text>
+      <rect x="20" y="160" width="110" height="50" fill="#e6f0ff" stroke="black" rx="5"/>
+      <text x="75" y="180" class="model-label">Language Model</text>
+      <text x="75" y="200" class="var" font-size="14">P(y)</text>
+      <path d="M 130 185 h 30" class="arrow"/>
+      <rect x="160" y="240" width="120" height="50" fill="#e6f0ff" stroke="black" rx="5"/>
+      <text x="220" y="260" class="model-label">Translation Model</text>
+      <text x="220" y="280" class="var" font-size="14">P(x|y)</text>
+      <path d="M 220 240 v -30" class="arrow"/>
+    </svg>
+duration: 133665 ms
+usage_stats:
+  {
+    "candidates_token_count": 1001,
+    "prompt_token_count": 786,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 786
+      }
+    ],
+    "thoughts_token_count": 16541,
+    "total_token_count": 18328
+  }
+...

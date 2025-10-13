@@ -1,0 +1,683 @@
+{model: str, query: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+model: gemini-2.5-pro
+query: headpiece
+prompt:
+  What follows is a text for a chapter from a book called "Introduction to
+  Computational Linguistics".
+  
+  <chapter>
+  
+  This chapter introduces *sentiment analysis*, the computational task of
+  identifying and extracting opinions, sentiments, and emotions from text
+  data.[^1] While previous chapters often focused on the objective, factual
+  content of language, our focus now shifts to its *subjective* dimension. The
+  core goal is to automatically determine the author's attitude, evaluation, or
+  emotional state concerning a particular topic or entity.
+  
+  The most common task in sentiment analysis is determining a text's *polarity*:
+  is the expressed opinion positive, negative, or neutral? This seemingly simple
+  classification powers countless applications. As we will see, the immense volume
+  of user-generated content on the web—from product reviews and social media posts
+  to political commentary—has made sentiment analysis an indispensable tool for
+  understanding public opinion at scale.
+  
+  The practical impact of sentiment analysis is vast, touching nearly every
+  industry that deals with human-generated text. Its core value lies in
+  transforming massive volumes of unstructured opinions into structured,
+  actionable data, enabling automated, large-scale analysis that would be
+  impossible for humans to perform manually. This capability provides powerful
+  insights for decision-making across numerous domains.
+  
+  Key application areas include:
+  
+  - **Business Intelligence:** Companies systematically process customer feedback
+    from product reviews, support tickets, and surveys. This helps them to monitor
+    brand perception, track customer satisfaction over time, and quickly identify
+    product or service flaws.
+  - **Social and Political Analysis:** Political campaigns and social scientists
+    gauge public opinion on candidates and policies by analyzing millions of posts
+    on social media platforms. This provides a real-time pulse on public mood and
+    reaction to events.
+  - **Financial Markets:** Analysts sift through news articles and investor forums
+    to predict market trends, a practice known as *financial sentiment analysis*,
+    by capturing the mood surrounding specific stocks or the economy as a whole.
+  - **Healthcare:** Researchers can analyze patient narratives from online forums
+    or reviews to understand real-world experiences with treatments and medical
+    services.
+  
+  This chapter will guide you through the core methodologies for sentiment
+  analysis, charting a course from transparent, rule-based systems to more
+  complex, data-driven models. Our exploration begins with the most intuitive
+  approach: *lexicon-based* methods. These techniques operate on a simple
+  principle, using pre-compiled dictionaries of words with associated sentiment
+  scores to "tally up" the overall feeling of a text.
+  
+  We will then transition to more powerful and adaptable techniques based on
+  *supervised machine learning*. This paradigm reframes sentiment analysis as a
+  classification task. A model is trained to predict sentiment from a large corpus
+  of pre-labeled examples (e.g., positive or negative reviews). This section will
+  cover the classic machine learning pipeline, from feature extraction to training
+  classifiers, and briefly introduce how modern neural networks are applied to the
+  task.
+  
+  Before classifying sentiment, we must first decide on the scope of the text to
+  analyze. Sentiment analysis is not a monolithic task; it operates at different
+  levels of granularity, and the appropriate level depends on the required detail.
+  We can distinguish three main levels:
+  
+  - **Document-Level:** This is the broadest scope. The goal is to classify the
+    overall sentiment of an entire document, such as a product review or a blog
+    post. It assumes the text expresses a single, primary opinion. For instance,
+    is a movie review, taken as a whole, positive, negative, or neutral?
+  
+  - **Sentence-Level:** This level refines the analysis by determining the
+    sentiment of each individual sentence. It can capture nuances that
+    document-level analysis misses, as a single review might contain both positive
+    and negative statements about different things.
+  
+  - **Aspect-Based (or Fine-Grained):** This is the most detailed level. It moves
+    beyond a single polarity to identify opinions about specific *aspects* or
+    *features* of an entity. For a hotel review, it would identify the sentiment
+    towards the *'service'* separately from the *'cleanliness'* or the
+    *'location'*.
+  
+  The choice of level directly influences the complexity of the task and the
+  specificity of the insights gained.
+  
+  To make these distinctions concrete, consider a typical hotel review, which we
+  can analyze at each of the three levels as illustrated in Fig. 11.5.
+  
+  > "The location was perfect, but the room was a bit noisy. Overall, a good
+  > stay."
+  
+  The insights derived depend entirely on the chosen granularity:
+  
+  1. **Document-Level:** At the coarsest level, a model considers the entire text
+     as a single document. Influenced by the phrase "a good stay," it would likely
+     assign a single, overarching *Positive* polarity to the review. This gives a
+     general summary but obscures important details.
+  
+  2. **Sentence-Level:** Here, the review is broken down into its constituent
+     sentences or clauses. A system would classify "The location was perfect" as
+     *Positive* and "the room was a bit noisy" as *Negative*. This reveals the
+     conflicting opinions present within the same review.
+  
+  3. **Aspect-Based Level:** This most fine-grained analysis links sentiment
+     directly to specific features, or *aspects*, of the hotel. The model
+     identifies that the sentiment towards the aspect *'location'* is *Positive*
+     ("perfect"), while the sentiment towards the aspect *'room'* is *Negative*
+     ("noisy"). This level provides the most specific and actionable feedback.
+  
+  The first major approach we will cover is the **lexicon-based method**. This
+  technique is intuitive and powerful, operating without the need for model
+  training on labeled data. At its core, this method relies on a pre-compiled
+  sentiment *lexicon*—essentially a large dictionary where individual words and
+  phrases are tagged with a prior sentiment polarity. This polarity can be a
+  simple categorical label (e.g., `positive`, `negative`, `neutral`) or a
+  numerical score indicating sentiment intensity.
+  
+  For instance, a lexicon might assign numerical scores such as:
+  
+  - `"wonderful"`: +2
+  - `"terrible"`: -2
+  - `"adequate"`: +0.5
+  - `"ordinary"`: 0
+  
+  The sentiment of a given text is determined by first tokenizing it into words
+  and then aggregating the polarity scores of the words found in the lexicon. A
+  common aggregation function is a simple sum. Let $S(T)$ be the sentiment score
+  for a text $T$ composed of words $w_1, w_2, \ldots, w_n$. A basic model would
+  be:
+  
+  $S(T) = \sum_{i=1}^{n} \text{polarity}(w_i)$
+  
+  If the final score $S(T)$ is above a positive threshold, the text is classified
+  as positive; if below a negative threshold, it's deemed negative.
+  
+  A variety of pre-compiled sentiment lexicons are available, each constructed
+  differently and offering unique properties. Among the most well-known are the
+  MPQA Subjectivity Lexicon and SentiWordNet.
+  
+  The **MPQA Subjectivity Lexicon** was created through extensive manual
+  annotation. It contains over 8,000 words, each tagged with its polarity
+  (positive, negative, or neutral) and its subjectivity strength (strong or weak).
+  For example, the word *excellent* is tagged as `strong-positive`, while
+  *adequate* might be `weak-positive`. Its direct, human-curated labels make it a
+  reliable and straightforward resource.
+  
+  In contrast, **SentiWordNet** is a resource built on top of the WordNet lexical
+  database. Instead of labeling individual words, it assigns three scores to each
+  *synset* (a group of synonymous words representing a single concept):
+  positivity, negativity, and objectivity. These three scores for any given synset
+  always sum to 1.0. For instance, the primary sense of *gripping* might be
+  assigned `{Positive: 0.75, Negative: 0.0, Objective: 0.25}`. This structure
+  provides a more nuanced view, acknowledging that a word's sentiment can depend
+  on its specific meaning in context.
+  
+  The fundamental algorithm for lexicon-based sentiment analysis is both intuitive
+  and computationally efficient. It operates by aggregating the polarity of
+  individual words to determine the overall sentiment of a text, a process
+  summarized visually in Fig. 11.8. The procedure can be broken down into four
+  main steps:
+  
+  1. **Tokenization:** First, the input text is segmented into a list of words, or
+     tokens.
+  2. **Polarity Scoring:** Each token is looked up in the sentiment lexicon. If
+     the word is present, its pre-assigned polarity score is retrieved (e.g., +1
+     for positive, -1 for negative). Words not found in the lexicon are typically
+     assigned a neutral score of 0.
+  3. **Aggregation:** The scores for all tokens in the text are combined, usually
+     through simple summation, to produce a final sentiment score. This is
+     calculated as: $S_{text} = \sum_{i=1}^{n} \text{polarity}(w_i)$ where $w_i$
+     is the *i*-th word in the *n*-word text.
+  4. **Classification:** The final aggregated score, $S_{text}$, is then compared
+     against a threshold to assign a category. For instance:
+     - **Positive** if $S_{text} > 0$
+     - **Negative** if $S_{text} < 0$
+     - **Neutral** if $S_{text} = 0$
+  
+  This method provides a transparent and easily implemented baseline for sentiment
+  classification, serving as a valuable first approach before moving to more
+  complex models.
+  
+  To illustrate, let's calculate the sentiment of a short movie review using this
+  aggregation method. Consider the sentence: "The acting was brilliant and the
+  story was truly amazing, but the ending felt a bit predictable."
+  
+  First, we consult a simple sentiment lexicon where words are assigned polarity
+  scores. For this example, we'll use +1 for positive, -1 for negative, and 0 for
+  neutral or out-of-lexicon words.[^1] Our lexicon might contain:
+  
+  - `brilliant`: +1
+  - `amazing`: +1
+  - `predictable`: -1
+  
+  The overall sentiment score, $S$, for the review is the sum of the polarity
+  scores, $P(w_i)$, for each relevant word $w_i$:
+  
+  $$ S = \sum_{w_i \in \text{review}} P(w_i) $$
+  
+  For our sentence, the calculation is:
+  
+  $$ P(\text{brilliant}) + P(\text{amazing}) + P(\text{predictable}) = (+1) + (+1) + (-1) = +1 $$
+  
+  The final score of +1 is positive, so the model classifies the review as having
+  a positive overall sentiment. This simple approach effectively captures the
+  dominant opinion despite the presence of a negative term.
+  
+  While elegant in their simplicity, lexicon-based methods face significant
+  challenges that limit their accuracy in real-world scenarios. Their reliance on
+  context-free word scores means they often fail to capture the nuances of human
+  language. Key difficulties include:
+  
+  - **Handling Negation.** A simple negation word like "not" or "never" can
+    completely reverse the polarity of a subsequent phrase. For instance, in "The
+    movie was *not good*," a basic algorithm might incorrectly register a positive
+    sentiment from the word "good" while failing to account for the critical
+    negation that inverts its meaning.
+  
+  - **Accounting for Intensifiers.** Language is filled with modifiers that
+    strengthen or weaken sentiment. Words like "very" or "extremely" amplify
+    polarity (e.g., "very happy"), while words like "slightly" or "barely"
+    diminish it. Simple lexicon lookups that assign a fixed score to each word
+    often ignore the crucial impact of these adverbs.
+  
+  - **Adapting to Domain-Specific Context.** The sentiment of a word can be highly
+    dependent on its domain. The word "unpredictable" is likely positive when
+    describing a thriller novel's plot but negative for a car's braking system. A
+    general-purpose lexicon will fail to capture these vital domain-specific
+    meanings.
+  
+  ### Case Study: E-commerce Product Launch
+  
+  Consider an e-commerce company, *InnovateTech*, launching a new smart speaker.
+  To gauge customer reaction in real-time, they need to analyze a high volume of
+  tweets and on-site product reviews. Building a supervised machine learning model
+  would require time and labeled data they don't yet have. Instead, they rapidly
+  deploy a lexicon-based system.
+  
+  The system ingests incoming feedback, tokenizes the text, and calculates a
+  sentiment score for each comment by summing the polarities of its words from a
+  general-purpose lexicon. A simple dashboard visualizes the aggregate sentiment.
+  If the score trends sharply negative, the product team is immediately alerted.
+  This enables them to pinpoint and address specific issues—like a software bug or
+  unexpected shipping delays—long before these problems would impact sales
+  figures, providing an invaluable and low-cost early warning system.
+  
+  While lexicon-based methods provide a strong and interpretable baseline, they
+  can be rigid and struggle with domain-specific language or subtle contexts. A
+  more powerful and adaptable alternative is to frame sentiment analysis as a
+  supervised machine learning problem. In this paradigm, instead of providing the
+  machine with a dictionary of sentimental words, we provide it with a large
+  corpus of texts that have already been labeled with the correct sentiment.
+  
+  The task is thus transformed into a classic text classification problem. The
+  model's objective is to learn a function that maps an input text (e.g., a movie
+  review) to a pre-defined sentiment category such as *positive*, *negative*, or
+  *neutral*. During a "training" phase, a machine learning algorithm examines
+  thousands or even millions of these labeled examples. It automatically learns to
+  identify the textual features—words, phrases, and their combinations—that are
+  predictive of each sentiment class. For instance, it might learn that words like
+  "brilliant" and "amazing" strongly correlate with a positive label, while
+  "disappointing" and "awful" suggest a negative one, without being explicitly
+  told the polarity of these words. The key is that the model discovers these
+  associations from the data. The ultimate goal is to produce a trained classifier
+  that can generalize from these examples to accurately predict the sentiment of
+  new, unseen text.
+  
+  For supervised machine learning to work, the model needs a large corpus of
+  examples where the correct answer—in this case, the sentiment label—is already
+  known. This collection of labeled texts is called the training dataset. While
+  one could manually pay human annotators to label thousands of documents as
+  positive or negative, this process is incredibly slow and expensive.
+  
+  A far more common and efficient strategy is to find data where labels already
+  exist as a natural byproduct. Online reviews are a perfect source. A product
+  review on an e-commerce site or a movie review on a platform like IMDb is
+  typically accompanied by a star rating (e.g., 1 to 5 stars). We can use this
+  explicit rating as a proxy for the sentiment label. A common heuristic for
+  creating a binary classification dataset is:
+  
+  - Reviews with 4 or 5 stars are automatically assigned a **positive** label.
+  - Reviews with 1 or 2 stars are automatically assigned a **negative** label.
+  
+  Notice that 3-star reviews are often discarded in this process. They can
+  represent neutral sentiment, mixed opinions, or other ambiguities, and removing
+  them creates a cleaner training signal for the model. This method allows for the
+  rapid creation of massive datasets, where each instance is a pair $(d, c)$
+  consisting of a document $d$ (the review text) and its derived class label $c$
+  (positive or negative).
+  
+  Machine learning algorithms operate on numerical data, not raw text. Therefore,
+  a crucial step in building a supervised sentiment classifier is to convert text
+  documents into fixed-length numerical feature vectors. This process is known as
+  *feature extraction* or *vectorization*.
+  
+  The most common and intuitive approach is the **bag-of-words (BoW)** model. This
+  model represents text by disregarding grammar and word order, treating it as an
+  unordered collection—or "bag"—of its words. The process involves two steps:
+  first, a vocabulary of all unique words in the entire training corpus is
+  compiled. Second, each document is converted into a vector with the same length
+  as the vocabulary. Each dimension of the vector corresponds to a unique word,
+  and its value is typically the frequency (count) of that word in the document.
+  This transformation is illustrated in Fig. 11.14, which shows how two sentences
+  are converted into sparse vectors where most values are zero.
+  
+  A limitation of BoW is that very common words (e.g., "the," "is," "a") dominate
+  the frequency counts but often carry little semantic weight. An effective
+  alternative is the **Term Frequency-Inverse Document Frequency (TF-IDF)**
+  weighting scheme. TF-IDF evaluates how important a word is to a document within
+  a collection. It is the product of two statistics:
+  
+  - **Term Frequency (TF)**: Measures how frequently a term $t$ appears in a
+    document $d$. $tf(t, d)$
+  - **Inverse Document Frequency (IDF)**: Measures how informative a term is by
+    down-weighting common terms. It is calculated as the logarithm of the total
+    number of documents $|D|$ divided by the number of documents containing the
+    term $t$. $idf(t, D) = \log \frac{|D|}{|\{d \in D: t \in d\}|}$
+  
+  The resulting TF-IDF score, $tfidf(t, d, D) = tf(t, d) \times idf(t, D)$,
+  replaces the raw counts in the feature vector. This gives higher weight to terms
+  that are frequent in a specific document but rare across the entire corpus,
+  making them more discriminative for classification. These resulting vectors,
+  whether from BoW or TF-IDF, serve as the input for training a classification
+  model.
+  
+  Once our text is represented as numerical feature vectors, the task of sentiment
+  classification transforms into a standard supervised machine learning problem.
+  We can feed these vectors into any number of classification algorithms to train
+  a model that learns to distinguish between different sentiment polarities. We
+  will briefly overview two classic and highly effective models for this task:
+  Naive Bayes and Support Vector Machines.
+  
+  The **Naive Bayes** classifier is a simple yet powerful probabilistic model
+  based on Bayes' theorem. It calculates the probability of a document belonging
+  to a class (e.g., *positive* or *negative*) given its features (the words it
+  contains). Its "naive" assumption is that every feature is conditionally
+  independent of every other feature, given the class. While this is almost never
+  true for natural language, the model often performs surprisingly well. To
+  classify a new document, we choose the class $\hat{c}$ that maximizes this
+  probability:
+  
+  $\hat{c} = \underset{c \in \{\text{pos, neg}\}}{\arg\max} P(c) \prod_{i=1}^{n} P(w_i | c)$
+  
+  Here, $P(c)$ is the prior probability of a class (how common it is), and
+  $P(w_i | c)$ is the likelihood of word $w_i$ appearing in a document of that
+  class, both learned from the training data. Due to its simplicity and
+  computational efficiency, Naive Bayes serves as an excellent baseline model.
+  
+  In contrast, **Support Vector Machines (SVMs)** are discriminative classifiers.
+  Instead of modeling probabilities, an SVM aims to find an optimal hyperplane
+  that separates the data points of different classes in the high-dimensional
+  feature space. For text, this means finding a decision boundary that best
+  separates the vectors of positive reviews from negative ones. The optimal
+  hyperplane is the one that maximizes the *margin*—the distance to the nearest
+  data point from either class. This large-margin principle helps the model
+  generalize better to unseen data. Furthermore, SVMs can employ the "kernel
+  trick" to learn complex, non-linear boundaries, often achieving high accuracy
+  and making them a robust choice for sentiment classification.
+  
+  To illustrate, let's walk through training a simple Naive Bayes classifier on a
+  small, labeled dataset. Imagine our training corpus consists of just four
+  sentences:
+  
+  - **Positive:** "a great film", "I love this film"
+  - **Negative:** "a bad plot", "I hate the acting"
+  
+  Our goal is to classify a new, unseen sentence: "_I love the film_". The
+  classifier works by calculating a score for each potential class (positive and
+  negative) and selecting the one with the higher score. The calculation is based
+  on the Naive Bayes formula, where the score for a class is proportional to the
+  class's overall probability multiplied by the probabilities of each word in the
+  new sentence, given that class:
+  
+  $P(\text{class} | \text{document}) \propto P(\text{class}) \prod_{i=1}^{n} P(\text{word}_i | \text{class})$
+  
+  First, we compute the score for the *positive* class. The class probability, or
+  *prior*, $P(\text{positive})$ is $\frac{2}{4} = 0.5$, as two of our four
+  training documents are positive. We then calculate the *likelihood* of each word
+  from our new sentence given the positive data. Words like "love" and "film"
+  appear in our positive training examples, giving them relatively high likelihood
+  values.
+  
+  Next, we compute the score for the *negative* class. The prior
+  $P(\text{negative})$ is also $0.5$. However, the words "love" and "film" do not
+  appear in any negative training sentences. A raw calculation would give them a
+  probability of zero, which would incorrectly make the entire score for the
+  negative class zero. To solve this, we use a technique called **Laplace
+  smoothing** (or add-1 smoothing), which adds one to every word count. This
+  ensures all words have a small, non-zero probability. Still, the likelihoods
+  $P(\text{love} | \text{negative})$ and $P(\text{film} | \text{negative})$ will
+  be much lower than their positive counterparts.
+  
+  Finally, by multiplying the prior and the word likelihoods for each class, we
+  find that the score for *positive* is significantly higher. The classifier
+  therefore correctly labels "I love the film" as positive.
+  
+  Once a sentiment classifier is trained, we need a systematic way to measure its
+  performance. A simple "percentage correct" can be misleading, especially with
+  imbalanced data. A more nuanced evaluation starts with a *confusion matrix*,
+  which visualizes how the model's predictions align with the true labels, as
+  shown in Fig. 11.17. This matrix categorizes predictions into four types:
+  
+  - **True Positives (TP):** Positive instances correctly identified as positive.
+  - **True Negatives (TN):** Negative instances correctly identified as negative.
+  - **False Positives (FP):** Negative instances incorrectly labeled as positive
+    (a Type I error).
+  - **False Negatives (FN):** Positive instances incorrectly labeled as negative
+    (a Type II error).
+  
+  From these counts, we derive several key metrics. *Accuracy* is the most
+  intuitive, representing the overall fraction of correct predictions:
+  \$$ \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN} $\$
+  
+  To understand the trade-offs, we use *Precision* and *Recall*. Precision
+  measures exactness: of all instances the model predicted as positive, how many
+  were actually positive?
+  \$$ \text{Precision} = \frac{TP}{TP + FP} $$
+  Recall measures completeness: of all the instances that were truly positive, how many did the model find?
+  $$ \text{Recall} = \frac{TP}{TP + FN} $\$
+  
+  The *F1-score* combines these two into a single number by calculating their
+  harmonic mean, providing a balanced measure that is useful when both precision
+  and recall are important.
+  \$$ F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}} = \frac{2TP}{2TP + FP + FN} $\$
+  Together, these metrics provide a robust framework for comparing different
+  sentiment analysis models.
+  
+  While powerful, the machine learning approaches discussed so far share a
+  fundamental limitation: bag-of-words and TF-IDF representations discard word
+  order. For these models, the sentences "The service was not good" and "The
+  service was good, not!" appear very similar, despite having opposite meanings.
+  To capture the sequential nature of language, we can turn to neural network
+  architectures.
+  
+  *Recurrent Neural Networks* (RNNs) and their variants, such as LSTMs (Long
+  Short-Term Memory), are explicitly designed for sequential data. An RNN
+  processes a sentence one word at a time, maintaining a *hidden state* that acts
+  as a form of memory. At each step, the network updates its hidden state based on
+  the current word and the state from the previous word.
+  
+  This process allows the model to build a rich vector representation that encodes
+  information from the entire sequence. The final hidden state, which represents a
+  contextualized summary of the sentence, can then be fed into a classifier to
+  predict the overall sentiment. By modeling dependencies between words, these
+  neural approaches can better understand complex linguistic phenomena like
+  negation and long-distance relationships, often leading to significantly
+  improved classification performance.
+  
+  While document-level and sentence-level classification provide a useful
+  high-level summary, they often lack the necessary granularity for detailed
+  analysis. A single product review, for example, can contain conflicting opinions
+  about different features. A customer might praise a phone’s *battery life* while
+  simultaneously criticizing its *camera*. Assigning a single positive or negative
+  label to the entire text would obscure this crucial detail, leading to a loss of
+  valuable information.
+  
+  To achieve a more nuanced understanding, we introduce **Aspect-Based Sentiment
+  Analysis (ABSA)**. This more sophisticated task aims to identify opinions about
+  specific entities or their attributes, which are formally referred to as
+  *aspects*. Instead of asking "Is this review positive?", ABSA asks "What
+  specific features are being discussed, and what is the sentiment towards each
+  one?" This fine-grained approach provides far more actionable insights, moving
+  beyond a simple polarity score to a detailed breakdown of what people like and
+  dislike. The core challenge of ABSA is twofold: first, identifying the aspects
+  themselves, and second, determining the sentiment expressed towards each one.
+  
+  To achieve this fine-grained analysis, Aspect-Based Sentiment Analysis (ABSA) is
+  typically broken down into two fundamental sub-tasks, often executed as a
+  pipeline. Successfully solving the first task is a prerequisite for attempting
+  the second.
+  
+  1. **Aspect Term Extraction (ATE):** The initial goal is to identify the
+     specific entities or their attributes that are the target of an opinion.
+     These are the "aspects" themselves. In a product review, these might be nouns
+     or noun phrases like "battery life," "screen resolution," or "customer
+     service." The output of this stage is a list of all explicit opinion targets
+     mentioned in the text. For example, given the sentence, "The phone's camera
+     is amazing, but its speakers are tinny," an ATE system should extract the
+     terms *camera* and *speakers*.
+  
+  2. **Aspect Sentiment Classification (ASC):** Once the aspect terms have been
+     extracted, the next task is to determine the polarity of the sentiment
+     expressed towards *each* specific aspect. This is a targeted classification
+     problem. For each term identified by the ATE step, the ASC system assigns a
+     sentiment label, such as *positive*, *negative*, or *neutral*. Continuing the
+     previous example, the sentiment for the aspect *camera* would be classified
+     as positive, while the sentiment for *speakers* would be classified as
+     negative.
+  
+  Document-level sentiment analysis can be a blunt instrument, often failing to
+  capture the full picture when a text contains mixed opinions. To illustrate the
+  power and necessity of Aspect-Based Sentiment Analysis (ABSA), consider this
+  common type of review:
+  
+  - "The pizza was delicious, but the service was slow."
+  
+  A document-level classifier might label this sentence as neutral, as the
+  positive and negative sentiments could effectively cancel each other out. This
+  overlooks crucial information. ABSA, in contrast, dissects the sentence to
+  extract more granular insights. The goal is to identify the specific *aspects*
+  being discussed and then determine the *polarity* of the opinion expressed
+  towards each one.
+  
+  In this example, there are two distinct aspect-opinion pairs:
+  
+  1. **Aspect:** `pizza`
+  
+     - **Opinion Expression:** `delicious`
+     - **Sentiment Polarity:** Positive (+)
+  
+  2. **Aspect:** `service`
+  
+     - **Opinion Expression:** `slow`
+     - **Sentiment Polarity:** Negative (-)
+  
+  This process, visually deconstructed in Fig. 11.21, provides a much richer
+  understanding of the reviewer's feedback. A restaurant owner reading this review
+  learns precisely what customers liked (the food) and what needs improvement (the
+  service). This level of detail is far more actionable than a simple "neutral"
+  rating and demonstrates the core value of the ABSA task.
+  
+  The first sub-task in ABSA is *aspect term extraction*—identifying the specific
+  features or entities being discussed. Techniques for this range from
+  straightforward linguistic rules to sophisticated machine learning models.
+  
+  Rule-based approaches leverage common grammatical patterns to find aspects. A
+  simple heuristic might be to extract any noun or noun phrase that is modified by
+  a sentiment-bearing adjective. For example, in "The *pizza* was delicious," a
+  rule could identify `pizza` as an aspect because it is a noun connected to the
+  positive adjective `delicious`. These methods often rely on outputs from earlier
+  pipeline stages, such as Part-of-Speech tagging and dependency parsing, to
+  create precise patterns. While easy to implement, they can be brittle and
+  struggle with linguistic variation.
+  
+  A more robust and dominant approach frames extraction as a supervised sequence
+  labeling task. Here, the goal is to assign a tag to each word in a sentence,
+  indicating whether it is part of an aspect term. A common tagging schema is BIO
+  (Beginning, Inside, Outside). For the sentence "The customer service was slow,"
+  the desired output would be:
+  
+  - `The`/O `customer`/B-ASP `service`/I-ASP `was`/O `slow`/O
+  
+  In this schema, `B-ASP` marks the beginning of an aspect, `I-ASP` marks the
+  continuation of an aspect, and `O` marks words that are outside any aspect.
+  Models are trained on a manually annotated corpus to learn to predict these tag
+  sequences. Historically, powerful models for this task include Conditional
+  Random Fields (CRFs), which excel at sequence labeling by considering the
+  context of the entire sentence when predicting each word's tag.
+  
+  Once aspect terms like 'pizza' or 'service' have been identified, the subsequent
+  task is to assign a specific sentiment polarity to each one. This is crucial
+  because the overall sentence sentiment might be mixed or misleading. The
+  sentiment associated with an aspect is almost always determined by its immediate
+  local context.
+  
+  A straightforward method is to use a *window-based* approach. For each aspect
+  term, we define a context window (e.g., the 5 words before and after it) and
+  apply a lexicon-based sentiment calculation only to the words within that
+  window. The sentiment for the aspect $a$ can be a simple sum of polarity scores:
+  
+  $S(a) = \sum_{w \in \text{window}(a)} \text{polarity}(w)$
+  
+  A more powerful technique frames this as a supervised classification problem. A
+  model is trained on examples where each instance consists of a sentence, a
+  target aspect, and its corresponding polarity label (positive, negative, or
+  neutral). Features for the classifier are engineered from the context, such as
+  the bag-of-words within the window or syntactic dependencies linking the aspect
+  to opinion words. For example, a dependency parse could explicitly link the
+  adjective "delicious" to the noun "pizza."
+  
+  Modern neural network architectures can learn this context automatically, using
+  attention mechanisms to focus on the most relevant opinion words for a given
+  aspect, regardless of their distance from the aspect term itself.
+  
+  To illustrate the practical power of ABSA, consider a large restaurant chain
+  analyzing thousands of online customer reviews. A simple document-level analysis
+  might reveal an average sentiment score of "mildly positive," but this provides
+  no direction for improvement. By applying ABSA, the chain can dissect this
+  feedback into more meaningful components.
+  
+  The system first extracts common aspects discussed by customers—such as *food
+  quality*, *service speed*, *ambiance*, *price*, and *cleanliness*. For each
+  mention of an aspect, it then classifies the associated sentiment. After
+  aggregating the data across all reviews, a clear picture emerges. The analysis
+  might reveal that while 'food quality' consistently receives high praise,
+  'service speed' is a significant source of negative sentiment, a critical nuance
+  that would otherwise be lost in an overall average score.
+  
+  This granular breakdown, visualized in **Fig. 11.24**, transforms vague feedback
+  into actionable intelligence. The chart clearly highlights the restaurant's
+  operational strengths and critical weaknesses at a glance. Armed with this
+  specific insight, management can bypass generic improvement plans and focus
+  resources precisely where they are needed—for instance, by retraining staff to
+  improve service efficiency rather than needlessly altering a popular menu. ABSA
+  thus provides a direct bridge from unstructured customer opinion to strategic
+  business decisions.
+  
+  In summary, we have explored the main paradigms of sentiment analysis, each
+  presenting a unique set of trade-offs. The optimal choice depends on the
+  specific task, available resources, and desired level of analytical depth.
+  
+  - **Lexicon-Based Methods:** These are valued for their simplicity, speed, and
+    independence from labeled training data. They provide an excellent baseline
+    but are often brittle, struggling to handle contextual nuances like negation,
+    sarcasm, or domain-specific jargon.
+  
+  - **Supervised Machine Learning:** This approach, which frames sentiment
+    analysis as a classification task, generally yields higher accuracy. Its
+    power, however, is contingent upon the availability of a large, high-quality
+    annotated corpus, making data acquisition a significant bottleneck.
+  
+  - **Aspect-Based Sentiment Analysis (ABSA):** Offering the most granular
+    insight, ABSA pinpoints opinions about specific features. This detailed output
+    is highly actionable but comes at the cost of substantially increased
+    complexity in both model design and annotation.
+  
+  Despite the effectiveness of the methods covered, several significant challenges
+  persist in sentiment analysis, often stemming from the complex nature of human
+  expression. These problems require moving beyond simple word polarity and
+  towards a deeper contextual understanding.
+  
+  Key challenges include:
+  
+  - **Sarcasm and Irony:** These figures of speech intentionally use positive
+    words to convey a negative sentiment. For example, in the sentence *"I just
+    love being stuck in traffic,"* the literal positivity of "love" is inverted by
+    the real-world context. Simple models struggle to detect this contradiction.
+  
+  - **Context-Dependent Sentiment:** The polarity of a word is not always fixed.
+    The word *unpredictable* is desirable for a movie plot but highly undesirable
+    for a car's brakes. This domain-specific nature challenges universal,
+    one-size-fits-all sentiment lexicons.
+  
+  Solving these issues often requires more sophisticated models that can
+  incorporate world knowledge and nuanced pragmatic understanding.
+  
+  The field of opinion mining continues to evolve rapidly. While the methods
+  discussed provide a strong foundation, the future lies in leveraging the
+  contextual understanding of *Large Language Models* (LLMs), which we will
+  explore in the final chapter. These models excel at detecting subtle sentiment,
+  sarcasm, and complex aspect-based opinions with minimal training. This
+  capability, however, introduces critical ethical questions. We must consider the
+  potential for manipulating public opinion, the amplification of biases present
+  in training data, and the privacy implications of analyzing personal sentiments
+  at an unprecedented scale.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+  
+  [^1]: In practice, stop words like 'the', 'was', and 'a' are often filtered out, and
+  words not found in the lexicon are ignored. We treat them as having a score of 0
+  for simplicity.
+hash: e3078d99d84d225bdf9710ca6155d95c2182c9d20254a850a6da232b977718ae
+response:
+  Create a simple line art illustration depicting a person's hands holding a
+  comment card. The card contains a short, stylized piece of text representing a
+  customer review. One of the hands is holding a pen, which has just finished
+  annotating the text. Next to one line of text, there is a clear, hand-drawn plus
+  sign (+), and next to another line, a minus sign (-). The focus should be on the
+  act of dissecting and evaluating the feedback. The overall aesthetic should be
+  clean, minimalist, and focused, with no distracting background elements.
+duration: 17676 ms
+usage_stats:
+  {
+    "candidates_token_count": 113,
+    "prompt_token_count": 8159,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 8159
+      }
+    ],
+    "thoughts_token_count": 1603,
+    "total_token_count": 9875
+  }
+...
