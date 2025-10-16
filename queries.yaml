@@ -131,11 +131,11 @@ prompt:
   </chapter>
 
   Choose an illustration that would be a good headpiece for this chapter. The
-  illustration should touch on some specific topic discussed in the chapter.
-  Describe the chosen illustration as if your are giving a task to an artist.
-  Keep the aesthetics simple. The description should be self-sufficient, i.e.
-  it should not reference the chapter. The description should be no longer than
-  a paragraph. A shorter description is also fine.
+  illustration should show a human activity that is closely related to one of
+  the topics discussed in the chapter. Describe the chosen illustration as if
+  your are giving a task to an artist. Keep the aesthetics simple. The
+  description should be self-sufficient, i.e. it should not reference the
+  chapter. The description should be no longer than a paragraph.
 ---
 query: image
 model: gemini-2.5-flash-image-preview
