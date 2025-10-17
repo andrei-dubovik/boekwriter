@@ -68,9 +68,66 @@ class Footnote():
     }
 
 
-# Enable LaTeX and footnote support in mdformat
+class Table():
+    """A pass-through table plugin for mdformat."""
+    @staticmethod
+    def update_mdit(mdit):
+        mdit.enable('table')
+
+    @staticmethod
+    def render_children(node, context):
+        return (child.render(context) for child in node.children)
+
+    @staticmethod
+    def table(node, context):
+        return ''.join(Table.render_children(node, context))
+
+    @staticmethod
+    def thead(node, context):
+        context.env['columns'] = []
+        row = node.children[0].render(context) + '\n'
+        row += '| ' + ' | '.join(context.env['columns']) + ' |\n'
+        return row
+
+    @staticmethod
+    def tbody(node, context):
+        return '\n'.join(Table.render_children(node, context))
+
+    @staticmethod
+    def tr(node, context):
+        cells = [c.strip() for c in Table.render_children(node, context)]
+        cells = [' ' + c + ' ' if c != '' else ' ' for c in cells]
+        return '|' + '|'.join(cells) + '|'
+
+    @staticmethod
+    def th(node, context):
+        style = node.attrs.get('style', '')
+        if 'text-align:right' in style:
+            context.env['columns'].append('---:')
+        elif 'text-align:center' in style:
+            context.env['columns'].append(':---:')
+        else:
+            context.env['columns'].append(':---')
+        return ''.join(Table.render_children(node, context))
+
+    @staticmethod
+    def td(node, context):
+        return ''.join(Table.render_children(node, context))
+
+    RENDERERS = {
+        'table': table,
+        'thead': thead,
+        'tbody': tbody,
+        'tr': tr,
+        'th': th,
+        'td': th,
+    }
+
+
+# Enable LaTeX, footnote and table support in mdformat
 mdformat.plugins.PARSER_EXTENSIONS['dollarmath'] = DollarMath
 mdformat.plugins.PARSER_EXTENSIONS['footnote'] = Footnote
+mdformat.plugins.PARSER_EXTENSIONS['table'] = Table
 
 
 def deephash(obj):
@@ -120,7 +177,7 @@ def reflow(obj, width=80):
             return mdformat.text(
                 obj,
                 options = {'wrap': width, 'number': True},
-                extensions = {'dollarmath', 'footnote'},
+                extensions = {'dollarmath', 'footnote', 'table'},
             ).rstrip()
         case _:
             return obj

@@ -27,6 +27,7 @@ VARIABLES_KEYS = '|'.join(VARIABLES.keys())
 UNICODE_KEYS = '|'.join(UNICODE.keys())
 BUILD = Path('build')
 md = MarkdownIt('commonmark').use(dollarmath_plugin).use(footnote_plugin)
+md.enable('table')
 
 # Initialize a logger
 LOGGER = logging.getLogger('latex')
@@ -154,6 +155,7 @@ def svg2pdf(path):
 def md2tex(obj):
     """Covert a parsed Markdown to LaTeX."""
     footnotes = {}
+    columns = [None]
 
     def convert(obj):
         # '\0' markup in fomulas and code blocks guards against post-processing
@@ -204,6 +206,9 @@ def md2tex(obj):
             case SyntaxTreeNode(type='footnote'):
                 footnotes[obj.meta['label']] = convert(obj.children).strip()
                 return ''
+            case SyntaxTreeNode(type='table'|'thead'|'tbody'|'tr'|'th'|'td'):
+                # Splitting this part into a separate function for clarity
+                return convert_table(obj, convert, columns)
             case SyntaxTreeNode():
                 return convert(obj.children)
             case list():
@@ -217,6 +222,35 @@ def md2tex(obj):
     text = re.sub(r'\\footnote\{(.*?)\}', lambda m: r'\footnote{%s}' % footnotes[m.group(1)], text)
 
     return text
+
+
+def convert_table(obj, convert, columns):
+    """Convert a stray Markdown table to LaTeX."""
+    match obj:
+        case SyntaxTreeNode(type='table'):
+            columns[0] = []
+            table = convert(obj.children)
+            header = r'\begin{center}\small\begin{tabular}{%s}' % ''.join(columns[0])
+            footer = r'\end{tabular}\end{center}'
+            table = f'{header}\n\\toprule\n{table}\\bottomrule\n{footer}'
+            return '\0' + table + '\0\n\n'
+        case SyntaxTreeNode(type='thead'):
+            return convert(obj.children) + '\\midrule\n'
+        case SyntaxTreeNode(type='tbody'):
+            return convert(obj.children)
+        case SyntaxTreeNode(type='tr'):
+            return ' & '.join(convert(v) for v in obj.children) + r'\\' + '\n'
+        case SyntaxTreeNode(type='th'):
+            style = obj.attrs.get('style', '')
+            if 'text-align:right' in style:
+                columns[0].append('r')
+            elif 'text-align:center' in style:
+                columns[0].append('c')
+            else:
+                columns[0].append('l')
+            return convert(obj.children)
+        case SyntaxTreeNode(type='td'):
+            return convert(obj.children)
 
 
 def normalize(text):
