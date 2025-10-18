@@ -22,6 +22,7 @@ from mdit_py_plugins.footnote import footnote_plugin
 from .unicode import VARIABLES, UNICODE
 
 # Define constants
+SYNTAX=['python']  # enable basic syntax highlighting for these languages
 SUPERSCRIPTS = '¹|²|³|⁴|⁵|⁶|⁷|⁸|⁹'
 VARIABLES_KEYS = '|'.join(VARIABLES.keys())
 UNICODE_KEYS = '|'.join(UNICODE.keys())
@@ -190,6 +191,12 @@ def md2tex(obj):
                 code = obj.content
                 sep = find_delimiter(code)
                 return f'\0\\Verb{sep}' + code + f'{sep}\0'
+            case SyntaxTreeNode(type='fence', tag='code'):
+                code = obj.content
+                header = '\\begin{lstlisting}'
+                if obj.info in SYNTAX:
+                    header += f'[language={obj.info}]'
+                return '\0' + header + '\n' + code + '\\end{lstlisting}\0\n\n'
             case SyntaxTreeNode(type='paragraph'):
                 return convert(obj.children) + '\n\n'
             case SyntaxTreeNode(type='em'):
