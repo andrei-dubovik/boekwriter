@@ -275,8 +275,8 @@ def normalize_span(match):
             text = re.sub(r'(?<!\\)\\([*\[\]])', r'\1', text)
             # Escape unmatched $ before numbers (a likely currency symbol)
             text = re.sub(r'\$(?=[0-9][^$]*$)', r'\\$', text, flags=re.M)
-            # Escape unescaped &
-            text = re.sub(r'(?<!\\)&', r'\&', text)
+            # Escape unescaped & and %
+            text = re.sub(r'(?<!\\)([&%])', r'\\\1', text)
             return text
 
 
