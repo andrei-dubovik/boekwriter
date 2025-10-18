@@ -3,6 +3,8 @@ BookQuery
 
 A collection of generic prompts for writing any given book in a structured manner using an LLM, plus a Python scaffolding for executing those prompts, for caching, and for LaTeX compilation. The LaTeX compilation is somewhat brittle at the moment and is likely to fail for more technical books.
 
+For the story behind this project, take a look at my blog ["Gemini and I Wrote a Book: Introduction to Computational Linguistics"](https://dubovik.eu/blog/computational-linguistics).
+
 ## Usage
 
 At the moment, only Gemini API is supported, though adding OpenAI support should be trivial.
