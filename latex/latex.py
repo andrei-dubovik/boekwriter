@@ -279,7 +279,7 @@ def normalize_span(match):
             text = normalize_unicode(text)
             text = normalize_quotes(text, 'text')
             # Unescape erroneously escaped asterisks and square brackets (a known issue with the caching pipeline)
-            text = re.sub(r'(?<!\\)\\([*\[\]])', r'\1', text)
+            text = re.sub(r'(?<!\\)\\([*\[\]()])', r'\1', text)
             # Escape unmatched $ before numbers (a likely currency symbol)
             text = re.sub(r'\$(?=[0-9][^$]*$)', r'\\$', text, flags=re.M)
             # Escape unescaped & and %
