@@ -119,6 +119,20 @@ prompt:
   the output, exclude the outer `table` environment.
 schema: {caption: str, latex: str}
 ---
+query: photo-caption
+prompt:
+  Consider the following text fragment:
+
+  ${chunk}
+
+  This fragment refers to Fig. ${visual['fig']}, which is a photograph. The
+  photograph's description is as follows:
+
+  ${visual['description']}
+
+  Write a short caption for this figure.
+schema: {caption: str}
+---
 query: headpiece
 prompt:
   What follows is a text for a chapter from a book called "${book}".

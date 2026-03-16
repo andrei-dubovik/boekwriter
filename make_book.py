@@ -11,6 +11,7 @@ VISUALS = [
     'Chart',
     'Map',
     'Timeline',
+    'Photograph',
     'Illustration',
 ]
 
@@ -133,6 +134,26 @@ def make_section(title, chapters, cid, outline, oid, visuals):
             )
             figure['caption'] = response['caption']
             figure['table'] = response['latex']
+        elif visual['aid'] == 'Photograph':
+            # PNG
+            response = model.query(
+                'image',
+                slot = f'{cid+1}-{oid+1}',
+                validators = [],
+                prompt = visual['description'],
+            )
+            figure['png'] = response
+
+            # Caption
+            #pdb.set_trace()
+            response = model.query(
+                'photo-caption',
+                slot = f'{cid+1}-{oid+1}',
+                validators = [],
+                chunk = chunk,
+                visual = visual,
+            )
+            figure['caption'] = response['caption']
         else:
             response = model.query(
                 'figure',

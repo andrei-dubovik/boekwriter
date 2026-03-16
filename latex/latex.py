@@ -94,8 +94,13 @@ def render_chunk(file, chunk):
             latex = normalize_quotes(figure['table'], 'table')
             file.write(r'\small')
             file.write(latex)
+        elif figure['type'] == 'Photograph':
+            png_path = f'fig-{figure["number"]}.png'
+            with open(BUILD/png_path, 'wb') as png:
+                png.write(figure['png'])
+            file.write(r'\includegraphics[width=80mm]{%s}' % png_path)
         else:
-            svg_path = Path(BUILD/f'fig-{figure["number"]}.svg')
+            svg_path = BUILD/f'fig-{figure["number"]}.svg'
             with open(svg_path, 'wt') as svg:
                 svg.write(figure['svg'])
             pdf_path = svg2pdf(svg_path)
