@@ -46,10 +46,11 @@ prompt:
   - ${name}
   % endfor
 
-  Only choose an aid if it can contribute substantially to the unerstanding of the
-  text. Avoid visual aids with low information density. You have a budget of at
-  most ${chapter['word_count']//1000} aids. Explain the chosen aids in detail.
-  Only list the items where an aid has been chosen.
+  Only choose an aid if it can contribute substantially to the unerstanding of
+  the text. Avoid visual aids with low information density. You have a budget
+  of at most ${chapter['word_count']//1000} aids. Explain the chosen aids in
+  detail. If the chosen aid is a table, the table must fit on a portrait A4
+  page. Only list the items where an aid has been chosen.
 schema: [{number: int, aid: str, description: str}]
 ---
 query: chunk
