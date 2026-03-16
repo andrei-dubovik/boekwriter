@@ -22,9 +22,12 @@ The final book is saved as `build/book.pdf`. All prompt-response pairs are cache
 The tool has been developed on the aforementioned book title. To compile the book from cached Gemini responses,
 
 ```bash
-git checkout edition-202510
+git checkout computational-linguistics-202510
 echo 'dummy' > dummy.key
-python make_book.py --key dummy.key --title "Introduction to Computational Linguistics" --words 90000
+python make_book.py \
+  --key dummy.key \
+  --title "Introduction to Computational Linguistics" \
+  --words 90000
 ```
 
 ## Requirements
