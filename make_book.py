@@ -35,6 +35,8 @@ def make_book(model, title, word_count):
     return {
         'title': title,
         'content': content,
+        'model': model.model,
+        'date': date.today().strftime('%B %Y'),
     }
 
 
@@ -178,6 +180,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Import standard libraries
+    from datetime import date
     from itertools import count
     from pathlib import Path
     import logging
