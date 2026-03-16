@@ -210,7 +210,7 @@ prompt:
   
   This visual aid will be drafted separately, but you can already refer to it as
   Fig. 3.16 in the text.
-hash: 468e7b5231b74bd8efe27c4286be1e2461db16ab8d1d9951bd621687d94a6e66
+hash: d2dab2aca6dc3ecf429bb4304af737207fd9aea70f1a22440bb19d30e8b8d0ee
 response:
   To solidify our understanding, let's walk through the complete normalization of
   a single sentence from raw string to a final, processed list of tokens. This

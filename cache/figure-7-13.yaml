@@ -65,7 +65,7 @@ prompt:
   Draw the figure using SVG. The figure should have a white background, and it
   should have an aspect ratio of 4:3. Do not include the figure title in the SVG
   figure. Verify that the labels do not obstruct one another.
-hash: 52e4095a47dd24d134ceaa7a6980ee62809633dd31bfc3fdb1d6164a64e20ec8
+hash: 4980153071e98b0894e8e9fec37a99c116e9fa46533af62aa66d4f7febdf2d33
 response:
   caption:
     Fig. 7.13: A diagram of compositional semantics using vector averaging. The

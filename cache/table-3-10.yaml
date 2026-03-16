@@ -66,7 +66,7 @@ prompt:
   
   [^1]: The split of *can't* into `ca` and `n't` may seem unusual, but it reflects a
   convention designed to regularize patterns for parsing algorithms.
-hash: 17cee28421b902d56f8eceb9a68976999cce984a3178f08ced3c1550a4bb0466
+hash: 8333fc3eb3f1d1866f310706d5d2e98c47071a76b12f10a65124b0de0646c551
 response:
   caption:
     Fig. 3.10: A table illustrating common tokenization challenges with example

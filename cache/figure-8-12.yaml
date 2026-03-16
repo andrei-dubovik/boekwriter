@@ -99,7 +99,7 @@ prompt:
   Draw the figure using SVG. The figure should have a white background, and it
   should have an aspect ratio of 4:3. Do not include the figure title in the SVG
   figure. Verify that the labels do not obstruct one another.
-hash: 4ec95e54fdb524c6133622788cf90cdad8321f20c32f15186bdebf5b65dcf84f
+hash: f942bc6ac3b3bb08bf1634e614f89a2b6caab7754c5a965afad4fbeea93edbc4
 response:
   caption:
     Fig. 8.12: A diagram of the pipeline architecture for a traditional

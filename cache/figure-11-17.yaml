@@ -50,7 +50,7 @@ prompt:
   Draw the figure using SVG. The figure should have a white background, and it
   should have an aspect ratio of 4:3. Do not include the figure title in the SVG
   figure. Verify that the labels do not obstruct one another.
-hash: 78bcf4ee9fe3ad1c8e421a9843d192a2f2e759b735d0a0eb37717205bae2c411
+hash: f4e4413312fa61b2c8137a97cc8e02069619642e864dd2b9400456ff7939cfec
 response:
   caption:
     Fig. 11.17: A confusion matrix for a binary classification task. It visualizes

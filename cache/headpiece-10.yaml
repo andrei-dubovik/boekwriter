@@ -693,7 +693,7 @@ prompt:
   
   [^1]: Note that for single-token entities, the `B-` tag is used by convention. There
   is no corresponding `I-` tag.
-hash: 3f47ade1f19872b4e1c3e29fbf69c17c78d1de98c0debb604d9568ba53d159a5
+hash: 25e797b34672dfe131827e1d2eb9a21f55c5cf0b43d75a1e2d86fff80fd1df9f
 response:
   Create a simple, line-art illustration depicting a top-down view of a workspace.
   On the left side of the desk lies an open book or a dense printed report. A

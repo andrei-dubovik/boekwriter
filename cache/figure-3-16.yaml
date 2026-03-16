@@ -54,7 +54,7 @@ prompt:
   Draw the figure using SVG. The figure should have a white background, and it
   should have an aspect ratio of 4:3. Do not include the figure title in the SVG
   figure. Verify that the labels do not obstruct one another.
-hash: e09408e0ea973859411916e3b05b23b0376a3f50eba2bf74a15e4f77e1732840
+hash: 6b651b2b43d79e2f3383de74a3fd18632afd8d4ad1e53eb0f2eeb74e5d91434e
 response:
   caption:
     A diagram of the text normalization pipeline. The sentence 'The quickest foxes

@@ -75,7 +75,7 @@ prompt:
   Draw the figure using SVG. The figure should have a white background, and it
   should have an aspect ratio of 4:3. Do not include the figure title in the SVG
   figure. Verify that the labels do not obstruct one another.
-hash: 51a55b53e9476532db28224bb3767e3723719ce1332bc92fb835873da2cbba12
+hash: b9b6da841612cb257c57f1ded7cfdd90302cb2f1c3d489e986040aedb6335b7e
 response:
   caption:
     Figure 12.12: The process of bias amplification in Large Language Models. Skewed

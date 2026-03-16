@@ -876,7 +876,7 @@ prompt:
   [^1]: The asterisk notation $(N \cup \Sigma)^*$ means "a sequence of zero or more
   symbols" from the given set. For most practical parsing grammars, rule
   right-hand sides have at least one symbol.
-hash: c881b2cc1f1ec7cedc2bafc58643933eac60458c9eec21096d71d588ffcec51c
+hash: 0b33808b1389d645baf8ec6710a5f84b0c8a1d52399a07cfb30a0cab53e40185
 response:
   Please create an illustration of a person standing before a large chalkboard, in
   the process of diagramming a sentence. Their hand, holding a piece of chalk, has

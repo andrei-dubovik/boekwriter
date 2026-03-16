@@ -71,7 +71,7 @@ prompt:
   Draw the figure using SVG. The figure should have a white background, and it
   should have an aspect ratio of 4:3. Do not include the figure title in the SVG
   figure. Verify that the labels do not obstruct one another.
-hash: 1e6621a57c3aef36989a63558e375e90d0f5b82dfa055c441189ac1ea8df433a
+hash: 8969f8d29321c404c2fd0f9ed7cbe37dd3810a6df660649e212acde189598105
 response:
   caption:
     Fig. 6.2: A side-by-side comparison of Constituency Parsing and Dependency

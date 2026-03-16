@@ -91,7 +91,7 @@ prompt:
   Draft this table, format it using LaTeX. Assume the `booktabs` package is
   already imported. Only include the `tabular` environment and its content in the
   output, exclude the outer `table` environment.
-hash: 5b1530ff223067f49515b7168503e64ae5ddba2f9d8e72a4b4ba2641b3fb0074
+hash: 46e27461bd785317a41a2b07ebdcbf4f5a50bc13f268ea1c3fcd5012bcc8b8aa
 response:
   caption:
     Fig. 7.15: A summary of fundamental semantic roles common to frameworks like
