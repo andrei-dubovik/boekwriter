@@ -35,7 +35,7 @@ class ValidationError(LLMError):
 class LLModel(ABC):
     """A generic large language model."""
 
-    def __init__(self, queries, cache, tries=5, cooldown=20):
+    def __init__(self, queries, cache, tries=10, cooldown=20):
         self.queries = queries
         self.cache = cache
         self.tries = tries
