@@ -35,7 +35,11 @@ class ValidationError(LLMError):
 class LLModel(ABC):
     """A generic large language model."""
 
-    def __init__(self, queries, cache, tries=10, cooldown=20):
+    def __init__(self, text_model, image_model, queries, cache, tries=10, cooldown=20):
+        self.models = {
+            'default-text-model': text_model,
+            'default-image-model': image_model,
+        }
         self.queries = queries
         self.cache = cache
         self.tries = tries
@@ -43,17 +47,18 @@ class LLModel(ABC):
         cache.mkdir(parents=True, exist_ok=True)
 
     @abstractmethod
-    def defaults(self):
-        """Provide default query settings."""
-
-    @abstractmethod
     def basequery(self, prompt):
         """Query LLM."""
+
+    def set_defaults(self, prompt):
+        """Expand a prompt with default settings."""
+        model = prompt.get('model', 'default-text-model')
+        prompt['model'] = self.models.get(model, model), None
 
     def query(self, query, slot, validators, **kwargs):
         """Resolve prompt, cache an LLM query."""
         prompt = load_prompt(self.queries, query, **kwargs)
-        prompt = JSONObject(self.defaults()) | prompt
+        self.set_defaults(prompt)
 
         # Use the cache if exists and not stale
         hash = utils.deephash(prompt)
@@ -77,7 +82,6 @@ class LLModel(ABC):
         # Cache the results
         dump_yaml(prompt, path)
         return response
-
 
     def retry(self, prompt, validators):
         for i in count():
@@ -182,16 +186,9 @@ class JSONObject(dict):
 class Gemini(LLModel):
     """A specialization of LLModel to Gemini."""
 
-    def __init__(self, key, model, **kwargs):
+    def __init__(self, key, **kwargs):
         super().__init__(**kwargs)
-        self.model = model
         self.client = genai.Client(api_key=key)
-
-    def defaults(self):
-        """Provide default query settings."""
-        return {
-            'model': self.model,
-        }
 
     def basequery(self, prompt):
         """Query LLM."""

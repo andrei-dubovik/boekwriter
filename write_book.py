@@ -36,7 +36,7 @@ def make_book(model, title, word_count):
     return {
         'title': title,
         'content': content,
-        'model': model.model,
+        'model': model.models['default-text-model'],
         'date': date.today().strftime('%B %Y'),
     }
 
@@ -189,9 +189,14 @@ if __name__ == '__main__':
         help = 'total word count',
     )
     parser.add_argument(
-        '--model',
+        '--text-model',
         default = 'gemini-2.5-pro',
-        help = 'LLM model (default: gemini-2.5-pro)',
+        help = 'an LLM model for text and vector graphics (default: gemini-2.5-pro)',
+    )
+    parser.add_argument(
+        '--image-model',
+        default = 'gemini-2.5-flash-image',
+        help = 'an LLM model for raster graphics (default: gemini-2.5-flash-image)',
     )
     parser.add_argument(
         '--template',
@@ -225,10 +230,11 @@ if __name__ == '__main__':
         key = file.read().rstrip()
 
     model = Gemini(
+        text_model = args.text_model,
+        image_model = args.image_model,
         queries = Path('queries.yaml'),
         cache = Path('cache'),
         key = key,
-        model = args.model,
     )
 
     # Round and round she goes

@@ -153,7 +153,7 @@ prompt:
   chapter. The description should be no longer than a paragraph.
 ---
 query: image
-model: gemini-2.5-flash-image
+model: default-image-model
 prompt: ${prompt}
 schema: png
 ...
