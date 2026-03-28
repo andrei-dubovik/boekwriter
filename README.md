@@ -1,5 +1,5 @@
-BookQuery
-=========
+BoekWriter
+==========
 
 A collection of generic prompts for writing any given book in a structured manner using an LLM, plus a Python scaffolding for executing those prompts, for caching, and for LaTeX compilation. The LaTeX compilation is somewhat brittle at the moment and is likely to fail for more technical books.
 
@@ -12,7 +12,7 @@ At the moment, only Gemini API is supported, though adding OpenAI support should
 Run
 
 ```bash
-python make_book.py --key [KEYFILE] --title [BOOK_TITLE] --words [WORD_COUNT]
+python write_book.py --key [KEYFILE] --title [BOOK_TITLE] --words [WORD_COUNT]
 ```
 
 The final book is saved as `build/book.pdf`. All prompt-response pairs are cached in `cache`.

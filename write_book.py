@@ -171,7 +171,7 @@ def make_section(title, chapters, cid, outline, oid, visuals):
 
 if __name__ == '__main__':
     # Parse arguments
-    parser = argparse.ArgumentParser(description='Textbook Builder')
+    parser = argparse.ArgumentParser(description='GenAI textbook writer')
     parser.add_argument(
         '--key',
         required = True,
