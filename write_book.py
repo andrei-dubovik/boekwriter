@@ -169,14 +169,17 @@ def make_section(title, chapters, cid, outline, oid, visuals):
     return {'chunk': chunk} | ({} if figure is None else {'figure': figure})
 
 
+def load_key(path):
+    """Load an API key from a file."""
+    if path is None:
+        return None
+    with open(path) as file:
+        return file.read().rstrip()
+
+
 if __name__ == '__main__':
     # Parse arguments
     parser = argparse.ArgumentParser(description='GenAI textbook writer')
-    parser.add_argument(
-        '--key',
-        required = True,
-        help = 'API-key file location',
-    )
     parser.add_argument(
         '--title',
         required = True,
@@ -187,6 +190,10 @@ if __name__ == '__main__':
         type = int,
         required = True,
         help = 'total word count',
+    )
+    parser.add_argument(
+        '--gemini-key',
+        help = 'Gemini API key file location (optional)',
     )
     parser.add_argument(
         '--text-model',
@@ -212,7 +219,7 @@ if __name__ == '__main__':
     import logging
 
     # Import local libraries
-    from llmwrapper.wrapper import Gemini
+    from llmwrapper.wrapper import MultiModel
     from llmwrapper.wrapper import chk_sum, chk_range, chk_words
     import latex
 
@@ -226,15 +233,12 @@ if __name__ == '__main__':
     logging.getLogger('httpx').setLevel(logging.WARNING)
 
     # Initialize an LLM wrapper
-    with open(args.key) as file:
-        key = file.read().rstrip()
-
-    model = Gemini(
+    model = MultiModel(
         text_model = args.text_model,
         image_model = args.image_model,
         queries = Path('queries.yaml'),
         cache = Path('cache'),
-        key = key,
+        gemini_key = load_key(args.gemini_key),
     )
 
     # Round and round she goes

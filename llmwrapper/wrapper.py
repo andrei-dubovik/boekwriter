@@ -6,16 +6,19 @@
 from abc import ABC, abstractmethod
 from copy import deepcopy
 from itertools import count
+import importlib
 import logging
 import time
 
 # Import external libraries
-from google import genai
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError as JSONValidationError
 from lxml.etree import XMLSyntaxError
 from mako.template import Template
 import mdformat
+
+# Lazy imports
+genai = None
 
 # Import local libraries
 from . import jsonschema, yaml, utils
@@ -183,11 +186,29 @@ class JSONObject(dict):
         return JSONObject(super().copy(), deepcopy(self.schema))
 
 
-class Gemini(LLModel):
-    """A specialization of LLModel to Gemini."""
+class MultiModel(LLModel):
+    """A model that dispatches requests to appropriate LLMs."""
 
-    def __init__(self, key, **kwargs):
+    def __init__(self, gemini_key=None, **kwargs):
+        global genai
         super().__init__(**kwargs)
+        if gemini_key:
+            genai = importlib.import_module("google.genai")
+            self.gemini = Gemini(gemini_key)
+
+    def basequery(self, prompt):
+        """Query the appropriate LLM."""
+        match prompt['model'].partition('-')[0]:
+            case 'gemini':
+                return self.gemini.basequery(prompt)
+            case model:
+                raise RuntimeError(f'model class {model} is not supported')
+
+
+class Gemini():
+    """A standardized wrapper around Gemini."""
+
+    def __init__(self, key):
         self.client = genai.Client(api_key=key)
 
     def basequery(self, prompt):

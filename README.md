@@ -12,7 +12,7 @@ At the moment, only Gemini API is supported, though adding OpenAI support should
 Run
 
 ```bash
-python write_book.py --key [KEYFILE] --title [BOOK_TITLE] --words [WORD_COUNT]
+python write_book.py --title [BOOK_TITLE] --words [WORD_COUNT] --gemini-key [KEYFILE]
 ```
 
 The final book is saved as `build/book.pdf`. All prompt-response pairs are cached in `cache`.
