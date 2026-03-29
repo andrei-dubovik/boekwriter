@@ -196,6 +196,10 @@ if __name__ == '__main__':
         help = 'Gemini API key file location (optional)',
     )
     parser.add_argument(
+        '--claude-key',
+        help = 'Claude API key file location (optional)',
+    )
+    parser.add_argument(
         '--text-model',
         default = 'gemini-2.5-pro',
         help = 'an LLM model for text and vector graphics (default: gemini-2.5-pro)',
@@ -239,6 +243,7 @@ if __name__ == '__main__':
         queries = Path('queries.yaml'),
         cache = Path('cache'),
         gemini_key = load_key(args.gemini_key),
+        claude_key = load_key(args.claude_key),
     )
 
     # Round and round she goes

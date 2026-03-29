@@ -7,9 +7,7 @@ For the story behind this project, take a look at my blog ["Gemini and I Wrote a
 
 ## Usage
 
-At the moment, only Gemini API is supported, though adding OpenAI support should be trivial.
-
-Run
+At the moment, Gemini and Claude models are supported. To generate a book using Gemini Pro, with illustrations by Gemini Flash Image (these are the default settings), run
 
 ```bash
 python write_book.py --title [BOOK_TITLE] --words [WORD_COUNT] --gemini-key [KEYFILE]
@@ -34,6 +32,7 @@ python make_book.py \
 
 - python
   - PIL
+  - anthropic
   - google.genai
   - jsonschema
   - lxml

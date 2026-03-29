@@ -7,6 +7,7 @@ from abc import ABC, abstractmethod
 from copy import deepcopy
 from itertools import count
 import importlib
+import json
 import logging
 import time
 
@@ -18,6 +19,7 @@ from mako.template import Template
 import mdformat
 
 # Lazy imports
+anthropic = None
 genai = None
 
 # Import local libraries
@@ -189,24 +191,29 @@ class JSONObject(dict):
 class MultiModel(LLModel):
     """A model that dispatches requests to appropriate LLMs."""
 
-    def __init__(self, gemini_key=None, **kwargs):
-        global genai
+    def __init__(self, gemini_key=None, claude_key=None, **kwargs):
+        global anthropic, genai
         super().__init__(**kwargs)
         if gemini_key:
             genai = importlib.import_module("google.genai")
             self.gemini = Gemini(gemini_key)
+        if claude_key:
+            anthropic = importlib.import_module("anthropic")
+            self.claude = Claude(claude_key)
 
     def basequery(self, prompt):
         """Query the appropriate LLM."""
         match prompt['model'].partition('-')[0]:
             case 'gemini':
                 return self.gemini.basequery(prompt)
+            case 'claude':
+                return self.claude.basequery(prompt)
             case model:
                 raise RuntimeError(f'model class {model} is not supported')
 
 
 class Gemini():
-    """A standardized wrapper around Gemini."""
+    """A wrapper around Gemini."""
 
     def __init__(self, key):
         self.client = genai.Client(api_key=key)
@@ -243,6 +250,53 @@ class Gemini():
             raise LLMError(err.status) from err
         except genai.errors.ServerError as err:
             raise LLMError(err.status) from err
+
+
+class Claude():
+    """A wrapper around Claude."""
+
+    def __init__(self, key, max_tokens=64_000, timeout=1_200):
+        self.client = anthropic.Anthropic(api_key=key, max_retries=0, timeout=timeout)
+        self.max_tokens = max_tokens
+
+    def basequery(self, prompt):
+        """Query LLM."""
+        if prompt['schema']['type'] == 'string':
+            config = {}
+        else:
+            config = {
+                'format': {
+                    'type': 'json_schema',
+                    'schema': prompt['schema'],
+                },
+            }
+
+        try:
+            message = self.client.messages.create(
+                model = prompt['model'],
+                messages = [{
+                    'role': 'user',
+                    'content': prompt['prompt'],
+                }],
+                thinking = {'type': 'adaptive'},
+                max_tokens = self.max_tokens,
+                output_config = {**config},
+            )
+
+            if message.stop_reason == 'max_tokens':
+                raise LLMError('output token limit reached')
+
+            part = next(p for p in message.content if p.type == 'text')
+            if prompt['schema']['type'] == 'string':
+                content = part.text
+            else:
+                content = json.loads(part.text)
+
+            return content, utils.upcast(message.usage)
+
+        except anthropic.APIError as err:
+            status = err.body['error']['type'].upper()
+            raise LLMError(status) from err
 
 
 # A handful of additional validators

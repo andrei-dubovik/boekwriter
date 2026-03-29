@@ -24,6 +24,7 @@ def load(schema):
                 return {
                     'type': 'object',
                     'properties': {k.id: convert(v) for k, v in zip(keys, values)},
+                    'additionalProperties': False,
                 }
             case ast.BinOp(left, _, right):
                 return {
@@ -92,6 +93,7 @@ def deduce(obj):
             return {
                 'type': 'object',
                 'properties': {k: deduce(v) for k, v in obj.items()},
+                'additionalProperties': False,
             }
         case int():
             return {'type': 'integer'}
