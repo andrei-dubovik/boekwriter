@@ -105,7 +105,7 @@ def make_section(title, chapters, cid, outline, oid, visuals):
     chunk = model.query(
         'chunk',
         slot = f'{cid+1}-{oid+1}',
-        validators = [chk_words(min_words, max_words)],
+        validators = [chk_words(min_words, max_words*5//4)],
         book = title,
         chapters = chapters,
         outline = outline,
