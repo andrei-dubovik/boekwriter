@@ -198,6 +198,7 @@ def md2tex(obj):
                 return f'\0\\Verb{sep}' + code + f'{sep}\0'
             case SyntaxTreeNode(type='fence', tag='code'):
                 code = obj.content
+                code = collapse_dashes(code)
                 header = '\\begin{lstlisting}'
                 if obj.info in SYNTAX:
                     header += f'[language={obj.info}]'
@@ -367,6 +368,11 @@ def normalize_unicode(text):
     """Recode miscellaneous Unicode to LaTeX."""
     text = re.sub(f'{UNICODE_KEYS}', lambda m: '%s{}' % UNICODE[m.group(0)], text)
     return text
+
+
+def collapse_dashes(text):
+    """Convert en- and em-dashes to hyphens (for code listings)."""
+    return text.translate({8211: '-', 8212: '-'})
 
 
 def detect_footnotes(text):
