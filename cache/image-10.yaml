@@ -1,0 +1,33 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  A person at a desk is writing a short, one-page guide for a new project. The
+  page is clearly organized with simple headings and concise bullet points. In the
+  background, a computer with code on the screen is slightly out of focus,
+  indicating that this act of writing the guide is a preparatory step. The style
+  is minimalist and uses clean line art, conveying a sense of clarity,
+  thoughtfulness, and preparation before the main work begins.
+hash: de478ebfca33a4babd55bd21dc4e6938a70e867a443af0be37afc7ddf4a7684b
+response: image-10.png
+duration: 6310 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 95,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 95
+      }
+    ],
+    "total_token_count": 1385
+  }
+...

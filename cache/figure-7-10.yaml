@@ -1,0 +1,125 @@
+{query: str, model: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+query: figure
+prompt:
+  Consider the following text fragment from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  Everything in this chapter distills into a single repeatable loop:
+  
+  1. **Describe the symptom** clearly—error message, wrong output, or slowdown.
+  2. **Share context**: relevant files, logs, environment details.
+  3. **Ask for hypotheses** before fixes. Two or three candidates beat a blind
+     guess.
+  4. **Investigate iteratively**—let Claude Code read code, run commands, and
+     eliminate candidates one by one.
+  5. **Verify every fix** by running the test that originally failed.
+  6. **Commit the fix alongside a regression test** so the bug stays dead.
+  
+  Fig. 7.10 captures this workflow as a flowchart you can keep beside your
+  terminal. Debugging with Claude Code is not a magic wand—it is a *structured
+  collaboration*, and structure is what makes it reliable.
+  
+  This fragment refers to Fig. 7.10. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A flowchart depicting the complete systematic debugging methodology synthesized
+  in this closing section. The diagram begins with a rounded box labeled 'Describe
+  the Symptom' (containing sub-notes: error message, unexpected output,
+  performance degradation), which flows downward via an arrow to 'Share Context'
+  (relevant files, logs, environment details). From there an arrow leads to 'Ask
+  for Hypotheses' (Claude Code proposes 2–3 candidate explanations). The flow then
+  enters a dashed-border loop region labeled 'Iterative Investigation Cycle'.
+  Inside the loop, the first box is 'Investigate Next Hypothesis' (read code, run
+  commands, check logs), which flows to a diamond decision node asking 'Root Cause
+  Found?'. A 'No' branch loops back up to 'Investigate Next Hypothesis' with a
+  side note 'Eliminate and move to next candidate; if all exhausted, reset
+  conversation with fresh context.' A 'Yes' branch exits downward to 'Propose and
+  Apply Fix'. That flows to 'Verify with a Test' (run the failing test case,
+  confirm it passes), which reaches a second diamond: 'Fix Verified?'. A 'No'
+  branch loops back into the investigation cycle. A 'Yes' branch proceeds to the
+  final box: 'Commit Fix + Regression Test'. The loop region and the two feedback
+  arrows are the key visual elements, reinforcing that debugging is iterative, not
+  linear. The diagram fits comfortably in a single column and serves as a tear-out
+  reference checklist the reader can consult whenever they encounter a new bug.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+model: claude-opus-4-6
+hash: 3e29097acc834f2c6763dc56e07c6b0bb70c3e685ce055d810d527b49055b0fc
+response:
+  caption:
+    Systematic debugging workflow flowchart showing the iterative cycle of
+    describing symptoms, sharing context, generating hypotheses, investigating
+    candidates, verifying fixes, and committing with regression tests.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 720">
+      <rect width="960" height="720" fill="white"/>
+      <defs>
+        <marker id="a" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0,10 3.5,0 7" fill="#2c3e6b"/>
+        </marker>
+        <marker id="r" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0,10 3.5,0 7" fill="#c0392b"/>
+        </marker>
+      </defs>
+      <rect x="310" y="18" width="340" height="58" rx="16" fill="#dce6f7" stroke="#2c3e6b" stroke-width="2"/>
+      <text x="480" y="40" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="bold" fill="#1a1a2e">Describe the Symptom</text>
+      <text x="480" y="57" text-anchor="middle" font-family="Arial,sans-serif" font-size="9.5" fill="#555">(error message, unexpected output, performance degradation)</text>
+      <line x1="480" y1="76" x2="480" y2="98" stroke="#2c3e6b" stroke-width="2" marker-end="url(#a)"/>
+      <rect x="310" y="100" width="340" height="48" rx="16" fill="#dce6f7" stroke="#2c3e6b" stroke-width="2"/>
+      <text x="480" y="119" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="bold" fill="#1a1a2e">Share Context</text>
+      <text x="480" y="135" text-anchor="middle" font-family="Arial,sans-serif" font-size="9.5" fill="#555">(relevant files, logs, environment details)</text>
+      <line x1="480" y1="148" x2="480" y2="170" stroke="#2c3e6b" stroke-width="2" marker-end="url(#a)"/>
+      <rect x="300" y="172" width="360" height="48" rx="16" fill="#dce6f7" stroke="#2c3e6b" stroke-width="2"/>
+      <text x="480" y="191" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="bold" fill="#1a1a2e">Ask for Hypotheses</text>
+      <text x="480" y="207" text-anchor="middle" font-family="Arial,sans-serif" font-size="9.5" fill="#555">(Claude Code proposes 2&#8211;3 candidate explanations)</text>
+      <line x1="480" y1="220" x2="480" y2="266" stroke="#2c3e6b" stroke-width="2" marker-end="url(#a)"/>
+      <rect x="147" y="238" width="666" height="382" rx="12" fill="#f8f9fb" stroke="#777" stroke-width="2" stroke-dasharray="8,4"/>
+      <text x="160" y="254" font-family="Arial,sans-serif" font-size="11" font-weight="bold" font-style="italic" fill="#777">Iterative Investigation Cycle</text>
+      <rect x="330" y="268" width="300" height="48" rx="4" fill="#e0ecff" stroke="#2c3e6b" stroke-width="2"/>
+      <text x="480" y="287" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">Investigate Next Hypothesis</text>
+      <text x="480" y="303" text-anchor="middle" font-family="Arial,sans-serif" font-size="9.5" fill="#555">(read code, run commands, check logs)</text>
+      <line x1="480" y1="316" x2="480" y2="340" stroke="#2c3e6b" stroke-width="2" marker-end="url(#a)"/>
+      <polygon points="480,342 590,378 480,414 370,378" fill="#fff6d5" stroke="#8b6914" stroke-width="2"/>
+      <text x="480" y="374" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="bold" fill="#5a4510">Root Cause</text>
+      <text x="480" y="388" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="bold" fill="#5a4510">Found?</text>
+      <polyline points="370,378 215,378 215,286 330,286" fill="none" stroke="#c0392b" stroke-width="2" marker-end="url(#r)"/>
+      <text x="352" y="372" text-anchor="end" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#c0392b">No</text>
+      <text x="222" y="338" font-family="Arial,sans-serif" font-size="8.5" fill="#999">Eliminate candidate;</text>
+      <text x="222" y="350" font-family="Arial,sans-serif" font-size="8.5" fill="#999">if all exhausted, reset</text>
+      <text x="222" y="362" font-family="Arial,sans-serif" font-size="8.5" fill="#999">with fresh context.</text>
+      <line x1="480" y1="414" x2="480" y2="433" stroke="#2c3e6b" stroke-width="2" marker-end="url(#a)"/>
+      <text x="496" y="428" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#2c6b3e">Yes</text>
+      <rect x="345" y="435" width="270" height="34" rx="4" fill="#e0ecff" stroke="#2c3e6b" stroke-width="2"/>
+      <text x="480" y="456" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">Propose and Apply Fix</text>
+      <line x1="480" y1="469" x2="480" y2="487" stroke="#2c3e6b" stroke-width="2" marker-end="url(#a)"/>
+      <rect x="335" y="489" width="290" height="46" rx="4" fill="#e0ecff" stroke="#2c3e6b" stroke-width="2"/>
+      <text x="480" y="508" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="#1a1a2e">Verify with a Test</text>
+      <text x="480" y="523" text-anchor="middle" font-family="Arial,sans-serif" font-size="9.5" fill="#555">(run failing test, confirm it passes)</text>
+      <line x1="480" y1="535" x2="480" y2="547" stroke="#2c3e6b" stroke-width="2" marker-end="url(#a)"/>
+      <polygon points="480,549 585,577 480,605 375,577" fill="#fff6d5" stroke="#8b6914" stroke-width="2"/>
+      <text x="480" y="582" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="bold" fill="#5a4510">Fix Verified?</text>
+      <polyline points="375,577 162,577 162,300 330,300" fill="none" stroke="#c0392b" stroke-width="2" marker-end="url(#r)"/>
+      <text x="358" y="570" text-anchor="end" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#c0392b">No</text>
+      <line x1="480" y1="605" x2="480" y2="638" stroke="#2c3e6b" stroke-width="2" marker-end="url(#a)"/>
+      <text x="496" y="628" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#2c6b3e">Yes</text>
+      <rect x="310" y="640" width="340" height="44" rx="16" fill="#d5eed5" stroke="#2c6b3e" stroke-width="2.5"/>
+      <text x="480" y="667" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="bold" fill="#1a3e1a">Commit Fix + Regression Test</text>
+    </svg>
+duration: 428593 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 818,
+    "output_tokens": 31670,
+    "service_tier": "standard"
+  }
+...

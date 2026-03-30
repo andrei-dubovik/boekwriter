@@ -1,0 +1,107 @@
+{query: str, model: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+query: visuals
+prompt:
+  You are writing a chapter titled "Navigating and Understanding Codebases" in a
+  book called "A Tinkerer's Introduction to Claude Code". The plan for the chapter
+  is a follows.
+  
+  1. This section opens the chapter by describing the universal developer
+     experience of cloning or inheriting an unfamiliar codebase and feeling
+     overwhelmed, establishing that Claude Code transforms this daunting task into
+     an interactive exploration where you can ask questions and receive guided
+     explanations instead of silently reading file after file.
+  2. This section demonstrates how to launch Claude Code inside a project
+     directory and ask it for a high-level architectural overview, showing how it
+     reads key files like package.json, README, entry points, and directory
+     structures to synthesize a coherent summary of how the project is organized.
+  3. This example walks through asking Claude Code to summarize the structure of a
+     mid-sized Express.js application cloned from GitHub, showing the exact
+     prompts used, the tool calls Claude Code makes behind the scenes, and the
+     kind of architectural summary it produces, including identified routes,
+     middleware, models, and configuration patterns.
+  4. This section explains the specific tools Claude Code uses under the hood—file
+     reading, grep, find, directory listing, and more—to build its understanding
+     of a codebase, helping the reader develop a mental model of how the agent
+     gathers information so they can better anticipate its behavior and guide it
+     effectively.
+  5. This section teaches the technique of asking Claude Code to trace the flow of
+     a specific feature or operation through multiple layers of code, explaining
+     how to phrase prompts that follow a path from entry point through business
+     logic to data storage and back, revealing the connective tissue of a
+     codebase.
+  6. This example demonstrates asking Claude Code to trace how a user login
+     request travels through a web application, from the HTTP route handler
+     through authentication middleware, into the service layer, down to the
+     database query, and back with a session token, showing how Claude Code reads
+     each relevant file and narrates the journey.
+  7. This section covers asking Claude Code targeted questions about specific
+     subsystems, unfamiliar design patterns, or third-party libraries encountered
+     in the code, showing how to phrase questions like where is the caching layer
+     implemented or why does this project use the repository pattern to get
+     precise and educational answers.
+  8. This section discusses practical strategies for adapting your exploration
+     approach to codebases of different sizes, explaining that small projects
+     benefit from broad overview prompts while larger repositories require you to
+     guide Claude Code toward specific directories or modules to avoid
+     overwhelming its context window with irrelevant information.
+  9. This case study presents a realistic scenario of using Claude Code to orient
+     yourself in a Python Django project containing dozens of apps, custom
+     middleware, Celery task queues, and unfamiliar domain-specific terminology,
+     walking through a complete multi-turn exploration session that moves from
+     confusion to confident understanding of the project's structure and
+     conventions.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Photograph
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 1 aids. Explain the chosen aids in detail. If the chosen aid is a table,
+  the table must fit on a portrait A4 page. Only list the items where an aid has
+  been chosen.
+model: claude-opus-4-6
+hash: 55ab897b23aeb02b90e90885a809e5e677c331ef7bdf1e9bcb1c1cdcab3e4f73
+response:
+- number: 6
+  aid: Diagram
+  description:
+    A vertical flowchart diagram tracing the path of a user login request through
+    the application's layers, with two parallel tracks. The left track shows the
+    application components in order from top to bottom: HTTP POST /login request
+    arrives, Express route handler (routes/auth.js), authentication middleware
+    (middleware/auth.js), user service layer (services/userService.js), database
+    model and query (models/User.js), and then the return path back up carrying a
+    session token in the HTTP response. The right track, connected to each
+    corresponding layer by horizontal dashed arrows, shows the specific file that
+    Claude Code reads at each stage and a brief annotation of what it discovers
+    there (e.g., 'reads routes/auth.js — finds router.post("/login") calling
+    authController.login'). Arrows between layers on the left track are labeled with
+    what data is passed between them (e.g., 'email + password', 'user object', 'JWT
+    token'). This diagram provides high information density by simultaneously
+    illustrating the architectural layering of the application, the concrete data
+    flowing between layers, and the investigative process Claude Code follows to
+    uncover each link in the chain—three perspectives that would require extensive
+    prose to convey in text alone.
+duration: 17447 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 995,
+    "output_tokens": 536,
+    "service_tier": "standard"
+  }
+...

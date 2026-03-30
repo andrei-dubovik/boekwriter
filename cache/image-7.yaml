@@ -1,0 +1,36 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  A focused investigator stands before a large corkboard, which is covered with
+  printouts of code snippets, diagrams of system architecture, and a single,
+  highlighted error message. Lines of yarn connect these elements, mapping out
+  relationships and potential causes. The investigator, holding a marker, is in
+  the middle of drawing a new line, connecting a function call to the error
+  message, representing the formulation of a new hypothesis. The style should be
+  clean and minimalist, using simple line art with a single accent color for the
+  yarn and the highlighted error, emphasizing clarity and the process of
+  structured problem-solving.
+hash: a87bb3aaa6d382faaa314474b3a1511784386041ac45eceaef5b0d428a175868
+response: image-7.png
+duration: 6321 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 127,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 127
+      }
+    ],
+    "total_token_count": 1417
+  }
+...

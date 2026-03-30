@@ -1,0 +1,106 @@
+{query: str, model: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+query: visuals
+prompt:
+  You are writing a chapter titled "Installation and Setup" in a book called "A
+  Tinkerer's Introduction to Claude Code". The plan for the chapter is a follows.
+  
+  01. We open the chapter by establishing the prerequisites a reader needs before
+      installing Claude Code, covering the required versions of Node.js and npm,
+      basic terminal literacy, and how to check whether these tools are already
+      present on your system.
+  02. We walk through installing or updating Node.js and npm on macOS, Linux, and
+      Windows via WSL, explaining the recommended approaches such as using a
+      version manager like nvm so that readers avoid system-level permission
+      headaches later.
+  03. We explain how to install Claude Code itself as a global npm package,
+      including the exact command to run, what output to expect during a
+      successful installation, and how to confirm the installed version.
+  04. Example: we provide a complete end-to-end walkthrough of installing Claude
+      Code on a fresh macOS machine starting from zero, showing every terminal
+      command and its expected output so the reader can compare their own
+      experience step by step.
+  05. We cover authentication by explaining how to obtain and configure an
+      Anthropic API key, how to connect through a Max plan or team subscription as
+      an alternative, and how Claude Code stores and retrieves credentials on your
+      machine.
+  06. We guide the reader through verifying their installation by launching Claude
+      Code in a small directory and issuing a simple test prompt, confirming that
+      the tool starts, authenticates, and responds correctly.
+  07. We address the most common installation problems readers are likely to
+      encounter, including npm permission errors, Node.js version
+      incompatibilities, PATH misconfigurations, and proxy or firewall issues in
+      corporate or restricted network environments, with specific fixes for each.
+  08. Example: we present a realistic scenario where a Linux user encounters a
+      permission denied error during global npm install and walks through
+      diagnosing it, understanding why it happens, and resolving it using the
+      recommended nvm-based approach rather than resorting to sudo.
+  09. We discuss choosing and configuring a terminal emulator for the best Claude
+      Code experience, noting which terminals handle Claude Code's rich output
+      well, font and color considerations, and brief tips for popular options like
+      iTerm2, Windows Terminal, and Ghostty.
+  10. We close the chapter by discussing API usage and cost awareness, explaining
+      how Claude Code consumes tokens with each interaction, where to monitor your
+      usage, how to set spending limits, and how to develop an intuition for what
+      different tasks cost so that experimentation remains joyful rather than
+      anxiety-inducing.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Photograph
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 1 aids. Explain the chosen aids in detail. If the chosen aid is a table,
+  the table must fit on a portrait A4 page. Only list the items where an aid has
+  been chosen.
+model: claude-opus-4-6
+hash: 03f4ce7053aa921618962e208a573118d9a5b037f0d460970612158979bab383
+response:
+- number: 7
+  aid: Table
+  description:
+    A troubleshooting reference table with four columns: Symptom (the error message
+    or observable behavior the reader sees), Likely Cause (a concise explanation of
+    why it happens), Fix (the specific command or configuration change that resolves
+    it), and OS (which operating systems are affected, using macOS/Linux/Windows WSL
+    labels). Rows cover: (1) EACCES permission denied during global npm install,
+    caused by npm's default global directory being owned by root, fixed by switching
+    to nvm; (2) engine compatibility error stating Node.js version is too old,
+    caused by system-shipped Node.js being below the minimum required version, fixed
+    by installing a current LTS release via nvm; (3) 'claude: command not found'
+    after a successful install, caused by the npm global bin directory not being on
+    the user's PATH, fixed by adding the correct directory to the shell profile
+    file; (4) ETIMEDOUT or ECONNREFUSED during install, caused by a corporate proxy
+    or firewall blocking npm registry access, fixed by configuring npm's proxy and
+    https-proxy settings or pointing to an internal registry mirror; (5) SSL
+    certificate errors such as UNABLE_TO_GET_ISSUER_CERT_LOCALLY, caused by
+    corporate TLS inspection replacing certificates, fixed by setting the
+    NODE_EXTRA_CA_CERTS environment variable to the corporate CA bundle; (6)
+    'unexpected token' syntax errors on launch, caused by running Claude Code under
+    an unsupported older Node.js version that lacks required JavaScript features,
+    fixed by upgrading Node.js to the minimum supported version. This table gives
+    the reader a single, scannable page they can consult whenever an installation
+    attempt fails, without having to read through paragraphs of prose to find the
+    relevant fix.
+duration: 21277 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 913,
+    "output_tokens": 815,
+    "service_tier": "standard"
+  }
+...

@@ -1,0 +1,118 @@
+{query: str, model: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+query: visuals
+prompt:
+  You are writing a chapter titled "Working with Git and Version Control" in a
+  book called "A Tinkerer's Introduction to Claude Code". The plan for the chapter
+  is a follows.
+  
+  01. We open the chapter by explaining that Git is the backbone of modern
+      software development but that many developers find its command-line
+      interface intimidating or tedious, and we position Claude Code as a
+      collaborator that understands Git deeply and can translate your intent into
+      correct Git operations, making version control feel like a natural extension
+      of your creative workflow rather than a bureaucratic chore.
+  02. We cover the foundational skill of asking Claude Code to report on the
+      current state of your repository—checking status, viewing the log of recent
+      commits, listing branches, and summarizing what has changed since your last
+      commit—showing how these simple queries replace a handful of commands you
+      would otherwise have to remember and interpret yourself.
+  03. We demonstrate how to ask Claude Code to read and explain diffs, both staged
+      and unstaged, translating raw diff output into plain-language summaries that
+      help you understand exactly what changed, which is especially valuable when
+      you return to a project after a break and need to recall where you left off.
+  04. We teach the reader how to use Claude Code to generate high-quality,
+      descriptive commit messages by having it analyze the actual changes in the
+      staging area and produce messages that capture not just what changed but
+      why, following conventional commit formats or any custom format the reader
+      prefers.
+  05. As a worked example, we walk through a realistic scenario where the reader
+      has made several edits across three files to fix a bug involving incorrect
+      date parsing, and we show the exact prompt used to ask Claude Code to craft
+      a commit message, display Claude Code's output, and discuss why the
+      generated message is superior to a hastily typed one-liner like 'fix bug'.
+  06. We explore how Claude Code can help with branch management and pull request
+      workflows, including creating well-named feature branches, generating
+      comprehensive pull request descriptions that summarize all changes with
+      context and motivation, and preparing release notes—tasks that are
+      high-value but often skipped under time pressure.
+  07. We tackle the dreaded topic of merge conflicts by showing how Claude Code
+      can read both sides of a conflict, understand the intent behind each set of
+      changes, and propose a resolution that preserves the goals of both branches,
+      turning one of Git's most stressful experiences into a guided conversation.
+  08. As a case study, we present a scenario where a solo tinkerer has been
+      committing haphazardly on a personal project—mixing feature work, bug fixes,
+      and formatting changes in the same commits—and we show how they use Claude
+      Code to perform an interactive rebase that reorganizes the history into
+      clean, logical commits, illustrating each step of the dialogue between the
+      user and Claude Code as they untangle the mess together.
+  09. We dedicate a section to using Claude Code as a code reviewer by feeding it
+      a diff or a range of commits and asking it to identify potential bugs,
+      missed edge cases, style inconsistencies, security concerns, and
+      opportunities for improvement, a practice that is invaluable for solo
+      developers who lack a human reviewer and for team members who want a
+      preliminary review before requesting a colleague's time.
+  10. We explain how to configure Claude Code to follow your team's specific Git
+      conventions—such as commit message formats like Conventional Commits, branch
+      naming schemes, requirements for sign-offs or issue references, and PR
+      template structures—by encoding these preferences in your CLAUDE.md file so
+      that every Git-related interaction automatically respects your established
+      standards.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Photograph
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 1 aids. Explain the chosen aids in detail. If the chosen aid is a table,
+  the table must fit on a portrait A4 page. Only list the items where an aid has
+  been chosen.
+model: claude-opus-4-6
+hash: 863b267ecd079d70e5a57e24e9ce41b14a997e6774187af9464a70fdad8b5e25
+response:
+- number: 8
+  aid: Timeline
+  description:
+    A two-row horizontal timeline titled 'Before and After: Cleaning Up History with
+    Interactive Rebase'. The top row, labeled 'Before', shows a single branch with
+    seven commits in chronological order, each represented as a labeled node. The
+    commit labels reveal the haphazard mix described in the text: 'Add user avatar
+    upload', 'Fix typo in README', 'Reformat settings.py with Black', 'Half-done
+    avatar cropping', 'Fix crash on empty email field', 'More reformatting', 'Finish
+    avatar cropping'. Each node is color-coded by category—blue for feature work,
+    red for bug fixes, gray for formatting—making the chaotic interleaving
+    immediately visible. The bottom row, labeled 'After', shows the same branch
+    reorganized into three clean groups separated by subtle vertical dividers: a
+    gray cluster of two commits ('Reformat settings.py with Black', 'Reformat
+    remaining files with Black'), a red single commit ('Fix crash on empty email
+    field'), and a blue cluster of two commits ('Add user avatar upload with
+    cropping', 'Update README for avatar feature'). Dashed arrows connect each
+    'After' commit back to the one or more 'Before' commits it was squashed or
+    reworded from, making the mapping between old and new history explicit. A small
+    legend in the corner maps the three colors to 'Feature', 'Bug fix', and
+    'Formatting'. This timeline makes the abstract concept of interactive rebase
+    concrete by letting the reader see at a glance how a tangled sequence of commits
+    is untangled into coherent, reviewable units, reinforcing the narrative of the
+    case study far more efficiently than prose alone.
+duration: 20829 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 1150,
+    "output_tokens": 826,
+    "service_tier": "standard"
+  }
+...

@@ -1,0 +1,77 @@
+{query: str, model: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+query: table
+prompt:
+  Consider the following text fragment from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  These three action categories combine with Claude Code's **permission modes** to
+  determine how much autonomy the tool has in any given session. Fig. 11.3
+  summarizes the available modes at a glance.
+  
+  At one end sits **Ask Mode**, where Claude Code requests confirmation for nearly
+  everything, including file reads. At the other end is **Full Auto (YOLO) mode**,
+  where reads, writes, and shell commands all proceed without prompting. The
+  **Default mode** occupies the middle ground most users will find comfortable:
+  autonomous reads, prompted writes with a displayed diff, and prompted shell
+  commands.
+  
+  You can select a mode at launch with the `--permission-mode` flag or persist
+  your choice in your settings JSON. Switching is immediate—no restart required.
+  Start conservative and loosen the reins only as your confidence grows.
+  
+  This fragment refers to Fig. 11.3, which is a table. Its description is as
+  follows:
+  
+  A comparison table titled 'Claude Code Permission Modes at a Glance' with rows
+  for each trust level (from most conservative to most permissive) and columns
+  that capture the key dimensions a reader needs to understand at a glance. The
+  columns are: Mode Name (e.g., 'Ask Mode', 'Default / Auto-edit', 'YOLO / Full
+  Auto'), How to Activate (the exact CLI flag such as --permission-mode or the
+  settings JSON key and value), File Reads (whether autonomous or prompted), File
+  Writes and Edits (whether autonomous, prompted, or prompted-with-diff), Shell
+  Command Execution (whether blocked, prompted per command, or autonomous), and
+  Recommended Use Case (a short phrase such as 'Exploring an unfamiliar codebase'
+  or 'Trusted personal project with version control'). The table would have three
+  to four rows corresponding to the available permission tiers. This single table
+  gives readers a dense, scannable reference they can return to whenever they need
+  to recall which mode fits their current situation, how to switch to it, and
+  exactly which categories of action will or will not require their explicit
+  approval. It directly supports the surrounding text that narratively describes
+  each mode and complements the hands-on example in section 4 by giving readers
+  the vocabulary to understand which mode is active during the walkthrough.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+model: claude-opus-4-6
+hash: 832b26cb0aae09bc1e4a6655043235b80d9e9e14d713cf697ce018e2b1387d24
+response:
+  caption: Claude Code Permission Modes at a Glance
+  latex:
+    \begin{tabular}{@{} l p{3.4cm} c c c p{3.4cm} @{}}
+    \toprule
+    \textbf{Mode Name} & \textbf{How to Activate} & \textbf{File Reads} & \textbf{File Writes \& Edits} & \textbf{Shell Commands} & \textbf{Recommended Use Case} \\
+    \midrule
+    Ask Mode & \texttt{-{}-permission-mode ask} & Prompted & Prompted & Prompted & Exploring an unfamiliar codebase \\
+    \addlinespace
+    Default / Auto-edit & \texttt{-{}-permission-mode default} & Autonomous & Prompted (with diff) & Prompted & Day-to-day development with review \\
+    \addlinespace
+    YOLO / Full Auto & \texttt{-{}-permission-mode full-auto} & Autonomous & Autonomous & Autonomous & Trusted personal project with version control \\
+    \bottomrule
+    \end{tabular}
+duration: 38413 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 738,
+    "output_tokens": 2543,
+    "service_tier": "standard"
+  }
+...

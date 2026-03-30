@@ -1,0 +1,151 @@
+{query: str, model: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+query: figure
+prompt:
+  Consider the following text fragment from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  Let's make this concrete. Suppose you've cloned an Express.js app and want to
+  understand its login flow. You might prompt:
+  
+  > Trace what happens when a POST request hits /login. Start from the route
+  > definition and follow the request through middleware, service layer, and
+  > database query. Explain what each layer does and what data it passes to the
+  > next.
+  
+  Claude Code begins by grepping for `/login`, finding the route in
+  `routes/auth.js`. It reads that file, discovers the handler delegates to
+  `authController.login`, and follows the call. File by file, it narrates the
+  chain: the controller validates input and calls `userService.authenticate`,
+  which hashes the password and queries `models/User.js`, which runs the database
+  lookup. On success, a JWT is minted and returned up through the layers.
+  
+  Fig. 5.6 illustrates this full journey, showing each application layer alongside
+  the file Claude Code reads to uncover it and the data passed between them.
+  
+  This fragment refers to Fig. 5.6. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A vertical flowchart diagram tracing the path of a user login request through
+  the application's layers, with two parallel tracks. The left track shows the
+  application components in order from top to bottom: HTTP POST /login request
+  arrives, Express route handler (routes/auth.js), authentication middleware
+  (middleware/auth.js), user service layer (services/userService.js), database
+  model and query (models/User.js), and then the return path back up carrying a
+  session token in the HTTP response. The right track, connected to each
+  corresponding layer by horizontal dashed arrows, shows the specific file that
+  Claude Code reads at each stage and a brief annotation of what it discovers
+  there (e.g., 'reads routes/auth.js — finds router.post("/login") calling
+  authController.login'). Arrows between layers on the left track are labeled with
+  what data is passed between them (e.g., 'email + password', 'user object', 'JWT
+  token'). This diagram provides high information density by simultaneously
+  illustrating the architectural layering of the application, the concrete data
+  flowing between layers, and the investigative process Claude Code follows to
+  uncover each link in the chain—three perspectives that would require extensive
+  prose to convey in text alone.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+model: claude-opus-4-6
+hash: f5cbf6c7165e11b85f695c1a7a606edc5a5b234fc32063fffbcf2569cb39d9cd
+response:
+  caption:
+    Vertical flowchart tracing a POST /login request through an Express.js
+    application's layers (left track) with data-flow labels on each arrow, alongside
+    the file-by-file investigation path Claude Code follows to uncover each link in
+    the chain (right track). A green dashed return arrow on the left indicates the
+    response path carrying the JWT token back up through the layers.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+      <rect width="1200" height="900" fill="white"/>
+      <defs>
+        <marker id="ad" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+          <path d="M0,0L10,5L0,10Z" fill="#475569"/>
+        </marker>
+        <marker id="ah" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0L10,5L0,10Z" fill="#94A3B8"/>
+        </marker>
+        <marker id="ar" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+          <path d="M0,0L10,5L0,10Z" fill="#059669"/>
+        </marker>
+      </defs>
+      <text x="260" y="28" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="bold" fill="#1E293B">Application Layer</text>
+      <text x="895" y="28" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="bold" fill="#1E293B">Claude Code Investigation</text>
+      <line x1="100" y1="40" x2="1135" y2="40" stroke="#CBD5E1" stroke-width="1"/>
+      <rect x="100" y="55" width="320" height="48" rx="10" fill="#0F766E"/>
+      <text x="260" y="74" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="bold" fill="white">HTTP POST /login</text>
+      <text x="260" y="91" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#99F6E4">Incoming Request</text>
+      <line x1="260" y1="103" x2="260" y2="168" stroke="#475569" stroke-width="2" marker-end="url(#ad)"/>
+      <rect x="196" y="127" width="128" height="17" rx="3" fill="white" opacity="0.95"/>
+      <text x="260" y="139" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#B91C1C" font-style="italic">email + password</text>
+      <rect x="100" y="168" width="320" height="56" rx="10" fill="#1E40AF"/>
+      <text x="260" y="190" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="bold" fill="white">Express Route Handler</text>
+      <text x="260" y="208" text-anchor="middle" font-family="Consolas,monospace" font-size="12" fill="#BFDBFE">routes/auth.js</text>
+      <line x1="260" y1="224" x2="260" y2="294" stroke="#475569" stroke-width="2" marker-end="url(#ad)"/>
+      <rect x="210" y="251" width="100" height="17" rx="3" fill="white" opacity="0.95"/>
+      <text x="260" y="263" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#B91C1C" font-style="italic">req, res, next</text>
+      <rect x="100" y="294" width="320" height="56" rx="10" fill="#1E40AF"/>
+      <text x="260" y="316" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="bold" fill="white">Authentication Middleware</text>
+      <text x="260" y="334" text-anchor="middle" font-family="Consolas,monospace" font-size="12" fill="#BFDBFE">middleware/auth.js</text>
+      <line x1="260" y1="350" x2="260" y2="420" stroke="#475569" stroke-width="2" marker-end="url(#ad)"/>
+      <rect x="192" y="377" width="136" height="17" rx="3" fill="white" opacity="0.95"/>
+      <text x="260" y="389" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#B91C1C" font-style="italic">validated credentials</text>
+      <rect x="100" y="420" width="320" height="56" rx="10" fill="#1E40AF"/>
+      <text x="260" y="442" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="bold" fill="white">User Service Layer</text>
+      <text x="260" y="460" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#BFDBFE">services/userService.js</text>
+      <line x1="260" y1="476" x2="260" y2="546" stroke="#475569" stroke-width="2" marker-end="url(#ad)"/>
+      <rect x="200" y="503" width="120" height="17" rx="3" fill="white" opacity="0.95"/>
+      <text x="260" y="515" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#B91C1C" font-style="italic">email (DB query)</text>
+      <rect x="100" y="546" width="320" height="56" rx="10" fill="#1E40AF"/>
+      <text x="260" y="568" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="bold" fill="white">Database Model &amp; Query</text>
+      <text x="260" y="586" text-anchor="middle" font-family="Consolas,monospace" font-size="12" fill="#BFDBFE">models/User.js</text>
+      <line x1="260" y1="602" x2="260" y2="672" stroke="#475569" stroke-width="2" marker-end="url(#ad)"/>
+      <rect x="198" y="629" width="124" height="17" rx="3" fill="white" opacity="0.95"/>
+      <text x="260" y="641" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#B91C1C" font-style="italic">user object &#8594; JWT</text>
+      <rect x="100" y="672" width="320" height="48" rx="10" fill="#0F766E"/>
+      <text x="260" y="692" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="bold" fill="white">HTTP Response</text>
+      <text x="260" y="709" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#99F6E4">200 OK + JWT Token</text>
+      <line x1="420" y1="196" x2="648" y2="196" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#ah)"/>
+      <line x1="420" y1="322" x2="648" y2="322" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#ah)"/>
+      <line x1="420" y1="448" x2="648" y2="448" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#ah)"/>
+      <line x1="420" y1="574" x2="648" y2="574" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#ah)"/>
+      <rect x="655" y="166" width="480" height="60" rx="8" fill="#FFFBEB" stroke="#D97706" stroke-width="1.5"/>
+      <text x="895" y="186" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="bold" fill="#92400E">Reads routes/auth.js</text>
+      <text x="895" y="202" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#78350F">Finds router.post('/login')</text>
+      <text x="895" y="217" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#78350F">&#8594; calls authController.login</text>
+      <rect x="655" y="292" width="480" height="60" rx="8" fill="#FFFBEB" stroke="#D97706" stroke-width="1.5"/>
+      <text x="895" y="312" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="bold" fill="#92400E">Reads middleware/auth.js</text>
+      <text x="895" y="328" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#78350F">Discovers request validation</text>
+      <text x="895" y="343" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#78350F">and authentication checks</text>
+      <rect x="655" y="418" width="480" height="60" rx="8" fill="#FFFBEB" stroke="#D97706" stroke-width="1.5"/>
+      <text x="895" y="438" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="bold" fill="#92400E">Reads services/userService.js</text>
+      <text x="895" y="454" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#78350F">Finds authenticate() method, hashes</text>
+      <text x="895" y="469" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#78350F">password and queries database model</text>
+      <rect x="655" y="544" width="480" height="60" rx="8" fill="#FFFBEB" stroke="#D97706" stroke-width="1.5"/>
+      <text x="895" y="564" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="bold" fill="#92400E">Reads models/User.js</text>
+      <text x="895" y="580" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#78350F">Finds database lookup query</text>
+      <text x="895" y="595" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#78350F">for user by email</text>
+      <path d="M100,574 L50,574 L50,79 L100,79" fill="none" stroke="#059669" stroke-width="2.5" stroke-dasharray="8,5" marker-end="url(#ar)"/>
+      <text transform="rotate(-90,25,340)" x="25" y="340" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#059669" font-weight="bold">Response: JWT returned through layers</text>
+      <rect x="655" y="740" width="480" height="42" rx="6" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+      <line x1="670" y1="756" x2="698" y2="756" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <text x="706" y="760" font-family="Arial,sans-serif" font-size="10" fill="#475569">Dashed arrows: Claude Code's investigation path</text>
+      <line x1="670" y1="773" x2="698" y2="773" stroke="#059669" stroke-width="2.5" stroke-dasharray="8,5"/>
+      <text x="706" y="777" font-family="Arial,sans-serif" font-size="10" fill="#475569">Green path: Response returns through application layers</text>
+    </svg>
+duration: 724347 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 763,
+    "output_tokens": 52668,
+    "service_tier": "standard"
+  }
+...

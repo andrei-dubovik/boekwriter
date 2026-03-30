@@ -1,0 +1,34 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  A person sits at a simple wooden table, calmly and methodically untangling a
+  large, complex knot of multi-colored yarn. To their left, the yarn is a chaotic
+  jumble. In their hands, they are carefully separating the strands. To their
+  right, several strands of yarn now lie straight and parallel, perfectly sorted
+  by color. The illustration should be a clean, minimalist line drawing with a
+  limited color palette, conveying a sense of focus, clarity, and the satisfying
+  process of bringing order to chaos.
+hash: 3c1ab8fa0e90dd03b8c1402d65fd741e2a9e0a9c3619146c8c43acf29001828f
+response: image-9.png
+duration: 5901 ms
+usage_stats:
+  {
+    "candidates_token_count": 1299,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 109,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 109
+      }
+    ],
+    "total_token_count": 1408
+  }
+...

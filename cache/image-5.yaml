@@ -1,0 +1,34 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  A simple, clean line-art illustration depicting two figures, a navigator and a
+  guide, standing before a large, intricate map. The map is not geographical but
+  resembles a complex system diagram, like an abstract subway map or a circuit
+  board schematic, with countless nodes and branching pathways. The navigator
+  looks on with focused curiosity while the guide calmly points to the map, their
+  finger tracing a single, clear route through the overwhelming complexity,
+  connecting a starting point to a destination.
+hash: 619cdad0d52bb6ee6cddbb18f335f114c34a5edd8236114ccb2bc0882aa7a572
+response: image-5.png
+duration: 6661 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 101,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 101
+      }
+    ],
+    "total_token_count": 1391
+  }
+...

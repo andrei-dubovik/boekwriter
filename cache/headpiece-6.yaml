@@ -1,0 +1,208 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  Up to this point, you have used Claude Code to *read*, *explore*, and
+  *understand* code that already exists. This chapter flips the direction: now you
+  create something new.
+  
+  Code generation is the creative core of working with Claude Code. Whether you
+  need a standalone utility script, a feature woven into a large application, or a
+  quick prototype to test a half-formed idea, the workflow starts the same way—you
+  describe what you want, and Claude Code builds it.
+  
+  We will work through three progressively complex examples:
+  
+  1. A small Python command-line tool written from scratch.
+  2. A REST API endpoint added to an existing Express.js application.
+  3. A React component with accompanying unit tests.
+  
+  Type along. The best way to learn generative prompting is to do it.
+  
+  When you ask Claude Code to write new code, the quality of the output depends
+  heavily on how you frame the request. The goal is to describe *what* you want
+  and *why*, while leaving *how* mostly to Claude Code.
+  
+  A good generative prompt includes:
+  
+  - The **purpose** of the code—what problem it solves or what behavior it
+    produces.
+  - **Inputs and outputs**—what goes in, what comes back.
+  - **Constraints** that matter—error handling expectations, performance
+    requirements, target environment.
+  - **Audience**—is this a quick script for yourself or production code others
+    will maintain?
+  
+  What it should *not* include is a line-by-line dictation of the implementation.
+  Over-specifying defeats the purpose. You hired a collaborator, not a typist.
+  Give Claude Code a clear destination and enough guardrails, then let it drive.
+  
+  Let's start with something small and satisfying. Suppose you need a Python
+  script that reads a CSV file and prints a summary: row count, column names, and
+  basic statistics for numeric columns. You might type:
+  
+  > Write a Python command-line script that takes a CSV filename as an argument,
+  > reads it with the csv module, and prints a summary report showing the number
+  > of rows, the column names, and the min/max/mean for any numeric columns.
+  > Include error handling for missing files and malformed data.
+  
+  Claude Code will produce a complete script—imports, argument parsing, file
+  reading, numeric detection, and formatted output. It writes the file to disk.
+  You can run it immediately:
+  
+  ```
+  python summarize.py sales_data.csv
+  ```
+  
+  If the output looks right, you are done. One prompt, one working tool. This is
+  the simplest form of the generative workflow: describe, generate, verify. The
+  examples that follow will add complexity, but the loop stays the same.
+  
+  Now let's raise the stakes. Instead of a standalone script, you need to add a
+  `GET /api/reports/:id` endpoint to an existing Express.js application—one that
+  already has its own route structure, middleware, and database layer. Jumping
+  straight to "write me an endpoint" invites code that clashes with everything
+  around it.
+  
+  Start by orienting Claude Code:
+  
+  > Look at the routes in src/routes/ and the middleware in src/middleware/. How
+  > are existing endpoints structured?
+  
+  Once it has absorbed the conventions—how routes are registered, how errors are
+  handled, how the database is queried—you can make your real request:
+  
+  > Add a GET /api/reports/:id endpoint following the same patterns. It should
+  > fetch a report by ID from the reports table, return 404 if not found, and
+  > validate that :id is a positive integer.
+  
+  Claude Code will generate a route file, wire it into the existing router, and
+  reuse the project's error-handling middleware rather than inventing its own. The
+  result *fits*—because you gave it the architectural context first.
+  
+  The same principle—study first, generate second—applies when adding a React
+  component. Suppose your project already has a `components/` directory full of
+  functional components styled with CSS Modules and tested with React Testing
+  Library. Before asking for anything new, prompt Claude Code:
+  
+  > Examine the components in src/components/ and their test files in
+  > src/components/\_\_tests\_\_/. What patterns do they follow?
+  
+  Claude Code will note the naming conventions, prop-types usage, how tests render
+  components, and which assertions are common. Now you can ask with precision:
+  
+  > Create a ReportCard component that displays a report's title, date, and status
+  > badge. Include a full test file following the existing testing patterns.
+  
+  Because Claude Code has internalized the project's idioms, it will produce a
+  component *and* tests that look like a teammate wrote them—not a generic snippet
+  pasted from a tutorial. The tests will use the same queries, setup helpers, and
+  assertion styles already established in the codebase.
+  
+  Claude Code draws on broad training data, which means it will *guess* your
+  technology choices if you don't state them explicitly. Don't leave that to
+  chance. When generating new code, specify:
+  
+  - **Language version**: "Use Python 3.12 features" or "Target ES2020."
+  - **Frameworks and libraries**: "Use Express 5 with Zod for validation" rather
+    than letting Claude Code reach for its own preferences.
+  - **Patterns to follow**: "Use the repository pattern for data access" or
+    "Prefer composition over inheritance."
+  - **What to avoid**: "Do not use Lodash—use native array methods" or "Avoid
+    class components."
+  
+  These constraints belong in your prompt or, better yet, in your project's
+  `CLAUDE.md` so they apply to every session automatically. Upfront specificity
+  eliminates rework.
+  
+  Real features rarely live in a single file. A new module typically comes with
+  tests, type definitions, and perhaps a documentation stub. Claude Code handles
+  this well if you ask explicitly: "Create the service, its unit tests, and update
+  the barrel export in `index.ts`—all in one go."
+  
+  The key to making generated files feel native to the project is pointing Claude
+  Code at existing examples:
+  
+  - "Follow the naming convention used in `src/services/`."
+  - "Mirror the test structure in `tests/user.test.ts`."
+  - "Use the same import style as the rest of the project."
+  
+  Claude Code will match directory layout, file naming, and import patterns when
+  it has a concrete reference to imitate.
+  
+  First-draft code from Claude Code is rarely the final draft—and that is
+  perfectly fine. Iteration is the workflow, not a sign of failure.
+  
+  The refinement loop (Fig. 6.8) is simple:
+  
+  1. Describe what you want.
+  2. Review the generated output.
+  3. Identify *specific* gaps—a missing edge case, wrong return type, absent error
+     handling.
+  4. Ask for targeted fixes rather than regenerating from scratch.
+  
+  Targeted follow-up prompts work best: "Add input validation for empty lists,"
+  "Switch the callback to `async/await`," or "The `total` field should be a
+  decimal, not an integer." Each turn narrows the gap between what you have and
+  what you need.
+  
+  Resist the urge to start over. Claude Code remembers the full conversation, so
+  incremental corrections compound quickly—most code converges in two or three
+  turns.
+  
+  The tinkerer's secret is momentum: get something running *first*, then make it
+  good. Claude Code is built for this rhythm. Prompt it for the roughest version
+  of your idea—no error handling, no edge cases, hardcoded values welcome. Run it.
+  Does the concept work? If yes, ask Claude Code to harden it: add validation,
+  extract configuration, write tests. If no, pivot cheaply—you invested minutes,
+  not hours.
+  
+  This chapter's methodology reduces to a single loop:
+  
+  1. Describe intent at the right abstraction level.
+  2. Anchor generated code to your project's existing conventions.
+  3. Iterate in targeted turns until the output is production-worthy.
+  4. Repeat, faster each time, as your prompting instincts sharpen.
+  
+  Claude Code does not replace your creative judgment—it *accelerates* it.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: 8dbe201a2dc0dae792eccb3ef1f44c05ebe415d53d9ace2e081f9b82ae751fe7
+response:
+  An illustration of a human architect and a sleek, minimalist robot standing
+  together before a half-finished building. The architect is holding a simple
+  blueprint, pointing to a high-level outline of a new section to be added. The
+  robot, holding a construction tool, looks from the blueprint to the structure,
+  where it has already begun work. The new section's foundation and framing
+  perfectly match the style and materials of the existing, completed part of the
+  building, conveying a sense of seamless, context-aware collaboration. The entire
+  scene is depicted in a clean, line-art style, focusing on the cooperative act of
+  turning a plan into reality.
+duration: 16832 ms
+usage_stats:
+  {
+    "candidates_token_count": 128,
+    "prompt_token_count": 1910,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1910
+      }
+    ],
+    "thoughts_token_count": 1544,
+    "total_token_count": 3582
+  }
+...

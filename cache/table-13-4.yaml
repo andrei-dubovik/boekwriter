@@ -1,0 +1,79 @@
+{query: str, model: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+query: table
+prompt:
+  Consider the following text fragment from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  Claude Code is not just a coding tool—it is useful across every phase of the
+  software development lifecycle. During **planning and design**, it can sketch
+  architectures, compare technology choices, and outline data models. In **active
+  development**, it writes and edits code as we have already seen. During **code
+  review**, it analyzes diffs, flags potential bugs, and checks for style
+  violations. In **testing**, it generates test cases, runs suites, and fixes
+  failures. And during **deployment and operations**, it produces configuration
+  files, deployment scripts, and helps troubleshoot production issues.
+  
+  Fig. 13.4 summarizes these phases, showing example prompts and where your human
+  judgment matters most at each stage. Keep it bookmarked—it is one of the most
+  revisited references in this chapter.
+  
+  This fragment refers to Fig. 13.4, which is a table. Its description is as
+  follows:
+  
+  A table titled 'Claude Code Across the Software Development Lifecycle' with five
+  rows corresponding to the major lifecycle phases discussed in this section:
+  Planning & Design, Active Development, Code Review, Testing, and Deployment &
+  Operations. The table has four columns: 'Phase' (the lifecycle stage), 'How
+  Claude Code Helps' (a concise summary of the AI's role in that phase, such as
+  sketching architectures, writing code, analyzing diffs, generating tests, or
+  producing deployment scripts), 'Example Prompts' (one or two concrete
+  illustrative prompts the reader could type, such as 'Compare the trade-offs of a
+  SQL vs. NoSQL database for this use case' for Planning or 'Run the test suite
+  and fix any failures' for Testing), and 'Your Focus' (what the human developer
+  should concentrate on during that phase, such as making final architectural
+  decisions, reviewing generated code for correctness, judging severity of flagged
+  issues, verifying edge-case coverage, or confirming production readiness). This
+  table serves as a high-density, at-a-glance reference that readers can return to
+  repeatedly, making the otherwise lengthy narrative discussion of each phase
+  immediately scannable and actionable. It fits comfortably on a portrait A4 page
+  with five content rows and a header row.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+model: claude-opus-4-6
+hash: 2754fdd4b1bd31ee2fa6ff827c403a45848fdf8df1cb707e02ad8e6f4756d97e
+response:
+  caption: Claude Code Across the Software Development Lifecycle
+  latex:
+    \begin{tabular}{p{2.6cm}p{3.8cm}p{4.6cm}p{3.8cm}}
+    \toprule
+    \textbf{Phase} & \textbf{How Claude Code Helps} & \textbf{Example Prompts} & \textbf{Your Focus} \\
+    \midrule
+    Planning \& Design & Sketches architectures, compares technology choices, and outlines data models & ``Compare the trade-offs of a SQL vs.\ NoSQL database for this use case'' & Making final architectural decisions \\
+    \addlinespace
+    Active Development & Writes and edits code across files and languages & ``Add a user authentication module using JWT tokens'' & Reviewing generated code for correctness \\
+    \addlinespace
+    Code Review & Analyzes diffs, flags potential bugs, and checks for style violations & ``Review the last commit and flag any issues'' & Judging severity of flagged issues \\
+    \addlinespace
+    Testing & Generates test cases, runs test suites, and fixes failures & ``Run the test suite and fix any failures'' & Verifying edge-case coverage \\
+    \addlinespace
+    Deployment \& Operations & Produces configuration files, deployment scripts, and helps troubleshoot production issues & ``Generate a Dockerfile and CI pipeline for this project'' & Confirming production readiness \\
+    \bottomrule
+    \end{tabular}
+duration: 14869 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 720,
+    "output_tokens": 935,
+    "service_tier": "standard"
+  }
+...

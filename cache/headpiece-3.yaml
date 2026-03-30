@@ -1,0 +1,210 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  Your tools are on the workbench. Claude Code is installed, authenticated, and
+  waiting for its first real task. Before we dive into advanced techniques or
+  ambitious projects, though, we need to build something more fundamental: a feel
+  for the rhythm of working with an agentic tool. This chapter is a guided first
+  conversation—hands on the keyboard, eyes on the terminal. We will ask Claude
+  Code to explore, create, edit, and run commands in a small sample project, one
+  step at a time, so that the interactive loop becomes second nature before the
+  stakes get higher.
+  
+  We need a shared playground. Create a directory called `todo-app` and populate
+  it with a small Python project: a module `todo.py` containing a `TodoList` class
+  with methods to add, remove, and list items; a file `test_todo.py` with a
+  handful of unit tests; and a brief `README.md`. To save you the typing, the
+  book's companion repository at `github.com/tinkerers-guide/claude-code-samples`
+  has the exact project ready to clone:
+  
+  ```bash
+  git clone https://github.com/tinkerers-guide/claude-code-samples.git
+  cd claude-code-samples/todo-app
+  ```
+  
+  One deliberate detail: `todo.py` contains a small bug—an off-by-one error in the
+  `remove` method. We planted it on purpose. You will fix it with Claude Code
+  shortly.
+  
+  Open your terminal, `cd` into the `todo-app` directory, and type:
+  
+  ```bash
+  claude
+  ```
+  
+  That's it—no subcommands, no flags. Claude Code starts up and prints a short
+  greeting: the model name it's connected to (e.g., `claude-sonnet-4-20250514`),
+  the working directory it has detected, and a `>` prompt waiting for your input.
+  Pay attention to three things in this startup output. First, the *model
+  identifier* tells you exactly which Claude model is powering the session.
+  Second, the *working directory path* confirms Claude Code knows where your
+  project lives—this is the root from which it will read files and run commands.
+  Third, the *prompt indicator* is your cue that the agent is idle and ready for
+  an instruction. Type a question and press Enter.
+  
+  Let's start with something open-ended. Type:
+  
+  ```
+  What is this project and how is it structured?
+  ```
+  
+  Watch what happens next. Claude Code doesn't guess—it *investigates*. You'll see
+  it call tools: first a directory listing to map out the file tree, then a series
+  of file reads as it opens `README.md`, `todo.py`, `storage.py`, and
+  `test_todo.py` in quick succession. Each tool invocation appears inline, so you
+  can follow exactly which files it chose to examine and in what order.
+  
+  After gathering evidence, Claude Code synthesizes a response: a plain-language
+  summary of the project's purpose, a breakdown of which module handles what
+  responsibility, and a note about the test file's coverage. A simple question
+  triggered a multi-step research process—reading four files, cross-referencing
+  their contents, and producing an architectural overview that would have taken
+  you several minutes of manual browsing. This investigate-then-summarize pattern
+  is one you'll see repeatedly.
+  
+  Now that you've seen a full question-and-answer cycle, let's name the interface
+  elements you just observed:
+  
+  - **Tool use indicators.** Each time Claude Code read a file or listed a
+    directory, it displayed the tool name and target inline. These aren't
+    hidden—they're part of the conversation, giving you full visibility into what
+    the agent is doing.
+  - **Reasoning text.** Claude Code often shows its thinking before acting: why it
+    chose certain files, what it expects to find. This narration helps you judge
+    whether it's on the right track.
+  - **Permission prompts.** You haven't hit one yet—reading files is
+    non-destructive. When we start writing and executing, you'll see explicit
+    approval requests before anything changes on disk.
+  - **Output versus commentary.** Claude Code visually separates its own analysis
+    from raw tool output like file contents or command results, so you always know
+    which is which.
+  
+  Time to create something. Type this prompt:
+  
+  > Add a utility function in a new file called `export.py` that takes a list of
+  > to-do items and returns them as a JSON string.
+  
+  Claude Code reads the existing modules to understand how to-do items are
+  structured, then proposes the contents of `export.py`—a short function using
+  Python's built-in `json` library. But before writing anything, it pauses. This
+  is your first **permission prompt**: Claude Code displays the file path it wants
+  to create, the full content it intends to write, and an explicit request for
+  your approval.
+  
+  Accept, and watch the confirmation appear. Now verify it yourself:
+  
+  ```bash
+  cat export.py
+  ```
+  
+  The file is real, on disk, exactly as previewed. This is the core creation
+  cycle:
+  
+  1. You describe intent.
+  2. Claude Code drafts the artifact.
+  3. You approve.
+  4. The file materializes.
+  
+  Nothing happens without that third step.
+  
+  Creating files is one thing—editing them is where things get interesting. The
+  sample project has a small bug waiting for you in `todo.py`: the `mark_done`
+  function compares item titles case-sensitively, so `"Buy milk"` and `"buy milk"`
+  are treated as different tasks. Ask Claude Code to fix it:
+  
+  > There's a case-sensitivity bug in the `mark_done` function in `todo.py`. Can
+  > you fix it?
+  
+  Claude Code reads the file, locates the comparison, and proposes a *targeted
+  diff* rather than rewriting the entire file. You see the specific lines
+  changing, with before-and-after context. This is a key distinction from file
+  creation: edits are surgical. Claude Code shows you exactly what shifts, nothing
+  more.
+  
+  Approve, and the fix is applied in place. The original file is modified—not
+  replaced, not duplicated.
+  
+  Now let's close the loop. With the bug fixed, ask Claude Code to run the tests:
+  
+  > Run the test suite for this project.
+  
+  Claude Code executes `python -m pytest`, captures the output, and presents the
+  results directly in the conversation. You see the familiar pytest summary—green
+  dots, a pass count, elapsed time—but you also get Claude Code's interpretation:
+  it notes that `test_mark_done_case_insensitive`, which previously failed, now
+  passes. It connects cause to effect without being asked.
+  
+  This is the feedback loop that makes agentic coding feel different from editing
+  in isolation. You described a problem, Claude Code fixed it, and now it
+  *verified* the fix—all within a single conversation. No tab-switching, no
+  copy-pasting terminal output. The cycle from diagnosis to confidence took three
+  prompts.
+  
+  Sometimes Claude Code heads somewhere you don't want. You have simple controls
+  for this. Press **Escape** to stop it mid-response—it halts cleanly, and you can
+  type a new instruction as if picking up a different conversational thread. If
+  Claude Code is waiting for permission on an action you don't want, type **n** to
+  decline; it acknowledges the refusal and asks how you'd like to proceed instead.
+  
+  None of these interruptions corrupt your session. The conversation context
+  remains intact, so you can redirect freely without starting over. Think of it as
+  steering, not breaking.
+  
+  Everything you've done in this session—asking questions, creating a file, fixing
+  a bug, running tests—lives in a single **conversation context**. Claude Code
+  remembers each exchange, which is why later requests can build on earlier ones
+  without repeating yourself. Ask it to "add error handling to the function we
+  just wrote," and it knows exactly which function you mean.
+  
+  This memory lasts until you end the session. Once you close Claude Code, the
+  context is gone; a new launch starts fresh.
+  
+  Look at **Fig. 3.10** for the loop you've been practicing all chapter:
+  
+  1. **Describe intent** — say what you want.
+  2. **Review proposal** — read Claude Code's plan.
+  3. **Approve action** — confirm or reject.
+  4. **Verify result** — check what happened.
+  
+  Then repeat. Every subsequent chapter builds on this cycle.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: cf52d541752a31eaf0b1ffb11042eb249e79f96ae12ec41dab2f16185db118b1
+response:
+  A minimalist line-art illustration depicting a focused, collaborative exchange
+  over a workbench. On one side, a pair of human hands carefully holds a small,
+  intricate object, paused mid-assembly. Opposite them, a pair of simple,
+  schematic hands presents a small blueprint, offering a design for the next
+  component. The human's posture is one of thoughtful review, looking from the
+  object in their hands to the proposed plan before committing to the next step.
+  The scene captures the quiet rhythm of a partnership between a craftsperson and
+  an assistant, centered on a cycle of proposal and approval.
+duration: 18602 ms
+usage_stats:
+  {
+    "candidates_token_count": 117,
+    "prompt_token_count": 2021,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 2021
+      }
+    ],
+    "thoughts_token_count": 1720,
+    "total_token_count": 3858
+  }
+...

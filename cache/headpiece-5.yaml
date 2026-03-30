@@ -1,0 +1,197 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  Every developer knows the feeling. You clone a repository—or inherit one from a
+  departed colleague—and open it to find hundreds of files, unfamiliar
+  conventions, and no obvious starting point. The traditional approach is slow:
+  read files one by one, grep for keywords, sketch diagrams on scratch paper, and
+  gradually piece together a mental model.
+  
+  Claude Code changes this. Instead of silently reading, you *ask questions* and
+  get guided explanations. It transforms codebase exploration from a solitary
+  archaeological dig into an interactive conversation with a knowledgeable partner
+  who can read every file for you.
+  
+  The simplest way to begin is to `cd` into the project directory, launch
+  `claude`, and ask a broad question:
+  
+  > Give me a high-level overview of this project's architecture.
+  
+  Claude Code responds by reaching for the files that tend to reveal the most
+  about a project's shape. It will typically:
+  
+  - Read `package.json`, `pyproject.toml`, or equivalent manifests to identify
+    dependencies and scripts.
+  - Scan the top-level directory structure to map out the organizational layout.
+  - Open `README.md` or similar documentation for the maintainers' own
+    description.
+  - Peek at entry points—`index.ts`, `main.py`, `App.jsx`—to understand how
+    execution begins.
+  
+  From these, it synthesizes a summary: what the project does, how it is organized
+  into directories, which frameworks and libraries it relies on, and where the key
+  entry points live. You get in thirty seconds what might otherwise take an hour
+  of solo reading.
+  
+  Let's see this in action with a concrete example. Suppose you clone a mid-sized
+  Express.js application from GitHub and ask:
+  
+  > Summarize the structure of this project and identify the main routes,
+  > middleware, and models.
+  
+  Claude Code begins by reading `package.json` to catalog dependencies—Express,
+  Mongoose, Passport, dotenv. It then lists the top-level directories and opens
+  `src/index.ts` to find where the app is initialized. From there it fans out:
+  
+  - It reads files in `src/routes/` to enumerate API endpoints.
+  - It opens `src/middleware/` to identify authentication, error handling, and
+    logging layers.
+  - It scans `src/models/` to catalog Mongoose schemas and their relationships.
+  - It checks `src/config/` for environment and database configuration.
+  
+  The resulting summary reads like a short architecture document—one that would
+  normally take a new team member a full afternoon to write from scratch.
+  
+  Understanding what just happened behind the scenes makes you a better
+  collaborator. When Claude Code explores a codebase, it draws on a specific set
+  of tools:
+  
+  - **File reading** to examine source code, configuration, and documentation.
+  - **Directory listing** to map out project structure.
+  - **Grep and search** to locate specific symbols, strings, or patterns across
+    files.
+  - **Find** to discover files by name or extension.
+  - **Command execution** to run things like `cat`, `head`, or `wc -l` when a
+    quick glance suffices.
+  
+  Claude Code chooses these tools autonomously based on your prompt. Knowing they
+  exist helps you anticipate *how* it will approach a question—and lets you nudge
+  it when a different tool would be more efficient, like suggesting a grep instead
+  of reading files one by one.
+  
+  Knowing how a codebase is structured is one thing; understanding how data and
+  control *flow* through it is another. This is where feature tracing comes in.
+  You ask Claude Code to follow a specific operation—a request, a user action, a
+  scheduled job—from its entry point through every layer it touches.
+  
+  The key is phrasing your prompt as a journey: "Trace what happens when a user
+  submits a payment, starting from the route handler through to the database
+  write." This gives Claude Code a clear starting point and direction. It will
+  read files along the path, connecting controller to service to model, narrating
+  each handoff.
+  
+  Effective tracing prompts share three traits:
+  
+  - They name a **concrete action**, not an abstract concept.
+  - They suggest a **starting location** when possible.
+  - They ask Claude Code to explain the *why* at each step, not just the *what*.
+  
+  Let's make this concrete. Suppose you've cloned an Express.js app and want to
+  understand its login flow. You might prompt:
+  
+  > Trace what happens when a POST request hits /login. Start from the route
+  > definition and follow the request through middleware, service layer, and
+  > database query. Explain what each layer does and what data it passes to the
+  > next.
+  
+  Claude Code begins by grepping for `/login`, finding the route in
+  `routes/auth.js`. It reads that file, discovers the handler delegates to
+  `authController.login`, and follows the call. File by file, it narrates the
+  chain: the controller validates input and calls `userService.authenticate`,
+  which hashes the password and queries `models/User.js`, which runs the database
+  lookup. On success, a JWT is minted and returned up through the layers.
+  
+  Fig. 5.6 illustrates this full journey, showing each application layer alongside
+  the file Claude Code reads to uncover it and the data passed between them.
+  
+  Beyond tracing flows, you can ask Claude Code pointed questions about things
+  that puzzle you as you read. Prompts like these work well:
+  
+  - "Where is the caching layer implemented and what does it cache?"
+  - "Why does this project use the repository pattern instead of calling the ORM
+    directly?"
+  - "What does the `passport.deserializeUser` callback do in this app?"
+  
+  Claude Code will locate the relevant files, read them, and explain not just
+  *what* the code does but *why* the pattern exists. This is particularly valuable
+  when you encounter unfamiliar libraries or architectural decisions that only
+  make sense with context the original authors never documented. Think of it as
+  having a senior developer available for every "what is this?" moment.
+  
+  The size of a codebase should shape how you explore it. For small projects—a few
+  dozen files—broad prompts work beautifully. "Give me an overview of this
+  project" lets Claude Code read nearly everything and produce a comprehensive
+  summary. You can afford to be expansive because the entire project fits
+  comfortably in context.
+  
+  Medium-sized repositories demand more focus. Instead of asking about the whole
+  project, narrow your prompts to specific directories or modules: "Explain the
+  code in `src/billing/`" rather than "Explain this project."
+  
+  For large codebases, *you* become the navigator. Guide Claude Code explicitly:
+  
+  - Point it to a specific subsystem before asking questions
+  - Use `find` or `grep` results to identify relevant files first
+  - Break exploration into multiple focused sessions, one module at a time
+  
+  The principle is simple: as the codebase grows, your prompts must shrink in
+  scope.
+  
+  Let's put these strategies together with a realistic scenario. You've just
+  joined a team maintaining a Django project with 30+ apps, Celery workers, custom
+  middleware, and domain terms like "adjudication" and "remittance" scattered
+  throughout. Your first session might unfold like this:
+  
+  1. Ask Claude Code to read `settings.py` and list all installed apps, grouping
+     them by purpose.
+  2. Pick the most unfamiliar app—say, `adjudication`—and ask "What does the
+     `adjudication` app do? Read its models and views."
+  3. Ask it to explain the Celery tasks in `adjudication/tasks.py` and how they
+     connect to the views.
+  4. Ask "What custom middleware is registered, and what does each piece do?"
+  5. Request a glossary: "Based on the models and docstrings, define the domain
+     terms used in this project."
+  
+  Five prompts, each tightly scoped, each building on the last. Within a single
+  session you move from *bewildered newcomer* to someone who can sketch the
+  system's architecture on a whiteboard.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: 940115eeacc08370ed48035f23e5a309330cb18cd267608d8acfdd6964ea2149
+response:
+  A simple, clean line-art illustration depicting two figures, a navigator and a
+  guide, standing before a large, intricate map. The map is not geographical but
+  resembles a complex system diagram, like an abstract subway map or a circuit
+  board schematic, with countless nodes and branching pathways. The navigator
+  looks on with focused curiosity while the guide calmly points to the map, their
+  finger tracing a single, clear route through the overwhelming complexity,
+  connecting a starting point to a destination.
+duration: 16438 ms
+usage_stats:
+  {
+    "candidates_token_count": 93,
+    "prompt_token_count": 1876,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1876
+      }
+    ],
+    "thoughts_token_count": 1509,
+    "total_token_count": 3478
+  }
+...

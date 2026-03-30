@@ -1,0 +1,91 @@
+{query: str, model: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+query: table
+prompt:
+  Consider the following text fragment from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  To see these principles in action, consider three ways to ask Claude Code for
+  the same thing: adding input validation to a signup form.
+  
+  - **Vague:** *"Add validation to the signup form."*
+  - **Moderate:** *"Add email and password validation to the signup form in
+    `SignupForm.tsx`, showing inline errors."*
+  - **Richly specific:** *"Add validation to `SignupForm.tsx`: email must match a
+    standard regex, password must be at least 12 characters with one symbol,
+    username must be 3–20 alphanumeric characters. Display inline error messages
+    below each field using our existing `FormError` component. Don't modify
+    `api/auth.ts`."*
+  
+  The vague prompt gives Claude Code almost nothing to work with; the moderate one
+  narrows the target; the richly specific one eliminates guesswork almost
+  entirely. Fig. 4.3 breaks this comparison down dimension by dimension—prompt
+  text, validation rules, error handling, file scoping, UX requirements, resulting
+  output, and follow-up effort needed. Study it carefully; the pattern it reveals
+  applies to every prompt you will ever write.
+  
+  This fragment refers to Fig. 4.3, which is a table. Its description is as
+  follows:
+  
+  A three-column comparison table where each column represents one version of the
+  signup-form validation prompt (Vague, Moderate, Richly Specific). The rows break
+  down key dimensions: the exact prompt text given to Claude Code, the specificity
+  of the desired validation rules (e.g., none stated vs. 'email and password' vs.
+  'email regex, password minimum 12 chars with one symbol, username 3–20
+  alphanumeric'), whether error-handling behavior is mentioned, whether target
+  files or frameworks are named, whether UX requirements like inline error
+  messages are specified, a brief summary of what Claude Code actually produces in
+  response, and a qualitative assessment of how much follow-up correction the user
+  needed. This table makes the cause-and-effect relationship between prompt detail
+  and output quality immediately scannable, letting the reader see at a glance
+  exactly which missing details in the vague prompt led to unwanted guesses, which
+  additions in the moderate prompt narrowed the output, and how the richly
+  specific prompt eliminated almost all ambiguity. It serves as the chapter's
+  single most referenceable artifact—a concrete, side-by-side proof of the three
+  core principles (specificity, context, constraints) introduced in the preceding
+  section.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+model: claude-opus-4-6
+hash: 9ce8416ba021d557bdae57388b260bf66927bda1ac1a0eb529ce2a6e2d03962d
+response:
+  caption:
+    Fig.~4.3: Dimension-by-dimension comparison of three prompt specificity levels
+    for the signup-form validation task.
+  latex:
+    \begin{tabular}{@{} p{2.4cm} p{3.2cm} p{3.6cm} p{4.2cm} @{}}
+    \toprule
+    \textbf{Dimension} & \textbf{Vague} & \textbf{Moderate} & \textbf{Richly Specific} \\
+    \midrule
+    Prompt Text & ``Add validation to the signup form.'' & ``Add email and password validation to the signup form in \texttt{SignupForm.tsx}, showing inline errors.'' & ``Add validation to \texttt{SignupForm.tsx}: email must match a standard regex, password must be at least 12 characters with one symbol, username must be 3--20 alphanumeric characters. Display inline error messages below each field using our existing \texttt{FormError} component. Don't modify \texttt{api/auth.ts}.'' \\
+    \addlinespace
+    Validation Rules & None stated; left entirely to Claude Code's assumptions & Email and password mentioned but no specific criteria given & Email: standard regex. Password: $\geq$12 chars with one symbol. Username: 3--20 alphanumeric chars \\
+    \addlinespace
+    Error Handling & Not mentioned & Implied by ``showing inline errors'' & Explicit: inline error messages using existing \texttt{FormError} component \\
+    \addlinespace
+    File Scoping & Not specified; Claude Code may touch multiple files & \texttt{SignupForm.tsx} named as target & \texttt{SignupForm.tsx} targeted; \texttt{api/auth.ts} explicitly excluded \\
+    \addlinespace
+    UX Requirements & None specified & Inline errors requested but no component or placement details given & Inline errors below each field rendered via \texttt{FormError} \\
+    \addlinespace
+    Resulting Output & Generic validation with arbitrary rules; may create new components or modify unrelated files & Focused on email and password in the correct file; specific rules and error display still guessed & Precise validation matching all stated rules; errors rendered with \texttt{FormError}; \texttt{api/auth.ts} untouched \\
+    \addlinespace
+    Follow-up Effort & High --- multiple rounds of correction needed to align output with intent & Moderate --- some refinement of rules and error display required & Minimal --- output matches intent with little to no revision \\
+    \bottomrule
+    \end{tabular}
+duration: 34127 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 793,
+    "output_tokens": 2253,
+    "service_tier": "standard"
+  }
+...

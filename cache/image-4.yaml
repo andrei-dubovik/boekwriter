@@ -1,0 +1,36 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  A clean, minimalist line-art illustration depicting two people, an architect and
+  a builder, collaborating over a large blueprint. The blueprint is spread across
+  a simple wooden table. The architect is pointing to a specific detail on the
+  plan with a pencil, while the builder leans in, looking closely at the same spot
+  and gesturing with their hand as if clarifying a point or confirming the
+  instruction. In the background, the simple, sketched-in frame of a building
+  under construction suggests that their conversation is about to become a
+  tangible reality. The overall feeling is one of focused, purposeful
+  communication before action is taken.
+hash: ca85048990af6a574756cea36d29d94185e7ce92bde31ffcbf2ae37796af3dac
+response: image-4.png
+duration: 6002 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 129,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 129
+      }
+    ],
+    "total_token_count": 1419
+  }
+...

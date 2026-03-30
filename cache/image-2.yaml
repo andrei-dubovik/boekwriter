@@ -1,0 +1,33 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  A clean, simple line drawing of a person's hands at a workbench. One hand holds
+  a brand-new tool, carefully lowering it into a specific, perfectly-sized slot
+  within a new, open toolbox. A few other essential tools are laid out in an
+  orderly fashion on the surface of the workbench, ready to be placed in their own
+  spots. The scene is calm and uncluttered, conveying a sense of methodical
+  preparation and setting things up correctly before starting a project.
+hash: 35667a55c5e879fa2d70ac2a576bb63ef7386e70d42be2143520705ff9cdaa3b
+response: image-2.png
+duration: 8775 ms
+usage_stats:
+  {
+    "candidates_token_count": 1306,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 102,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 102
+      }
+    ],
+    "total_token_count": 1408
+  }
+...

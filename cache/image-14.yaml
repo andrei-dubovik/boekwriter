@@ -1,0 +1,35 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  Depict a person's hands at a well-used but organized workbench, illustrated in a
+  clean, minimalist line-drawing style. The background is a pegboard holding a
+  variety of hand tools—wrenches, screwdrivers, pliers, and calipers—each in its
+  place. The central action is one hand reaching up to thoughtfully select a
+  specific, small tool from the board, while the other hand rests beside a
+  half-finished, intricate project on the benchtop. The overall feeling should be
+  one of quiet focus and the deliberate choice of the right instrument for a
+  precise task.
+hash: 94162761e13e80d82761926770b643e3665615e926200d682adeeaefbef6f16d
+response: image-14.png
+duration: 5426 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 126,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 126
+      }
+    ],
+    "total_token_count": 1416
+  }
+...

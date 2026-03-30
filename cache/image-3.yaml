@@ -1,0 +1,35 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  A minimalist line-art illustration depicting a focused, collaborative exchange
+  over a workbench. On one side, a pair of human hands carefully holds a small,
+  intricate object, paused mid-assembly. Opposite them, a pair of simple,
+  schematic hands presents a small blueprint, offering a design for the next
+  component. The human's posture is one of thoughtful review, looking from the
+  object in their hands to the proposed plan before committing to the next step.
+  The scene captures the quiet rhythm of a partnership between a craftsperson and
+  an assistant, centered on a cycle of proposal and approval.
+hash: 042824edba1589fb8c2bcd16ffe9718fa8ddd9c9677940f052420e878087effb
+response: image-3.png
+duration: 9196 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 127,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 127
+      }
+    ],
+    "total_token_count": 1417
+  }
+...

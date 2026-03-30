@@ -1,0 +1,35 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  A minimalist, clean-line illustration of a watchmaker at a workbench. The
+  watchmaker is hunched over, using delicate tweezers to work on a single,
+  intricate assembly of gears. The vast majority of the watch's other components
+  are not on the main workspace; instead, they are neatly organized in small,
+  compartmentalized trays set off to the side. The central theme is focus: the
+  workspace is uncluttered, containing only the specific tools and parts needed
+  for the immediate task, while the complexity of the whole project is kept
+  organized but out of the way.
+hash: 07064e5997ae612dc7b0abc3f82637db3cffcfc769f41ba49a3306fc9e3e9667
+response: image-12.png
+duration: 5986 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 123,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 123
+      }
+    ],
+    "total_token_count": 1413
+  }
+...

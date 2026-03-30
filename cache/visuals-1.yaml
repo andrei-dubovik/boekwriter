@@ -1,0 +1,107 @@
+{query: str, model: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+query: visuals
+prompt:
+  You are writing a chapter titled "What Is Claude Code?" in a book called "A
+  Tinkerer's Introduction to Claude Code". The plan for the chapter is a follows.
+  
+  1. Open the chapter by painting a vivid picture of the experience of sitting at
+     your terminal and, instead of typing code line by line, describing what you
+     want to build and watching an intelligent agent read your project, reason
+     about it, and start making changes—establishing the emotional hook that
+     something fundamentally new is happening in software development.
+  2. Define Claude Code precisely as Anthropic's agentic command-line coding tool
+     that runs inside your terminal, operates directly on your file system,
+     executes shell commands, and maintains a conversational thread of reasoning
+     about your project, distinguishing the term 'agentic' from the simpler notion
+     of an AI that merely suggests code snippets.
+  3. Contrast Claude Code with the other major categories of AI coding
+     tools—chat-based assistants where you copy and paste code into a browser
+     window, IDE-integrated copilots that offer inline autocomplete suggestions,
+     and retrieval-augmented generation tools—explaining what each category does
+     well and where it falls short compared to a fully agentic approach that can
+     take action on your behalf.
+  4. Present a concrete example comparing the same task—adding an input validation
+     feature to a small Flask web application—performed first by copying code into
+     a chat-based AI assistant and manually applying its suggestions, and then by
+     asking Claude Code to do it directly, illustrating how the agentic approach
+     eliminates context-switching and preserves the full picture of your project.
+  5. Explore the core philosophy behind Claude Code's design: that the tool should
+     operate where developers already work, inside the terminal and the real file
+     system, reading actual source files rather than relying on pasted excerpts,
+     so that it builds a grounded, accurate understanding of the project rather
+     than hallucinating about code it has never seen.
+  6. Survey the broad range of workflows that Claude Code enables—rapid
+     prototyping of new ideas, large-scale refactoring across many files,
+     systematic bug hunting with real command execution, automated documentation
+     generation, Git workflow assistance, and exploratory learning of unfamiliar
+     codebases—giving the reader a taste of the chapters to come.
+  7. Present a case study of a hobbyist tinkerer who uses Claude Code over a
+     single weekend to go from a vague idea to a working RSS feed reader with a
+     SQLite backend, describing how she iterated through prompting, reviewing
+     generated code, asking for fixes, and gradually steering the project to
+     completion without writing most of the code by hand.
+  8. Discuss the mindset shift that working with an agentic tool requires, moving
+     from the deeply ingrained habit of writing every line yourself to the new
+     discipline of clearly articulating intent, providing context, reviewing
+     proposed changes critically, and learning when to guide tightly versus when
+     to give Claude Code latitude to surprise you with a better approach than you
+     imagined.
+  9. Close the chapter by reflecting on why Claude Code represents a meaningful
+     step forward for tinkerers, hobbyists, and professional developers alike—not
+     as a replacement for understanding code but as an amplifier of curiosity and
+     capability—and provide a brief roadmap of how the remaining chapters will
+     equip the reader to master this new way of building software.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Photograph
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 1 aids. Explain the chosen aids in detail. If the chosen aid is a table,
+  the table must fit on a portrait A4 page. Only list the items where an aid has
+  been chosen.
+model: claude-opus-4-6
+hash: ed7aca74b5721d91f49d2f59c8c4019cdd4b1bdc71644efc461888386e59f01d
+response:
+- number: 3
+  aid: Table
+  description:
+    A comparison table with five columns and roughly six rows. The columns are
+    labeled 'Capability', 'Chat-Based Assistants', 'IDE-Integrated Copilots', 'RAG
+    Tools', and 'Claude Code (Agentic)'. The rows compare the tools across key
+    dimensions: 'Reads your actual project files' (no / partial via open tabs /
+    partial via indexed chunks / yes), 'Executes shell commands on your behalf' (no
+    / no / no / yes), 'Edits files directly in your project' (no, you copy-paste /
+    limited inline suggestions / no / yes), 'Maintains multi-step reasoning across
+    actions' (single prompt-response / per-keystroke, no memory across suggestions /
+    single query-response / yes, conversational thread with planning), 'Requires
+    leaving your development environment' (yes, switch to browser / no / varies /
+    no, runs inside terminal), and 'Can chain multiple actions to complete a task
+    autonomously' (no / no / no / yes, e.g. read file, edit, run tests, fix errors).
+    Each cell contains a short phrase or a yes/no with a brief qualifier. The table
+    gives the reader a single, scannable reference that makes the defining
+    differences between the four categories concrete and precise, anchoring the
+    prose discussion of what 'agentic' really means in practical terms.
+duration: 15503 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 1092,
+    "output_tokens": 492,
+    "service_tier": "standard"
+  }
+...

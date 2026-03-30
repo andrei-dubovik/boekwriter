@@ -1,0 +1,106 @@
+{query: str, model: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+query: visuals
+prompt:
+  You are writing a chapter titled "Customizing Claude Code with CLAUDE.md" in a
+  book called "A Tinkerer's Introduction to Claude Code". The plan for the chapter
+  is a follows.
+  
+  01. Open the chapter by explaining that CLAUDE.md is a plain-text configuration
+      file you place in your project that gives Claude Code persistent context
+      about your codebase, conventions, and preferences, functioning as a briefing
+      document that transforms Claude Code from a generic assistant into one that
+      feels like a team member who already understands your project.
+  02. Explain the mechanics of how Claude Code discovers and loads CLAUDE.md
+      files, covering where to place the file in your project root, how Claude
+      Code reads it automatically at the start of every session, and what happens
+      when it is too large or missing.
+  03. Clarify the distinction between project-level CLAUDE.md files that live in a
+      repository and apply to everyone who works on that project versus user-level
+      configuration files that encode your personal preferences across all
+      projects.
+  04. Walk through the core categories of content that belong in a well-crafted
+      CLAUDE.md, including a brief architectural overview, coding conventions and
+      style rules, preferred libraries and frameworks, testing strategies and
+      commands, build and deployment instructions, and any domain-specific
+      terminology or business logic that Claude Code would not otherwise know.
+  05. Provide a fully annotated example of a CLAUDE.md file written for a Python
+      data science toolkit, showing how to describe the project's package
+      structure, specify preferred libraries like pandas and pytest, document
+      naming conventions for modules and functions, and list common development
+      commands.
+  06. Provide a second annotated example of a CLAUDE.md file for a TypeScript web
+      application with a React frontend and Express backend, illustrating how to
+      communicate framework-specific conventions, component patterns, API route
+      organization, and the preferred approach to state management and error
+      handling.
+  07. Discuss the art of writing CLAUDE.md content that strikes the right balance
+      between conciseness and detail, explaining that overly verbose files waste
+      precious context window tokens while overly terse files fail to provide the
+      guidance that makes Claude Code's output meaningfully better.
+  08. Cover the advanced technique of layering multiple CLAUDE.md files across
+      different directories in a monorepo so that each package or service can
+      provide its own specialized context while inheriting the shared conventions
+      defined at the repository root.
+  09. Discuss strategies for keeping your CLAUDE.md up to date as your project
+      evolves, including periodically reviewing it during major refactors, asking
+      Claude Code itself to suggest updates based on changes it has observed, and
+      treating the file as living documentation rather than a one-time setup
+      artifact.
+  10. Close the chapter by showing how CLAUDE.md can serve as a vehicle for
+      encoding and enforcing team-wide standards, ensuring that every developer
+      using Claude Code on the project gets consistent guidance, and reflect on
+      how this practice also benefits onboarding by capturing institutional
+      knowledge in a machine-readable format.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Photograph
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 1 aids. Explain the chosen aids in detail. If the chosen aid is a table,
+  the table must fit on a portrait A4 page. Only list the items where an aid has
+  been chosen.
+model: claude-opus-4-6
+hash: 023a208b64246db5ba75eafed761f1576b94dfa391ed1eb05123e5bcf5136176
+response:
+- number: 8
+  aid: Diagram
+  description:
+    A directory-tree diagram of a monorepo showing how multiple CLAUDE.md files
+    layer and inherit context. The root of the tree is the repository directory
+    containing a root-level CLAUDE.md labeled 'Shared conventions: linting rules,
+    commit message format, CI pipeline commands'. Below it, two package directories
+    branch out: 'packages/api/' containing its own CLAUDE.md labeled 'Express route
+    patterns, REST naming conventions, auth middleware usage' and 'packages/web/'
+    containing its own CLAUDE.md labeled 'React component structure, state
+    management via Zustand, CSS module conventions'. Dashed arrows flow downward
+    from the root CLAUDE.md into each package-level CLAUDE.md to visually indicate
+    that the child files inherit and extend the root-level context rather than
+    replacing it. A brief annotation beside the arrows reads 'Child files add
+    specificity; root file provides shared baseline.' This diagram makes the
+    inheritance and scoping mechanic immediately intuitive in a way that prose alone
+    cannot, clarifying that Claude Code composes context from all applicable
+    CLAUDE.md files from the root down to the current working directory.
+duration: 15468 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 1014,
+    "output_tokens": 552,
+    "service_tier": "standard"
+  }
+...

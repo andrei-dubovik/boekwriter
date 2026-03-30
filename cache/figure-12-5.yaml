@@ -1,0 +1,171 @@
+{query: str, model: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+query: figure
+prompt:
+  Consider the following text fragment from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  Let's make this concrete. Suppose you need to add a "billing history" feature to
+  a monorepo with three packages: `shared-types`, `api`, and `frontend` (see Fig.
+  12.5).
+  
+  **Session 1 — Define the contract.** You ask Claude Code to create the
+  `BillingRecord` interface and shared validation schema in
+  `packages/shared-types`. Once the types compile cleanly, you commit.
+  
+  **Session 2 — Build the endpoint.** In a fresh session, you point Claude Code at
+  the new types and ask it to implement a `GET /billing/history` route in
+  `packages/api`, plus tests. The shared-types package is read-only context now;
+  the API service is the editing target. Commit again.
+  
+  **Session 3 — Wire up the UI.** You re-establish context, then have Claude Code
+  build a React component that calls the endpoint, renders the data, and passes
+  its own tests.
+  
+  Each session inherits a clean commit, a narrow scope, and a small enough file
+  set to leave Claude Code ample room to think.
+  
+  This fragment refers to Fig. 12.5. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A layered diagram that serves as both an architectural map and a
+  session-sequencing guide. At the top, three stacked rounded rectangles represent
+  the monorepo's packages: 'packages/shared-types', 'packages/api', and
+  'packages/frontend'. Dependency arrows flow upward from shared-types into both
+  api and frontend. Below the architecture, a horizontal swim-lane timeline shows
+  three sessions arranged left to right. Session 1 is labeled 'Define the
+  contract' and a highlighted connector links it to the shared-types package,
+  showing that this session adds new TypeScript interfaces and shared validation
+  schemas. A Git commit icon (a small node on a branch line running beneath the
+  swim lanes) marks the checkpoint between Session 1 and Session 2. Session 2 is
+  labeled 'Build the endpoint' and connects to both shared-types (read-only,
+  dashed arrow) and api (read-write, solid arrow), showing it imports the new
+  types and implements the API route, handler, and tests. Another Git commit node
+  separates Session 2 from Session 3. Session 3 is labeled 'Wire up the UI' and
+  connects to shared-types (read-only, dashed) and frontend (read-write, solid),
+  showing it builds the React component, calls the new endpoint, and adds frontend
+  tests. Between each pair of sessions a small annotation box shows the two-part
+  handoff protocol: 'End-of-session summary written' on the left side of the
+  commit node and 'Context re-established via summary' on the right side. This
+  single diagram encodes the monorepo's dependency graph, the order and scope of
+  each session, the Git checkpoint strategy, and the context-passing mechanism—all
+  concepts discussed across multiple sections of the chapter—giving readers a
+  concrete reference image they can return to while reading sections 4, 6, 7, and
+  8\.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+model: claude-opus-4-6
+hash: a7aa9ec0ddc5133ef94a6184dbc4714a2e30ccd4ca96258c22d6763bd0e97d77
+response:
+  caption:
+    Layered diagram combining the monorepo package dependency graph (top) with a
+    horizontal session timeline (bottom). Solid colored arrows connect each session
+    to its read-write editing target; dashed gray arrows indicate read-only context.
+    Git commit nodes on the branch line separate sessions, and annotation boxes
+    below each commit show the two-part handoff protocol: end-of-session summary
+    written (left) and context re-established via summary (right).
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+      <rect width="800" height="600" fill="#fff"/>
+      <defs>
+        <marker id="ad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,1L10,5L0,9z" fill="#9CA3AF"/>
+        </marker>
+        <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,1L10,5L0,9z" fill="#3B82F6"/>
+        </marker>
+        <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,1L10,5L0,9z" fill="#10B981"/>
+        </marker>
+        <marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,1L10,5L0,9z" fill="#D97706"/>
+        </marker>
+        <marker id="ay" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,1L10,5L0,9z" fill="#9CA3AF"/>
+        </marker>
+      </defs>
+      <text x="400" y="30" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="bold" fill="#6B7280" letter-spacing="1">MONOREPO PACKAGES</text>
+      <rect x="95" y="52" width="200" height="36" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="1.8"/>
+      <text x="195" y="75" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#059669">packages/api</text>
+      <rect x="505" y="52" width="200" height="36" rx="8" fill="#FFFBEB" stroke="#D97706" stroke-width="1.8"/>
+      <text x="605" y="75" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#B45309">packages/frontend</text>
+      <rect x="270" y="125" width="260" height="36" rx="8" fill="#EFF6FF" stroke="#3B82F6" stroke-width="1.8"/>
+      <text x="400" y="148" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#2563EB">packages/shared-types</text>
+      <line x1="338" y1="125" x2="200" y2="88" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#ad)"/>
+      <line x1="462" y1="125" x2="600" y2="88" stroke="#9CA3AF" stroke-width="1.5" marker-end="url(#ad)"/>
+      <line x1="20" y1="192" x2="780" y2="192" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="6,4"/>
+      <text x="400" y="222" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="bold" fill="#6B7280" letter-spacing="1">SESSION TIMELINE</text>
+      <rect x="38" y="238" width="180" height="84" rx="8" fill="#EFF6FF" stroke="#3B82F6" stroke-width="1.8"/>
+      <text x="128" y="261" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#2563EB">Session 1</text>
+      <text x="128" y="278" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#374151">Define the contract</text>
+      <text x="128" y="295" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#6B7280">BillingRecord interface</text>
+      <text x="128" y="307" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#6B7280">+ validation schema</text>
+      <rect x="311" y="238" width="180" height="84" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="1.8"/>
+      <text x="401" y="261" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#059669">Session 2</text>
+      <text x="401" y="278" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#374151">Build the endpoint</text>
+      <text x="401" y="295" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#6B7280">GET /billing/history</text>
+      <text x="401" y="307" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#6B7280">route + handler + tests</text>
+      <rect x="582" y="238" width="180" height="84" rx="8" fill="#FFFBEB" stroke="#D97706" stroke-width="1.8"/>
+      <text x="672" y="261" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#B45309">Session 3</text>
+      <text x="672" y="278" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#374151">Wire up the UI</text>
+      <text x="672" y="295" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#6B7280">React component +</text>
+      <text x="672" y="307" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#6B7280">API call + frontend tests</text>
+      <line x1="175" y1="238" x2="338" y2="161" stroke="#3B82F6" stroke-width="2" marker-end="url(#ab)"/>
+      <path d="M340,238 C318,195 268,125 255,88" fill="none" stroke="#10B981" stroke-width="2" marker-end="url(#ag)"/>
+      <line x1="400" y1="238" x2="400" y2="161" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ay)"/>
+      <path d="M700,238 C695,195 660,125 650,88" fill="none" stroke="#D97706" stroke-width="2" marker-end="url(#ao)"/>
+      <line x1="625" y1="238" x2="465" y2="161" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ay)"/>
+      <line x1="128" y1="322" x2="128" y2="388" stroke="#3B82F6" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+      <line x1="401" y1="322" x2="401" y2="388" stroke="#10B981" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+      <line x1="672" y1="322" x2="672" y2="388" stroke="#D97706" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+      <circle cx="38" cy="393" r="3" fill="#374151"/>
+      <line x1="38" y1="393" x2="762" y2="393" stroke="#374151" stroke-width="2.5"/>
+      <polygon points="762,387 772,393 762,399" fill="#374151"/>
+      <circle cx="260" cy="393" r="9" fill="#fff" stroke="#374151" stroke-width="2.5"/>
+      <circle cx="260" cy="393" r="3.5" fill="#374151"/>
+      <circle cx="540" cy="393" r="9" fill="#fff" stroke="#374151" stroke-width="2.5"/>
+      <circle cx="540" cy="393" r="3.5" fill="#374151"/>
+      <text x="260" y="378" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#374151" font-weight="bold">commit</text>
+      <text x="540" y="378" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#374151" font-weight="bold">commit</text>
+      <rect x="150" y="412" width="98" height="40" rx="4" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+      <text x="199" y="429" text-anchor="middle" font-family="sans-serif" font-size="7.5" fill="#92400E">End-of-session</text>
+      <text x="199" y="441" text-anchor="middle" font-family="sans-serif" font-size="7.5" fill="#92400E">summary written</text>
+      <path d="M248,414 L257,402" stroke="#F59E0B" stroke-width="0.8" fill="none"/>
+      <rect x="272" y="412" width="100" height="40" rx="4" fill="#D1FAE5" stroke="#10B981" stroke-width="1"/>
+      <text x="322" y="429" text-anchor="middle" font-family="sans-serif" font-size="7.5" fill="#065F46">Context re-established</text>
+      <text x="322" y="441" text-anchor="middle" font-family="sans-serif" font-size="7.5" fill="#065F46">via summary</text>
+      <path d="M272,414 L263,402" stroke="#10B981" stroke-width="0.8" fill="none"/>
+      <rect x="430" y="412" width="98" height="40" rx="4" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+      <text x="479" y="429" text-anchor="middle" font-family="sans-serif" font-size="7.5" fill="#92400E">End-of-session</text>
+      <text x="479" y="441" text-anchor="middle" font-family="sans-serif" font-size="7.5" fill="#92400E">summary written</text>
+      <path d="M528,414 L537,402" stroke="#F59E0B" stroke-width="0.8" fill="none"/>
+      <rect x="550" y="412" width="100" height="40" rx="4" fill="#D1FAE5" stroke="#10B981" stroke-width="1"/>
+      <text x="600" y="429" text-anchor="middle" font-family="sans-serif" font-size="7.5" fill="#065F46">Context re-established</text>
+      <text x="600" y="441" text-anchor="middle" font-family="sans-serif" font-size="7.5" fill="#065F46">via summary</text>
+      <path d="M550,414 L543,402" stroke="#10B981" stroke-width="0.8" fill="none"/>
+      <rect x="35" y="475" width="285" height="60" rx="6" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+      <text x="50" y="493" font-family="sans-serif" font-size="10" font-weight="bold" fill="#374151">Legend</text>
+      <line x1="50" y1="510" x2="85" y2="510" stroke="#3B82F6" stroke-width="2"/>
+      <polygon points="83,507 90,510 83,513" fill="#3B82F6"/>
+      <text x="96" y="514" font-family="sans-serif" font-size="9" fill="#555">Solid arrow = read-write (editing target)</text>
+      <line x1="50" y1="526" x2="85" y2="526" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <polygon points="83,523 90,526 83,529" fill="#9CA3AF"/>
+      <text x="96" y="530" font-family="sans-serif" font-size="9" fill="#555">Dashed arrow = read-only (context only)</text>
+    </svg>
+duration: 670471 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 934,
+    "output_tokens": 52404,
+    "service_tier": "standard"
+  }
+...

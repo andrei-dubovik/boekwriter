@@ -1,0 +1,210 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  Before installing Claude Code, you need two things on your machine: **Node.js**
+  (version 18 or later) and **npm** (which ships with Node.js). You also need
+  basic comfort with a terminal—opening one, typing commands, and reading their
+  output.
+  
+  To check whether you already have these tools, run:
+  
+  - `node --version` — you should see `v18.0.0` or higher
+  - `npm --version` — any version bundled with a supported Node.js will work
+  
+  If either command prints "command not found" or reports a version below the
+  minimum, you will need to install or update Node.js before proceeding. The next
+  section covers exactly how to do that on every major platform.
+  
+  The recommended way to install Node.js on any platform is **nvm** (Node Version
+  Manager). It installs Node.js into your home directory, sidestepping the
+  system-level permission issues that plague global installs.
+  
+  On **macOS** and **Linux**, install nvm by running the curl-based installer from
+  the project's GitHub page, then:
+  
+  ```
+  nvm install --lts
+  ```
+  
+  This gives you the latest long-term support release of Node.js along with a
+  matching npm.
+  
+  On **Windows**, use WSL (Windows Subsystem for Linux) to get a Linux environment
+  first, then follow the Linux instructions above inside your WSL terminal.
+  
+  Avoid installing Node.js via `sudo apt install nodejs` or similar system package
+  managers—their versions tend to be outdated, and the system-wide installation
+  creates permission friction you don't need.
+  
+  With Node.js and npm ready, installing Claude Code is a single command:
+  
+  ```
+  npm install -g @anthropic-ai/claude-code
+  ```
+  
+  The `-g` flag installs it globally, making the `claude` command available from
+  any directory. You'll see npm download the package and its dependencies—this
+  typically takes under a minute.
+  
+  Once it finishes, verify the installation:
+  
+  ```
+  claude --version
+  ```
+  
+  This should print a version number like `1.0.20`. If you get `command not found`
+  instead, your npm global bin directory likely isn't on your PATH—we'll
+  troubleshoot that later in the chapter.
+  
+  Let's put it all together. Here is a complete install on a fresh macOS machine,
+  starting from nothing:
+  
+  ```
+  # Install nvm
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+  
+  # Restart your terminal, then install Node.js
+  nvm install --lts
+  
+  # Confirm both tools are available
+  node --version    # e.g., v22.15.0
+  npm --version     # e.g., 10.9.2
+  
+  # Install Claude Code
+  npm install -g @anthropic-ai/claude-code
+  
+  # Verify
+  claude --version  # e.g., 1.0.20
+  ```
+  
+  If every command produced output similar to the comments above, you're done—the
+  entire process takes about two minutes on a reasonable internet connection. If
+  something went wrong, don't worry; the troubleshooting section later in this
+  chapter almost certainly covers your situation.
+  
+  With Claude Code installed, you need to authenticate. The first time you run
+  `claude`, it will open a browser window and walk you through signing in. There
+  are two paths:
+  
+  - **Anthropic API key.** You create a key at
+    [console.anthropic.com](https://console.anthropic.com), and Claude Code stores
+    it locally in its configuration directory (`~/.claude/` on most systems). You
+    can also set the `ANTHROPIC_API_KEY` environment variable directly if you
+    prefer explicit control.
+  - **Max or Team plan.** If your organization uses one of Anthropic's
+    subscription plans, Claude Code can authenticate through that account instead,
+    meaning you won't need a personal API key or worry about per-token billing
+    yourself.
+  
+  Either way, credentials stay on your machine—Claude Code never writes them into
+  your project files.
+  
+  Time to confirm everything works. Create a throwaway directory and launch Claude
+  Code inside it:
+  
+  ```bash
+  mkdir ~/claude-test
+  cd ~/claude-test
+  claude
+  ```
+  
+  Claude Code should start, display a welcome message, and present you with its
+  input prompt. Type something simple—`What directory am I in?` works well. Claude
+  Code will read your working directory and reply with the path. If you see a
+  coherent answer, your installation, authentication, and network connectivity are
+  all functioning correctly. Type `/exit` to end the session. That single round
+  trip—prompt in, answer out—exercises every piece of the setup chain.
+  
+  Even a straightforward install can stumble. The most common problems fall into a
+  handful of categories: permission errors, version mismatches, missing PATH
+  entries, and network restrictions. Rather than bury the fixes in prose, Fig. 2.7
+  collects them into a single scannable reference table mapping each symptom to
+  its cause and solution.
+  
+  A few general principles apply across all of these:
+  
+  - **Read the error message carefully.** npm errors are verbose but usually
+    contain the critical clue in the first few lines.
+  - **Prefer nvm over sudo.** If your instinct is to re-run a failing command with
+    `sudo`, resist it—nvm sidesteps the underlying ownership problem cleanly.
+  - **Check your Node.js version first.** Running `node -v` eliminates an entire
+    class of issues in two seconds.
+  
+  When in doubt, consult Fig. 2.7 before searching the web.
+  
+  Let's make this concrete. Suppose you are on a fresh Ubuntu machine and you run:
+  
+  ```bash
+  npm install -g @anthropic-ai/claude-code
+  ```
+  
+  npm responds with
+  `EACCES: permission denied, mkdir '/usr/local/lib/node_modules'`. The
+  system-owned `/usr/local` directory is not writable by your user. You *could*
+  fix this with `sudo`, but that invites further permission tangles down the road.
+  Instead, install nvm as described earlier in this chapter, use it to install
+  Node.js into your home directory, then re-run the install command. It will
+  succeed without `sudo`—and every future global install will too.
+  
+  Claude Code renders Markdown, syntax-highlighted code blocks, and occasionally
+  wide diffs, so your terminal emulator matters. Most modern terminals work well;
+  a few stand out:
+  
+  - **iTerm2** (macOS): excellent rendering, good Unicode support, and easy font
+    configuration.
+  - **Windows Terminal** (WSL): handles rich output cleanly and supports tabs for
+    multiple sessions.
+  - **Ghostty** and **Kitty**: fast GPU-accelerated options on Linux with strong
+    font and color support.
+  
+  Whatever you choose, use a monospaced font with broad Unicode coverage—JetBrains
+  Mono and Fira Code are popular choices—and ensure your color theme has enough
+  contrast to distinguish Claude Code's output sections at a glance.
+  
+  Every prompt you send consumes tokens—roughly the text Claude Code reads plus
+  the text it generates. Small questions cost fractions of a cent; large codebase
+  explorations or multi-step refactors can cost considerably more. Keep an eye on
+  your usage through the Anthropic dashboard at console.anthropic.com, and set a
+  monthly spending limit before you start experimenting freely. You can also run
+  `/cost` within a session to see what the current conversation has consumed so
+  far. Developing a feel for token costs takes a few days of normal use—but
+  starting with small, focused prompts keeps surprises to a minimum.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: 60a7b0301991055e6703790ae24a62a3c195a1311ed5947b880280f0a87dee9c
+response:
+  A clean, simple line drawing of a person's hands at a workbench. One hand holds
+  a brand-new tool, carefully lowering it into a specific, perfectly-sized slot
+  within a new, open toolbox. A few other essential tools are laid out in an
+  orderly fashion on the surface of the workbench, ready to be placed in their own
+  spots. The scene is calm and uncluttered, conveying a sense of methodical
+  preparation and setting things up correctly before starting a project.
+duration: 15961 ms
+usage_stats:
+  {
+    "candidates_token_count": 95,
+    "prompt_token_count": 1836,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1836
+      }
+    ],
+    "thoughts_token_count": 1522,
+    "total_token_count": 3453
+  }
+...

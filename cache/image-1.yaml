@@ -1,0 +1,35 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  Create a simple, line-art illustration of a person standing before a large,
+  complex architectural blueprint spread across a table. The person is not
+  drawing, but rather pointing thoughtfully at a section of the plan, as if
+  directing a change. In response to their gesture, a pair of stylized, glowing
+  hands are shown actively erasing and redrawing the lines on the blueprint in
+  that specific area. The overall aesthetic should be clean and minimalist,
+  emphasizing the act of high-level direction and the immediate, collaborative
+  execution of an idea.
+hash: 26fb15c258890ff97ebd57af272f9b73d4780751f030b30c1f71246dd46dfaa1
+response: image-1.png
+duration: 5861 ms
+usage_stats:
+  {
+    "candidates_token_count": 1299,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 114,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 114
+      }
+    ],
+    "total_token_count": 1413
+  }
+...

@@ -1,0 +1,159 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  Every tool we have discussed so far—prompting, navigating codebases, writing and
+  refactoring code—depends on a single underlying reality: Claude Code is an
+  *agent*. It does not merely suggest code in a sidebar. It reads your files,
+  writes new ones, and executes shell commands directly on your machine, with real
+  and immediate consequences.
+  
+  This makes Claude Code extraordinarily productive. It also means a careless
+  configuration or an ambiguous prompt can result in changes you did not
+  intend—files overwritten, commands run, data modified. Unlike a passive
+  autocomplete engine, an agent *acts*.
+  
+  Understanding Claude Code's permission model and safety boundaries is therefore
+  not a bonus topic for the cautious. It is essential knowledge for every user.
+  
+  Claude Code divides every action it can take into three categories:
+  
+  1. **Read actions**—opening files, listing directories, searching with grep.
+     These are non-destructive, and Claude Code performs them autonomously by
+     default.
+  2. **Write actions**—creating new files, editing existing ones, deleting them.
+     These modify your project, so Claude Code presents the proposed change and
+     waits for your explicit approval before proceeding.
+  3. **Shell commands**—anything executed in your terminal, from `npm test` to
+     `rm -rf`. Because shell commands can do essentially *anything*, Claude Code
+     shows you the exact command it intends to run and asks for confirmation.
+  
+  When approval is needed, a clear prompt appears inline in your terminal
+  displaying the proposed action. You can accept, reject, or edit it before Claude
+  Code continues. Nothing irreversible happens without you pressing a key first.
+  
+  These three action categories combine with Claude Code's **permission modes** to
+  determine how much autonomy the tool has in any given session. Fig. 11.3
+  summarizes the available modes at a glance.
+  
+  At one end sits **Ask Mode**, where Claude Code requests confirmation for nearly
+  everything, including file reads. At the other end is **Full Auto (YOLO) mode**,
+  where reads, writes, and shell commands all proceed without prompting. The
+  **Default mode** occupies the middle ground most users will find comfortable:
+  autonomous reads, prompted writes with a displayed diff, and prompted shell
+  commands.
+  
+  You can select a mode at launch with the `--permission-mode` flag or persist
+  your choice in your settings JSON. Switching is immediate—no restart required.
+  Start conservative and loosen the reins only as your confidence grows.
+  
+  Let's see this in practice. Imagine you ask Claude Code to fix a failing test in
+  a small Python project. The session unfolds in three permission steps:
+  
+  1. **Read request.** Claude Code wants to open `tests/test_parser.py`. In
+     Default mode this happens silently; in Ask mode you see a prompt and type `y`
+     to approve.
+  2. **Write request.** Claude Code proposes a two-line fix in `src/parser.py`. A
+     diff appears in your terminal—green for additions, red for deletions. You
+     review it and press `y`.
+  3. **Shell command request.** Claude Code asks to run
+     `pytest tests/test_parser.py`. You see the exact command before it executes.
+  
+  At any prompt you can type `a` instead of `y` to **allow that action type for
+  the rest of the session**, eliminating repeated confirmations for, say, file
+  reads while still gating writes and commands individually.
+  
+  Good habits matter more than good settings. A few practices will save you from
+  nearly every mishap:
+  
+  - **Review diffs before accepting.** Read what Claude Code proposes, not just
+    the summary it gives you. A one-line change can still break things if it
+    touches the wrong line.
+  - **Commit before you prompt.** If your working tree is clean, any unwanted
+    change is one `git checkout .` away from gone. Version control is your undo
+    button.
+  - **Treat destructive commands with extra skepticism.** `rm -rf`, `DROP TABLE`,
+    force-pushes—these deserve a pause and a careful read, every single time.
+  - **Be mindful of your working directory.** Running Claude Code in a folder that
+    contains `.env` files, production credentials, or deployment keys increases
+    the stakes of every action it takes.
+  
+  This is not a hypothetical risk. One early adopter ran Claude Code with fully
+  permissive settings in a repository that contained a shell script for deploying
+  to production. They asked Claude Code to "clean up the scripts and make sure
+  they work." Claude Code, interpreting "make sure they work" literally,
+  *executed* the deployment script to verify it ran without errors. A staging
+  environment received an unplanned push. No data was lost, but the team spent an
+  afternoon untangling the result.
+  
+  The lesson is simple: **your permission settings should match the stakes of your
+  environment.** A personal hobby project and a repository with live deployment
+  hooks are not the same context, and Claude Code cannot distinguish between them
+  on its own.
+  
+  Beyond permissions, think carefully about what information flows through Claude
+  Code. Your Anthropic API key should live in an environment variable or a secured
+  config file—never hardcoded in a repository or visible in shell history. During
+  a session, Claude Code can access anything your user account can: environment
+  variables, dotfiles, credentials stored in plaintext, and files outside the
+  current project if given a path.
+  
+  Be deliberate about proprietary code. Prompts and file contents are sent to
+  Anthropic's API for processing. Anthropic's usage policies state that API inputs
+  are **not** used to train models, but you should still review their current data
+  retention terms at [anthropic.com/policies](https://anthropic.com/policies)
+  before sharing anything your organization considers sensitive.
+  
+  Finding your comfort level with Claude Code's permissions is a process, not a
+  one-time decision. A sensible progression looks like this:
+  
+  1. **Start conservative.** While you are learning, let Claude Code ask before
+     every write and every command. The friction is educational—you see exactly
+     what the tool wants to do and why.
+  2. **Relax selectively.** Once patterns become familiar, grant session-level
+     permissions for low-risk actions like reading files or running tests.
+  3. **Reassess periodically.** When you switch to a project with production
+     credentials or sensitive data, tighten settings back up. When Claude Code
+     ships new capabilities, review what those capabilities can do before trusting
+     them.
+  
+  Permissions should fit the environment, not the other way around.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: 3ad5414d8bf4b74fbd7868ad7b90ed1ec3dbd362bf8ffdded4d2058e60f9c3f6
+response:
+  A simple, clean-line illustration of a person's hand hovering over a minimalist
+  control panel. The panel features two large, distinct buttons: one green with a
+  checkmark symbol (✓) and one red with an X symbol (✗). Above the buttons, a
+  small, uncluttered screen displays a single line of text representing a proposed
+  command for an automated system. The visual focus is on the moment of decision,
+  the deliberate pause before the hand commits to either approving or rejecting
+  the machine's intended action.
+duration: 19706 ms
+usage_stats:
+  {
+    "candidates_token_count": 103,
+    "prompt_token_count": 1533,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1533
+      }
+    ],
+    "thoughts_token_count": 1757,
+    "total_token_count": 3393
+  }
+...

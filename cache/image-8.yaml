@@ -1,0 +1,35 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  A person is carefully reorganizing a bookshelf. To one side, on the floor, is a
+  disorganized pile of books of various sizes, stacked haphazardly. The person is
+  in the process of moving them to the shelf, where a section is now neat and
+  orderly, with the books arranged systematically. The person is holding one book,
+  thoughtfully considering its proper place among the others. The illustration
+  should be a simple, clean line drawing, focusing on the clarity of the
+  action—transforming a chaotic pile into a structured library—rather than on
+  intricate detail.
+hash: b09b241850942b130078da01ada42209e39565db74f9af27f6a8d3592dc73e52
+response: image-8.png
+duration: 7378 ms
+usage_stats:
+  {
+    "candidates_token_count": 1306,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 122,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 122
+      }
+    ],
+    "total_token_count": 1428
+  }
+...

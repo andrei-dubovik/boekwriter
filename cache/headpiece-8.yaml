@@ -1,0 +1,183 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  Refactoring—restructuring existing code without changing its external
+  behavior—is where Claude Code delivers some of its most dramatic productivity
+  gains. The reason is straightforward: refactoring is often *tedious and
+  repetitive*, demanding consistency across dozens or hundreds of call sites.
+  Human developers lose focus over long editing sessions. Claude Code does not. It
+  can hold large swaths of a codebase in context simultaneously, spot every
+  occurrence of a pattern that needs updating, and apply transformations with
+  mechanical precision. The work that follows in this chapter will show you how to
+  harness that capability across a range of common refactoring scenarios.
+  
+  The simplest refactoring—and often the most impactful—is renaming things. Vague
+  names like `data`, `tmp`, or `processStuff` force every future reader to
+  reverse-engineer intent. Ask Claude Code to fix this directly:
+  
+  > *Rename the variable `d` in `src/analytics.ts` to `dailyActiveUsers` and
+  > update all references across the project.*
+  
+  Claude Code will respect scope, update imports, and leave unrelated identifiers
+  untouched. For broader sweeps, try:
+  
+  > *Review `utils/helpers.js` and suggest clearer names for every exported
+  > function.*
+  
+  Clear naming is the highest-leverage improvement you can make to any inherited
+  codebase.
+  
+  Duplicated logic is the next target. Suppose you have three Express route
+  handlers—`createUser`, `updateUser`, and `inviteUser`—each containing nearly
+  identical input-validation checks for email format and password length. Rather
+  than extracting the common code yourself, prompt Claude Code:
+  
+  > *Find the duplicated input-validation logic in `routes/users.js`, extract it
+  > into a shared utility function in `utils/validation.js`, and update all three
+  > handlers to use it.*
+  
+  Claude Code will read the file, identify the repeated blocks, produce a
+  `validateUserInput` function, and rewrite each handler to call it. Review the
+  diff carefully: confirm that every conditional branch from the original code
+  survives in the extracted function, and that error responses remain identical. A
+  quick `npm test` after applying the changes gives you confidence that behavior
+  is preserved. If a test fails, paste the failure back into Claude Code and ask
+  it to investigate.
+  
+  As a codebase grows, files accumulate responsibilities they were never meant to
+  carry. Rather than manually choreographing every move, describe the *target
+  structure* you want and let Claude Code figure out the mechanics:
+  
+  > *Split `routes/users.js` into three modules—`routes/userCreate.js`,
+  > `routes/userUpdate.js`, and `routes/userInvite.js`—with a shared
+  > `routes/index.js` that re-exports all routes. Update all import statements
+  > across the project.*
+  
+  Claude Code will move functions, rewrite imports, and flag any build
+  configuration (bundler aliases, test path mappings) that references the old
+  file. This approach works because Claude Code can grep the entire project for
+  stale references—something easy to miss by hand. Always run your test suite
+  after the restructure to catch any import it overlooked.
+  
+  Let's walk through a realistic conversion. Suppose you have an Express
+  middleware stack riddled with nested callbacks—the classic "pyramid of doom."
+  Start by asking Claude Code to survey the situation:
+  
+  > *Read through `middleware/auth.js` and `middleware/upload.js`. Identify every
+  > callback-based async pattern and propose a plan for converting them to
+  > async/await.*
+  
+  Claude Code will return a numbered conversion plan, typically grouping changes
+  by file. Accept the plan and let it work. On the first pass, you might notice it
+  wraps every `await` in individual `try/catch` blocks—verbose but safe. Refine:
+  
+  > *Consolidate error handling: use a single try/catch per middleware function
+  > and pass errors to `next(err)` instead of duplicating catch logic.*
+  
+  After this second round, the code reads cleanly. One more refinement—asking it
+  to replace any remaining `util.promisify` wrappers with native promise-based
+  APIs where available—and you're done. Run the test suite:
+  
+  > *Run `npm test` and report any failures.*
+  
+  All green. Commit the result as a single logical change.
+  
+  Claude Code is equally useful for modernizing syntax across a codebase. A prompt
+  like
+  
+  > *Update `src/utils/` to use destructuring, optional chaining, nullish
+  > coalescing, and template literals wherever they simplify the code. Do not use
+  > features unsupported by Node 18.*
+  
+  produces clean, idiomatic rewrites while respecting your runtime floor. The same
+  approach works in Python—ask it to introduce f-strings, walrus operators, or
+  `dict | dict` merges while targeting a minimum version like 3.10. Always specify
+  that constraint explicitly; without it, Claude Code will reach for the newest
+  syntax available regardless of compatibility.
+  
+  Type annotations are another high-leverage improvement Claude Code handles well.
+  For a JavaScript project migrating to TypeScript, try:
+  
+  > *Add TypeScript type definitions to all exported functions in `src/api/`.
+  > Infer types from usage where possible; use `unknown` rather than `any` when
+  > the type is genuinely ambiguous.*
+  
+  For Python, ask it to add type hints across a module using `typing` conventions
+  compatible with your minimum version. In both languages, better types serve as
+  living documentation—they catch bugs at compile time, improve editor
+  autocomplete, and make the next reader's job significantly easier.
+  
+  Refactoring is not only about structure. Claude Code is equally useful for the
+  smaller quality improvements that accumulate into a genuinely maintainable
+  codebase. Common tasks worth prompting for:
+  
+  - **Error handling:** Ask Claude Code to find functions that silently swallow
+    exceptions and replace them with proper error propagation or meaningful
+    fallback behavior.
+  - **Log messages:** Have it enrich terse log lines with request IDs, timestamps,
+    or variable values so production debugging becomes feasible.
+  - **Documentation comments:** Prompt it to write or update JSDoc or docstring
+    comments for public APIs, focusing on parameters, return values, and edge
+    cases.
+  - **Style normalization:** Ask it to reconcile inconsistent formatting, naming
+    conventions, or import ordering across files contributed by different authors.
+  
+  Each of these is tedious by hand yet nearly effortless for Claude Code.
+  
+  All of these improvements carry risk if applied carelessly. The safest approach
+  is a disciplined loop (see Fig. 8.9):
+  
+  1. **Scope each change narrowly.** Ask Claude Code to refactor one function, one
+     pattern, or one module at a time—never the entire codebase in a single
+     prompt.
+  2. **Review the diff before accepting.** Look for accidental behavior changes:
+     altered return values, swallowed errors, removed edge-case handling.
+  3. **Run the test suite after every accepted change.** Tests are your objective
+     proof that behavior is preserved.
+  4. **Commit immediately** after each verified step. If a later step introduces a
+     regression, you can revert to a known-good state without losing earlier
+     progress.
+  
+  When Claude Code *does* change behavior inadvertently—and eventually it
+  will—small commits make the damage trivial to undo.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: 90cae4da1acccfc18c7c06ae26ff39f6a83aa32b30a3bacef9c6449d1ae9534b
+response:
+  A person is carefully reorganizing a bookshelf. To one side, on the floor, is a
+  disorganized pile of books of various sizes, stacked haphazardly. The person is
+  in the process of moving them to the shelf, where a section is now neat and
+  orderly, with the books arranged systematically. The person is holding one book,
+  thoughtfully considering its proper place among the others. The illustration
+  should be a simple, clean line drawing, focusing on the clarity of the
+  action—transforming a chaotic pile into a structured library—rather than on
+  intricate detail.
+duration: 17217 ms
+usage_stats:
+  {
+    "candidates_token_count": 110,
+    "prompt_token_count": 1698,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1698
+      }
+    ],
+    "thoughts_token_count": 1421,
+    "total_token_count": 3229
+  }
+...

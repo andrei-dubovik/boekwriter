@@ -1,0 +1,123 @@
+{query: str, model: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+query: figure
+prompt:
+  Consider the following text fragment from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  First-draft code from Claude Code is rarely the final draft—and that is
+  perfectly fine. Iteration is the workflow, not a sign of failure.
+  
+  The refinement loop (Fig. 6.8) is simple:
+  
+  1. Describe what you want.
+  2. Review the generated output.
+  3. Identify *specific* gaps—a missing edge case, wrong return type, absent error
+     handling.
+  4. Ask for targeted fixes rather than regenerating from scratch.
+  
+  Targeted follow-up prompts work best: "Add input validation for empty lists,"
+  "Switch the callback to `async/await`," or "The `total` field should be a
+  decimal, not an integer." Each turn narrows the gap between what you have and
+  what you need.
+  
+  Resist the urge to start over. Claude Code remembers the full conversation, so
+  incremental corrections compound quickly—most code converges in two or three
+  turns.
+  
+  This fragment refers to Fig. 6.8. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A cyclic flowchart illustrating the iterative refinement loop that is central to
+  the section's message. The diagram begins with a node labeled 'Describe
+  requirement to Claude Code' which flows to 'Review generated output'. From there
+  an arrow leads to a diamond decision node labeled 'Meets expectations?'. A 'Yes'
+  path exits the loop to a terminal node labeled 'Accept and commit code'. A 'No'
+  path leads to a node labeled 'Identify specific issues (bugs, missing
+  requirements, style problems)' which flows to 'Compose targeted follow-up
+  prompt' which loops back to 'Review generated output'. Along each arrow in the
+  'No' loop, small annotations give concrete examples of the kind of feedback a
+  tinkerer might give at that stage—such as 'add input validation', 'switch to
+  async/await', or 'handle the empty-list edge case'. A small counter notation on
+  the loop ('Turn 2, Turn 3, …') reinforces the idea that multiple passes are
+  normal. The diagram makes the chapter's key philosophical point visually
+  unmistakable: the workflow is inherently cyclical and convergent, not a single
+  shot, and each pass through the loop narrows the gap between the current output
+  and the desired result.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+model: claude-opus-4-6
+hash: 72459fdde58e6cdc156d77140d441cc5874717e6575ef5fcee25fef3b5423ab3
+response:
+  caption:
+    Fig. 6.8 — The iterative refinement loop: describe a requirement, review the
+    generated output, and decide whether it meets expectations. If not, identify
+    specific issues, compose a targeted follow-up prompt, and loop back to review.
+    Annotations along the loop illustrate the kind of concrete feedback that drives
+    convergence—typically within two or three turns.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 720">
+      <defs>
+        <marker id="a" markerWidth="14" markerHeight="10" refX="13" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+          <polygon points="0 0.5,13 5,0 9.5" fill="#475569"/>
+        </marker>
+        <marker id="ag" markerWidth="14" markerHeight="10" refX="13" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+          <polygon points="0 0.5,13 5,0 9.5" fill="#16A34A"/>
+        </marker>
+        <marker id="ar" markerWidth="14" markerHeight="10" refX="13" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+          <polygon points="0 0.5,13 5,0 9.5" fill="#DC2626"/>
+        </marker>
+        <marker id="ap" markerWidth="14" markerHeight="10" refX="13" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+          <polygon points="0 0.5,13 5,0 9.5" fill="#7C3AED"/>
+        </marker>
+      </defs>
+      <rect width="960" height="720" fill="white"/>
+      <rect x="345" y="41" width="310" height="48" rx="24" fill="#3B82F6" stroke="#1D4ED8" stroke-width="2"/>
+      <text x="500" y="70" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="14" font-weight="bold">Describe requirement to Claude Code</text>
+      <line x1="500" y1="89" x2="500" y2="159" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+      <rect x="360" y="161" width="280" height="48" rx="8" fill="#EFF6FF" stroke="#3B82F6" stroke-width="2"/>
+      <text x="500" y="190" text-anchor="middle" fill="#1E3A5F" font-family="Arial,sans-serif" font-size="14" font-weight="bold">Review generated output</text>
+      <line x1="500" y1="209" x2="500" y2="261" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+      <polygon points="500,263 620,325 500,387 380,325" fill="#FFFBEB" stroke="#D97706" stroke-width="2"/>
+      <text x="500" y="321" text-anchor="middle" fill="#92400E" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Meets</text>
+      <text x="500" y="337" text-anchor="middle" fill="#92400E" font-family="Arial,sans-serif" font-size="13" font-weight="bold">expectations?</text>
+      <line x1="620" y1="325" x2="716" y2="325" stroke="#16A34A" stroke-width="2.5" marker-end="url(#ag)"/>
+      <text x="668" y="313" text-anchor="middle" fill="#16A34A" font-family="Arial,sans-serif" font-size="14" font-weight="bold">Yes</text>
+      <rect x="718" y="301" width="196" height="48" rx="24" fill="#DCFCE7" stroke="#16A34A" stroke-width="2.5"/>
+      <rect x="724" y="307" width="184" height="36" rx="18" fill="none" stroke="#16A34A" stroke-width="1"/>
+      <text x="816" y="330" text-anchor="middle" fill="#14532D" font-family="Arial,sans-serif" font-size="14" font-weight="bold">Accept &amp; commit code</text>
+      <line x1="500" y1="387" x2="500" y2="439" stroke="#DC2626" stroke-width="2" marker-end="url(#ar)"/>
+      <text x="516" y="418" text-anchor="start" fill="#DC2626" font-family="Arial,sans-serif" font-size="13" font-weight="bold">No</text>
+      <rect x="340" y="441" width="320" height="64" rx="8" fill="#FEF2F2" stroke="#EF4444" stroke-width="2"/>
+      <text x="500" y="467" text-anchor="middle" fill="#1E3A5F" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Identify specific issues</text>
+      <text x="500" y="487" text-anchor="middle" fill="#78716C" font-family="Arial,sans-serif" font-size="11">(bugs, missing requirements, style problems)</text>
+      <line x1="500" y1="505" x2="500" y2="564" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+      <rect x="330" y="566" width="340" height="48" rx="8" fill="#F5F3FF" stroke="#7C3AED" stroke-width="2"/>
+      <text x="500" y="595" text-anchor="middle" fill="#1E3A5F" font-family="Arial,sans-serif" font-size="13" font-weight="bold">Compose targeted follow-up prompt</text>
+      <path d="M330,590 L105,590 A17,17 0 0,1 88,573 L88,202 A17,17 0 0,1 105,185 L358,185" fill="none" stroke="#7C3AED" stroke-width="2.5" marker-end="url(#ap)"/>
+      <circle cx="88" cy="590" r="3" fill="#7C3AED"/>
+      <circle cx="88" cy="185" r="3" fill="#7C3AED"/>
+      <text x="520" y="540" fill="#6D28D9" font-family="Arial,sans-serif" font-size="11" font-style="italic">"add input validation"</text>
+      <text x="105" y="520" fill="#6D28D9" font-family="Arial,sans-serif" font-size="11" font-style="italic">"switch to async/await"</text>
+      <text x="105" y="290" fill="#6D28D9" font-family="Arial,sans-serif" font-size="11" font-style="italic">"handle the empty-list</text>
+      <text x="105" y="306" fill="#6D28D9" font-family="Arial,sans-serif" font-size="11" font-style="italic">edge case"</text>
+      <rect x="112" y="398" width="152" height="28" rx="14" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="188" y="417" text-anchor="middle" fill="#6D28D9" font-family="Arial,sans-serif" font-size="12" font-weight="bold">Turn 2, Turn 3, &#8230;</text>
+    </svg>
+duration: 674192 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 753,
+    "output_tokens": 48803,
+    "service_tier": "standard"
+  }
+...

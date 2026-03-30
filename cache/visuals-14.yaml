@@ -1,0 +1,115 @@
+{query: str, model: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+query: visuals
+prompt:
+  You are writing a chapter titled "Tips, Tricks, and Creative Recipes" in a book
+  called "A Tinkerer's Introduction to Claude Code". The plan for the chapter is a
+  follows.
+  
+  01. The chapter opens by setting the tone and framing this as a grab-bag
+      companion chapter, explaining that everything here has been collected from
+      real-world usage and community experimentation, and that readers should
+      treat it as a reference they return to repeatedly rather than something to
+      memorize in one sitting.
+  02. A practical section catalogues the most valuable keyboard shortcuts and
+      command-line flags, including how to launch Claude Code with a specific
+      model override, how to pipe input from other commands, how to use the
+      compact conversation flag for quick one-off questions, and how to interrupt
+      and resume gracefully.
+  03. A section on lesser-known features covers capabilities that even regular
+      users tend to overlook, such as asking Claude Code to read images for UI
+      debugging, using slash commands for session management, toggling verbosity
+      of tool output, and leveraging the ability to resume a previous conversation
+      to continue multi-session work.
+  04. An example presents a library of prompt templates for generating test
+      suites, showing exact prompts for unit tests, integration tests, and
+      edge-case discovery across Python and JavaScript, and demonstrating how each
+      template can be adapted by swapping in project-specific details while
+      preserving the structural scaffold that produces thorough coverage.
+  05. An example provides prompt templates for documentation generation, database
+      migration creation, and code translation between languages, illustrating how
+      a well-structured prompt that specifies audience, format, and level of
+      detail yields dramatically better results than a bare request like write
+      docs for this module.
+  06. A creative recipe walks through using Claude Code to scaffold an entire new
+      project from a single natural-language description, showing how to prompt
+      for directory structure, configuration files, boilerplate code, and a README
+      in one flowing session that gets you from zero to a runnable skeleton in
+      minutes.
+  07. A case study demonstrates using Claude Code to learn a new programming
+      language by having it translate a familiar Python script into Rust, then
+      asking it to explain each Rust-specific concept it introduced, showing how
+      this interactive translation-and-explanation loop accelerates language
+      acquisition far beyond reading documentation alone.
+  08. A section explores unconventional and creative uses including interactive
+      algorithmic exploration where you ask Claude Code to implement, benchmark,
+      and compare multiple solutions to a problem, and rubber duck debugging where
+      you narrate your confusion and Claude Code asks clarifying questions that
+      lead you to the answer yourself.
+  09. A troubleshooting FAQ addresses the most common issues users encounter,
+      organized as problem-and-solution pairs covering context window exhaustion
+      mid-task, Claude Code making confidently wrong assumptions about your
+      codebase, unexpected permission denials, slow response times, and strategies
+      for recovering when a session goes off the rails.
+  10. The chapter closes with a reflective essay on the tinkerer's mindset,
+      celebrating curiosity-driven exploration, encouraging readers to push Claude
+      Code into unfamiliar territory without fear of wasted time, and looking
+      forward to how the tool will continue evolving while affirming that the
+      human instinct to build, break, and learn remains at the center of the
+      craft.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Photograph
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 1 aids. Explain the chosen aids in detail. If the chosen aid is a table,
+  the table must fit on a portrait A4 page. Only list the items where an aid has
+  been chosen.
+model: claude-opus-4-6
+hash: a2327f62ac2f6958f6add3eb701b02d68138ac7c39d0904d5ed487a53d0b49a1
+response:
+- number: 2
+  aid: Table
+  description:
+    A two-column reference table titled 'Essential Keyboard Shortcuts and
+    Command-Line Flags' that serves as a quick-lookup card. The left column is
+    labeled 'Shortcut / Flag' and contains the exact keystrokes or CLI syntax (e.g.,
+    '--model <model-name>', 'echo "..." | claude', 'claude -p "..."', '--resume',
+    'Ctrl+C', 'Escape', '/compact'). The right column is labeled 'What It Does' and
+    provides a concise one-to-two sentence explanation of the behavior, when you
+    would reach for it, and any important caveats (such as the difference between
+    interrupting a response mid-stream versus cancelling a tool execution). Rows are
+    grouped into three logical sections separated by thin horizontal rules: 'Launch
+    & Input Flags' (model override, piped input, print mode, output format flags),
+    'In-Session Controls' (interrupt, resume, toggle tool output verbosity, slash
+    commands), and 'Session Management' (resume previous conversation, compact flag,
+    clear context). The table is designed to fit comfortably on a single portrait A4
+    page with roughly 12–15 rows, making it dense enough to be genuinely useful as a
+    tear-out reference sheet while remaining scannable at a glance. This is the
+    single highest-value visual aid in the chapter because it directly supports the
+    stated goal of being a resource readers return to repeatedly, and tabular format
+    is dramatically more scannable than the same information buried in prose
+    paragraphs.
+duration: 18322 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 1077,
+    "output_tokens": 689,
+    "service_tier": "standard"
+  }
+...

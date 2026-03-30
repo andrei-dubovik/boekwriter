@@ -1,0 +1,191 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  Everything we have done so far has involved projects where Claude Code can
+  comfortably hold the relevant code in its head all at once. Real-world software
+  is rarely so accommodating. A production codebase with hundreds of files,
+  layered abstractions, and tangled dependencies presents a fundamentally
+  different challenge—not because Claude Code becomes less intelligent, but
+  because it cannot *see* everything simultaneously. The core tension of this
+  chapter is simple: Claude Code's reasoning is powerful, but its context window
+  is finite. Learning to work within that constraint, rather than fighting it, is
+  what separates effective use from frustration.
+  
+  Claude Code's context window is the total amount of text it can consider at any
+  moment—your prompts, its responses, file contents it has read, command outputs,
+  and the CLAUDE.md file all count toward it. Think of it as a workbench with a
+  fixed surface area. Early in a session the bench is mostly clear and you can
+  spread out freely. As you converse, read files, and run commands, the bench
+  fills up. When the context window approaches its limit, Claude Code must
+  summarize or drop earlier material to make room, which means details from the
+  beginning of a long session may become hazy or vanish entirely.
+  
+  This is not a bug—it is a hard architectural constraint. Every token spent
+  reading an irrelevant file is a token unavailable for reasoning about the code
+  that actually matters.
+  
+  The single most effective habit you can build for large projects is *narrowing
+  scope before you prompt*. Instead of asking Claude Code to "fix the bug in the
+  payment flow," tell it exactly where to look:
+  
+  - Name the specific files or directories: "Look at `src/services/payment/` and
+    `src/models/order.ts`."
+  - Identify the layer or module: "This is a backend issue—ignore the frontend
+    entirely."
+  - State what *not* to touch: "Don't modify anything in `src/generated/`."
+  
+  Every file Claude Code doesn't have to read is context saved for reasoning about
+  the files it *does* read. A precise prompt turns a haystack problem into a
+  small, focused task.
+  
+  When a task touches many modules, resist the urge to describe it all in one
+  sweeping prompt. Instead, break it into subtasks that each have a clear input, a
+  narrow scope, and a verifiable result.
+  
+  A cross-cutting refactor, for example, might decompose into:
+  
+  1. Update the shared type definitions and interfaces.
+  2. Modify the backend services that consume those types.
+  3. Adjust the frontend components that display the affected data.
+  4. Update tests at each layer to reflect the changes.
+  
+  Each subtask should be small enough that Claude Code can hold all the relevant
+  files in context *and* have room left to reason about them. If you find yourself
+  thinking "this touches everything," that's a signal to decompose further, not to
+  write a longer prompt.
+  
+  Let's make this concrete. Suppose you need to add a "billing history" feature to
+  a monorepo with three packages: `shared-types`, `api`, and `frontend` (see Fig.
+  12.5).
+  
+  **Session 1 — Define the contract.** You ask Claude Code to create the
+  `BillingRecord` interface and shared validation schema in
+  `packages/shared-types`. Once the types compile cleanly, you commit.
+  
+  **Session 2 — Build the endpoint.** In a fresh session, you point Claude Code at
+  the new types and ask it to implement a `GET /billing/history` route in
+  `packages/api`, plus tests. The shared-types package is read-only context now;
+  the API service is the editing target. Commit again.
+  
+  **Session 3 — Wire up the UI.** You re-establish context, then have Claude Code
+  build a React component that calls the endpoint, renders the data, and passes
+  its own tests.
+  
+  Each session inherits a clean commit, a narrow scope, and a small enough file
+  set to leave Claude Code ample room to think.
+  
+  Not every directory in a large project deserves Claude Code's attention.
+  Monorepos often contain packages irrelevant to your current task. Microservice
+  architectures spread logic across repositories with only thin API contracts
+  connecting them. And many projects carry significant dead weight: auto-generated
+  protobuf files, vendored dependencies, ORM migration folders, or build artifacts
+  that balloon the file tree without offering useful signal.
+  
+  The fix is explicit exclusion. Tell Claude Code what to skip:
+  
+  - "Ignore everything under `packages/legacy-client`."
+  - "The `generated/` directories are auto-generated—don't read or modify them."
+  - "Only the `billing-service` and `shared-types` packages matter for this task."
+  
+  This keeps the context budget spent on code that actually matters.
+  
+  Large tasks rarely finish in one session. The key is making each session's end a
+  clean handoff to the next session's beginning.
+  
+  Before closing a session, ask Claude Code to summarize what was done and what
+  remains. Commit the completed work to Git with a descriptive message—this
+  creates a concrete checkpoint you can reference later. When you start the next
+  session, re-establish context efficiently:
+  
+  - Point Claude Code at the relevant commit or diff: *"Review the last three
+    commits on this branch."*
+  - State what is left: *"The API layer is done. Now we need the frontend
+    components."*
+  
+  This way each session inherits just enough history without replaying the full
+  conversation.
+  
+  In large projects, a well-crafted `CLAUDE.md` pays for itself many times over.
+  Every session where Claude Code would otherwise spend tokens discovering your
+  project's structure—*Which directory holds the API routes? What ORM does this
+  project use? Where do shared types live?*—is a session where `CLAUDE.md`
+  provides the answer upfront, for free.
+  
+  For large codebases, prioritize including:
+  
+  - **Module boundaries** and what each top-level directory owns
+  - **Key entry points** for the backend, frontend, and any worker processes
+  - **Conventions** that aren't obvious from the code alone (naming schemes,
+    import patterns, test file locations)
+  - **What to ignore**: generated files, vendored dependencies, build artifacts
+  
+  Think of `CLAUDE.md` as a context budget optimizer—it trades a few dozen tokens
+  of static description for hundreds of tokens Claude Code would otherwise spend
+  on exploration.
+  
+  Before asking Claude Code to modify anything in a large codebase, have it *look*
+  first. A short exploratory prompt like "find all files that reference the
+  `PaymentService` interface" costs very little context and pays enormous
+  dividends. Claude Code will use `grep`, `find`, or similar tools to locate every
+  relevant file, giving both of you a map of the blast radius before any edits
+  begin.
+  
+  This two-step rhythm—**search, then act**—prevents a common failure mode: Claude
+  Code modifies three files when seven needed changing, because it never
+  discovered the other four. The search step makes the subsequent edit prompt more
+  precise and the results more complete.
+  
+  Not every task should start with a prompt. When a change spans many modules,
+  involves unclear requirements, or would take you more than a sentence to
+  describe, pause and sketch a plan first. A lightweight template is enough:
+  
+  1. **Goal**: one sentence describing the end state.
+  2. **Files involved**: list them, or note what search to run.
+  3. **Sessions**: break the work into ordered steps, each small enough for one
+     session.
+  4. **Checkpoints**: decide where to commit between sessions.
+  
+  This takes two minutes and prevents the most expensive mistake in agentic
+  workflows—discovering halfway through a sprawling edit that you should have
+  started differently.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: 9e8768a46a3e4b24c421f165ba8ace52baa01f26e36234252844f35a8f6f2739
+response:
+  A minimalist, clean-line illustration of a watchmaker at a workbench. The
+  watchmaker is hunched over, using delicate tweezers to work on a single,
+  intricate assembly of gears. The vast majority of the watch's other components
+  are not on the main workspace; instead, they are neatly organized in small,
+  compartmentalized trays set off to the side. The central theme is focus: the
+  workspace is uncluttered, containing only the specific tools and parts needed
+  for the immediate task, while the complexity of the whole project is kept
+  organized but out of the way.
+duration: 17872 ms
+usage_stats:
+  {
+    "candidates_token_count": 113,
+    "prompt_token_count": 1818,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1818
+      }
+    ],
+    "thoughts_token_count": 1628,
+    "total_token_count": 3559
+  }
+...

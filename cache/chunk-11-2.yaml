@@ -1,0 +1,399 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: chunk
+prompt:
+  You are writing a book called "A Tinkerer's Introduction to Claude Code". The
+  book consists of the following chapters.
+  
+  # Chapter 1: What Is Claude Code?.
+  
+  This chapter introduces Claude Code as Anthropic's agentic command-line coding
+  tool, explaining where it fits into the rapidly evolving landscape of
+  AI-assisted software development. We explore the fundamental philosophy behind
+  Claude Code—an AI that operates directly in your terminal, reading and writing
+  files, executing commands, and reasoning about your entire project as a
+  collaborative partner rather than a simple autocomplete engine. The chapter
+  traces the origins of Claude Code, distinguishes it from other AI coding tools
+  like chat-based assistants and IDE copilots, and paints a picture of the kinds
+  of workflows it enables: from rapid prototyping to large-scale refactoring, from
+  bug hunting to documentation generation. We also discuss the mindset shift
+  required to work effectively with an agentic tool, where you move from writing
+  every line yourself to describing intent and guiding an intelligent agent. By
+  the end of this chapter, you will understand not just what Claude Code is, but
+  why it represents a meaningful step forward in how tinkerers, hobbyists, and
+  professional developers alike can approach the craft of building software.
+  
+  # Chapter 2: Installation and Setup.
+  
+  Before you can tinker, you need your tools on the workbench. This chapter walks
+  you through every step of getting Claude Code installed and configured on your
+  machine, covering macOS, Linux, and Windows via WSL. We start with the
+  prerequisites—Node.js, npm, and terminal basics—and then move into installing
+  Claude Code itself, authenticating with your Anthropic API key or connecting
+  through a supported plan, and verifying that everything works with a simple test
+  command. The chapter also covers common installation hiccups such as permission
+  errors, PATH issues, and proxy configurations for corporate environments. We
+  discuss choosing and configuring your preferred terminal emulator for the best
+  experience, and we briefly touch on resource considerations like API usage and
+  cost awareness so there are no surprises when you start experimenting. By the
+  end of this chapter, you will have a fully functional Claude Code installation
+  ready for the hands-on exploration that follows.
+  
+  # Chapter 3: Your First Conversation with Claude Code.
+  
+  With Claude Code installed, it is time to take it for a spin. This chapter is a
+  guided, hands-on walkthrough of your very first interactive session. We begin by
+  launching Claude Code in a small sample project, and we observe how it greets
+  you, how you can ask it questions about the codebase, and how it responds with
+  thoughtful analysis. Step by step, we ask Claude Code to perform simple
+  tasks—explain a function, create a new file, edit an existing one, and run a
+  test—so you can see the full loop of intent, action, and result. Along the way,
+  we explain the key elements of the Claude Code interface: how it displays its
+  reasoning, how it asks for permission before taking actions, how tool use
+  appears in the conversation, and how you can interrupt or redirect it
+  mid-stream. The chapter emphasizes learning by doing, encouraging you to type
+  along and experiment freely. We also introduce the concept of the conversation
+  context and how Claude Code maintains an understanding of what has been
+  discussed and done throughout a session. By the end, you will feel comfortable
+  launching Claude Code, asking it to perform basic tasks, and understanding the
+  rhythm of an interactive session.
+  
+  # Chapter 4: The Art of Prompting Claude Code.
+  
+  Claude Code is only as effective as the instructions you give it, and this
+  chapter is dedicated to the craft of writing excellent prompts for an agentic
+  coding tool. We start with the fundamental principles: being specific about what
+  you want, providing context about why you want it, and stating constraints
+  clearly. We then explore the spectrum of prompt styles—from terse one-liners for
+  simple tasks to richly detailed paragraphs for complex multi-step operations—and
+  discuss when each is appropriate. The chapter introduces practical prompt
+  patterns that experienced users rely on, such as asking Claude Code to plan
+  before acting, requesting explanations alongside changes, scoping edits to
+  specific files or directories, and specifying coding style or conventions you
+  want followed. We also cover anti-patterns: prompts that are too vague, prompts
+  that overload Claude Code with contradictory instructions, and prompts that
+  micromanage when high-level guidance would produce better results. Throughout,
+  real-world examples illustrate how subtle changes in wording can dramatically
+  affect the quality and relevance of Claude Code's output. We also discuss
+  iterative prompting—how to refine your request across multiple turns to converge
+  on exactly the result you need. This chapter is one of the most important in the
+  book because the skill of prompting well is what separates a frustrating
+  experience from a magical one.
+  
+  # Chapter 5: Navigating and Understanding Codebases.
+  
+  One of Claude Code's most powerful capabilities is its ability to explore, read,
+  and reason about existing codebases, and this chapter teaches you how to
+  leverage that ability to its fullest. We begin with the common scenario every
+  tinkerer faces: you have cloned a repository or inherited a project and you need
+  to understand how it works before you can modify it. We demonstrate how to ask
+  Claude Code to give you an overview of a project's architecture, trace the flow
+  of a specific feature through the code, explain unfamiliar patterns or
+  libraries, and identify the most important files and entry points. The chapter
+  also covers practical techniques for working with codebases of different sizes,
+  from small personal projects to medium-sized open source repositories, and
+  discusses how Claude Code uses tools like file reading, grep, and directory
+  listing to build its understanding. We explore strategies for asking targeted
+  questions—such as how does the authentication system work, or where is this API
+  endpoint defined—and show how Claude Code can synthesize answers by examining
+  multiple files. By the end of this chapter, you will be able to use Claude Code
+  as an intelligent guide to any unfamiliar codebase, dramatically reducing the
+  time it takes to get oriented and productive.
+  
+  # Chapter 6: Writing New Code with Claude Code.
+  
+  This chapter focuses on the generative heart of working with Claude Code:
+  creating new code from scratch or adding new features to existing projects. We
+  walk through several complete examples, starting with generating a simple
+  utility script, then building a REST API endpoint in a web application, and
+  finally adding a new React component with tests. Along the way, we discuss how
+  to describe what you want built in a way that gives Claude Code enough direction
+  without over-specifying implementation details. The chapter covers important
+  practical considerations like telling Claude Code which frameworks, libraries,
+  and patterns to use, how to ask it to follow existing conventions in the
+  project, and how to have it create multiple related files in a single session.
+  We also address the iterative nature of code generation—your first prompt rarely
+  produces a perfect result, and we show how to review what Claude Code has
+  written, request modifications, and refine the output through conversation.
+  Special attention is given to the tinkerer's workflow of rapid experimentation:
+  generating a quick prototype, testing it, and then asking Claude Code to improve
+  or extend it. By the end of this chapter, you will have a solid methodology for
+  using Claude Code as a powerful collaborator in writing new code.
+  
+  # Chapter 7: Debugging and Fixing Bugs.
+  
+  Every tinkerer knows the frustration of staring at a bug that refuses to reveal
+  itself, and this chapter shows how Claude Code can be your most patient and
+  perceptive debugging partner. We begin with the basics—pasting an error message
+  or stack trace into Claude Code and asking it to diagnose the problem—and then
+  move into more sophisticated techniques. We demonstrate how to ask Claude Code
+  to read relevant source files, form hypotheses about what might be wrong, add
+  logging or diagnostic code, run tests, and iteratively narrow down the root
+  cause. The chapter covers debugging across different contexts: runtime errors,
+  logic bugs that produce incorrect output, performance issues, and failing tests.
+  We also explore how to give Claude Code the right amount of context for
+  effective debugging, including sharing error logs, describing expected versus
+  actual behavior, and pointing it to the files most likely involved. A dedicated
+  section discusses the powerful workflow of letting Claude Code run commands and
+  observe their output, creating a tight feedback loop where it can test its own
+  fixes. We also address the limitations of AI-assisted debugging—cases where
+  Claude Code might lead you astray and how to recognize and recover from those
+  situations. By the end of this chapter, you will have a systematic approach to
+  squashing bugs with Claude Code at your side.
+  
+  # Chapter 8: Refactoring and Improving Code Quality.
+  
+  Once code works, the next question is whether it works well—and whether it will
+  be maintainable in the future. This chapter explores how Claude Code excels at
+  refactoring tasks that are tedious for humans but natural for an AI that can
+  hold large amounts of code in context. We cover a range of refactoring
+  scenarios: renaming variables and functions for clarity, extracting repeated
+  logic into reusable functions, restructuring modules for better separation of
+  concerns, converting callback-based code to async/await, updating code to use
+  modern language features, and improving type annotations. For each scenario, we
+  show how to prompt Claude Code effectively and how to review the changes it
+  proposes. The chapter also discusses using Claude Code for code quality
+  improvements beyond structural refactoring, such as adding error handling,
+  improving logging, writing or updating documentation comments, and ensuring
+  consistent code style. We address the important question of how to refactor
+  safely—asking Claude Code to make incremental changes rather than rewriting
+  everything at once, and using tests as a safety net. By the end of this chapter,
+  you will be able to use Claude Code to systematically improve the quality and
+  maintainability of any codebase you work with.
+  
+  # Chapter 9: Working with Git and Version Control.
+  
+  Claude Code has deep integration with Git, and this chapter teaches you how to
+  use that integration to streamline your version control workflow. We start with
+  the basics—asking Claude Code to check the status of your repository, view
+  diffs, and understand recent changes—and then move into more powerful
+  operations. The chapter covers using Claude Code to write meaningful commit
+  messages based on the actual changes in your staging area, create
+  well-structured branches for new features, and generate comprehensive pull
+  request descriptions that summarize what changed and why. We also explore how
+  Claude Code can help with more complex Git operations: resolving merge conflicts
+  by understanding both sides of a change, performing interactive rebases with
+  guidance, cherry-picking commits, and untangling messy Git histories. A
+  dedicated section discusses the workflow of using Claude Code for code review,
+  where you ask it to examine a diff and provide feedback on potential issues,
+  missed edge cases, or style inconsistencies. We also cover how to configure
+  Claude Code to follow your team's Git conventions, such as commit message
+  formats or branch naming schemes. By the end of this chapter, Git will feel less
+  like a necessary chore and more like a natural part of your creative flow.
+  
+  # Chapter 10: Customizing Claude Code with CLAUDE.md.
+  
+  One of the most powerful features of Claude Code is the CLAUDE.md file—a
+  project-level configuration document that gives Claude Code persistent context
+  about your project, your preferences, and your conventions. This chapter is a
+  comprehensive guide to writing effective CLAUDE.md files that make every
+  interaction with Claude Code more productive. We start with the basics: where to
+  place the file, how Claude Code reads it, and the difference between
+  project-level and user-level configuration. We then dive into what to
+  include—project architecture overviews, coding conventions, preferred libraries
+  and patterns, testing strategies, build and deployment instructions, and any
+  project-specific terminology or domain knowledge. The chapter provides numerous
+  real-world CLAUDE.md examples across different types of projects, from a Python
+  data science toolkit to a TypeScript web application to a Rust systems library.
+  We discuss the art of writing CLAUDE.md content that is concise enough to not
+  waste context but detailed enough to meaningfully guide Claude Code's behavior.
+  Advanced topics include layering multiple CLAUDE.md files in different
+  directories for monorepos, updating your CLAUDE.md as your project evolves, and
+  using it to enforce team-wide standards. By the end of this chapter, you will
+  understand how to make Claude Code feel like a team member who already knows
+  your project inside and out.
+  
+  # Chapter 11: Managing Permissions and Safety.
+  
+  Claude Code is a powerful agent that can read files, write files, and execute
+  arbitrary commands on your machine, so understanding its permission model and
+  safety features is essential. This chapter explains how Claude Code's permission
+  system works: which actions it can take autonomously, which require your
+  explicit approval, and how to configure these boundaries to match your comfort
+  level. We discuss the different permission modes and trust levels, from
+  conservative settings where Claude Code asks before every file edit to more
+  permissive configurations suitable for experienced users who want a faster
+  workflow. The chapter covers practical safety considerations such as reviewing
+  proposed changes before they are applied, using version control as a safety net,
+  being cautious with commands that have side effects, and understanding what
+  information Claude Code can access in your environment. We also address
+  security-conscious practices like managing API keys, being mindful of what code
+  and data you share through the tool, and understanding Anthropic's data handling
+  policies. By the end of this chapter, you will have a clear mental model of
+  Claude Code's safety architecture and the confidence to configure it
+  appropriately for your needs.
+  
+  # Chapter 12: Working with Large and Complex Projects.
+  
+  Small scripts and toy projects are fun, but the real test of any coding tool is
+  how it handles large, complex, real-world codebases. This chapter addresses the
+  unique challenges and strategies for using Claude Code effectively in
+  substantial projects with hundreds or thousands of files, multiple languages,
+  complex build systems, and intricate dependency graphs. We discuss how Claude
+  Code manages its context window—the limited amount of text it can consider at
+  once—and how you can help it focus on the most relevant parts of a large
+  codebase through targeted prompts and good project organization. The chapter
+  covers strategies for breaking large tasks into smaller, manageable pieces that
+  Claude Code can handle effectively, using multiple sessions for different
+  aspects of a complex change, and maintaining consistency across a series of
+  related modifications. We explore working with monorepos, microservice
+  architectures, and projects with extensive generated code or third-party
+  dependencies. Practical techniques include guiding Claude Code to the right
+  files before asking it to make changes, using grep and search tools
+  strategically, and leveraging CLAUDE.md to provide architectural context that
+  saves tokens. We also discuss recognizing when a task is too large for a single
+  session and how to plan a multi-session approach. By the end of this chapter,
+  you will have the strategies needed to wield Claude Code confidently even in the
+  most sprawling and complex projects.
+  
+  # Chapter 13: Integrating Claude Code into Your Daily Workflow.
+  
+  Knowing how to use Claude Code is one thing; making it a seamless part of your
+  everyday development workflow is another. This chapter bridges that gap by
+  exploring how Claude Code fits into the rhythms and rituals of daily software
+  development. We cover using Claude Code alongside your favorite IDE or editor,
+  discussing workflows where you use Claude Code for heavy lifting and your editor
+  for fine-tuning. The chapter explores using Claude Code in different phases of
+  the development lifecycle: during planning and design, during active
+  development, during code review, during testing, and during deployment and
+  operations. We discuss how to combine Claude Code with other tools in your
+  toolchain—linters, formatters, CI/CD pipelines, issue trackers, and
+  documentation generators—to create a workflow that is greater than the sum of
+  its parts. The chapter also addresses the human side of integration: building
+  trust in Claude Code's suggestions over time, knowing when to lean on it heavily
+  versus when to work manually, and avoiding over-reliance that might erode your
+  own skills. For tinkerers who work on personal projects in stolen evening hours,
+  we discuss how Claude Code can dramatically compress the time from idea to
+  working prototype. By the end of this chapter, you will have a personalized
+  mental model for when, where, and how to deploy Claude Code throughout your day.
+  
+  # Chapter 14: Tips, Tricks, and Creative Recipes.
+  
+  This final chapter is a curated collection of tips, tricks, and creative recipes
+  gathered from extensive use of Claude Code and from the broader community of
+  tinkerers and developers who have pushed the tool in unexpected directions. We
+  cover keyboard shortcuts and command-line flags that save time, lesser-known
+  features that even experienced users often overlook, and clever prompt templates
+  for common tasks like generating test suites, writing documentation, creating
+  database migrations, scaffolding new projects, and converting code between
+  languages. The chapter includes a section on creative and unconventional
+  uses—using Claude Code to learn a new programming language by having it explain
+  and translate familiar patterns, using it to explore algorithmic problems
+  interactively, and using it as a rubber duck debugging partner that actually
+  talks back. We also compile a troubleshooting FAQ addressing the most common
+  issues users encounter—from context length limitations to unexpected
+  behavior—with practical solutions for each. The chapter closes with a reflection
+  on the tinkerer's mindset: the joy of experimentation, the value of curiosity,
+  and the exciting frontier of building software with an AI collaborator that
+  keeps getting better with every release. By the end of this chapter, you will
+  have a rich toolkit of practical techniques and the inspiration to keep
+  exploring what is possible with Claude Code.
+  
+  Consider Chapter 11 "Managing Permissions and Safety". A plan has been prepared
+  for this chapter.
+  
+  1. We open the chapter by establishing why permissions and safety deserve
+     dedicated attention, explaining that Claude Code is fundamentally different
+     from passive tools because it is an agent capable of reading files, writing
+     files, and executing arbitrary shell commands on your machine, which makes
+     understanding its safety boundaries not optional but essential.
+  2. We explain Claude Code's permission model in detail, walking through the
+     categories of actions it can take—such as reading files, writing or editing
+     files, and running shell commands—and describing which of these actions
+     Claude Code performs autonomously, which require explicit user approval via
+     the interactive prompt, and how the approval flow appears in your terminal
+     during a session.
+  3. We describe the different permission modes and trust levels available in
+     Claude Code, from the most conservative setting where nearly every action
+     requires confirmation, through moderate defaults suitable for most users, to
+     the most permissive configuration where experienced users allow broad
+     autonomous action, explaining how to set and switch between these modes using
+     command-line flags and configuration files.
+  4. Example: We present a hands-on walkthrough of a typical coding session where
+     Claude Code requests permission at several points—asking to read a
+     configuration file, proposing an edit to a source file, and requesting to run
+     a test command—showing exactly what each permission prompt looks like, how to
+     approve or deny it, and how to use the allow-for-session shortcut to reduce
+     repeated confirmations for trusted action types.
+  5. We cover practical safety habits that every user should adopt, including
+     always reviewing proposed file changes before accepting them, using Git as a
+     safety net so that any unwanted modification can be instantly reverted,
+     exercising particular caution with commands that have irreversible side
+     effects such as deleting files or modifying databases, and being thoughtful
+     about running Claude Code in directories that contain sensitive credentials
+     or production configuration.
+  6. Case study: We tell the story of a developer who ran Claude Code with fully
+     permissive settings in a repository that contained a live deployment script,
+     and Claude Code—following a reasonable but mistaken interpretation of an
+     ambiguous prompt—executed a command that triggered an unintended deployment,
+     illustrating why matching your permission settings to the sensitivity of your
+     environment is a critical practice rather than mere caution.
+  7. We address security-conscious practices in depth, covering how to manage your
+     Anthropic API key so it is not accidentally exposed in logs or shared
+     repositories, what information from your local environment Claude Code can
+     access during a session, how to be mindful about proprietary or sensitive
+     code you discuss through the tool, and a clear summary of Anthropic's data
+     handling and retention policies so you can make informed decisions about what
+     you share.
+  8. We close the chapter by guiding readers to find their own personal comfort
+     level with Claude Code's permissions, suggesting a progressive approach where
+     you start with conservative settings while you are learning, gradually relax
+     them as you build trust and familiarity with how the tool behaves, and
+     periodically reassess your configuration as Claude Code evolves and as you
+     move between projects with different sensitivity levels.
+  
+  The chapter has been written up to and including point 1, which reads as
+  follows:
+  
+  Every tool we have discussed so far—prompting, navigating codebases, writing and
+  refactoring code—depends on a single underlying reality: Claude Code is an
+  *agent*. It does not merely suggest code in a sidebar. It reads your files,
+  writes new ones, and executes shell commands directly on your machine, with real
+  and immediate consequences.
+  
+  This makes Claude Code extraordinarily productive. It also means a careless
+  configuration or an ambiguous prompt can result in changes you did not
+  intend—files overwritten, commands run, data modified. Unlike a passive
+  autocomplete engine, an agent *acts*.
+  
+  Understanding Claude Code's permission model and safety boundaries is therefore
+  not a bonus topic for the cautious. It is essential knowledge for every user.
+  
+  Consider now point 2 of the plan. Write that part of the book. Be consise in
+  your writing, avoid an overly verbose prose. Use Markdown for paragraphs,
+  emphasis, numbered or unnumbered lists. Use LaTeX for formulas. Do not add any
+  headers. Footnotes are allowed but should be used sparingly. In total, you
+  should write between 105 and 140 words.
+model: claude-opus-4-6
+hash: 65156081c6f7af888c25c4eeadab590fccecac8e14c6140a073764eba652cceb
+response:
+  Claude Code divides every action it can take into three categories:
+  
+  1. **Read actions**—opening files, listing directories, searching with grep.
+     These are non-destructive, and Claude Code performs them autonomously by
+     default.
+  2. **Write actions**—creating new files, editing existing ones, deleting them.
+     These modify your project, so Claude Code presents the proposed change and
+     waits for your explicit approval before proceeding.
+  3. **Shell commands**—anything executed in your terminal, from `npm test` to
+     `rm -rf`. Because shell commands can do essentially *anything*, Claude Code
+     shows you the exact command it intends to run and asks for confirmation.
+  
+  When approval is needed, a clear prompt appears inline in your terminal
+  displaying the proposed action. You can accept, reject, or edit it before Claude
+  Code continues. Nothing irreversible happens without you pressing a key first.
+duration: 7546 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 4984,
+    "output_tokens": 253,
+    "service_tier": "standard"
+  }
+...

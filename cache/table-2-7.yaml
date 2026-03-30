@@ -1,0 +1,109 @@
+{query: str, model: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+query: table
+prompt:
+  Consider the following text fragment from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  Even a straightforward install can stumble. The most common problems fall into a
+  handful of categories: permission errors, version mismatches, missing PATH
+  entries, and network restrictions. Rather than bury the fixes in prose, Fig. 2.7
+  collects them into a single scannable reference table mapping each symptom to
+  its cause and solution.
+  
+  A few general principles apply across all of these:
+  
+  - **Read the error message carefully.** npm errors are verbose but usually
+    contain the critical clue in the first few lines.
+  - **Prefer nvm over sudo.** If your instinct is to re-run a failing command with
+    `sudo`, resist it—nvm sidesteps the underlying ownership problem cleanly.
+  - **Check your Node.js version first.** Running `node -v` eliminates an entire
+    class of issues in two seconds.
+  
+  When in doubt, consult Fig. 2.7 before searching the web.
+  
+  This fragment refers to Fig. 2.7, which is a table. Its description is as
+  follows:
+  
+  A troubleshooting reference table with four columns: Symptom (the error message
+  or observable behavior the reader sees), Likely Cause (a concise explanation of
+  why it happens), Fix (the specific command or configuration change that resolves
+  it), and OS (which operating systems are affected, using macOS/Linux/Windows WSL
+  labels). Rows cover: (1) EACCES permission denied during global npm install,
+  caused by npm's default global directory being owned by root, fixed by switching
+  to nvm; (2) engine compatibility error stating Node.js version is too old,
+  caused by system-shipped Node.js being below the minimum required version, fixed
+  by installing a current LTS release via nvm; (3) 'claude: command not found'
+  after a successful install, caused by the npm global bin directory not being on
+  the user's PATH, fixed by adding the correct directory to the shell profile
+  file; (4) ETIMEDOUT or ECONNREFUSED during install, caused by a corporate proxy
+  or firewall blocking npm registry access, fixed by configuring npm's proxy and
+  https-proxy settings or pointing to an internal registry mirror; (5) SSL
+  certificate errors such as UNABLE_TO_GET_ISSUER_CERT_LOCALLY, caused by
+  corporate TLS inspection replacing certificates, fixed by setting the
+  NODE_EXTRA_CA_CERTS environment variable to the corporate CA bundle; (6)
+  'unexpected token' syntax errors on launch, caused by running Claude Code under
+  an unsupported older Node.js version that lacks required JavaScript features,
+  fixed by upgrading Node.js to the minimum supported version. This table gives
+  the reader a single, scannable page they can consult whenever an installation
+  attempt fails, without having to read through paragraphs of prose to find the
+  relevant fix.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+model: claude-opus-4-6
+hash: 70ba82e60f0e50888de730b5ea764a8e5e735eb4e1420f82cec7deee5d27f61c
+response:
+  caption: Fig. 2.7 – Installation troubleshooting reference table
+  latex:
+    \begin{tabular}{p{3.4cm} p{3.2cm} p{4.6cm} p{2.4cm}}
+    \toprule
+    \textbf{Symptom} & \textbf{Likely Cause} & \textbf{Fix} & \textbf{OS} \\
+    \midrule
+    \texttt{EACCES: permission denied} during global \texttt{npm install} &
+    npm's default global directory is owned by root &
+    Switch to \texttt{nvm} to manage Node.js; it installs packages in your home directory, eliminating the ownership conflict. &
+    macOS / Linux \\
+    \addlinespace
+    Engine compatibility error: Node.js version is too old &
+    The system-shipped Node.js falls below Claude Code's minimum required version &
+    Install a current LTS release via \texttt{nvm}:\newline \texttt{nvm install --lts}\newline \texttt{nvm use --lts} &
+    macOS / Linux / Windows WSL \\
+    \addlinespace
+    \texttt{claude: command not found} after a successful install &
+    The npm global \texttt{bin} directory is not on your \texttt{PATH} &
+    Add the directory to your shell profile:\newline \texttt{export PATH=\"\$(npm prefix -g)/bin:\$PATH\"} \newline Append this line to \texttt{\textasciitilde/.bashrc}, \texttt{\textasciitilde/.zshrc}, or the equivalent, then reload the shell. &
+    macOS / Linux / Windows WSL \\
+    \addlinespace
+    \texttt{ETIMEDOUT} or \texttt{ECONNREFUSED} during install &
+    A corporate proxy or firewall is blocking access to the npm registry &
+    Configure npm's proxy settings:\newline \texttt{npm config set proxy http://proxy:port}\newline \texttt{npm config set https-proxy http://proxy:port}\newline Or point to an internal registry mirror:\newline \texttt{npm config set registry https://internal.registry} &
+    macOS / Linux / Windows WSL \\
+    \addlinespace
+    \texttt{UNABLE\_TO\_GET\_ISSUER\_CERT\_LOCALLY} (SSL certificate error) &
+    Corporate TLS inspection is replacing upstream certificates with its own &
+    Set the \texttt{NODE\_EXTRA\_CA\_CERTS} environment variable to point to your corporate CA bundle:\newline \texttt{export NODE\_EXTRA\_CA\_CERTS=/path/to/ca-bundle.crt} &
+    macOS / Linux / Windows WSL \\
+    \addlinespace
+    \texttt{SyntaxError: Unexpected token} on launch &
+    Claude Code is running under an unsupported older Node.js version that lacks required JavaScript features &
+    Upgrade Node.js to the minimum supported version:\newline \texttt{nvm install --lts}\newline \texttt{nvm use --lts}\newline Verify with \texttt{node -v}. &
+    macOS / Linux / Windows WSL \\
+    \bottomrule
+    \end{tabular}
+duration: 21059 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 861,
+    "output_tokens": 1221,
+    "service_tier": "standard"
+  }
+...

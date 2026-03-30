@@ -1,0 +1,36 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  An illustration of a human architect and a sleek, minimalist robot standing
+  together before a half-finished building. The architect is holding a simple
+  blueprint, pointing to a high-level outline of a new section to be added. The
+  robot, holding a construction tool, looks from the blueprint to the structure,
+  where it has already begun work. The new section's foundation and framing
+  perfectly match the style and materials of the existing, completed part of the
+  building, conveying a sense of seamless, context-aware collaboration. The entire
+  scene is depicted in a clean, line-art style, focusing on the cooperative act of
+  turning a plan into reality.
+hash: 257882404c5cc5f4b80991e60987bc474e0d5e9c9e71265818d682b0f363ce77
+response: image-6.png
+duration: 8127 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 138,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 138
+      }
+    ],
+    "total_token_count": 1428
+  }
+...

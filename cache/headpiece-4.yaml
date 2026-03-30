@@ -1,0 +1,211 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  When you type a message to a conventional chatbot, the worst outcome is a bad
+  answer. When you type a prompt into Claude Code, your words set an agent in
+  motion—one that reads files, writes code, deletes lines, and executes shell
+  commands in your actual project directory. This is the fundamental distinction
+  that shapes everything in this chapter: **prompting Claude Code is closer to
+  giving instructions to a collaborator than to asking a search engine a
+  question.** A vague or careless prompt does not just return an unhelpful
+  response; it can produce unwanted file edits, introduce bugs, or kick off a
+  chain of actions you did not intend. The stakes make the craft of prompting
+  worth learning well.
+  
+  Every effective prompt rests on three core principles:
+  
+  1. **Specificity** — Say *what* you want done in concrete terms. "Fix the bug"
+     is a coin toss; "Fix the null pointer exception in `parseUserInput` when the
+     email field is empty" gives Claude Code a clear target.
+  
+  2. **Context** — Explain *why* you want it and how it fits into the bigger
+     picture. A prompt that mentions "this endpoint is called by the mobile app
+     during onboarding" helps Claude Code make better design decisions than one
+     that simply says "change this endpoint." Context turns a mechanical edit into
+     an informed one.
+  
+  3. **Constraints** — State the boundaries explicitly. Which files should be
+     touched? Which language features or library versions are in play? Are there
+     performance budgets, backward-compatibility requirements, or style
+     conventions to honor? Constraints you leave unstated are constraints Claude
+     Code will guess at—sometimes correctly, sometimes not.
+  
+  These three principles interact: specificity tells Claude Code *what*, context
+  tells it *why*, and constraints tell it *within what limits*.
+  
+  To see these principles in action, consider three ways to ask Claude Code for
+  the same thing: adding input validation to a signup form.
+  
+  - **Vague:** *"Add validation to the signup form."*
+  - **Moderate:** *"Add email and password validation to the signup form in
+    `SignupForm.tsx`, showing inline errors."*
+  - **Richly specific:** *"Add validation to `SignupForm.tsx`: email must match a
+    standard regex, password must be at least 12 characters with one symbol,
+    username must be 3–20 alphanumeric characters. Display inline error messages
+    below each field using our existing `FormError` component. Don't modify
+    `api/auth.ts`."*
+  
+  The vague prompt gives Claude Code almost nothing to work with; the moderate one
+  narrows the target; the richly specific one eliminates guesswork almost
+  entirely. Fig. 4.3 breaks this comparison down dimension by dimension—prompt
+  text, validation rules, error handling, file scoping, UX requirements, resulting
+  output, and follow-up effort needed. Study it carefully; the pattern it reveals
+  applies to every prompt you will ever write.
+  
+  Not every prompt needs that level of detail. Prompt length should match task
+  complexity—think of it as a spectrum:
+  
+  - **Terse** (a few words): mechanical tasks with one obvious interpretation.
+    *"Rename `fetchData` to `fetchUserProfile`."*
+  - **Mid-length** (one to three sentences): tasks with some ambiguity but limited
+    scope. *"Extract the retry logic in `api.ts` into a reusable helper function
+    and update all call sites."*
+  - **Detailed** (a full paragraph or more): multi-step operations, unfamiliar
+    domains, or work that must follow specific conventions.
+  
+  The rule of thumb is simple: if Claude Code would need to *guess* something
+  important, your prompt is too short. If you are dictating things Claude Code
+  already knows how to do well, your prompt is too long.
+  
+  Beyond matching length to complexity, certain prompt patterns consistently
+  produce better results. These are worth committing to muscle memory:
+  
+  - **Plan first.** Ask Claude Code to outline its approach before writing any
+    code. *"Before making changes, describe how you'd restructure the
+    authentication module."* This gives you a checkpoint to catch
+    misunderstandings early.
+  - **Explain alongside.** Request commentary with changes: *"Add pagination to
+    the `/users` endpoint and explain each design choice."* You learn more and
+    catch errors faster.
+  - **Scope explicitly.** Constrain which files or directories Claude Code should
+    touch: *"Only modify files under `src/utils/`."* This prevents
+    well-intentioned but unwanted ripple effects.
+  - **Specify conventions.** Name the style guide, pattern, or library you expect:
+    *"Use our existing `Result<T, E>` type for error handling, not exceptions."*
+  
+  These patterns compose naturally—you can combine several in a single prompt.
+  
+  Let's see the plan-first pattern in action. Suppose you're working on an Express
+  application and you prompt:
+  
+  *"I want to add a Redis caching layer for our most expensive database queries.
+  Before writing any code, outline your approach: which files you'd change, what
+  caching strategy you'd use, and how you'd handle cache invalidation."*
+  
+  Claude Code responds with a numbered plan—listing the routes it would modify,
+  proposing a TTL-based expiration strategy, and suggesting a cache-aside pattern
+  with invalidation on writes. You notice it missed your existing `db/helpers.ts`
+  abstraction layer and say:
+  
+  *"Route the cache logic through `db/helpers.ts` instead of modifying route
+  handlers directly."*
+  
+  Only then do you tell it to proceed. The cost of planning is a few seconds; the
+  cost of undoing the wrong approach is far higher.
+  
+  Just as good patterns elevate your results, bad habits reliably sabotage them.
+  The most common prompting anti-patterns fall into three categories:
+  
+  - **The vague toss.** Prompts like *"fix the backend"* or *"make this better"*
+    force Claude Code to guess your intent. It may fix something you didn't
+    consider broken while ignoring what actually bothers you.
+  - **The contradictory bundle.** Asking Claude Code to *"make this function
+    faster, more readable, and fully backward-compatible with the old interface"*
+    can pull in three incompatible directions. When goals conflict, state their
+    priority explicitly.
+  - **The micromanager.** Dictating every variable name, every conditional
+    structure, and every line of whitespace leaves Claude Code no room to apply
+    its own judgment—which is the whole reason you're using it.
+  
+  Each anti-pattern has the same root cause: a mismatch between what you *said*
+  and what you *meant*.
+  
+  To see the micromanager anti-pattern in action, compare two prompts for the same
+  task—converting a series of nested callbacks to async/await:
+  
+  - **Micromanaging prompt:** *"Create a variable called `result` with `const`,
+    then write a try block, assign `await fetchUser(id)` to `result`, then check
+    `if (!result)` and throw a new Error with the message 'Not found'…"*
+  - **High-level prompt:** *"Refactor `getUserProfile` in `services/user.js` from
+    nested callbacks to async/await. Preserve the existing error messages and
+    return types."*
+  
+  The second prompt specifies *what* to achieve and *what* to preserve, then steps
+  back. Claude Code responds with idiomatic, cleanly structured async code—often
+  better than what the line-by-line dictation produces, because it can apply
+  patterns holistically rather than following a script.
+  
+  Effective work with Claude Code is rarely a single prompt—it is a
+  *conversation*. Treat your first message as a rough draft of intent, then refine
+  based on what comes back. A practical iterative workflow looks like this:
+  
+  1. **Issue the initial prompt** and let Claude Code produce its first attempt.
+  2. **Review the output** quickly—scan for structural fit, not perfection.
+  3. **Request targeted modifications:** "Move the retry logic into its own helper
+     function" or "Use early returns instead of nested ifs."
+  4. **Ask clarifying questions** if something surprises you: "Why did you choose
+     a Map here instead of a plain object?"
+  5. **Repeat** until the result matches your vision.
+  
+  Each turn narrows the gap between what you imagined and what exists on disk.
+  Resist the urge to restart from scratch—building on partial results is almost
+  always faster.
+  
+  Let's watch this play out. Imagine you want a small CLI tool that fetches
+  weather data from an API and prints a forecast.
+  
+  1. **Turn 1:** "Build a Node.js command-line tool that fetches weather from the
+     OpenWeatherMap API for a given city and prints temperature and conditions."
+     Claude Code scaffolds `index.js` with argument parsing and a fetch
+     call—functional but bare.
+  2. **Turn 2:** "Add proper error handling for invalid city names and network
+     failures, with user-friendly messages." The rough edges disappear.
+  3. **Turn 3:** "Support a `.weatherrc` JSON config file for storing a default
+     city and API key." The tool gains persistence.
+  4. **Turn 4:** "Format the output with colored text and a simple ASCII
+     thermometer." Now it *feels* finished.
+  
+  Four turns took a vague idea to a polished utility—each prompt building
+  precisely on what existed before.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: 0e1e1dc07e616b9f75f8ef735e6655994aa2d4fa5457809eaf98ed834618ac40
+response:
+  A clean, minimalist line-art illustration depicting two people, an architect and
+  a builder, collaborating over a large blueprint. The blueprint is spread across
+  a simple wooden table. The architect is pointing to a specific detail on the
+  plan with a pencil, while the builder leans in, looking closely at the same spot
+  and gesturing with their hand as if clarifying a point or confirming the
+  instruction. In the background, the simple, sketched-in frame of a building
+  under construction suggests that their conversation is about to become a
+  tangible reality. The overall feeling is one of focused, purposeful
+  communication before action is taken.
+duration: 16988 ms
+usage_stats:
+  {
+    "candidates_token_count": 119,
+    "prompt_token_count": 2177,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 2177
+      }
+    ],
+    "thoughts_token_count": 1420,
+    "total_token_count": 3716
+  }
+...

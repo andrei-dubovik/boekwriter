@@ -1,0 +1,172 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  Every tinkerer has been there: code that worked an hour ago now fails in ways
+  that seem to defy logic. Bugs are inevitable. They are also, paradoxically, one
+  of the best teachers in software development—each one a small puzzle that
+  deepens your understanding of the system you're building.
+  
+  Claude Code turns out to be a remarkably effective debugging partner. It can
+  read your source files, reason about control flow, execute commands, and observe
+  the results—all in a tight iterative loop. This mirrors how skilled human
+  debuggers work: form a hypothesis, gather evidence, refine, repeat. The
+  difference is that Claude Code doesn't get tired, doesn't lose track of what it
+  already checked, and never feels too frustrated to think clearly.
+  
+  The simplest way to start debugging with Claude Code is also the most intuitive:
+  paste in the error. Copy the stack trace, compiler message, or runtime exception
+  directly into the conversation and ask what went wrong. Claude Code will parse
+  the error, identify the file and line number, read the surrounding code for
+  context, and propose a fix. This single pattern—*share the error, get a
+  diagnosis*—is the foundation of every debugging workflow in this chapter.
+  
+  You don't need to explain the project architecture or give a preamble. The error
+  message itself is rich with context: function names, file paths, variable
+  states. Claude Code knows how to pull on those threads, reading outward from the
+  point of failure until it understands enough to act.
+  
+  Let's make this concrete. Suppose you have a Python script that crashes with
+  `KeyError: 'shipping_cost'` inside a function that builds an order summary. You
+  paste the traceback into Claude Code and ask what's going on. Claude Code reads
+  the traceback, opens the offending file, and traces the dictionary back to where
+  it was constructed in a separate data-formatting function. It discovers that a
+  recent change renamed the key to `shipping_fee` but this function was never
+  updated. Claude Code proposes a fix: replace the bare dictionary lookup with
+  `order.get('shipping_fee', 0.0)`, handling the rename *and* adding a defensive
+  default in one move. One prompt, one diagnosis, one fix.
+  
+  That quick fix worked, but not every bug yields to a single prompt. For trickier
+  problems, slow down and ask Claude Code to *think before it acts*. A prompt like
+  "read the relevant files, then give me two or three hypotheses about what might
+  cause this before proposing any fix" transforms the session from a guessing game
+  into a structured investigation. Claude Code will survey the code, list
+  candidate explanations, and then systematically test each one—reading more
+  files, checking assumptions, ruling out possibilities. This mirrors the
+  scientific method: observe, hypothesize, test, eliminate. It takes an extra turn
+  or two, but you converge on the *right* fix instead of the first plausible one.
+  
+  Let's see this in action. Imagine a small e-commerce app where order totals
+  occasionally come back wrong—off by a penny or two, but only with certain
+  discount combinations. You paste a failing test into Claude Code and prompt:
+  "Read the order calculation logic, form hypotheses about why the total is off,
+  and investigate each one."
+  
+  Claude Code reads three files—the cart module, the discount engine, and the
+  invoice formatter—and proposes two hypotheses: a rounding issue in how
+  percentage discounts are applied, and a possible order-of-operations problem
+  when stacking discounts. It adds `print` statements around the discount math,
+  reruns the failing test, and spots the culprit: the code multiplies and rounds
+  *per line item*, accumulating floating-point drift. The expression
+  $\sum \text{round}(p_i \times d) \neq \text{round}(\sum p_i \times d)$ makes the
+  problem obvious once surfaced. Claude Code applies a fix using Python's
+  `decimal` module and the test passes.
+  
+  That example highlighted something worth calling out explicitly: Claude Code ran
+  the test itself. When you allow it to execute shell commands—running `pytest`,
+  `curl`, `npm test`, or even tailing a log file—Claude Code can test its own
+  hypotheses and verify its own fixes without you manually copying output back and
+  forth. This creates a tight *observe → hypothesize → experiment → confirm* loop,
+  much like a developer with two monitors and fast fingers.
+  
+  You control this through the permission system discussed in Chapter 11. A
+  reasonable middle ground is to allow read-only commands freely (running tests,
+  grepping logs) while requiring approval for commands with side effects
+  (installing packages, modifying databases). The productivity gain from even
+  read-only execution permission is substantial.
+  
+  Failing tests present a subtle fork: is the bug in the production code or in the
+  test itself? Claude Code handles this well. Point it at the failure—paste the
+  test name or the output—and ask it to read both the test and the implementation
+  under test. It will compare the assertion's *expected* value against what the
+  code actually produces, then reason about which side is wrong.
+  
+  This matters because developers reflexively blame production code, when
+  sometimes the test encodes a stale assumption. Claude Code has no such bias. Ask
+  it directly: "Is the test correct, or is the implementation correct?" Its
+  answer, grounded in reading both sides, saves you from fixing the wrong target.
+  
+  Not all bugs crash your program. Some just make it slow. Claude Code can debug
+  performance problems too. Suppose an API endpoint that once responded in
+  milliseconds now takes several seconds. Paste the endpoint's route into Claude
+  Code and ask: "Why is this endpoint slow?"
+  
+  Claude Code will trace the request path, reading controller logic, service
+  layers, and ORM calls. A common culprit it spots quickly is the N+1 query
+  pattern—a database call inside a loop that should be a single eager-loaded
+  query. It recognizes this from the ORM code alone, without needing a profiler.
+  
+  The fix is usually a one-line change—adding an `include`, `prefetch_related`, or
+  `joinedload`—but *finding* it is the hard part. Claude Code finds it fast.
+  
+  Claude Code is not infallible, and debugging is where its limitations show most
+  clearly. Watch for these warning signs:
+  
+  - **Fixation on a wrong hypothesis.** If Claude Code proposes a fix, you test
+    it, it fails, and the next fix is a more elaborate version of the same
+    idea—stop. It is going in circles.
+  - **Environmental blind spots.** Bugs caused by OS differences, network
+    conditions, or container configurations often lie outside what Claude Code can
+    observe from source code alone.
+  - **Concurrency and timing.** Race conditions are notoriously hard to reason
+    about from static reading.
+  
+  When you feel stuck, do not keep pushing. Start a fresh session, restate the
+  symptom differently, and deliberately suggest an alternative direction. A reset
+  costs less than a rabbit hole.
+  
+  Everything in this chapter distills into a single repeatable loop:
+  
+  1. **Describe the symptom** clearly—error message, wrong output, or slowdown.
+  2. **Share context**: relevant files, logs, environment details.
+  3. **Ask for hypotheses** before fixes. Two or three candidates beat a blind
+     guess.
+  4. **Investigate iteratively**—let Claude Code read code, run commands, and
+     eliminate candidates one by one.
+  5. **Verify every fix** by running the test that originally failed.
+  6. **Commit the fix alongside a regression test** so the bug stays dead.
+  
+  Fig. 7.10 captures this workflow as a flowchart you can keep beside your
+  terminal. Debugging with Claude Code is not a magic wand—it is a *structured
+  collaboration*, and structure is what makes it reliable.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: d0ebe92884b382da5f0383340c3c1dbdffc2959442239e4a52cd40c1e0494568
+response:
+  A focused investigator stands before a large corkboard, which is covered with
+  printouts of code snippets, diagrams of system architecture, and a single,
+  highlighted error message. Lines of yarn connect these elements, mapping out
+  relationships and potential causes. The investigator, holding a marker, is in
+  the middle of drawing a new line, connecting a function call to the error
+  message, representing the formulation of a new hypothesis. The style should be
+  clean and minimalist, using simple line art with a single accent color for the
+  yarn and the highlighted error, emphasizing clarity and the process of
+  structured problem-solving.
+duration: 17628 ms
+usage_stats:
+  {
+    "candidates_token_count": 117,
+    "prompt_token_count": 1815,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1815
+      }
+    ],
+    "thoughts_token_count": 1587,
+    "total_token_count": 3519
+  }
+...

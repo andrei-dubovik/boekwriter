@@ -1,0 +1,88 @@
+{query: str, model: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+query: table
+prompt:
+  Consider the following text fragment from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  To appreciate what "agentic" buys you, it helps to see where the other
+  categories of AI coding tools stop short.
+  
+  *Chat-based assistants* like ChatGPT or the Anthropic console live in a browser
+  tab. You paste code in, get advice back, and manually apply every suggestion—a
+  workflow that breaks the moment your project spans more than a couple of files.
+  
+  *IDE-integrated copilots* meet you where you type, offering inline completions
+  as you code. They're fast for small, local suggestions but have no ability to
+  run commands, orchestrate multi-file changes, or reason across steps.
+  
+  *Retrieval-augmented generation (RAG) tools* index your codebase and answer
+  questions against it, but they remain read-only—they can look things up, not act
+  on them.
+  
+  Fig. 1.3 summarizes these differences across six practical dimensions. The
+  pattern is clear: only a fully agentic tool closes the loop from *understanding*
+  your project to *changing* it.
+  
+  This fragment refers to Fig. 1.3, which is a table. Its description is as
+  follows:
+  
+  A comparison table with five columns and roughly six rows. The columns are
+  labeled 'Capability', 'Chat-Based Assistants', 'IDE-Integrated Copilots', 'RAG
+  Tools', and 'Claude Code (Agentic)'. The rows compare the tools across key
+  dimensions: 'Reads your actual project files' (no / partial via open tabs /
+  partial via indexed chunks / yes), 'Executes shell commands on your behalf' (no
+  / no / no / yes), 'Edits files directly in your project' (no, you copy-paste /
+  limited inline suggestions / no / yes), 'Maintains multi-step reasoning across
+  actions' (single prompt-response / per-keystroke, no memory across suggestions /
+  single query-response / yes, conversational thread with planning), 'Requires
+  leaving your development environment' (yes, switch to browser / no / varies /
+  no, runs inside terminal), and 'Can chain multiple actions to complete a task
+  autonomously' (no / no / no / yes, e.g. read file, edit, run tests, fix errors).
+  Each cell contains a short phrase or a yes/no with a brief qualifier. The table
+  gives the reader a single, scannable reference that makes the defining
+  differences between the four categories concrete and precise, anchoring the
+  prose discussion of what 'agentic' really means in practical terms.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+model: claude-opus-4-6
+hash: bcf1558f63fdc1e08ca93f5007853ee38b59388012f1556eccdc9887d22f2e8a
+response:
+  caption:
+    Fig. 1.3 — Comparison of AI coding-tool categories across six practical
+    dimensions
+  latex:
+    \begin{tabular}{p{0.18\linewidth} p{0.17\linewidth} p{0.17\linewidth} p{0.15\linewidth} p{0.21\linewidth}}
+    \toprule
+    \textbf{Capability} & \textbf{Chat-Based Assistants} & \textbf{IDE-Integrated Copilots} & \textbf{RAG Tools} & \textbf{Claude Code (Agentic)} \\
+    \midrule
+    Reads your actual project files & No & Partial (via open tabs) & Partial (via indexed chunks) & Yes \\
+    \addlinespace
+    Executes shell commands on your behalf & No & No & No & Yes \\
+    \addlinespace
+    Edits files directly in your project & No (you copy-paste) & Limited inline suggestions & No & Yes \\
+    \addlinespace
+    Maintains multi-step reasoning across actions & Single prompt-response & Per-keystroke; no memory across suggestions & Single query-response & Yes; conversational thread with planning \\
+    \addlinespace
+    Requires leaving your development environment & Yes (switch to browser) & No & Varies & No (runs inside terminal) \\
+    \addlinespace
+    Can chain multiple actions to complete a task autonomously & No & No & No & Yes (e.g.\ read file, edit, run tests, fix errors) \\
+    \bottomrule
+    \end{tabular}
+duration: 13530 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 795,
+    "output_tokens": 922,
+    "service_tier": "standard"
+  }
+...

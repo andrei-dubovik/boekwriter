@@ -1,0 +1,110 @@
+{query: str, model: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+query: visuals
+prompt:
+  You are writing a chapter titled "Working with Large and Complex Projects" in a
+  book called "A Tinkerer's Introduction to Claude Code". The plan for the chapter
+  is a follows.
+  
+  01. We open by establishing why large and complex projects present fundamentally
+      different challenges than small scripts or toy applications, introducing the
+      tension between Claude Code's powerful reasoning abilities and the finite
+      context window it must work within.
+  02. We explain how Claude Code's context window works in practical terms—what
+      counts toward it, how it fills up over a long session, and what happens when
+      it overflows—so readers develop an accurate mental model they can reason
+      about when planning their work.
+  03. We teach readers how to write targeted, scope-narrowing prompts that direct
+      Claude Code to the specific files, modules, or layers relevant to the task
+      at hand, rather than letting it spend tokens exploring parts of the codebase
+      that are irrelevant.
+  04. We present a strategy for decomposing a large task—such as a cross-cutting
+      refactor or a feature that touches many modules—into a sequence of smaller,
+      self-contained subtasks that each fit comfortably within a single Claude
+      Code session.
+  05. A case study walks through adding a new user-facing feature to a full-stack
+      TypeScript monorepo with a shared types package, a backend API service, and
+      a React frontend, demonstrating how to plan the work across three focused
+      sessions that build on each other.
+  06. We discuss the specific challenges of working with monorepos, microservice
+      architectures, and projects that contain extensive generated code or
+      vendored third-party dependencies, including how to tell Claude Code what to
+      ignore and what matters.
+  07. We cover multi-session workflows in depth, explaining how to end one session
+      with a clear summary of what was accomplished, how to start the next session
+      by re-establishing context efficiently, and how to use Git commits as
+      checkpoints between sessions.
+  08. We show how a well-crafted CLAUDE.md file acts as a force multiplier in
+      large projects by front-loading architectural context, module boundaries,
+      and navigation hints that would otherwise consume precious tokens if Claude
+      Code had to discover them each session.
+  09. An example demonstrates the practical technique of using Claude Code's grep
+      and file search capabilities as a first step before asking it to make
+      changes, showing how a quick exploratory prompt like find all files that
+      reference the PaymentService interface can dramatically improve the accuracy
+      of subsequent edits.
+  10. We close by helping readers develop the judgment to recognize when a task is
+      genuinely too large or ambiguous for Claude Code to handle in one pass, and
+      we outline a lightweight planning template they can use to sketch a phased
+      approach before diving in.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Photograph
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 1 aids. Explain the chosen aids in detail. If the chosen aid is a table,
+  the table must fit on a portrait A4 page. Only list the items where an aid has
+  been chosen.
+model: claude-opus-4-6
+hash: 1b9347f35f7d6f016341ed4fc72dd1641db2682b29821ccbd7251732ab95420b
+response:
+- number: 5
+  aid: Diagram
+  description:
+    A layered diagram that serves as both an architectural map and a
+    session-sequencing guide. At the top, three stacked rounded rectangles represent
+    the monorepo's packages: 'packages/shared-types', 'packages/api', and
+    'packages/frontend'. Dependency arrows flow upward from shared-types into both
+    api and frontend. Below the architecture, a horizontal swim-lane timeline shows
+    three sessions arranged left to right. Session 1 is labeled 'Define the
+    contract' and a highlighted connector links it to the shared-types package,
+    showing that this session adds new TypeScript interfaces and shared validation
+    schemas. A Git commit icon (a small node on a branch line running beneath the
+    swim lanes) marks the checkpoint between Session 1 and Session 2. Session 2 is
+    labeled 'Build the endpoint' and connects to both shared-types (read-only,
+    dashed arrow) and api (read-write, solid arrow), showing it imports the new
+    types and implements the API route, handler, and tests. Another Git commit node
+    separates Session 2 from Session 3. Session 3 is labeled 'Wire up the UI' and
+    connects to shared-types (read-only, dashed) and frontend (read-write, solid),
+    showing it builds the React component, calls the new endpoint, and adds frontend
+    tests. Between each pair of sessions a small annotation box shows the two-part
+    handoff protocol: 'End-of-session summary written' on the left side of the
+    commit node and 'Context re-established via summary' on the right side. This
+    single diagram encodes the monorepo's dependency graph, the order and scope of
+    each session, the Git checkpoint strategy, and the context-passing mechanism—all
+    concepts discussed across multiple sections of the chapter—giving readers a
+    concrete reference image they can return to while reading sections 4, 6, 7, and
+    8\.
+duration: 22889 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 944,
+    "output_tokens": 870,
+    "service_tier": "standard"
+  }
+...

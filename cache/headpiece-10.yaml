@@ -1,0 +1,197 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  Every time you start a session, Claude Code arrives fresh—no memory of your
+  project's architecture, your team's naming conventions, or your preferred
+  testing framework. The `CLAUDE.md` file changes that. It is a plain-text file
+  you place in your project that acts as a persistent briefing document, loaded
+  automatically at the start of every conversation.
+  
+  Think of it as the onboarding notes you would write for a new team member on
+  their first day:
+  
+  - Here is how the project is structured.
+  - Here are the conventions we follow.
+  - Here are the commands you will need.
+  - Here is the domain knowledge that is not obvious from the code alone.
+  
+  Without a `CLAUDE.md`, Claude Code is a capable generalist. *With* one, it
+  becomes a collaborator who already understands your project.
+  
+  Claude Code looks for a file named `CLAUDE.md` in the root directory of whatever
+  project you launch it from. When a session begins, it reads this file
+  automatically and treats its contents as background context for the entire
+  conversation—no special command or flag required. If the file is missing, Claude
+  Code simply starts without project-specific context, behaving as a generalist.
+  If the file is unusually large, it still gets loaded, but you are spending
+  context window tokens on instructions rather than on the actual work of the
+  session, so brevity matters.
+  
+  There is an important distinction between the *project-level* `CLAUDE.md` that
+  lives in your repository root and the *user-level* configuration file that lives
+  in your home directory (typically `~/.claude/CLAUDE.md`). The project-level file
+  is shared—committed to version control, visible to every collaborator, and
+  tailored to that specific codebase. The user-level file is personal. It encodes
+  your individual preferences: your preferred explanation style, your tendency
+  toward verbose or terse output, conventions you follow across all your projects.
+  When both exist, Claude Code loads both, with project-level content taking
+  precedence on any conflicting guidance.
+  
+  So what actually belongs in a well-crafted `CLAUDE.md`? The most effective files
+  tend to cover a consistent set of categories:
+  
+  - **Architectural overview**: a few sentences describing how the project is
+    structured and where the important pieces live.
+  - **Coding conventions**: naming styles, formatting rules, patterns to prefer or
+    avoid.
+  - **Preferred libraries and frameworks**: what to reach for (and what *not* to
+    reach for) when generating new code.
+  - **Testing strategy**: how to run tests, what framework is used, what coverage
+    expectations exist.
+  - **Build and deployment commands**: the incantations needed to build, lint, and
+    ship.
+  - **Domain-specific terminology**: business logic, acronyms, or concepts that
+    Claude Code cannot infer from the code alone.
+  
+  You do not need every category on day one. Start with whatever saves you the
+  most repetition, and grow the file over time.
+  
+  Let's make this concrete with a real example. Here is a `CLAUDE.md` for a Python
+  data science toolkit called `datakit`:
+  
+  ```markdown
+  # datakit
+  
+  A Python library for cleaning and transforming tabular datasets.
+  
+  ## Structure
+  - `src/datakit/` — core library code
+  - `tests/` — pytest test suite
+  - `notebooks/` — Jupyter notebooks for examples and exploration
+  
+  ## Conventions
+  - Use pandas for all DataFrame operations; avoid polars for now.
+  - Function names: `verb_noun` style (e.g., `clean_timestamps`, `merge_sources`).
+  - All public functions need NumPy-style docstrings.
+  - Type hints on all function signatures.
+  
+  ## Development
+  - `pytest tests/` to run the full suite.
+  - `ruff check src/` for linting.
+  - Target Python 3.10+.
+  ```
+  
+  Notice how little prose is needed. Each line earns its place by preventing a
+  question Claude Code would otherwise have to ask—or worse, guess at.
+  
+  Now let's look at a different flavor. Here is a `CLAUDE.md` for a TypeScript web
+  application with a React frontend and Express backend:
+  
+  ```markdown
+  # taskflow
+  
+  A task management app. React frontend, Express API, PostgreSQL.
+  
+  ## Structure
+  - `client/` — React app (Vite, React Router)
+  - `server/` — Express API
+  - `server/routes/` — one file per resource (e.g., `tasks.ts`, `users.ts`)
+  
+  ## Conventions
+  - Functional components only; use hooks for state.
+  - State management via Zustand — no Redux.
+  - API errors return `{ error: string, code: number }`.
+  - Shared types live in `shared/types.ts`.
+  
+  ## Commands
+  - `npm run dev` — starts both client and server.
+  - `npm test` — runs Vitest for client, Jest for server.
+  ```
+  
+  The pattern is the same as `datakit`—structure, conventions, commands—but the
+  *content* is shaped entirely by the stack. That consistency of format across
+  different projects is deliberate: it trains your own habits as much as it guides
+  Claude Code.
+  
+  Every token in your `CLAUDE.md` consumes space in Claude Code's context
+  window—the same finite space needed for your prompts, source files, and its
+  reasoning. This creates a practical tradeoff: *too long* and you crowd out room
+  for actual work; *too short* and Claude Code lacks the guidance that makes its
+  output feel project-aware.
+  
+  A good rule of thumb: if a line does not change what Claude Code would *do*, cut
+  it. Keep descriptions actionable. "Use `snake_case` for all Python functions" is
+  useful. "We believe in clean, elegant code" is not. Aim for a file you can read
+  in under a minute.
+  
+  In a monorepo, a single `CLAUDE.md` rarely fits every package. Claude Code
+  solves this by composing context from *all* `CLAUDE.md` files it encounters from
+  the repository root down to your current working directory. Place shared
+  conventions—linting rules, commit formats, CI commands—in the root file, then
+  add package-specific guidance in each subdirectory (see Fig. 10.8).
+  
+  When you run Claude Code inside `packages/api/`, it reads the root file first,
+  then layers the API-specific file on top. Child files *extend* the root; they
+  never replace it. This keeps each file focused and short, spending tokens only
+  on what differs between packages.
+  
+  A `CLAUDE.md` that describes last year's architecture actively misleads. Treat
+  it as living documentation: review it during major refactors, update it when you
+  adopt new libraries or change conventions, and prune sections that no longer
+  apply. A lightweight habit works best—add a quick `CLAUDE.md` check to your pull
+  request checklist alongside updating the README.
+  
+  You can also ask Claude Code itself to help. After a large refactoring session,
+  prompt it: *"Based on the changes we just made, suggest updates to CLAUDE.md."*
+  It will often catch stale references you would otherwise overlook.
+  
+  When every developer on a team shares the same `CLAUDE.md`, Claude Code gives
+  consistent advice regardless of who is prompting it—the same naming conventions,
+  the same test commands, the same architectural guardrails. This turns
+  `CLAUDE.md` into a lightweight standards enforcement mechanism that works
+  through guidance rather than gatekeeping.
+  
+  There is a pleasant side effect: because a good `CLAUDE.md` captures how the
+  project actually works—its structure, its idioms, its unwritten rules—it doubles
+  as an onboarding document. New team members can read it themselves *and* get
+  Claude Code's help interpreting a codebase that already comes with its own
+  instruction manual.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: 6c23fd98b471d818e5e45e2b0247a9ae4b760098bc7f28d3b6e1115a5555c562
+response:
+  A person at a desk is writing a short, one-page guide for a new project. The
+  page is clearly organized with simple headings and concise bullet points. In the
+  background, a computer with code on the screen is slightly out of focus,
+  indicating that this act of writing the guide is a preparatory step. The style
+  is minimalist and uses clean line art, conveying a sense of clarity,
+  thoughtfulness, and preparation before the main work begins.
+duration: 13450 ms
+usage_stats:
+  {
+    "candidates_token_count": 88,
+    "prompt_token_count": 1860,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1860
+      }
+    ],
+    "thoughts_token_count": 1212,
+    "total_token_count": 3160
+  }
+...

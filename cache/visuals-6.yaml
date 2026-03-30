@@ -1,0 +1,113 @@
+{query: str, model: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+query: visuals
+prompt:
+  You are writing a chapter titled "Writing New Code with Claude Code" in a book
+  called "A Tinkerer's Introduction to Claude Code". The plan for the chapter is a
+  follows.
+  
+  1. This section opens the chapter by framing code generation as the creative
+     core of working with Claude Code, explaining that while previous chapters
+     focused on understanding and modifying existing code, this chapter is about
+     bringing something new into existence—from standalone scripts to features
+     woven into larger applications—and setting the expectation that readers will
+     follow along with several complete, progressively complex examples.
+  2. This section discusses how to describe what you want built at the right level
+     of abstraction, explaining that effective prompts for new code give Claude
+     Code a clear picture of the desired outcome and relevant constraints—such as
+     inputs, outputs, error handling expectations, and target audience—without
+     dictating every implementation detail, thereby leaving room for Claude Code
+     to apply sound engineering judgment.
+  3. This hands-on example walks through generating a small but complete Python
+     command-line utility script—such as a tool that reads a CSV file and produces
+     a summary report—from a single natural language prompt, showing the full
+     cycle from describing the task, watching Claude Code produce the file,
+     running the script, and observing the output to verify correctness.
+  4. This longer example demonstrates building a new REST API endpoint inside an
+     existing Express.js web application, showing how to orient Claude Code to the
+     project's existing route structure and middleware conventions before asking
+     it to generate the new endpoint, its validation logic, and its integration
+     with an existing database layer, illustrating how generated code must fit
+     within an established architectural context.
+  5. This example tackles adding a new React component along with its accompanying
+     unit tests, walking through a workflow where the reader first asks Claude
+     Code to examine existing components for stylistic patterns, then prompts it
+     to generate both the component and a test file using the same testing
+     framework found in the project, highlighting how to ask for production-ready
+     code rather than a bare-bones skeleton.
+  6. This section covers how to explicitly tell Claude Code which frameworks,
+     libraries, language versions, and design patterns to use—or avoid—when
+     generating new code, explaining that being upfront about these choices
+     prevents Claude Code from guessing and ensures the generated code is
+     compatible with your project's existing technology stack and your team's
+     preferences.
+  7. This section explains how to ask Claude Code to create multiple related files
+     in a single session—such as a module, its tests, and its documentation—and
+     how to instruct it to follow existing naming conventions, directory
+     structures, and import patterns so that newly generated code feels like a
+     natural extension of the project rather than an alien addition.
+  8. This section addresses the reality that first-draft code generation rarely
+     produces a perfect result, walking through a realistic multi-turn
+     conversation where the reader reviews Claude Code's initial output,
+     identifies issues or missing requirements, requests targeted modifications,
+     and refines the code through dialogue until it meets expectations—emphasizing
+     that iteration is a feature of the workflow, not a failure.
+  9. This closing section celebrates the tinkerer's approach to rapid
+     prototyping—generating a quick-and-dirty version of an idea, running it
+     immediately to see if the concept holds up, and then asking Claude Code to
+     harden, extend, or pivot the prototype—and summarizes the chapter's core
+     methodology for making Claude Code a powerful generative collaborator in your
+     creative coding process.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Photograph
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 1 aids. Explain the chosen aids in detail. If the chosen aid is a table,
+  the table must fit on a portrait A4 page. Only list the items where an aid has
+  been chosen.
+model: claude-opus-4-6
+hash: a08800cb05740bec761d46e8eaa6e91e0f55db089ccc2c89616c7a663daef894
+response:
+- number: 8
+  aid: Diagram
+  description:
+    A cyclic flowchart illustrating the iterative refinement loop that is central to
+    the section's message. The diagram begins with a node labeled 'Describe
+    requirement to Claude Code' which flows to 'Review generated output'. From there
+    an arrow leads to a diamond decision node labeled 'Meets expectations?'. A 'Yes'
+    path exits the loop to a terminal node labeled 'Accept and commit code'. A 'No'
+    path leads to a node labeled 'Identify specific issues (bugs, missing
+    requirements, style problems)' which flows to 'Compose targeted follow-up
+    prompt' which loops back to 'Review generated output'. Along each arrow in the
+    'No' loop, small annotations give concrete examples of the kind of feedback a
+    tinkerer might give at that stage—such as 'add input validation', 'switch to
+    async/await', or 'handle the empty-list edge case'. A small counter notation on
+    the loop ('Turn 2, Turn 3, …') reinforces the idea that multiple passes are
+    normal. The diagram makes the chapter's key philosophical point visually
+    unmistakable: the workflow is inherently cyclical and convergent, not a single
+    shot, and each pass through the loop narrows the gap between the current output
+    and the desired result.
+duration: 20949 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 1109,
+    "output_tokens": 781,
+    "service_tier": "standard"
+  }
+...

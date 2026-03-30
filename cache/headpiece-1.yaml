@@ -1,0 +1,194 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  Picture this: it's late evening, your terminal is open, and you have a project
+  spread across dozens of files that needs a new feature. Instead of diving into
+  the code yourself, you type a single sentence describing what you want. Within
+  seconds, the agent is reading your source files, reasoning about your project's
+  structure, and proposing changes—not in some abstract sandbox, but right there
+  on your actual file system. You watch files update in real time. Tests run.
+  Errors get caught and fixed in a follow-up pass, without you asking.
+  
+  This is not autocomplete. This is not a chatbot you paste snippets into. This is
+  something fundamentally different: an AI that *acts* on your project as a
+  collaborator, not a clipboard. And it changes everything about how building
+  software feels.
+  
+  So what exactly is Claude Code? It is Anthropic's *agentic* command-line coding
+  tool—a program you run inside your terminal that can:
+  
+  - Read and write files on your actual file system
+  - Execute shell commands and observe their output
+  - Maintain a running conversation where it reasons about your project across
+    multiple turns
+  - Decide which actions to take next based on what it discovers
+  
+  The word *agentic* is doing real work in that description. A conventional AI
+  coding assistant responds to a prompt and hands you text. An agentic tool *takes
+  action*. It doesn't just suggest a fix—it opens the file, applies the edit, runs
+  the tests, and reports back. Claude Code operates in a loop of reasoning and
+  acting, not a single shot of question and answer.
+  
+  To appreciate what "agentic" buys you, it helps to see where the other
+  categories of AI coding tools stop short.
+  
+  *Chat-based assistants* like ChatGPT or the Anthropic console live in a browser
+  tab. You paste code in, get advice back, and manually apply every suggestion—a
+  workflow that breaks the moment your project spans more than a couple of files.
+  
+  *IDE-integrated copilots* meet you where you type, offering inline completions
+  as you code. They're fast for small, local suggestions but have no ability to
+  run commands, orchestrate multi-file changes, or reason across steps.
+  
+  *Retrieval-augmented generation (RAG) tools* index your codebase and answer
+  questions against it, but they remain read-only—they can look things up, not act
+  on them.
+  
+  Fig. 1.3 summarizes these differences across six practical dimensions. The
+  pattern is clear: only a fully agentic tool closes the loop from *understanding*
+  your project to *changing* it.
+  
+  Let's make this concrete. Suppose you need to add input validation to a
+  `/register` endpoint in a small Flask application. The form accepts a username,
+  email, and password, and right now it trusts everything blindly.
+  
+  With a chat-based assistant, the workflow looks like this:
+  
+  1. Copy the route handler into the browser window.
+  2. Describe what validation you want.
+  3. Read the suggested code, mentally map it back to your file, and paste it in.
+  4. Realize the assistant didn't see your `User` model or your existing
+     error-handling helpers, so its suggestion clashes with both.
+  5. Paste those files in too, re-ask, and repeat.
+  
+  With Claude Code, you type one sentence:
+  
+  > Add email, username, and password validation to the register endpoint,
+  > following the error-handling pattern used in the rest of the app.
+  
+  Claude Code reads the relevant files *itself*, discovers your existing
+  `validate_email` helper and your `ApiError` exception class, and produces a
+  change that fits. No copying, no pasting, no re-explaining context you already
+  have on disk.
+  
+  This difference isn't accidental—it reflects a deliberate design philosophy.
+  Claude Code operates where you already work: your terminal, your file system,
+  your actual source tree. It doesn't ask you to reproduce your project inside a
+  chat window. It *reads* the real files, follows real imports, and sees real
+  directory structures.
+  
+  This grounding matters because AI tools hallucinate most when they have the
+  least context. A model reasoning about a code snippet pasted into a text box is
+  guessing about everything outside that snippet—your project layout, your
+  dependencies, your conventions. Claude Code doesn't have to guess. It looks. The
+  result is suggestions that fit your project as it actually exists, not as a
+  language model imagines it might.
+  
+  So what can you actually *do* with a tool like this? More than you might expect:
+  
+  - **Rapid prototyping.** Describe an idea and have a working skeleton in
+    minutes, not hours.
+  - **Large-scale refactoring.** Rename a concept across dozens of files, migrate
+    an API, or modernize syntax—consistently and without the tedium.
+  - **Bug hunting.** Point Claude Code at a failing test or error log and let it
+    read source files, form hypotheses, and run experiments.
+  - **Documentation generation.** Produce READMEs, docstrings, and API references
+    grounded in what the code actually does.
+  - **Git workflow assistance.** Generate commit messages, pull request
+    descriptions, and conflict resolutions informed by real diffs.
+  - **Codebase exploration.** Drop into an unfamiliar repository and ask questions
+    until the architecture clicks.
+  
+  Each of these workflows gets its own chapter later in this book. For now, the
+  point is scope: Claude Code isn't a single-trick tool. It's a general-purpose
+  collaborator that adapts to whatever phase of development you're in.
+  
+  To make this concrete, consider a weekend tinkerer named Priya. She wants a
+  simple RSS feed reader that stores articles in SQLite and serves them through a
+  clean web interface. She has the idea but not the patience to wire up feed
+  parsing, database schemas, and HTML templates from scratch.
+  
+  On Saturday morning she launches Claude Code in an empty directory. Over the
+  next few hours she:
+  
+  1. Asks it to scaffold a Python project with `feedparser` and Flask.
+  2. Reviews the generated schema, requests an index on `published_date`.
+  3. Tells it to add a background refresh job using APScheduler.
+  4. Pastes in a traceback when the date parsing breaks on a malformed feed, and
+     lets Claude Code diagnose and patch the issue.
+  5. Asks for basic CSS styling so the reader doesn't look like 1997.
+  
+  By Sunday evening she has a working application. She wrote maybe thirty lines by
+  hand—mostly tweaking copy. The rest emerged from conversation.
+  
+  Priya's story illustrates something deeper than a productivity hack. Working
+  with Claude Code demands a genuine mindset shift. For years, the measure of a
+  developer was the code flowing from their fingertips. Now the critical skill is
+  *articulating intent clearly enough that someone else—an agent—can act on it*.
+  
+  This means learning to:
+  
+  1. Describe what you want and *why*, not just how.
+  2. Review proposed changes with a critical eye rather than accepting them
+     blindly.
+  3. Recognize when to steer tightly and when to step back and let Claude Code
+     explore a solution you hadn't considered.
+  
+  You are not giving up control. You are exercising it at a higher level of
+  abstraction.
+  
+  Claude Code is not a replacement for understanding software. It is an
+  *amplifier*. It takes the curiosity you already have—the itch to build
+  something, to poke at an unfamiliar codebase, to fix the bug that's been nagging
+  you for days—and removes the friction that so often kills momentum before you
+  reach the satisfying part.
+  
+  For tinkerers especially, this matters. Your time is scarce, your ambitions
+  outpace your hours, and the gap between idea and working prototype has always
+  been the hardest stretch to cross. Claude Code shrinks that gap dramatically.
+  
+  The rest of this book is a practical guide to making the most of it. We will
+  install Claude Code, run our first session, learn to prompt effectively,
+  navigate unfamiliar codebases, write and debug code, refactor with confidence,
+  and build workflows that feel natural rather than forced. Let's get started.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: a3622197845e7855f97853411651bc08f37a400edf5248889f2397f29f044015
+response:
+  Create a simple, line-art illustration of a person standing before a large,
+  complex architectural blueprint spread across a table. The person is not
+  drawing, but rather pointing thoughtfully at a section of the plan, as if
+  directing a change. In response to their gesture, a pair of stylized, glowing
+  hands are shown actively erasing and redrawing the lines on the blueprint in
+  that specific area. The overall aesthetic should be clean and minimalist,
+  emphasizing the act of high-level direction and the immediate, collaborative
+  execution of an idea.
+duration: 17587 ms
+usage_stats:
+  {
+    "candidates_token_count": 104,
+    "prompt_token_count": 1890,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1890
+      }
+    ],
+    "thoughts_token_count": 1636,
+    "total_token_count": 3630
+  }
+...

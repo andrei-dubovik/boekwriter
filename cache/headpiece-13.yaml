@@ -1,0 +1,178 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  If you have been reading this book sequentially, you now know how to prompt
+  Claude Code effectively, generate and refactor code, debug problems, manage Git
+  workflows, and configure the tool to understand your project. Each of these
+  skills was learned in relative isolation—a controlled exercise, a focused
+  example. But real software development is not a series of isolated exercises. It
+  is a continuous, messy flow of planning, writing, reviewing, testing, deploying,
+  and fixing, often with interruptions and context switches.
+  
+  The challenge this chapter addresses is *integration*: how do you take
+  everything you have learned and weave it into the actual rhythms of your working
+  day? What follows is a practical guide to doing exactly that.
+  
+  Most developers already have a text editor or IDE they love, and Claude Code is
+  not here to replace it. The two work best as complements: Claude Code in a
+  terminal panel, your editor in the main view.
+  
+  The natural division of labor is:
+  
+  - **Claude Code** handles broad, multi-file operations—scaffolding modules,
+    renaming symbols across a project, generating boilerplate, applying repetitive
+    edits.
+  - **Your editor** handles precise, single-point work—tweaking a conditional,
+    adjusting formatting, fixing a typo you spotted while reading.
+  
+  The key habit to develop is *rapid switching*. Ask Claude Code to make a
+  sweeping change, watch the files update in your editor, make a small manual
+  correction if needed, then switch back to Claude Code for the next task. The
+  rhythm becomes natural surprisingly quickly.
+  
+  Let's make this concrete. Imagine VS Code filling the left two-thirds of your
+  screen, a terminal with Claude Code occupying the right third.
+  
+  1. You type to Claude Code: *"Create a new module `src/notifications.ts` that
+     exports a `sendEmail` function using the Resend library. Follow the patterns
+     in `src/billing.ts`."*
+  2. Claude Code writes the file. It appears instantly in your VS Code explorer.
+  3. You open `notifications.ts`, scan the code, and notice you'd prefer the retry
+     logic extracted into a helper. You make that edit by hand—ten seconds.
+  4. Back in Claude Code: *"Write unit tests for `src/notifications.ts`, mocking
+     the Resend client."*
+  5. Claude Code generates the test file. You run the suite from your editor's
+     test panel. Green.
+  
+  The whole loop takes under five minutes.
+  
+  Claude Code is not just a coding tool—it is useful across every phase of the
+  software development lifecycle. During **planning and design**, it can sketch
+  architectures, compare technology choices, and outline data models. In **active
+  development**, it writes and edits code as we have already seen. During **code
+  review**, it analyzes diffs, flags potential bugs, and checks for style
+  violations. In **testing**, it generates test cases, runs suites, and fixes
+  failures. And during **deployment and operations**, it produces configuration
+  files, deployment scripts, and helps troubleshoot production issues.
+  
+  Fig. 13.4 summarizes these phases, showing example prompts and where your human
+  judgment matters most at each stage. Keep it bookmarked—it is one of the most
+  revisited references in this chapter.
+  
+  Claude Code becomes even more powerful when you treat it as the glue between
+  your existing tools. Rather than context-switching between separate workflows,
+  you can ask Claude Code to orchestrate them:
+  
+  - **Linting and formatting:** "Run `eslint` on the `src/` directory and fix
+    every warning in place."
+  - **CI/CD:** "The GitHub Actions build is failing—read the log and fix the
+    issue."
+  - **Changelogs:** "Generate a changelog entry from all commits since the last
+    tag."
+  - **Issue tracking:** "Draft a GitHub issue describing the authentication bug we
+    just discussed, with reproduction steps."
+  
+  The key insight is that Claude Code can *invoke* these tools, *read* their
+  output, and *act* on the results—all in one conversational loop. You stop being
+  the middleman between your tools and start directing an agent that speaks all of
+  their languages.
+  
+  To make this concrete, imagine a hobbyist with three free hours on a Tuesday
+  evening and an idea for a small Flask app to track book recommendations. Without
+  Claude Code, setting up the project scaffold, writing SQLAlchemy models,
+  building CRUD endpoints, and configuring deployment would easily consume a full
+  weekend. With Claude Code, the session might look like this:
+  
+  1. "Initialize a Flask project with a virtual environment and a SQLite
+     database."
+  2. "Create models for `User` and `Book` with a many-to-many relationship."
+  3. "Generate RESTful endpoints for all CRUD operations on books."
+  4. "Write a Dockerfile and a `fly.toml` for deploying to Fly.io."
+  
+  Each prompt produces working code in under a minute. The tinkerer reviews,
+  tweaks a database index, and moves on. By 10 PM, the app is live.
+  
+  Trust in Claude Code is not a switch you flip; it is a gradient you traverse
+  through experience. Most developers follow a natural progression: early on, you
+  review every line Claude Code produces with the same scrutiny you would give a
+  junior colleague's pull request. Over weeks, you notice patterns—it handles
+  boilerplate reliably, follows your CLAUDE.md conventions consistently, and gets
+  standard test structures right almost every time. Gradually, you relax scrutiny
+  on those routine tasks while maintaining close attention where it matters most:
+  
+  - **Unfamiliar libraries or APIs** where hallucinated methods are plausible
+  - **Security-sensitive code** like authentication or input validation
+  - **Complex business logic** where only you know the true requirements
+  
+  This selective trust is not laziness—it is efficient allocation of your finite
+  attention.
+  
+  The flip side of trust is dependency. If Claude Code becomes a crutch, your own
+  skills quietly atrophy—you stop remembering syntax, lose intuition for
+  debugging, and struggle when the tool is unavailable. Guard against this
+  deliberately:
+  
+  - **Use Claude Code as a teacher.** When it produces a solution you don't fully
+    understand, ask it to explain the reasoning. Learn *from* the output, not just
+    *with* it.
+  - **Practice manually.** Set aside time—perhaps one small task per session—where
+    you write code unassisted. Treat it like exercise.
+  - **Solve before delegating.** On problems that stretch your abilities, attempt
+    a solution first. Then ask Claude Code to review or improve it.
+  
+  The goal is augmentation, not replacement. A tinkerer who cannot tinker without
+  AI has lost something essential.
+  
+  There is no single correct workflow—only the one that fits your projects, your
+  schedule, and your temperament. Start small: pick one phase of your development
+  cycle and let Claude Code handle it for a week. Observe what works, discard what
+  doesn't, and expand gradually. The principles worth carrying forward are simple:
+  
+  1. Match the tool to the task.
+  2. Trust but verify.
+  3. Stay curious, stay capable.
+  
+  Your workflow will keep evolving as Claude Code itself evolves. Treat
+  integration as an ongoing experiment—which, for a tinkerer, should feel exactly
+  right.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: 48c03b4a46c4e3d4915b4dbc47fe01c7d7f75b4d07412fb5fdec25bbcbca4081
+response:
+  A minimalist line drawing of a conductor standing on a podium, with their back
+  mostly to the viewer, energetically directing an orchestra. Instead of musicians
+  and traditional instruments, the orchestra is composed of stylized, floating
+  icons representing various software development tools: a code editor, a terminal
+  window, a version control system, a testing framework, and a cloud service. The
+  conductor's baton and hand gestures are creating visible streams of light or
+  energy that connect the different icons, weaving them together into a single,
+  harmonious activity.
+duration: 15654 ms
+usage_stats:
+  {
+    "candidates_token_count": 101,
+    "prompt_token_count": 1703,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1703
+      }
+    ],
+    "thoughts_token_count": 1522,
+    "total_token_count": 3326
+  }
+...

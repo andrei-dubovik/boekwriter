@@ -1,0 +1,133 @@
+{query: str, model: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+query: visuals
+prompt:
+  You are writing a chapter titled "Debugging and Fixing Bugs" in a book called "A
+  Tinkerer's Introduction to Claude Code". The plan for the chapter is a follows.
+  
+  01. This section opens the chapter by acknowledging the universal frustration of
+      debugging, framing bugs as an inevitable and even instructive part of the
+      tinkerer's journey, and introduces the premise that Claude Code can serve as
+      a tireless, methodical debugging partner that combines the ability to read
+      code, reason about control flow, execute commands, and observe results in a
+      tight iterative loop that mirrors how the best human debuggers work.
+  02. This section covers the most immediate and accessible debugging
+      technique—copying an error message, stack trace, or compiler error into
+      Claude Code and asking it to diagnose the problem—explaining how Claude Code
+      parses the error, identifies the relevant file and line number, reads the
+      surrounding code for context, and proposes a fix, establishing the
+      foundational pattern that even beginners can use from day one.
+  03. This example walks through a concrete scenario where a Python script crashes
+      with a KeyError deep inside a dictionary lookup, showing the exact prompt
+      the user types, how Claude Code reads the traceback, opens the offending
+      file, traces where the dictionary was constructed, identifies a missing key
+      caused by an upstream data-formatting change, and proposes a defensive fix
+      with a get() call and a meaningful default value.
+  04. This section teaches the reader how to guide Claude Code into a
+      hypothesis-driven debugging workflow by asking it to first survey the
+      relevant source files, then articulate two or three candidate explanations
+      for the bug, and then systematically investigate each one by reading code,
+      checking assumptions, and eliminating possibilities, mirroring the
+      scientific method and producing more reliable results than jumping straight
+      to a fix.
+  05. This case study presents a realistic scenario where a small web
+      application's order-total calculation occasionally returns incorrect values,
+      and walks through a multi-turn debugging session in which Claude Code reads
+      the calculation logic across three files, identifies a floating-point
+      rounding issue that only manifests with certain discount combinations, adds
+      targeted logging to confirm the hypothesis by running a failing test case,
+      and applies a fix using decimal arithmetic—demonstrating how Claude Code
+      handles bugs that span multiple files and require reasoning about data flow.
+  06. This section explains the powerful workflow of allowing Claude Code to
+      execute shell commands—running tests, invoking scripts, curling endpoints,
+      or tailing logs—and then feeding the output back into its reasoning,
+      creating a rapid feedback loop where Claude Code can test its own hypotheses
+      and verify its own fixes without requiring the user to manually copy-paste
+      terminal output, and discusses how to enable this safely using the
+      permission system covered elsewhere in the book.
+  07. This section focuses specifically on the common scenario of a failing test
+      suite, showing how to point Claude Code at a test failure, have it read both
+      the test code and the implementation under test, understand the assertion
+      that failed and why, determine whether the bug is in the production code or
+      in the test itself, and then fix the correct target—a distinction that trips
+      up many developers and where Claude Code's ability to reason about intent
+      versus implementation is especially valuable.
+  08. This example demonstrates debugging a performance issue where an API
+      endpoint has become noticeably slow, showing how the user prompts Claude
+      Code to profile the request path, how Claude Code identifies an N+1 database
+      query inside a loop by reading the ORM code and recognizing the pattern, and
+      how it proposes a fix using eager loading—illustrating that Claude Code can
+      debug not just crashes and incorrect output but also the subtler category of
+      code that works but works poorly.
+  09. This section honestly addresses the limitations of AI-assisted debugging,
+      including cases where Claude Code fixates on an incorrect hypothesis and
+      proposes increasingly elaborate wrong fixes, situations where the bug
+      depends on environmental factors Claude Code cannot observe, and scenarios
+      involving concurrency or timing that are inherently hard to reason about
+      from static code alone, and teaches practical strategies for recognizing
+      when you are going down a rabbit hole and how to reset the conversation with
+      fresh context and a different angle of investigation.
+  10. This closing section synthesizes everything into a repeatable systematic
+      methodology for debugging with Claude Code—describe the symptom clearly,
+      share relevant context and logs, ask for hypotheses before fixes, let Claude
+      Code investigate iteratively, verify each fix with a test, and commit the
+      fix alongside a regression test—giving the reader a mental checklist they
+      can follow for any bug they encounter and reinforcing the chapter's core
+      message that effective AI-assisted debugging is a structured collaboration,
+      not a magic wand.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Photograph
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 1 aids. Explain the chosen aids in detail. If the chosen aid is a table,
+  the table must fit on a portrait A4 page. Only list the items where an aid has
+  been chosen.
+model: claude-opus-4-6
+hash: 3b466f0d7ca1159745003776a39aa9e0110fc1ca58ce243bdad61d158c41207a
+response:
+- number: 10
+  aid: Diagram
+  description:
+    A flowchart depicting the complete systematic debugging methodology synthesized
+    in this closing section. The diagram begins with a rounded box labeled 'Describe
+    the Symptom' (containing sub-notes: error message, unexpected output,
+    performance degradation), which flows downward via an arrow to 'Share Context'
+    (relevant files, logs, environment details). From there an arrow leads to 'Ask
+    for Hypotheses' (Claude Code proposes 2–3 candidate explanations). The flow then
+    enters a dashed-border loop region labeled 'Iterative Investigation Cycle'.
+    Inside the loop, the first box is 'Investigate Next Hypothesis' (read code, run
+    commands, check logs), which flows to a diamond decision node asking 'Root Cause
+    Found?'. A 'No' branch loops back up to 'Investigate Next Hypothesis' with a
+    side note 'Eliminate and move to next candidate; if all exhausted, reset
+    conversation with fresh context.' A 'Yes' branch exits downward to 'Propose and
+    Apply Fix'. That flows to 'Verify with a Test' (run the failing test case,
+    confirm it passes), which reaches a second diamond: 'Fix Verified?'. A 'No'
+    branch loops back into the investigation cycle. A 'Yes' branch proceeds to the
+    final box: 'Commit Fix + Regression Test'. The loop region and the two feedback
+    arrows are the key visual elements, reinforcing that debugging is iterative, not
+    linear. The diagram fits comfortably in a single column and serves as a tear-out
+    reference checklist the reader can consult whenever they encounter a new bug.
+duration: 20444 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 1396,
+    "output_tokens": 715,
+    "service_tier": "standard"
+  }
+...

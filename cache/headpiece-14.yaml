@@ -1,0 +1,170 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  You have made it to the final chapter, and the format changes here. Everything
+  that follows is a grab-bag: shortcuts, prompt templates, creative recipes,
+  troubleshooting fixes, and unconventional ideas collected from real-world usage
+  and community experimentation. None of it needs to be read in order.
+  
+  Treat this chapter as a reference you return to. Skim it now to know what is
+  here, then come back when you need a specific trick or feel stuck in a rut. Some
+  entries will save you thirty seconds a day; others might reshape how you think
+  about the tool entirely. Both kinds matter.
+  
+  The shortcuts and flags in Fig. 14.2 are worth committing to muscle memory. A
+  few deserve special emphasis. Piping input with
+  `echo "explain this error" | claude` lets you integrate Claude Code into shell
+  scripts and automation chains without entering an interactive session. The `-p`
+  (print mode) flag is its close cousin: it sends a single prompt, prints the
+  response to stdout, and exits—perfect for quick one-off questions. Inside a
+  session, `Escape` cancels your current input line while `Ctrl+C` interrupts
+  Claude Code mid-response, which is invaluable when you see it heading in the
+  wrong direction and want to course-correct immediately rather than wait.
+  
+  Even regular users overlook surprisingly useful capabilities. You can drop an
+  image path into your prompt and ask Claude Code to analyze a screenshot—handy
+  for diagnosing UI layout bugs without describing them in words. Slash commands
+  like `/clear` reset your context when a session gets cluttered, while `/compact`
+  summarizes the conversation to reclaim token space without losing the thread.
+  You can toggle tool output verbosity with `/verbose` to see exactly which files
+  Claude Code read or which commands it ran. Perhaps most valuable:
+  `claude --continue` resumes your last conversation, letting you pick up a
+  multi-session task exactly where you left off.
+  
+  A good test-generation prompt has three parts: *what* to test, *how* thoroughly,
+  and *in what style*. Here is a template that works across languages:
+  
+  > Write unit tests for `[module/function]` using `[framework]`. Cover the happy
+  > path, edge cases (empty input, null values, boundary conditions), and at least
+  > one failure mode. Follow the Arrange-Act-Assert pattern and use descriptive
+  > test names that read as behavior specifications.
+  
+  For integration tests, append: *"Mock external dependencies and verify the
+  interaction between `[component A]` and `[component B]`."* For edge-case
+  discovery specifically, try: *"List ten inputs most likely to break
+  `[function]`, then write a parameterized test covering all of them."*
+  
+  Swap the bracketed placeholders for your project's details and the structural
+  scaffold does the rest.
+  
+  The same template philosophy applies to documentation, migrations, and code
+  translation. Compare two prompts:
+  
+  - *"Write docs for this module."*
+  - *"Write API documentation for `auth.py` targeting backend developers who will
+    consume these endpoints. Use NumPy-style docstrings, include parameter types,
+    return values, and one usage example per function."*
+  
+  The second prompt specifies **audience**, **format**, and **level of
+  detail**—the three levers that matter most.
+  
+  For database migrations: *"Generate a migration using `[framework]` that adds a
+  `last_login` column to the `users` table with a sensible default and a rollback
+  step."*
+  
+  For language translation: *"Convert this Python function to idiomatic Go.
+  Preserve the function signature's intent but use Go conventions for error
+  handling and naming."*
+  
+  One of the most satisfying Claude Code tricks is scaffolding a complete project
+  from a single prompt. Try something like:
+  
+  *"Create a Node.js Express API for a bookstore. Set up the directory structure,
+  `package.json` with dependencies, a `src/` folder with routes, models, and
+  middleware directories, a basic health-check endpoint, a `.env.example`, and a
+  README explaining how to install and run it."*
+  
+  Claude Code will work through this sequentially—creating directories, writing
+  config files, stubbing out route handlers, and producing a README—all in one
+  session. Within minutes you have a runnable skeleton. From there, you iterate:
+  *"Now add a `/books` CRUD endpoint with validation."* The scaffolding becomes a
+  living project.
+  
+  Claude Code also doubles as a language tutor. Suppose you know Python well and
+  want to learn Rust. Start with a small, familiar script—say, a CLI tool that
+  reads a CSV and prints summary statistics—and prompt:
+  
+  *"Translate this Python script into idiomatic Rust. After each function, explain
+  any Rust-specific concepts you introduced—ownership, borrowing, lifetimes,
+  pattern matching—as if I've never seen them before."*
+  
+  The result is a working Rust program *and* a personalized tutorial woven through
+  it. Follow up naturally: *"Why did you use `unwrap()` here? What's the safer
+  alternative?"* Each question deepens understanding in context rather than in the
+  abstract. This translation-and-explanation loop beats passive documentation
+  every time.
+  
+  Claude Code rewards creative misuse. Try *interactive algorithmic exploration*:
+  ask it to implement both a brute-force and a dynamic-programming solution to the
+  same problem, then run benchmarks on increasing input sizes so you can watch the
+  $O(2^n)$ wall appear in real time. Follow up with *"Can you beat the DP version
+  with memoization and pruning?"* and let it iterate.
+  
+  Equally valuable is *reverse rubber ducking*. Instead of explaining your problem
+  to a silent duck, narrate your confusion to Claude Code. Rather than jumping to
+  a fix, prompt it with *"Ask me questions before suggesting anything."* Its
+  clarifying questions often surface the assumption you didn't realize you were
+  making.
+  
+  Every tool has failure modes. Here are the ones you will hit most often:
+  
+  - **Context window exhaustion mid-task.** Claude Code slows down or loses track
+    of earlier instructions. Start a new session with a focused prompt summarizing
+    where you left off.
+  - **Confident but wrong assumptions.** It invents function names or misreads
+    your architecture. Correct it explicitly and point it to the actual file:
+    *"Read `src/auth/middleware.ts` before continuing."*
+  - **Unexpected permission denials.** Check your permission mode and whether the
+    command requires shell access you haven't granted.
+  - **Session gone off the rails.** Don't patch a confused conversation. Reset,
+    refine your prompt, and restart cleanly—it's faster every time.
+  
+  This book began with a premise: that the best way to understand a tool is to
+  pick it up and use it. You have done that across thirteen chapters and arrived
+  here with a toolkit that would have seemed implausible a few years ago. But
+  Claude Code is not the point. *You* are. The tinkerer's instinct—curiosity that
+  refuses to leave a problem alone, the willingness to break something just to see
+  how it works—predates every tool in your arsenal and will outlast this one too.
+  Claude Code will keep evolving. So will you. Keep building things that interest
+  you. That has always been enough.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: e7070709c269df87af702cf96eacfaa835602994aefa949504ebe5333aeb0ef4
+response:
+  Depict a person's hands at a well-used but organized workbench, illustrated in a
+  clean, minimalist line-drawing style. The background is a pegboard holding a
+  variety of hand tools—wrenches, screwdrivers, pliers, and calipers—each in its
+  place. The central action is one hand reaching up to thoughtfully select a
+  specific, small tool from the board, while the other hand rests beside a
+  half-finished, intricate project on the benchtop. The overall feeling should be
+  one of quiet focus and the deliberate choice of the right instrument for a
+  precise task.
+duration: 17458 ms
+usage_stats:
+  {
+    "candidates_token_count": 118,
+    "prompt_token_count": 1694,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1694
+      }
+    ],
+    "thoughts_token_count": 1746,
+    "total_token_count": 3558
+  }
+...

@@ -1,0 +1,35 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  A minimalist line drawing of a conductor standing on a podium, with their back
+  mostly to the viewer, energetically directing an orchestra. Instead of musicians
+  and traditional instruments, the orchestra is composed of stylized, floating
+  icons representing various software development tools: a code editor, a terminal
+  window, a version control system, a testing framework, and a cloud service. The
+  conductor's baton and hand gestures are creating visible streams of light or
+  energy that connect the different icons, weaving them together into a single,
+  harmonious activity.
+hash: 97c3ee3ae042a523b675e4801f12ab7190f779ce570e8df762b862ec766d1533
+response: image-13.png
+duration: 5437 ms
+usage_stats:
+  {
+    "candidates_token_count": 1290,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 110,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 110
+      }
+    ],
+    "total_token_count": 1400
+  }
+...

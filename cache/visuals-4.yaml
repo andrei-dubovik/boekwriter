@@ -1,0 +1,113 @@
+{query: str, model: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+query: visuals
+prompt:
+  You are writing a chapter titled "The Art of Prompting Claude Code" in a book
+  called "A Tinkerer's Introduction to Claude Code". The plan for the chapter is a
+  follows.
+  
+  01. The chapter opens by establishing that prompting an agentic coding tool like
+      Claude Code is fundamentally different from prompting a chatbot, because
+      your words directly trigger file edits, command execution, and multi-step
+      workflows with real consequences in your project.
+  02. A section introduces the three core principles of effective
+      prompting—specificity about what you want done, context about why you want
+      it and how it fits into the broader project, and explicit constraints such
+      as language features to use, files to avoid touching, or performance
+      requirements to meet.
+  03. An example presents three versions of the same request—adding input
+      validation to a signup form—ranging from a vague one-liner to a moderately
+      detailed prompt to a richly specific prompt, showing side by side how each
+      version produces progressively more accurate, relevant, and usable results
+      from Claude Code.
+  04. A section explores the spectrum of prompt styles from terse commands
+      suitable for simple mechanical tasks like renaming a variable to detailed
+      multi-sentence instructions appropriate for complex operations like
+      designing a new module, with practical guidance on reading the situation and
+      choosing the right level of detail.
+  05. A section catalogs the most valuable prompt patterns that experienced users
+      rely on, including asking Claude Code to outline a plan before writing any
+      code, requesting explanations alongside changes so you can learn and verify,
+      scoping edits to specific files or directories, and specifying coding
+      conventions or style guides to follow.
+  06. An example demonstrates the plan-before-act pattern in practice by showing a
+      prompt that asks Claude Code to describe its approach to adding a Redis
+      caching layer to an Express application before writing a single line of
+      code, followed by the user reviewing and adjusting the plan before giving
+      the go-ahead.
+  07. A section identifies and dissects the most common prompting
+      anti-patterns—requests so vague that Claude Code must guess your intent,
+      instructions that bundle contradictory requirements causing the agent to
+      thrash between competing goals, and prompts that micromanage every
+      implementation detail when a higher-level description would let Claude Code
+      leverage its own strengths.
+  08. An example contrasts a micromanaging prompt that dictates exact variable
+      names, line-by-line structure, and specific syntax for a refactoring task
+      with a high-level guidance prompt for the same task, revealing how the
+      latter produces cleaner and more idiomatic code because Claude Code has room
+      to apply its own judgment.
+  09. A section on iterative prompting explains how to treat a Claude Code session
+      as a conversation rather than a single command, showing techniques for
+      reviewing initial output, requesting targeted modifications, asking
+      follow-up questions to deepen understanding, and gradually steering toward
+      the exact result you need across multiple turns.
+  10. A case study walks through a complete multi-turn session in which a tinkerer
+      starts with a rough idea for a command-line weather tool, writes an initial
+      prompt, reviews the generated scaffold, refines the error handling in a
+      second prompt, adds a configuration file in a third, and polishes the output
+      formatting in a fourth, illustrating how iterative prompting transforms a
+      fuzzy notion into a fully functional program.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Photograph
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 1 aids. Explain the chosen aids in detail. If the chosen aid is a table,
+  the table must fit on a portrait A4 page. Only list the items where an aid has
+  been chosen.
+model: claude-opus-4-6
+hash: 42b94927fcfb986b8891b79800c095c4d443ea83a133a93c5dc702e1fd6304f8
+response:
+- number: 3
+  aid: Table
+  description:
+    A three-column comparison table where each column represents one version of the
+    signup-form validation prompt (Vague, Moderate, Richly Specific). The rows break
+    down key dimensions: the exact prompt text given to Claude Code, the specificity
+    of the desired validation rules (e.g., none stated vs. 'email and password' vs.
+    'email regex, password minimum 12 chars with one symbol, username 3–20
+    alphanumeric'), whether error-handling behavior is mentioned, whether target
+    files or frameworks are named, whether UX requirements like inline error
+    messages are specified, a brief summary of what Claude Code actually produces in
+    response, and a qualitative assessment of how much follow-up correction the user
+    needed. This table makes the cause-and-effect relationship between prompt detail
+    and output quality immediately scannable, letting the reader see at a glance
+    exactly which missing details in the vague prompt led to unwanted guesses, which
+    additions in the moderate prompt narrowed the output, and how the richly
+    specific prompt eliminated almost all ambiguity. It serves as the chapter's
+    single most referenceable artifact—a concrete, side-by-side proof of the three
+    core principles (specificity, context, constraints) introduced in the preceding
+    section.
+duration: 18197 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 1090,
+    "output_tokens": 642,
+    "service_tier": "standard"
+  }
+...

@@ -1,0 +1,123 @@
+{query: str, model: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+query: figure
+prompt:
+  Consider the following text fragment from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  All of these improvements carry risk if applied carelessly. The safest approach
+  is a disciplined loop (see Fig. 8.9):
+  
+  1. **Scope each change narrowly.** Ask Claude Code to refactor one function, one
+     pattern, or one module at a time—never the entire codebase in a single
+     prompt.
+  2. **Review the diff before accepting.** Look for accidental behavior changes:
+     altered return values, swallowed errors, removed edge-case handling.
+  3. **Run the test suite after every accepted change.** Tests are your objective
+     proof that behavior is preserved.
+  4. **Commit immediately** after each verified step. If a later step introduces a
+     regression, you can revert to a known-good state without losing earlier
+     progress.
+  
+  When Claude Code *does* change behavior inadvertently—and eventually it
+  will—small commits make the damage trivial to undo.
+  
+  This fragment refers to Fig. 8.9. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A flowchart diagram depicting the safe incremental refactoring loop. The diagram
+  begins with a node labeled 'Identify next small refactoring step' which flows
+  into 'Prompt Claude Code with scoped request'. From there an arrow leads to
+  'Review the diff carefully', which branches at a diamond decision node labeled
+  'Behavior preserved?'. A 'No' edge loops back to 'Revise the prompt or revert
+  changes'. A 'Yes' edge proceeds to 'Run the full test suite', which reaches a
+  second diamond decision node labeled 'All tests pass?'. A 'No' edge from this
+  diamond leads to 'Revert to last commit and adjust approach', which loops back
+  to the initial prompting node. A 'Yes' edge flows to 'Commit with descriptive
+  message', which then reaches a final diamond labeled 'More refactoring needed?'.
+  A 'Yes' edge loops all the way back to the first node, completing the cycle,
+  while a 'No' edge exits to a terminal node labeled 'Refactoring complete'. The
+  diagram makes the cyclic, disciplined nature of the workflow immediately visible
+  in a way that sequential prose cannot, highlights the two critical checkpoints
+  (diff review and test suite) where regressions are caught, and clearly shows
+  that every revert path circles back to a safe committed state rather than
+  leaving the codebase in a partially transformed condition.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+model: claude-opus-4-6
+hash: eb9259c2833f0747d095426e273195da1b66b0de2e4dc56b98e23b84d8ae4774
+response:
+  caption:
+    Fig. 8.9: The safe incremental refactoring loop. Each proposed change passes
+    through two quality gates—diff review and the full test suite—before being
+    committed. All failure paths revert to a known-good committed state, ensuring
+    the codebase is never left partially refactored.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#4A5568"/>
+        </marker>
+      </defs>
+      <rect width="1200" height="900" fill="white"/>
+      <rect x="395" y="30" width="410" height="42" rx="21" fill="#F0FFF4" stroke="#2F855A" stroke-width="2"/>
+      <text x="600" y="55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#1A202C">Identify next small refactoring step</text>
+      <line x1="600" y1="72" x2="600" y2="120" stroke="#4A5568" stroke-width="1.8" marker-end="url(#ah)"/>
+      <rect x="405" y="120" width="390" height="42" rx="6" fill="#EBF8FF" stroke="#2B6CB0" stroke-width="1.8"/>
+      <text x="600" y="145" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#1A202C">Prompt Claude Code with scoped request</text>
+      <line x1="600" y1="162" x2="600" y2="210" stroke="#4A5568" stroke-width="1.8" marker-end="url(#ah)"/>
+      <rect x="445" y="210" width="310" height="42" rx="6" fill="#EBF8FF" stroke="#2B6CB0" stroke-width="1.8"/>
+      <text x="600" y="235" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#1A202C">Review the diff carefully</text>
+      <line x1="600" y1="252" x2="600" y2="290" stroke="#4A5568" stroke-width="1.8" marker-end="url(#ah)"/>
+      <polygon points="600,290 720,330 600,370 480,330" fill="#FFFBEB" stroke="#B7791F" stroke-width="1.8"/>
+      <text x="600" y="334" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#1A202C">Behavior preserved?</text>
+      <line x1="600" y1="370" x2="600" y2="409" stroke="#4A5568" stroke-width="1.8" marker-end="url(#ah)"/>
+      <text x="618" y="394" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#2F855A" font-weight="bold">Yes</text>
+      <line x1="480" y1="330" x2="332" y2="330" stroke="#4A5568" stroke-width="1.8" marker-end="url(#ah)"/>
+      <text x="412" y="322" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#C53030" font-weight="bold">No</text>
+      <rect x="80" y="305" width="250" height="50" rx="6" fill="#FFF5F5" stroke="#C53030" stroke-width="1.8"/>
+      <text x="205" y="325" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#1A202C">Revise the prompt or</text>
+      <text x="205" y="342" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#1A202C">revert changes</text>
+      <path d="M205,305 L205,151 Q205,141 215,141 L405,141" fill="none" stroke="#4A5568" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#ah)"/>
+      <rect x="455" y="409" width="290" height="42" rx="6" fill="#EBF8FF" stroke="#2B6CB0" stroke-width="1.8"/>
+      <text x="600" y="434" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#1A202C">Run the full test suite</text>
+      <line x1="600" y1="451" x2="600" y2="490" stroke="#4A5568" stroke-width="1.8" marker-end="url(#ah)"/>
+      <polygon points="600,490 710,530 600,570 490,530" fill="#FFFBEB" stroke="#B7791F" stroke-width="1.8"/>
+      <text x="600" y="534" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#1A202C">All tests pass?</text>
+      <line x1="600" y1="570" x2="600" y2="604" stroke="#4A5568" stroke-width="1.8" marker-end="url(#ah)"/>
+      <text x="618" y="592" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#2F855A" font-weight="bold">Yes</text>
+      <line x1="710" y1="530" x2="843" y2="530" stroke="#4A5568" stroke-width="1.8" marker-end="url(#ah)"/>
+      <text x="772" y="522" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#C53030" font-weight="bold">No</text>
+      <rect x="845" y="505" width="290" height="50" rx="6" fill="#FFF5F5" stroke="#C53030" stroke-width="1.8"/>
+      <text x="990" y="525" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#1A202C">Revert to last commit and</text>
+      <text x="990" y="542" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#1A202C">adjust approach</text>
+      <path d="M990,505 L990,151 Q990,141 980,141 L795,141" fill="none" stroke="#4A5568" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#ah)"/>
+      <rect x="430" y="604" width="340" height="42" rx="6" fill="#EBF8FF" stroke="#2B6CB0" stroke-width="1.8"/>
+      <text x="600" y="629" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#1A202C">Commit with descriptive message</text>
+      <line x1="600" y1="646" x2="600" y2="680" stroke="#4A5568" stroke-width="1.8" marker-end="url(#ah)"/>
+      <polygon points="600,680 740,720 600,760 460,720" fill="#FFFBEB" stroke="#B7791F" stroke-width="1.8"/>
+      <text x="600" y="724" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#1A202C">More refactoring needed?</text>
+      <line x1="600" y1="760" x2="600" y2="809" stroke="#4A5568" stroke-width="1.8" marker-end="url(#ah)"/>
+      <text x="618" y="790" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#C53030" font-weight="bold">No</text>
+      <path d="M460,720 L60,720 Q50,720 50,710 L50,61 Q50,51 60,51 L395,51" fill="none" stroke="#4A5568" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#ah)"/>
+      <text x="425" y="710" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#2F855A" font-weight="bold">Yes</text>
+      <rect x="470" y="809" width="260" height="42" rx="21" fill="#EDF2F7" stroke="#4A5568" stroke-width="2"/>
+      <text x="600" y="834" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#1A202C">Refactoring complete</text>
+    </svg>
+duration: 363680 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 786,
+    "output_tokens": 25616,
+    "service_tier": "standard"
+  }
+...

@@ -1,0 +1,160 @@
+{query: str, model: str, prompt: str, hash: str, response: str, duration: ms, usage_stats: json}
+---
+query: headpiece
+model: gemini-2.5-pro
+prompt:
+  What follows is a text for a chapter from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  <chapter>
+  
+  Git is the backbone of modern software development, yet many developers treat it
+  as a necessary chore—a tangle of commands to memorize, flags to look up, and
+  merge conflicts to dread. Claude Code changes this relationship. Because it
+  understands Git deeply, you can express your *intent* in plain language and let
+  it translate that into the correct operations. Want to untangle a messy history?
+  Summarize a week of changes for a pull request? Resolve a conflict you don't
+  fully understand? You describe the goal; Claude Code handles the mechanics.
+  Version control becomes a natural extension of your creative workflow, not a
+  bureaucratic toll booth.
+  
+  The simplest way to start using Claude Code with Git is to ask it what's going
+  on. Prompts like *"What's the status of my repo?"*, *"Show me the last ten
+  commits"*, or *"Which branches exist and which one am I on?"* replace a handful
+  of commands—`git status`, `git log`, `git branch`—that you would otherwise need
+  to remember, run individually, and mentally combine. Claude Code doesn't just
+  parrot the raw output; it synthesizes it into a concise summary. You get
+  orientation in one question instead of four commands.
+  
+  Diffs are where Git gets noisy. A raw `git diff` dumps context-free hunks of
+  added and removed lines that demand careful reading, especially across multiple
+  files. Claude Code turns this into something usable. Ask it *"What have I
+  changed since my last commit?"* or *"Explain the staged diff"* and it will
+  return a plain-language summary: which files were touched, what the
+  modifications accomplish, and anything that looks inconsistent or incomplete.
+  This is particularly valuable when you return to a project after days or weeks
+  away. Instead of archaeologically reconstructing your own intent from cryptic
+  diffs, you simply ask and get caught up in seconds.
+  
+  Good commit messages are documentation you write for your future self, yet under
+  time pressure they degrade into meaningless fragments like `fix stuff` or
+  `updates`. Claude Code eliminates the friction by reading your staged changes
+  and producing a message that captures both *what* changed and *why*. You can ask
+  for any format you like:
+  
+  - **Conventional Commits** (`fix:`, `feat:`, `chore:`)
+  - A subject line plus explanatory body
+  - A house style defined in your CLAUDE.md
+  
+  A prompt as simple as *"Commit my staged changes with a descriptive message"* is
+  enough. Claude Code inspects the diff, infers the purpose of the changes from
+  their content and surrounding code, and writes a message you would be proud to
+  see in `git log` six months from now.
+  
+  Let's make this concrete. Suppose you have edited three files—`parse_date.py`,
+  `test_parse_date.py`, and `CHANGELOG.md`—to fix a bug where dates in
+  `DD/MM/YYYY` format were being interpreted as `MM/DD/YYYY`. You stage the
+  changes and prompt:
+  
+  *"Commit my staged changes with a conventional commit message."*
+  
+  Claude Code examines the diff and produces:
+  
+  ```
+  fix: correct date parsing to treat DD/MM/YYYY as day-first
+  
+  Previously, parse_date() assumed MM/DD/YYYY ordering, causing
+  silent data corruption for non-US date formats. Updated parser,
+  added regression tests, and documented the fix in CHANGELOG.
+  ```
+  
+  Compare that to `fix bug`. The generated message tells a future reader *what*
+  was wrong, *why* it mattered, and *what* was done about it—without you having to
+  compose a single sentence.
+  
+  Good commit messages are just the beginning. Claude Code can handle the broader
+  choreography of branch-based workflows too. Ask it to create a feature branch
+  and it will suggest a well-named one like `fix/date-parsing-dd-mm-yyyy` rather
+  than `my-branch`. Ask it to write a pull request description and it will
+  summarize every change, explain the motivation, list affected files, and note
+  any testing you have done—producing the kind of thorough PR description that
+  reviewers love but authors rarely have the patience to write. You can even ask
+  it to draft release notes from a range of commits.
+  
+  Few things in Git inspire dread like merge conflicts. Claude Code turns them
+  from cryptic puzzles into guided conversations. When you hit a conflict, ask
+  Claude Code to look at the conflicting files. It will read both sides, explain
+  what each branch was trying to accomplish, and propose a resolution that
+  preserves the intent of both. This is more than mechanical—Claude Code reasons
+  about *why* the code diverged, not just *how*. If its proposed resolution does
+  not look right, you can refine it: "keep the new validation logic from `main`
+  but use the error messages from my branch." The result is a merge you actually
+  understand rather than one you nervously hope is correct.
+  
+  Let's make this concrete. Imagine you've been hacking on a personal
+  project—commits piling up in no particular order: a half-done feature here, a
+  formatting pass there, a bug fix wedged in between. Fig. 9.8 shows the mess:
+  seven commits with feature work, bug fixes, and reformatting chaotically
+  interleaved. You ask Claude Code to help clean things up:
+  
+  > "I want to interactive rebase the last seven commits into logical
+  > groups—formatting changes together, bug fixes separate, feature work squashed
+  > into coherent units."
+  
+  Claude Code examines each commit's diff, proposes a reorder-and-squash plan, and
+  walks you through it step by step. You approve, adjust one squash grouping, and
+  moments later your history reads like it was planned from the start. The bottom
+  row of Fig. 9.8 tells the story: three clean, purposeful clusters instead of
+  seven scattered fragments.
+  
+  Solo developers rarely get code reviews. Claude Code can fill that gap. Feed it
+  a diff or a commit range—`"Review the changes in my last three commits"`—and it
+  will scan for potential bugs, missed edge cases, style inconsistencies, and
+  security concerns. It won't just flag problems; it explains *why* something is
+  risky and suggests concrete fixes. For team developers, this serves as a
+  preliminary review: catch the obvious issues before asking a colleague's time.
+  Think of it as a first pass that raises the floor of every pull request you
+  open.
+  
+  All of these Git workflows improve when Claude Code knows your conventions up
+  front. Add a section to your `CLAUDE.md` specifying your preferred commit
+  message format (e.g., Conventional Commits), branch naming scheme (`feature/`,
+  `fix/`), whether commits require issue references or sign-offs, and your PR
+  template structure. Once these preferences are documented, every commit message
+  Claude Code drafts, every branch it creates, and every PR description it
+  generates will conform automatically. You stop correcting and start approving.
+  The upfront investment of a few lines in `CLAUDE.md` pays off across every
+  future Git interaction.
+  
+  </chapter>
+  
+  Choose an illustration that would be a good headpiece for this chapter. The
+  illustration should show a human activity that is closely related to one of the
+  topics discussed in the chapter. Describe the chosen illustration as if your are
+  giving a task to an artist. Keep the aesthetics simple. The description should
+  be self-sufficient, i.e. it should not reference the chapter. The description
+  should be no longer than a paragraph.
+hash: 131af4206ca6f3f7b2faba56af3f3bf20de77a2b19dfa34f62bbecc99a8c1d19
+response:
+  A person sits at a simple wooden table, calmly and methodically untangling a
+  large, complex knot of multi-colored yarn. To their left, the yarn is a chaotic
+  jumble. In their hands, they are carefully separating the strands. To their
+  right, several strands of yarn now lie straight and parallel, perfectly sorted
+  by color. The illustration should be a clean, minimalist line drawing with a
+  limited color palette, conveying a sense of focus, clarity, and the satisfying
+  process of bringing order to chaos.
+duration: 16118 ms
+usage_stats:
+  {
+    "candidates_token_count": 102,
+    "prompt_token_count": 1665,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 1665
+      }
+    ],
+    "thoughts_token_count": 1505,
+    "total_token_count": 3272
+  }
+...

@@ -1,0 +1,34 @@
+{query: str, model: str, prompt: str, hash: str, response: png, duration: ms, usage_stats: json}
+---
+query: image
+model: gemini-2.5-flash-image
+prompt:
+  A simple, clean-line illustration of a person's hand hovering over a minimalist
+  control panel. The panel features two large, distinct buttons: one green with a
+  checkmark symbol (✓) and one red with an X symbol (✗). Above the buttons, a
+  small, uncluttered screen displays a single line of text representing a proposed
+  command for an automated system. The visual focus is on the moment of decision,
+  the deliberate pause before the hand commits to either approving or rejecting
+  the machine's intended action.
+hash: 3eac1a05e8f7aa9cd677741827cdfd435b49f71d3582367ff79ca70842d59357
+response: image-11.png
+duration: 5813 ms
+usage_stats:
+  {
+    "candidates_token_count": 1297,
+    "candidates_tokens_details": [
+      {
+        "modality": "IMAGE",
+        "token_count": 1290
+      }
+    ],
+    "prompt_token_count": 109,
+    "prompt_tokens_details": [
+      {
+        "modality": "TEXT",
+        "token_count": 109
+      }
+    ],
+    "total_token_count": 1406
+  }
+...

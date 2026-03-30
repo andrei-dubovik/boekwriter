@@ -1,0 +1,112 @@
+{query: str, model: str, prompt: str, hash: str, response: [{number: int, aid: str, description: str}], duration: ms, usage_stats: json}
+---
+query: visuals
+prompt:
+  You are writing a chapter titled "Integrating Claude Code into Your Daily
+  Workflow" in a book called "A Tinkerer's Introduction to Claude Code". The plan
+  for the chapter is a follows.
+  
+  1. The chapter opens by framing the core challenge it addresses: that learning
+     Claude Code's features in isolation is not the same as weaving it fluidly
+     into the daily rhythms of software development, and that this chapter will
+     serve as a practical guide to making that transition.
+  2. This section discusses the mechanics and philosophy of using Claude Code in a
+     terminal alongside your preferred text editor or IDE, covering split-screen
+     layouts, rapid switching between editing and commanding, and how to let
+     Claude Code handle broad scaffolding or multi-file changes while you use your
+     editor for precise, fine-grained adjustments.
+  3. An example walks through a concrete split-screen workflow where a developer
+     uses VS Code on one side and Claude Code in a terminal on the other, showing
+     step by step how they ask Claude Code to generate a new module, review the
+     output in the editor, make a small manual tweak, and then return to Claude
+     Code to write the corresponding tests.
+  4. This section maps Claude Code onto the full software development lifecycle,
+     explaining how it can assist during planning and design by sketching
+     architectures and evaluating trade-offs, during active development by writing
+     and editing code, during code review by analyzing diffs and spotting issues,
+     during testing by generating and running test suites, and during deployment
+     by helping with configuration, scripts, and operational troubleshooting.
+  5. This section explores how to combine Claude Code with the other tools in your
+     development toolchain—linters, formatters, CI/CD pipelines, issue trackers,
+     and documentation generators—showing how you can ask Claude Code to run your
+     linter and fix every warning, generate a changelog entry from recent commits,
+     or draft an issue description, thereby creating a workflow that is greater
+     than the sum of its parts.
+  6. A case study follows a hobbyist tinkerer who has only a few evening hours
+     each week to work on a personal side project, illustrating how they use
+     Claude Code to compress what would normally be a full weekend of work—setting
+     up a new Flask application, writing database models, building an API, and
+     deploying to a cloud service—into a single focused evening session by
+     delegating boilerplate and exploratory tasks to the agent.
+  7. This section addresses the human dimension of building trust in Claude Code
+     over time, discussing how developers naturally progress from carefully
+     reviewing every change to selectively trusting Claude Code on routine tasks
+     while maintaining close scrutiny on critical or unfamiliar code, and offering
+     practical heuristics for deciding when to lean heavily on the tool versus
+     when to work manually.
+  8. A dedicated discussion tackles the risk of over-reliance on Claude Code,
+     explaining how to avoid letting your own coding skills atrophy by
+     deliberately practicing manual coding, using Claude Code as a teacher rather
+     than just a doer, and periodically challenging yourself to solve problems
+     without AI assistance so that you remain a capable and critical developer in
+     your own right.
+  9. The chapter closes by guiding readers to construct their own personalized
+     mental model for when, where, and how to deploy Claude Code throughout their
+     day, summarizing the key principles covered and encouraging readers to
+     experiment with integrating the tool gradually rather than all at once,
+     letting the workflow evolve organically as their confidence and experience
+     grow.
+  
+  For each item of the plan you may choose one of the following visual aids:
+  
+  - Table
+  - Diagram
+  - Chart
+  - Map
+  - Timeline
+  - Photograph
+  - Illustration
+  
+  Only choose an aid if it can contribute substantially to the unerstanding of the
+  text. Avoid visual aids with low information density. You have a budget of at
+  most 1 aids. Explain the chosen aids in detail. If the chosen aid is a table,
+  the table must fit on a portrait A4 page. Only list the items where an aid has
+  been chosen.
+model: claude-opus-4-6
+hash: a61939e2a093842931edce8a99673ba7305eb8a3aa7af08125bddd143f76eb33
+response:
+- number: 4
+  aid: Table
+  description:
+    A table titled 'Claude Code Across the Software Development Lifecycle' with five
+    rows corresponding to the major lifecycle phases discussed in this section:
+    Planning & Design, Active Development, Code Review, Testing, and Deployment &
+    Operations. The table has four columns: 'Phase' (the lifecycle stage), 'How
+    Claude Code Helps' (a concise summary of the AI's role in that phase, such as
+    sketching architectures, writing code, analyzing diffs, generating tests, or
+    producing deployment scripts), 'Example Prompts' (one or two concrete
+    illustrative prompts the reader could type, such as 'Compare the trade-offs of a
+    SQL vs. NoSQL database for this use case' for Planning or 'Run the test suite
+    and fix any failures' for Testing), and 'Your Focus' (what the human developer
+    should concentrate on during that phase, such as making final architectural
+    decisions, reviewing generated code for correctness, judging severity of flagged
+    issues, verifying edge-case coverage, or confirming production readiness). This
+    table serves as a high-density, at-a-glance reference that readers can return to
+    repeatedly, making the otherwise lengthy narrative discussion of each phase
+    immediately scannable and actionable. It fits comfortably on a portrait A4 page
+    with five content rows and a header row.
+duration: 16837 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 1115,
+    "output_tokens": 640,
+    "service_tier": "standard"
+  }
+...

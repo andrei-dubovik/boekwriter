@@ -1,0 +1,100 @@
+{query: str, model: str, prompt: str, hash: str, response: {caption: str, latex: str}, duration: ms, usage_stats: json}
+---
+query: table
+prompt:
+  Consider the following text fragment from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  The shortcuts and flags in Fig. 14.2 are worth committing to muscle memory. A
+  few deserve special emphasis. Piping input with
+  `echo "explain this error" | claude` lets you integrate Claude Code into shell
+  scripts and automation chains without entering an interactive session. The `-p`
+  (print mode) flag is its close cousin: it sends a single prompt, prints the
+  response to stdout, and exits—perfect for quick one-off questions. Inside a
+  session, `Escape` cancels your current input line while `Ctrl+C` interrupts
+  Claude Code mid-response, which is invaluable when you see it heading in the
+  wrong direction and want to course-correct immediately rather than wait.
+  
+  This fragment refers to Fig. 14.2, which is a table. Its description is as
+  follows:
+  
+  A two-column reference table titled 'Essential Keyboard Shortcuts and
+  Command-Line Flags' that serves as a quick-lookup card. The left column is
+  labeled 'Shortcut / Flag' and contains the exact keystrokes or CLI syntax (e.g.,
+  '--model <model-name>', 'echo "..." | claude', 'claude -p "..."', '--resume',
+  'Ctrl+C', 'Escape', '/compact'). The right column is labeled 'What It Does' and
+  provides a concise one-to-two sentence explanation of the behavior, when you
+  would reach for it, and any important caveats (such as the difference between
+  interrupting a response mid-stream versus cancelling a tool execution). Rows are
+  grouped into three logical sections separated by thin horizontal rules: 'Launch
+  & Input Flags' (model override, piped input, print mode, output format flags),
+  'In-Session Controls' (interrupt, resume, toggle tool output verbosity, slash
+  commands), and 'Session Management' (resume previous conversation, compact flag,
+  clear context). The table is designed to fit comfortably on a single portrait A4
+  page with roughly 12–15 rows, making it dense enough to be genuinely useful as a
+  tear-out reference sheet while remaining scannable at a glance. This is the
+  single highest-value visual aid in the chapter because it directly supports the
+  stated goal of being a resource readers return to repeatedly, and tabular format
+  is dramatically more scannable than the same information buried in prose
+  paragraphs.
+  
+  Draft this table, format it using LaTeX. Assume the `booktabs` package is
+  already imported. Only include the `tabular` environment and its content in the
+  output, exclude the outer `table` environment.
+model: claude-opus-4-6
+hash: c7e1cbf646172e7c37e79558b21de97dd9e384366f28edac21bf18f9c94fb6eb
+response:
+  caption: Essential Keyboard Shortcuts and Command-Line Flags
+  latex:
+    \begin{tabular}{@{}p{4.2cm}p{10.3cm}@{}}
+    \toprule
+    \textbf{Shortcut / Flag} & \textbf{What It Does} \\
+    \midrule
+    \multicolumn{2}{@{}l}{\textit{Launch \& Input Flags}} \\
+    \addlinespace[3pt]
+    \texttt{-{}-model <model>} & Override the default model for this session. Reach for this when a task demands a specific model variant. \\
+    \addlinespace
+    \texttt{echo "..." | claude} & Pipe input directly to Claude Code, enabling use inside shell scripts and automation chains without starting an interactive session. \\
+    \addlinespace
+    \texttt{claude -p "..."} & Print mode. Sends a single prompt, prints the response to \texttt{stdout}, and exits---ideal for quick one-off questions. \\
+    \addlinespace
+    \texttt{-{}-output-format json} & Emit the response as structured JSON. Combine with \texttt{-p} for programmatic consumption in pipelines. \\
+    \addlinespace
+    \texttt{-{}-output-format stream-json} & Stream the response as incremental JSON chunks, enabling real-time processing in automation workflows. \\
+    \midrule
+    \multicolumn{2}{@{}l}{\textit{In-Session Controls}} \\
+    \addlinespace[3pt]
+    \texttt{Ctrl+C} & Interrupt Claude mid-response or cancel a pending tool execution. Invaluable when output is heading in the wrong direction and you want to course-correct immediately. Note: during tool execution this aborts the tool rather than the whole response. \\
+    \addlinespace
+    \texttt{Escape} & Cancel the current input line without sending it. Does not interrupt an in-progress response from Claude. \\
+    \addlinespace
+    \texttt{/compact} & Compress conversation context to reclaim token headroom while preserving essential details of the session so far. \\
+    \addlinespace
+    \texttt{/verbose} & Toggle verbose output for tool executions, showing or hiding detailed logs of each tool call and its result. \\
+    \addlinespace
+    \texttt{/model <model>} & Switch to a different model mid-session without restarting the conversation or losing context. \\
+    \midrule
+    \multicolumn{2}{@{}l}{\textit{Session Management}} \\
+    \addlinespace[3pt]
+    \texttt{-{}-resume} & Resume the most recent conversation, restoring full context from the prior session. \\
+    \addlinespace
+    \texttt{-{}-resume <session-id>} & Resume a specific prior conversation by its unique session identifier. \\
+    \addlinespace
+    \texttt{/clear} & Clear the current context window entirely, starting fresh within the same session. Useful when accumulated context becomes noisy or irrelevant. \\
+    \bottomrule
+    \end{tabular}
+duration: 41631 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 755,
+    "output_tokens": 2972,
+    "service_tier": "standard"
+  }
+...

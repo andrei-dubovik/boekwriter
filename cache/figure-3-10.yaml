@@ -1,0 +1,115 @@
+{query: str, model: str, prompt: str, hash: str, response: {caption: str, svg: str}, duration: ms, usage_stats: json}
+---
+query: figure
+prompt:
+  Consider the following text fragment from a book called "A Tinkerer's
+  Introduction to Claude Code".
+  
+  Everything you've done in this session—asking questions, creating a file, fixing
+  a bug, running tests—lives in a single **conversation context**. Claude Code
+  remembers each exchange, which is why later requests can build on earlier ones
+  without repeating yourself. Ask it to "add error handling to the function we
+  just wrote," and it knows exactly which function you mean.
+  
+  This memory lasts until you end the session. Once you close Claude Code, the
+  context is gone; a new launch starts fresh.
+  
+  Look at **Fig. 3.10** for the loop you've been practicing all chapter:
+  
+  1. **Describe intent** — say what you want.
+  2. **Review proposal** — read Claude Code's plan.
+  3. **Approve action** — confirm or reject.
+  4. **Verify result** — check what happened.
+  
+  Then repeat. Every subsequent chapter builds on this cycle.
+  
+  This fragment refers to Fig. 3.10. The figure in question is a "Diagram" and its
+  description is as follows:
+  
+  A circular flow diagram depicting the core interactive loop that the reader has
+  learned throughout the chapter. Four nodes are arranged in a cycle: (1)
+  'Describe Intent' — you type a natural-language request; (2) 'Review Proposal' —
+  Claude Code presents its plan, showing reasoning, tool calls, and proposed
+  changes; (3) 'Approve Action' — you confirm or reject via the permission prompt;
+  (4) 'Verify Result' — you inspect the output, the file on disk, or the test
+  results. A bold arrow connects each node to the next in clockwise order, and a
+  final arrow loops from 'Verify Result' back to 'Describe Intent', emphasizing
+  the iterative nature of the workflow. A dashed branch from 'Approve Action'
+  leads to a small 'Reject / Redirect' box that also feeds back to 'Describe
+  Intent', showing the escape path discussed in section 9. Inside the center of
+  the cycle, a label reads 'Conversation Context', with subtle lines connecting it
+  to every node, reinforcing the idea from section 10 that accumulated session
+  memory underpins each step. This single diagram serves as both a summary of the
+  chapter and a quick-reference mental model the reader can carry forward into
+  every subsequent chapter.
+  
+  Draw the figure using SVG. The figure should have a white background, and it
+  should have an aspect ratio of 4:3. Do not include the figure title in the SVG
+  figure. Verify that the labels do not obstruct one another.
+model: claude-opus-4-6
+hash: bf9d121542041dde1ec9518c43c3d7a5b760482f807b5001dd49ff0ca023bc00
+response:
+  caption:
+    The core interactive loop of Claude Code: four steps—Describe Intent, Review
+    Proposal, Approve Action, and Verify Result—arranged in a clockwise cycle with
+    Conversation Context at the center. A dashed escape path branches from Approve
+    Action through a Reject/Redirect node back to Describe Intent.
+  svg:
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="14" markerHeight="11" orient="auto" markerUnits="userSpaceOnUse">
+          <path d="M0,0.5 L9,4 L0,7.5 Z" fill="#1E293B"/>
+        </marker>
+        <marker id="arrG" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="12" markerHeight="10" orient="auto" markerUnits="userSpaceOnUse">
+          <path d="M0,0.5 L9,4 L0,7.5 Z" fill="#64748B"/>
+        </marker>
+      </defs>
+      <rect width="800" height="600" fill="white"/>
+      <g stroke="#E2E8F0" stroke-width="1" stroke-dasharray="3,5" opacity="0.8">
+        <line x1="400" y1="250" x2="400" y2="128"/>
+        <line x1="467" y1="270" x2="540" y2="270"/>
+        <line x1="400" y1="292" x2="400" y2="412"/>
+        <line x1="333" y1="270" x2="260" y2="270"/>
+      </g>
+      <text x="400" y="265" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="15" fill="#94A3B8" font-style="italic">Conversation</text>
+      <text x="400" y="284" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="15" fill="#94A3B8" font-style="italic">Context</text>
+      <rect x="310" y="52" width="180" height="76" rx="12" fill="#2563EB"/>
+      <rect x="540" y="232" width="180" height="76" rx="12" fill="#2563EB"/>
+      <rect x="310" y="412" width="180" height="76" rx="12" fill="#2563EB"/>
+      <rect x="80" y="232" width="180" height="76" rx="12" fill="#2563EB"/>
+      <rect x="30" y="515" width="125" height="38" rx="8" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <path d="M490,90 Q580,55 630,232" fill="none" stroke="#1E293B" stroke-width="2.5" marker-end="url(#arr)"/>
+      <path d="M630,308 Q650,445 490,450" fill="none" stroke="#1E293B" stroke-width="2.5" marker-end="url(#arr)"/>
+      <path d="M310,445 Q160,440 170,308" fill="none" stroke="#1E293B" stroke-width="2.5" marker-end="url(#arr)"/>
+      <path d="M170,232 C100,150 340,200 340,128" fill="none" stroke="#1E293B" stroke-width="2.5" marker-end="url(#arr)"/>
+      <path d="M340,488 L155,534" fill="none" stroke="#64748B" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrG)"/>
+      <path d="M30,534 L18,534 A6,6 0 0,1 12,528 L12,96 A6,6 0 0,1 18,90 L310,90" fill="none" stroke="#64748B" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrG)"/>
+      <text x="400" y="78" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#93C5FD" font-weight="bold">1</text>
+      <text x="400" y="95" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="white" font-weight="bold">Describe Intent</text>
+      <text x="400" y="112" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#BFDBFE">Type your request</text>
+      <text x="630" y="258" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#93C5FD" font-weight="bold">2</text>
+      <text x="630" y="275" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="white" font-weight="bold">Review Proposal</text>
+      <text x="630" y="292" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#BFDBFE">Read the plan</text>
+      <text x="400" y="438" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#93C5FD" font-weight="bold">3</text>
+      <text x="400" y="455" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="white" font-weight="bold">Approve Action</text>
+      <text x="400" y="472" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#BFDBFE">Confirm or reject</text>
+      <text x="170" y="258" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#93C5FD" font-weight="bold">4</text>
+      <text x="170" y="275" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="white" font-weight="bold">Verify Result</text>
+      <text x="170" y="292" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="10" fill="#BFDBFE">Check the output</text>
+      <text x="92" y="538" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#64748B" font-weight="bold">Reject / Redirect</text>
+    </svg>
+duration: 687287 ms
+usage_stats:
+  {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "inference_geo": "global",
+    "input_tokens": 745,
+    "output_tokens": 47439,
+    "service_tier": "standard"
+  }
+...
