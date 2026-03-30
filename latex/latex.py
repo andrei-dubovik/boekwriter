@@ -205,6 +205,8 @@ def md2tex(obj):
                 return '\0' + header + '\n' + code + '\\end{lstlisting}\0\n\n'
             case SyntaxTreeNode(type='paragraph'):
                 return convert(obj.children) + '\n\n'
+            case SyntaxTreeNode(type='blockquote'):
+                return '\\begin{quote}\n\n' + convert(obj.children).strip() + '\n\n\\end{quote}\n\n'
             case SyntaxTreeNode(type='em'):
                 return r'\emph{' + convert(obj.children) + '}'
             case SyntaxTreeNode(type='strong'):
