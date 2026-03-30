@@ -6,6 +6,7 @@ prompt:
   Draft a list of chapters for a book called "${book}". Next to the title of
   each chapter write one paragraph introducing what that chapter is about. You
   have a total budget of ${word_count} words. Allocate this budget per chapter.
+  Each chapter should be at least ${min_words} words long.
 schema: [{number: int, title: str, description: str, word_count: int}]
 ---
 query: chapter-outline
@@ -22,7 +23,7 @@ prompt:
   Consider Chapter ${cid + 1} "${chapters[cid]['title']}". Write a detailed
   plan for this chapter. Each item in the plan must be one sentence long. For
   this chapter you have a total budget of ${word_count} words. Allocate this
-  budget per item of the plan.
+  budget per item of the plan, with no less than ${min_words} per item.
 
   An item of a plan can be, among other things, a pedagogical aid such as:
 

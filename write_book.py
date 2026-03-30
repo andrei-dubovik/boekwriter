@@ -25,6 +25,7 @@ def make_book(model, title, word_count):
         slot = 'root',
         book = title,
         word_count = word_count,
+        min_words = 1000,  # smaller chapters read less natural
     )
 
     # Write the book
@@ -54,6 +55,7 @@ def make_chapter(title, chapters, cid):
         chapters = chapters,
         cid = cid,
         word_count = chapter['word_count'],
+        min_words = 100,  # smaller chunks read less natural
     )
 
     # Decide on visual aids (or a table, which is always allowed)
