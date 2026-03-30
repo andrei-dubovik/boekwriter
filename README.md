@@ -5,6 +5,10 @@ A collection of generic prompts for writing any given book in a structured manne
 
 For the story behind this project, take a look at my blog ["Gemini and I Wrote a Book: Introduction to Computational Linguistics"](https://dubovik.eu/blog/computational-linguistics).
 
+## Library
+
+Some pre-compiled books can be found on the project's [releases](https://github.com/andrei-dubovik/boekwriter/releases) page.
+
 ## Usage
 
 At the moment, Gemini and Claude models are supported. To generate a book using Gemini Pro, with illustrations by Gemini Flash Image (these are the default settings), run
