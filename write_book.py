@@ -69,10 +69,12 @@ def make_chapter(title, chapters, cid):
     visuals = {v['number'] - 1: v | {'fig': f'{cid+1}.{v["number"]}'} for v in visuals}
 
     # Write the chapter
-    content = [
-        make_section(title, chapters, cid, outline, oid, visuals)
-        for oid in range(len(outline))
-    ]
+    content = []
+    parent = None
+    for oid in range(len(outline)):
+        chunk = make_section(title, chapters, cid, outline, oid, visuals, parent)
+        parent = chunk['chunk']
+        content.append(chunk)
 
     # Make a headpiece
     hp_task = model.query(
@@ -96,7 +98,7 @@ def make_chapter(title, chapters, cid):
     }
 
 
-def make_section(title, chapters, cid, outline, oid, visuals):
+def make_section(title, chapters, cid, outline, oid, visuals, parent):
     """Draft a section of a book."""
     min_words = outline[oid]['word_count']*3//4
     max_words = outline[oid]['word_count']
@@ -114,6 +116,7 @@ def make_section(title, chapters, cid, outline, oid, visuals):
         min_words = min_words,
         max_words = max_words,
         visual = visual,
+        parent_chunk = parent,
     )
 
     # Draft a visual aid, if any
